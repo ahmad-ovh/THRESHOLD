@@ -17,10 +17,10 @@ The backend is the game engine. It must be fully playable, testable, and demonst
 | **NPC Service** | NPC templates (identity, personality, metric definitions, state rules); NPC instance creation from templates | player-specific memories, relationship metric values, live NPC instance state |
 | **Memory Service** | per-instance memory entries, interpretation vocabulary, memory retrieval for context assembly | scoring math, dialogue generation |
 | **Scenario Service** | seed bank, weighted category selection, seed filtering/exclusion logic | NPC identity, LLM calls |
-| **Scoring Service** | invokes the Memory Formation AI module, returns four-dimension scores + interpretation label | metric math, dialogue |
+| **Scoring Service** | coordinates the Memory Formation pipeline: calls LLM Service with the player message and session context, receives and returns the four-dimension scores + interpretation label | metric math, dialogue, LLM execution |
 | **Relationship Service** | metric update calculations, relationship tier resolution | scoring, dialogue; does not own the NPC instance data entity itself |
 | **State Engine** | deterministic NPC state resolution (constrained-grammar rule evaluation) | LLM calls of any kind |
-| **Observer Service** | pattern trigger detection (same-NPC-instance repeated interpretation), invokes Observer phrasing call | scoring, state, memory writing; does not own memory |
+| **Observer Service** | pattern trigger detection (same-NPC-instance repeated interpretation) at encounter close; calls LLM Service (Observer Phrasing pipeline) when trigger fires | scoring, state, memory writing; does not own memory; does not execute LLM calls directly |
 | **Progression Service** | skill vector aggregation, XP/level calculation, distribution band lookup; owns the XP gain and level threshold formulas | scoring math itself |
 | **LLM Service** | all model calls (Memory Formation, Character Voice, Scenario Personalization, Observer Phrasing, Report Generation), structured-output enforcement | any game-state decision |
 
@@ -57,7 +57,7 @@ NPC Service: resolve player_id + npc_id → NPC instance
    ↓
 Memory Service: load instance memory + active session conversation history
    ↓
-Scoring Service → LLM Service (Memory Formation call)
+Scoring Service → LLM Service (Memory Formation pipeline)
    ↓ returns { clarity, empathy, politeness, expression, interpretation }
    ↓
 Relationship Service: apply metric_updates using scores → new metric values on instance
@@ -68,17 +68,52 @@ Relationship Service: resolve relationship_tier from instance.metrics.trust + te
    ↓
 Memory Service: write new memory entry to NPC instance (event + interpretation + turn)
    ↓
-Observer Service: read instance memory from Memory Service; check trigger condition (not fired every turn — see Section 7)
-   ↓
-Character Voice call → LLM Service, given resolved state + instance memory + scenario context
-   ↓ returns npc_reply + npc_expression
+LLM Service (Character Voice pipeline): given resolved state + instance memory + conversation history + scenario context
+   ↓ returns { npc_reply, npc_expression, coach_hint }
    ↓
 Progression Service: update skill_vector, XP
    ↓
 Response assembled per API Contract (Section 8) → returned to client
 ```
 
+The Observer Service is **not** invoked during message processing. It runs once at encounter close (`POST /interaction/end`). See Section 1.3.1 and Section 7.
+
 **Authority rule, stated explicitly:** the frontend never computes a score, a metric, a state, a relationship tier, or an Observer trigger. Every one of those values is computed server-side and handed to the client as a finished result.
+
+### 1.3.1 Request flows — encounter start and encounter end
+
+**`POST /interaction/start` — internal flow:**
+```
+Player Service: load or create player record
+   ↓
+NPC Service: resolve player_id + npc_id → NPC Instance (create if first contact)
+   ↓
+Scenario Service: select seed (Section 6.2 steps 1–7)
+   ↓ returns selected seed + effective encounter starting metrics
+   ↓
+Session created on NPC Instance: scenario_id, encounter_modifiers, empty conversation_history
+   ↓
+LLM Service (Scenario Personalization pipeline): given seed + NPC template identity + encounter starting metrics
+   ↓ returns { opening_line, npc_expression }
+   ↓
+Response assembled per API Contract (Section 8) → returned to client
+```
+
+**`POST /interaction/end` — internal flow:**
+```
+Memory Service: finalize encounter — scored outcomes written as new memory entries to NPC Instance
+   ↓
+Observer Service: read NPC Instance memory; apply deterministic count check (Section 7)
+   ↓ if trigger fires → LLM Service (Observer Phrasing pipeline) → returns { message }
+   ↓
+Progression Service: compute XP gain + skill_vector update from encounter scores
+   ↓
+Session record discarded from NPC Instance
+   ↓
+Response assembled per API Contract (Section 8) → returned to client
+```
+
+The `encounter_over` flag returned by `POST /interaction/message` signals to the client that the encounter is complete and the client should call `POST /interaction/end` to finalize. Finalization logic (Observer check, Progression update, session discard) runs only in the `/interaction/end` handler, not in the message handler.
 
 ---
 
@@ -280,7 +315,9 @@ Archetype roles are fixed to `teacher`, `friend`, `colleague`, `client` — matc
 
 ## 4. AI Pipeline
 
-The LLM is used in five distinct calls, each with a narrow, explicit job. No call is permitted to make a game-state decision outside its designated scope.
+The LLM is used in five distinct pipelines, each with a narrow, explicit job. No pipeline is permitted to make a game-state decision outside its designated scope.
+
+**Infrastructure vs. pipeline distinction:** these five (Memory Formation, Character Voice, Scenario Personalization, Observer Phrasing, Report Generation) are logical pipeline definitions — each with its own fixed input set, output schema, and system-prompt constraints. They are all executed by the LLM Service (Section 1.1), which owns model selection, structured-output enforcement, retry logic, and prompt assembly. They are not separately deployable services. Adding a new pipeline requires a new LLM Service call definition and system prompt, not a new service.
 
 ### 4.1 Memory Formation AI
 
@@ -307,9 +344,11 @@ The LLM is used in five distinct calls, each with a narrow, explicit job. No cal
 { "npc_reply": "I understand, but I wish you'd told me.", "npc_expression": "hurt" }
 ```
 
-**Responsible for:** generating what the character says and which expression enum best fits it, constrained to be consistent with the state and memory it is given.
+**Responsible for:** generating what the character says, which expression enum best fits it, and the `coach_hint` (a noticed fact about the current conversation — never a prescribed response). All three are constrained to be consistent with the state and memory provided.
 
 **Not responsible for:** deciding what state the character is in, updating any metric, inventing new scenario content.
+
+The `coach_hint` is a secondary structured output of this pipeline. It has access to the NPC state, memory, and conversation history — the same inputs used to generate the NPC reply — making this the correct pipeline to produce ambient situational awareness for the player. Its system prompt enforces: state a noticed fact, never tell the player what to say.
 
 ### 4.3 Scenario Personalization AI
 
@@ -375,7 +414,11 @@ Example (Sara, `trust`, given `empathy: 0.4, clarity: 0.8`, `influenced_by: {emp
 ```
 delta = (0.4 * 0.6) + (0.8 * 0.4) = 0.24 + 0.32 = 0.56
 ```
-This delta is combined with the existing trust value on the NPC Instance using a tunable update rule (e.g. a weighted move toward the delta, not a raw add) — exact blending formula is an implementation detail to tune during build, but the inputs and their weights are fixed by the template config, not by the LLM.
+This delta is combined with the existing trust value on the NPC Instance using a tunable update rule (e.g. a weighted move toward the delta, not a raw add). What is fixed vs. tunable is explicit:
+
+- **Fixed (template-defined, not tunable at runtime):** the four input scores (from Memory Formation AI), the `influenced_by` dimension weights per metric, and the `turn_decay` value — all defined in the NPC Template.
+- **Fixed (system behaviour):** the LLM has zero influence over any metric calculation. It provides scores; arithmetic does the rest.
+- **Tunable (implementation detail):** the specific blending/accumulation function (e.g., how aggressively the new delta moves the current value) — this is the one knob available during build. It does not change which inputs are used or who owns the calculation.
 
 The Relationship Service performs this calculation. The updated metric values are written back to the NPC Instance by the service layer. The Relationship Service does not own the NPC Instance data entity; it computes the new values and instructs the write.
 
@@ -525,7 +568,7 @@ seeds:
     category: high_pressure
     tier: 3
     title: "The Confrontation"
-    npc_context: { metric_overrides: { guardedness: 0.6 } }
+    npc_context: { metric_overrides: { trust: 0.35 } }  # override must reference a metric defined in the colleague NPC template
     context:
       premise: "You need to address that they haven't been contributing to shared work, without damaging the relationship irreparably."
       stakes: "High — an emotionally loaded confrontation with someone conflict-avoidant."
@@ -581,11 +624,24 @@ distribution_bands:
 
 `npc_context.metric_overrides` in a seed defines the **temporary emotional starting conditions** for that encounter — the NPC's disposition at the opening of this particular scenario. They are applied as encounter modifiers stored on the active session (Section 2.5, `encounter_modifiers`) and used to initialize the encounter's starting state.
 
-They do **not** permanently overwrite the NPC instance's persisted metric values. The instance's persisted metrics before the encounter remain unchanged at encounter start. Metric changes that occur *during* the encounter are written to the instance normally via the deterministic update rules (Section 5.1). The modifier only affects the starting point; it does not silently rewrite relationship history.
+They do **not** permanently overwrite the NPC instance's persisted metric values. The instance's persisted metrics before the encounter remain unchanged at encounter start. The modifier only affects the starting point; it does not silently rewrite relationship history.
 
-**Persistent NPC Instance state:** `trust`, `patience`, `openness`, and any other metrics defined in the template — these are the player's accumulated relationship history with this NPC.
+**How encounter_modifiers are consumed during message processing:**
 
-**Temporary encounter context:** `encounter_modifiers` from the seed — these set the emotional starting conditions for this scenario and exist only for the duration of the active session.
+At encounter start, the effective metric values are computed as:
+```
+effective_metric = encounter_modifier[metric] if metric in encounter_modifiers
+                   else instance.persisted_metric[metric]
+```
+These effective values are the starting point for all State Engine evaluations and Relationship Service calculations during the encounter. Each subsequent turn's metric update (Section 5.1) applies to the running effective values for the encounter. The persisted NPC Instance metrics are **not read or written during individual message turns** — only at encounter close, when the final effective metrics are committed back to the NPC Instance.
+
+Metric changes that occur *during* the encounter accumulate on the effective values. At encounter close (`/interaction/end`), the final accumulated metric values are written back to the NPC Instance as the new persisted state.
+
+**Persistent NPC Instance state:** `trust`, `patience`, `openness`, and any other metrics defined in the template — these are the player's accumulated relationship history with this NPC. Written once at encounter close.
+
+**Temporary encounter context:** `encounter_modifiers` from the seed — these set the emotional starting conditions for this scenario and exist only for the duration of the active session. Discarded with the session at encounter close.
+
+**Constraint:** any key in `metric_overrides` must correspond to a metric defined in the NPC template being used. Seeds are validated at load time against the template registry; a seed referencing an undefined metric is rejected as a content error.
 
 ### 6.4 Personalization boundaries
 
@@ -653,8 +709,7 @@ Response:
   "npc_expression": "hurt",
   "npc_reply": "I understand, but I wish you'd told me. I thought I did something wrong.",
   "coach_hint": { "shown": true, "line": "She's mentioned feeling ignored twice now." },
-  "stat_deltas": { "clarity": 0.80, "empathy": 0.35, "politeness": 0.70, "expression": 0.60 },
-  "npc_metrics": { "trust": 0.58, "patience": 0.55, "openness": 0.32 },
+  "turn_scores": { "clarity": 0.80, "empathy": 0.35, "politeness": 0.70, "expression": 0.60 },
   "relationship_tier": "Comfortable",
   "npc_state": "irritated",
   "feedback": {
@@ -665,17 +720,24 @@ Response:
 }
 ```
 
-`npc_metrics` reflects the NPC instance's persisted metric values after the update for this turn. `npc_state` is the result of the State Engine evaluating those metrics against the template's state rules. `relationship_tier` is derived from `npc_metrics.trust` and the template's archetype role.
+**Field semantics:**
+- `turn_scores` — the four-dimension scores returned by the Memory Formation pipeline for this turn. These are the *per-turn raw scores* used as input to the metric update calculation (Section 5.1). They are not deltas on the player's skill vector; skill vector accumulation happens at encounter close via the Progression Service.
+- `relationship_tier` — the derived relationship label for this NPC (Section 5.3). This is the client-facing representation of the NPC's trust level. Raw NPC metric float values are internal state and are not exposed in the API; `relationship_tier` is the render-ready form.
+- `npc_state` — the State Engine's resolved state enum after this turn's metric update. The client maps it to a pre-built expression asset.
+- `encounter_over` — when `true`, the encounter is complete. The client must call `POST /interaction/end` to finalize. Finalization (Observer check, Progression update, session discard) does not occur until `/interaction/end` is called.
 
-**Coach hint rule:** the `coach_hint.line` must state a noticed fact about the conversation, never a suggested response — enforced in the system prompt for the call that generates it. A prescriptive hint (telling the player what to say) is treated as a defect, not a style choice.
-
-**Coach hint timing:** the hint returned in a given response is meant to inform the player's *next* message — ambient situational awareness, not retrospective grading.
+**Coach hint ownership and rule:** `coach_hint` is a secondary output of the Character Voice pipeline (Section 4.2), generated alongside `npc_reply` and `npc_expression`. Its system prompt enforces: state a noticed fact about the conversation, never a prescribed response. A prescriptive hint (telling the player what to say) is a defect. The hint informs the player's *next* message — ambient situational awareness, not retrospective grading.
 
 Errors: `404` if no active session exists for this `(player_id, npc_id)` pair — client must call `/interaction/start` first. `400` if `message` is empty.
 
 ### `POST /interaction/end`
 
-Fires when the active scenario's encounter concludes (determined server-side, based on turn count and/or scored outcome relative to the seed's `possible_outcomes`).
+Called by the client when it receives `encounter_over: true` in a `POST /interaction/message` response. The server determines encounter completion (based on turn count and/or scored outcome relative to the seed's `possible_outcomes`) and signals it via that flag; the client is responsible for calling this endpoint to trigger finalization.
+
+Request:
+```json
+{ "player_id": "12345", "npc_id": "sara" }
+```
 
 Response:
 ```json
@@ -736,7 +798,7 @@ This does not change the underlying design principle that state is permanent per
 
 Every response field is one of exactly three kinds:
 - an **enum** (e.g. `npc_expression`, `npc_state`) — the client maps it directly to a pre-built asset, never interprets it,
-- a **number** (e.g. `stat_deltas`, `npc_metrics` values) — the client renders/tweens it directly,
+- a **number** (e.g. `turn_scores` values, `xp_progress`) — the client renders/tweens it directly,
 - **plain text** (e.g. `npc_reply`, `feedback.improvement`, `observer_event.message`) — the client displays it directly.
 
 No response requires the client to perform any conditional logic to determine meaning.
