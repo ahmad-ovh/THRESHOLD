@@ -1,0 +1,11 @@
+---
+description: 
+alwaysApply: true
+enabled: true
+updatedAt: 2026-08-02T18:22:59.309Z
+provider: 
+---
+
+* Always commit every change (`feat|fix|refactor|docs|chore|test: msg`)
+* Keep commits atomic
+* End with a **working build**
