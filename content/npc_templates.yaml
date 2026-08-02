@@ -1,0 +1,86 @@
+npcs:
+  - id: sara
+    archetype_role: friend
+    name: Sara
+    base_personality: "Direct but caring, reads as blunt if you don't know her."
+    communication_style: "Casual, expressive, texts in fragments."
+    metrics:
+      trust:    { start: 0.7, min: 0.0, max: 1.0 }
+      patience: { start: 0.6, min: 0.0, max: 1.0 }
+      openness: { start: 0.4, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:    { influenced_by: { empathy: 0.6, clarity: 0.4 },    turn_decay: 0.0  }
+      patience: { influenced_by: { politeness: 1.0 },               turn_decay: 0.05 }
+      openness: { influenced_by: { expression: 0.7, empathy: 0.3 }, turn_decay: 0.0  }
+    state_rules:
+      - condition: "trust < 0.3"
+        state: guarded
+      - condition: "trust >= 0.3 and patience < 0.3"
+        state: irritated
+      - condition: "trust >= 0.6 and openness >= 0.6"
+        state: warm
+      - condition: "default"
+        state: neutral
+
+  - id: mr_teo
+    archetype_role: teacher
+    name: "Mr. Teo"
+    base_personality: "Patient but direct. Expects ownership and brevity."
+    communication_style: "Formal, measured, economy of words."
+    metrics:
+      trust:   { start: 0.5, min: 0.0, max: 1.0 }
+      respect: { start: 0.5, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:   { influenced_by: { clarity: 0.6, politeness: 0.4 }, turn_decay: 0.0  }
+      respect: { influenced_by: { clarity: 0.5, empathy: 0.3, politeness: 0.2 }, turn_decay: 0.02 }
+    state_rules:
+      - condition: "trust < 0.3"
+        state: disappointed
+      - condition: "respect < 0.3"
+        state: dismissive
+      - condition: "trust >= 0.65 and respect >= 0.65"
+        state: approving
+      - condition: "default"
+        state: neutral
+
+  - id: jun
+    archetype_role: colleague
+    name: Jun
+    base_personality: "Conflict-avoidant but quietly watches how people treat others."
+    communication_style: "Measured, professional, occasionally dry."
+    metrics:
+      trust:        { start: 0.5, min: 0.0, max: 1.0 }
+      comfort_level: { start: 0.5, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:         { influenced_by: { empathy: 0.5, clarity: 0.5 },       turn_decay: 0.0  }
+      comfort_level: { influenced_by: { politeness: 0.6, expression: 0.4 }, turn_decay: 0.03 }
+    state_rules:
+      - condition: "trust < 0.3"
+        state: withdrawn
+      - condition: "comfort_level < 0.3"
+        state: defensive
+      - condition: "trust >= 0.65 and comfort_level >= 0.6"
+        state: collaborative
+      - condition: "default"
+        state: neutral
+
+  - id: ms_reyes
+    archetype_role: client
+    name: "Ms. Reyes"
+    base_personality: "Professional, results-driven, does not hide dissatisfaction."
+    communication_style: "Terse, precise, expects the same."
+    metrics:
+      trust:       { start: 0.4, min: 0.0, max: 1.0 }
+      satisfaction: { start: 0.4, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:        { influenced_by: { clarity: 0.7, politeness: 0.3 },     turn_decay: 0.0  }
+      satisfaction: { influenced_by: { clarity: 0.5, empathy: 0.5 },        turn_decay: 0.04 }
+    state_rules:
+      - condition: "trust < 0.25"
+        state: hostile
+      - condition: "satisfaction < 0.3"
+        state: frustrated
+      - condition: "trust >= 0.6 and satisfaction >= 0.6"
+        state: satisfied
+      - condition: "default"
+        state: neutral

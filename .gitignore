@@ -1,3 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+demo_out.txt
+test_green.db
+.env
+.env.*
+!.env.example
+
 # Logs
 logs
 *.log

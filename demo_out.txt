@@ -1,0 +1,199 @@
+﻿Starting THRESHOLD backend server…
+Server ready at http://127.0.0.1:18765
+
+
+============================================================
+  0. Reset Player
+============================================================
+  Status: 200
+
+[reset]
+{
+  "player_id": "demo_player_01",
+  "reset": true
+}
+
+============================================================
+  1. Start Interaction
+============================================================
+
+[start]
+{
+  "npc_name": "Sara",
+  "npc_expression": "neutral",
+  "opening_line": "Hey, so we've never really talked, right? How's your week treating you?",
+  "interaction_id": "first_meeting_small_talk",
+  "encounter_over": false
+}
+
+  NPC: Sara [neutral]
+  Opening: Hey, so we've never really talked, right? How's your week treating you?
+  Interaction ID: first_meeting_small_talk
+
+============================================================
+  2. Message Exchange
+============================================================
+
+  Turn 1 — Player: "I've just been really busy with work, sorry."
+  NPC [neutral]: No worries, work's been eating me alive too. What do you do?
+  Relationship tier: Comfortable | State: neutral
+  Turn scores: clarity=0.90, empathy=0.30, politeness=0.70, expression=0.40
+  Coach: Sara acknowledged your excuse and is trying to shift to lighter topics.
+  Feedback:
+    + You communicated your point clearly.
+    ~ You responded to the words, but not the feeling behind them.
+
+  Turn 2 — Player: "Look, I don't know what you want me to say. I was busy."
+  NPC [guarded]: Whoa okay, didn't mean to put you on the spot. Just making small talk, you know? Forget it.
+  Relationship tier: Comfortable | State: neutral
+  Turn scores: clarity=0.70, empathy=0.10, politeness=0.20, expression=0.20
+  Coach: She seems to be backing off after picking up on your defensive tone.
+  Feedback:
+    + You communicated your point clearly.
+    ~ You responded to the words, but not the feeling behind them.
+
+  Turn 3 — Player: "I get that you're upset, but things come up sometimes."
+  NPC [frustrated]: Upset? I'm not upset. I'm just... trying to have a conversation. But you keep shutting me down. This is exhausting.
+  Relationship tier: Comfortable | State: neutral
+  Turn scores: clarity=0.80, empathy=0.60, politeness=0.50, expression=0.30
+  Coach: She's frustrated because she feels her attempts at small talk are being rejected.
+  Feedback:
+    + You communicated your point clearly.
+    ~ You kept things factual but didn't share your own perspective.
+
+  Turn 4 — Player: "I understand you missed me. I'll try to be more present."
+  NPC [frustrated]: I don't think you get it. This isn't about missing you or you being busy. I just wanted to talk, like normal people do. But every time I try, you act like I'm attacking you. It's... a lot.
+  Relationship tier: Trusted | State: warm
+  Turn scores: clarity=0.80, empathy=0.70, politeness=0.70, expression=0.60
+  Coach: She's still trying to explain her perspective, but she seems worn out by the repeated defensiveness.
+  Feedback:
+    + You communicated your point clearly.
+    ~ You kept things factual but didn't share your own perspective.
+
+  Turn 5 — Player: "Can we just move past this? I said I was sorry."
+  NPC [warm]: Okay. Moving past it. So... what do you do for fun, then?
+  Relationship tier: Trusted | State: warm
+  Turn scores: clarity=0.80, empathy=0.20, politeness=0.40, expression=0.30
+  Coach: She is letting go of the conflict and offering a fresh start, but her question is tentative.
+  Feedback:
+    + You communicated your point clearly.
+    ~ You responded to the words, but not the feeling behind them.
+
+  Turn 6 — Player: "You're right. I should have checked in. I was wrong to disappear like that."
+  NPC [warm]: Yeah... thanks. That actually means a lot. I just want us to be cool, you know? Anyway... what's something you've been into lately?
+  Relationship tier: Close Friend | State: warm
+  Turn scores: clarity=0.90, empathy=0.80, politeness=0.90, expression=0.80
+  Coach: She acknowledged your apology and is trying to steer the conversation toward a lighter topic.
+  Feedback:
+    + You communicated your point clearly.
+    ~ You responded to the words, but not the feeling behind them.
+
+  [encounter_over=true at turn 6]
+
+============================================================
+  3. End Interaction
+============================================================
+
+[end]
+{
+  "observer_event": {
+    "fired": true,
+    "npc_id": "sara",
+    "message": "Across these exchanges, the pattern of deflecting emotional acknowledgment recurred, with each response focusing on external reasons or requests to move forward rather than engaging with the other's feelings. This repetition marked a consistent avoidance of emotional engagement."
+  },
+  "encounter_summary": {
+    "outcome": "neutral"
+  }
+}
+
+  [OBSERVER]: Across these exchanges, the pattern of deflecting emotional acknowledgment recurred, with each response focusing on external reasons or requests to move forward rather than engaging with the other's feelings. This repetition marked a consistent avoidance of emotional engagement.
+  Outcome: neutral
+
+============================================================
+  4. Player Status After Encounter
+============================================================
+
+[player_status]
+{
+  "player_id": "demo_player_01",
+  "level": 1,
+  "skill_vector": {
+    "clarity": 0.5063,
+    "empathy": 0.499,
+    "politeness": 0.504,
+    "expression": 0.4933
+  },
+  "xp_progress": 0.308,
+  "daily_streak": 0,
+  "created_at": "2026-08-02T19:22:32.821583"
+}
+
+  Level: 1  XP: 0.308
+  Skill vector: clarity=0.506, empathy=0.499, politeness=0.504, expression=0.493
+
+============================================================
+  5. Second Encounter (Observer pattern test)
+============================================================
+  NPC opening: Hey, we haven't really talked yet. How's your week been?
+  Turn 1 [neutral]: Hey, no worries. Work's been kicking my butt too. What's keeping you so busy?...
+  Turn 2 [neutral]: Okay, that's fair. Just making conversation. So... what kind of work do you do a...
+  Turn 3 [warm]: I'm not upset, promise. Just trying to get to know you, that's all. So... what d...
+
+[end (encounter 2)]
+{
+  "observer_event": {
+    "fired": true,
+    "npc_id": "sara",
+    "message": "The pattern shows a repeated avoidance of emotional acknowledgment, where responses focus on being busy or moving past the issue rather than engaging with the other person's feelings."
+  },
+  "encounter_summary": {
+    "outcome": "poor"
+  }
+}
+
+  [OBSERVER FIRED]: The pattern shows a repeated avoidance of emotional acknowledgment, where responses focus on being busy or moving past the issue rather than engaging with the other person's feelings.
+
+============================================================
+  6. Session Report
+============================================================
+
+[report]
+{
+  "current_level": 1,
+  "skill_vector": {
+    "clarity": 0.5135,
+    "empathy": 0.4957,
+    "politeness": 0.5018,
+    "expression": 0.474
+  },
+  "strongest_skill": "clarity",
+  "improving_area": "emotional_acknowledgment",
+  "recent_pattern_summary": "Your conversations are clear and well-structured, but you often miss opportunities to connect emotionally, which can make interactions feel distant.",
+  "recommended_practice": "In your next small talk encounter, try to actively listen and reflect back the other person's feelings to build a stronger emotional connection."
+}
+
+  Strongest skill: clarity
+  Improving area:  emotional_acknowledgment
+  Pattern:         Your conversations are clear and well-structured, but you often miss opportunities to connect emotionally, which can make interactions feel distant.
+  Practice:        In your next small talk encounter, try to actively listen and reflect back the other person's feelings to build a stronger emotional connection.
+
+============================================================
+  7. Daily Challenge
+============================================================
+
+[daily]
+{
+  "seed_id": "asking_for_extension",
+  "npc_id": "mr_teo",
+  "focus": "Clarity + Politeness",
+  "streak_count": 0
+}
+
+============================================================
+  Demo Complete
+============================================================
+  Full lifecycle verified:
+    start -> messages (with scores + state + tier) ->
+    end (observer check + progression) -> report -> daily
+
+  Backend is working correctly.

@@ -1,0 +1,137 @@
+seeds:
+  - id: missed_deadline_explain
+    compatible_roles: [teacher, colleague]
+    category: workplace
+    tier: 2
+    title: "The Late Submission"
+    npc_context:
+      metric_overrides: {}
+    context:
+      premise: "You missed a deadline by two days and need to explain yourself."
+      stakes: "Consequence is real but negotiable depending on how you handle it."
+      opening_line_seed: "So — tell me what happened."
+      npc_goal: "Wants ownership before deciding leniency."
+    scoring_focus: { primary: clarity, secondary: politeness }
+    success_signal: "owned_mistake_plainly"
+    failure_signal: "avoided_emotional_acknowledgment"
+    possible_outcomes:
+      good: "Leniency granted; relationship unaffected or slightly improved."
+      neutral: "Consequence applies; professional tone maintained."
+      poor: "Consequence applies; trust drops."
+
+  - id: felt_ignored_lately
+    compatible_roles: [friend]
+    category: friendship
+    tier: 2
+    title: "The Distance"
+    npc_context:
+      metric_overrides: { openness: 0.3 }
+    context:
+      premise: "They've noticed you've been distant lately and want to talk about it."
+      stakes: "The relationship itself, not a task outcome."
+      opening_line_seed: "Hey... can I ask why you've been off lately?"
+      npc_goal: "Wants to feel heard, not fixed."
+    scoring_focus: { primary: empathy, secondary: expression }
+    success_signal: "acknowledged_feelings_first"
+    failure_signal: "avoided_emotional_acknowledgment"
+    possible_outcomes:
+      good: "They feel heard; trust rises."
+      neutral: "Conversation resolves but stays guarded."
+      poor: "They shut down; trust drops."
+
+  - id: unhappy_with_deliverable
+    compatible_roles: [client, colleague]
+    category: high_pressure
+    tier: 3
+    title: "The Pushback"
+    npc_context:
+      metric_overrides: {}
+    context:
+      premise: "They're unhappy with what you delivered and think it missed the mark."
+      stakes: "Professional credibility, possibly the relationship itself."
+      opening_line_seed: "This isn't really what we discussed."
+      npc_goal: "Wants to know you understand the gap before trusting a fix."
+    scoring_focus: { primary: clarity, secondary: empathy }
+    success_signal: "validated_concern_specifically"
+    failure_signal: "avoided_emotional_acknowledgment"
+    possible_outcomes:
+      good: "They agree to a revised plan; tension eases."
+      neutral: "They accept a fix but stay cool."
+      poor: "Trust drops significantly; they escalate or disengage."
+
+  - id: first_meeting_small_talk
+    compatible_roles: [friend, colleague]
+    category: everyday_social
+    tier: 1
+    title: "Breaking the Ice"
+    npc_context:
+      metric_overrides: { trust: 0.4 }
+    context:
+      premise: "A casual, low-stakes first conversation — getting to know each other."
+      stakes: "Low. Sets the tone for the relationship going forward."
+      opening_line_seed: "Hey, I don't think we've properly met — how's your week going?"
+      npc_goal: "Wants a genuine, comfortable exchange, nothing more."
+    scoring_focus: { primary: expression, secondary: politeness }
+    success_signal: "warm_two_way_exchange"
+    failure_signal: "closed_off_exchange"
+    possible_outcomes:
+      good: "Comfortable rapport established; trust rises."
+      neutral: "Polite but forgettable exchange."
+      poor: "Feels awkward or one-sided; trust stagnates."
+
+  - id: asking_for_extension
+    compatible_roles: [teacher]
+    category: everyday_social
+    tier: 1
+    title: "The Ask"
+    npc_context:
+      metric_overrides: {}
+    context:
+      premise: "You need to ask for an extension on an assignment, and you know it's a big ask."
+      stakes: "Low-to-moderate — a reasonable request, badly delivered, can still go wrong."
+      opening_line_seed: "You wanted to see me about the assignment?"
+      npc_goal: "Wants a clear, honest reason, not excessive justification."
+    scoring_focus: { primary: clarity, secondary: politeness }
+    success_signal: "stated_request_plainly"
+    failure_signal: "rambled_unclear_ask"
+    possible_outcomes:
+      good: "Extension granted, professional tone maintained."
+      neutral: "Partial extension or conditions attached."
+      poor: "Denied; trust drops due to poor communication, not the request itself."
+
+  - id: teammate_not_pulling_weight
+    compatible_roles: [colleague]
+    category: high_pressure
+    tier: 3
+    title: "The Confrontation"
+    npc_context:
+      metric_overrides: { trust: 0.35 }
+    context:
+      premise: "You need to address that they haven't been contributing to shared work, without damaging the relationship irreparably."
+      stakes: "High — an emotionally loaded confrontation with someone conflict-avoidant."
+      opening_line_seed: "You wanted to talk to me about something?"
+      npc_goal: "Is bracing for blame and will shut down if attacked directly."
+    scoring_focus: { primary: empathy, secondary: clarity }
+    success_signal: "named_issue_collaboratively"
+    failure_signal: "blamed_outright"
+    possible_outcomes:
+      good: "They open up about why they've been checked out; issue starts resolving."
+      neutral: "They agree to do better but stay defensive."
+      poor: "They shut down entirely; trust drops significantly."
+
+
+distribution_bands:
+  - level_range: [1, 30]
+    weights: { everyday_social: 60, friendship: 25, workplace: 10, high_pressure: 5 }
+  - level_range: [31, 70]
+    weights: { everyday_social: 20, friendship: 30, workplace: 35, high_pressure: 15 }
+  - level_range: [71, 100]
+    weights: { everyday_social: 5, friendship: 20, workplace: 35, high_pressure: 40 }
+
+relationship_tiers:
+  thresholds: [0.0, 0.25, 0.45, 0.65, 0.85]
+  labels:
+    friend:    [Stranger, Acquaintance, Comfortable, Trusted, "Close Friend"]
+    teacher:   [Unfamiliar, Noted, Respected, Trusted, "Regarded Highly"]
+    colleague: [Unfamiliar, Coworker, Dependable, Trusted, "Strong Ally"]
+    client:    [Unknown, Skeptical, Professional, Reliable, "Trusted Partner"]
