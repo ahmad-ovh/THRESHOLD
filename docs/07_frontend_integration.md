@@ -15,64 +15,37 @@ To ensure minimal WebAssembly bundle size, fast initial loading, and zero room-t
 2. **Single Active Room in Memory**: Only one room scene is loaded at a time. Transitions are managed by a global `SceneManager` Autoload using `get_tree().change_scene_to_file()` accompanied by a smooth fade-to-black transition.
 3. **Spawn Markers**: Each room defines `SpawnMarker3D` nodes for entry points (matching door IDs) so the player spawns at the correct spatial coordinates after loading.
 
-```
-                                  ┌────────────────────────┐
-                                  │      Godot Engine      │
-                                  └───────────┬────────────┘
-                                              │
-     ┌───────────────────┬────────────────────┼───────────────────┬──────────────────┐
-     │                   │                    │                   │                  │
-     ▼                   ▼                    ▼                   ▼                  ▼
-┌──────────┐     ┌──────────────┐     ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-│  Scene   │     │  ApiClient   │     │  Encounter   │    │ PlayerStore  │    │  User Interface│
-│ Manager  │     │  (HTTP REST) │     │   Manager    │    │ (Profile/XP) │    │  (HUD/Journal) │
-└──────────┘     └──────────────┘     └──────────────┘    └──────────────┘    └──────────────┘
+```mermaid
+graph TD
+    GE["Godot Engine Root"] --> SM["SceneManager Autoload<br/>(Room Transitions)"]
+    GE --> API["ApiClient Autoload<br/>(HTTP REST)"]
+    GE --> EM["EncounterManager Autoload<br/>(State Machine)"]
+    GE --> PS["PlayerStore Autoload<br/>(Profile / XP)"]
+    GE --> UI["User Interface<br/>(HUD / Journal / Modals)"]
+
+    API <-->|REST Requests & Responses| Backend["THRESHOLD FastAPI Backend"]
 ```
 
 ---
 
 ## 2. Core Game Loop & User Flow
 
-```
-                               ┌──────────────────────────────┐
-                               │   Main Menu (MainMenu.tscn)  │
-                               │  Player enters Username/ID   │
-                               │     Click "Start Game"       │
-                               └──────────────┬───────────────┘
-                                              │
-                                   change_scene_to_file()
-                                              │
-                                              ▼
-                               ┌──────────────────────────────┐
-                               │ 3D Room Scene (Room_*.tscn)  │
-                               │  Free 3D Player Movement     │
-                               │  HUD Visible (Level, XP, J)  │
-                               └──────┬────────────────┬──────┘
-                                      │                │
-             Walk to Door & Press 'E' │                │ Walk to NPC & Press 'E'
-                                      ▼                ▼
-                 ┌──────────────────────────┐    ┌──────────────────────────┐
-                 │ SceneManager Transition  │    │ Encounter Dialogue Loop  │
-                 │   Fade Black ──► Load    │    │  Freeze 3D Movement      │
-                 │   Spawn at Marker3D      │    │  Camera Cuts to NPC      │
-                 └──────────────────────────┘    │  POST /interaction/start │
-                                                 └────────────┬─────────────┘
-                                                              │
-                                                Turn Loop: POST /message (×N)
-                                                Mood Emoji Pop-in above Head
-                                                              │
-                                                encounter_over == true ──► POST /end
-                                                              │
-                                                              ▼
-                                                 ┌──────────────────────────┐
-                                                 │ Overview Settlement Modal│
-                                                 │ Performance, XP, Observer│
-                                                 └────────────┬─────────────┘
-                                                              │
-                                                   Close & Unfreeze Movement
-                                                              │
-                                                              ▼
-                                                 Back to Free Exploration
+```mermaid
+flowchart TD
+    Menu["Main Menu (MainMenu.tscn)<br/>Player enters Username / ID<br/>Click 'Start Game'"] -->|change_scene_to_file| Room["3D Room Scene (Room_*.tscn)<br/>Free 3D Player Movement<br/>HUD Visible (Level, XP, J Key)"]
+    
+    Room -->|Walk to Door & Press 'E'| DoorTransition["SceneManager Transition<br/>Fade Black ──► Load Room ──► Spawn at Marker3D"]
+    DoorTransition --> Room
+    
+    Room -->|Walk to NPC & Press 'E'| EncounterStart["Encounter Dialogue Loop<br/>Freeze 3D Player Movement<br/>Camera Swivels to NPC<br/>POST /interaction/start"]
+    
+    EncounterStart --> TurnLoop["Turn Loop: POST /interaction/message (×N)<br/>Billboard Mood Emoji Pop-in<br/>Typewriter Dialogue & Turn Scores"]
+    
+    TurnLoop -->|encounter_over == true| EncounterEnd["POST /interaction/end"]
+    
+    EncounterEnd --> Settlement["Overview Settlement Modal<br/>Performance Outcome, XP, Observer Insight"]
+    
+    Settlement -->|Close & Unfreeze Movement| Room
 ```
 
 ---
@@ -193,17 +166,18 @@ func show_prompt(visible_state: bool) -> void:
 
 Backend REST calls return `npc_expression` in `/start` and `/message` responses. In 3D space, this expression is rendered as a floating billboard emoji above the NPC's head.
 
-```
-       ┌────────────────────────┐
-       │   [ 😠 Mood Emoji ]   │  ◄── Sprite3D (Billboard Y-Axis)
-       │    (Floating Icon)     │
-       └───────────┬────────────┘
-                   │
-            [ HeadMarker3D ]
-                   │
-           ┌──────────────┐
-           │ 3D NPC Mesh  │
-           └──────────────┘
+```mermaid
+graph TD
+    subgraph NPC_Node ["3D NPC Character Node"]
+        Mesh["3D Character Mesh"]
+        Marker["HeadMarker3D Position"]
+        Sprite["Sprite3D (Billboard Y-Axis)<br/>Floating Mood Emoji Icon"]
+        
+        Mesh --- Marker
+        Marker --> Sprite
+    end
+    
+    BackendExpr["Backend Response: npc_expression"] -->|Lookup in NPCData.mood_emojis| Sprite
 ```
 
 ### Expression to Emoji Icon Mapping
@@ -569,28 +543,13 @@ func interact() -> void:
 
 Follow this 5-phase build sequence to construct the Godot 4 web client:
 
-```
-  PHASE 1: Player Auth & Singletons
-  ├── Build MainMenu.tscn (Username line edit -> PlayerStore.player_id)
-  └── Implement ApiClient.gd & SceneManager.gd Autoloads
-
-  PHASE 2: Modular Rooms & Player Controller
-  ├── Create Player3D.tscn (movement + Area3D interaction raycast)
-  ├── Create Door3D.gd & Room_Start.tscn / Room_Office.tscn
-  └── Test room transitions via E key using SceneManager.change_room()
-
-  PHASE 3: NPC Template & Floating Mood Emoji
-  ├── Build NPCData custom resource registry & NPC.tscn template
-  └── Implement HeadMarker/MoodSprite3D billboard emoji pop-in tweens
-
-  PHASE 4: Dialogue UI & Turn Loop
-  ├── Build DialogueUI.tscn (typewriter effect, input box, turn scores)
-  └── Wire EncounterManager.gd to handle POST /start, /message, & /end
-
-  PHASE 5: HUD, Journal Book & Overview Settlement
-  ├── Build HUD.tscn (Level, XP progress bar, Daily streak, Journal button)
-  ├── Build JournalUI.tscn tabbed profile modal (Skill vector & /report)
-  └── Build OverviewModal.tscn for end-of-encounter results & Observer reveal
+```mermaid
+flowchart TD
+    Phase1["Phase 1: Player Auth & Singletons<br/>• MainMenu.tscn (Username input)<br/>• ApiClient.gd & SceneManager.gd Autoloads"] --> Phase2
+    Phase2["Phase 2: Modular Rooms & Player Controller<br/>• Player3D.tscn (Movement & Area3D interaction)<br/>• Door3D.gd & Room_Start.tscn / Room_Office.tscn<br/>• SceneManager.change_room() transitions"] --> Phase3
+    Phase3["Phase 3: NPC Template & Floating Mood Emoji<br/>• NPCData custom resource registry & NPC.tscn<br/>• HeadMarker/MoodSprite3D billboard tweens"] --> Phase4
+    Phase4["Phase 4: Dialogue UI & Turn Loop<br/>• DialogueUI.tscn (Typewriter, input box, scores)<br/>• Wire EncounterManager.gd to /start, /message, /end"] --> Phase5
+    Phase5["Phase 5: HUD, Journal Book & Overview Modal<br/>• HUD.tscn (Level, XP progress bar, Streak, J key)<br/>• JournalUI.tscn profile & /report tabs<br/>• OverviewModal.tscn for performance & Observer reveal"]
 ```
 
 ---
