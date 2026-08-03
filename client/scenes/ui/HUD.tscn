@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://chud001"]
+
+[ext_resource type="Script" path="res://scenes/ui/HUD.gd" id="1_hud_script"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud_script")
+
+[node name="TopBar" type="PanelContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 50.0
+grow_horizontal = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBar/MarginContainer"]
+layout_mode = 2
+
+[node name="PlayerIdLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Player: player_01"
+
+[node name="VSeparator1" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Lvl 1"
+
+[node name="XPProgressBar" type="ProgressBar" parent="TopBar/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="VSeparator2" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="StreakLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "🔥 0"
+
+[node name="Control" type="Control" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="JournalButton" type="Button" parent="TopBar/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Journal [J]"

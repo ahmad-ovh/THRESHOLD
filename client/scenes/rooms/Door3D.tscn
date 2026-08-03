@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdoor3d001"]
+
+[ext_resource type="Script" path="res://scenes/rooms/Door3D.gd" id="1_door_script"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_door"]
+size = Vector3(2, 2.5, 2)
+
+[node name="Door3D" type="Node3D"]
+script = ExtResource("1_door_script")
+
+[node name="DoorMesh" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+size = Vector3(1.5, 2.5, 0.2)
+
+[node name="TriggerArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TriggerArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("BoxShape3D_door")
+
+[node name="PromptLabel3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, 0)
+billboard = 1
+text = "Press [E] to Enter"
+font_size = 32

@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://cnpc001"]
+
+[ext_resource type="Script" path="res://scenes/templates/NPC.gd" id="1_npc_script"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_npc"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_npc_area"]
+radius = 2.5
+
+[node name="NPC" type="CharacterBody3D"]
+script = ExtResource("1_npc_script")
+
+[node name="MeshContainer" type="Node3D" parent="."]
+
+[node name="PlaceholderMesh" type="CSGMesh3D" parent="MeshContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_npc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_npc")
+
+[node name="HeadMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+
+[node name="MoodSprite3D" type="Sprite3D" parent="HeadMarker"]
+billboard = 2
+pixel_size = 0.005
+
+[node name="PromptLabel3D" type="Label3D" parent="HeadMarker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+billboard = 1
+text = "Press [E] to talk"
+font_size = 32
+
+[node name="InteractionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("SphereShape3D_npc_area")

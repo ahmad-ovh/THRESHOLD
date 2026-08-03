@@ -1,0 +1,87 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjournalui001"]
+
+[ext_resource type="Script" path="res://scenes/ui/JournalUI.gd" id="1_journal_script"]
+
+[node name="JournalUI" type="CanvasLayer"]
+script = ExtResource("1_journal_script")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(700, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -250.0
+offset_right = 350.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "  📖 Player Journal & Communication Profile"
+
+[node name="CloseButton" type="Button" parent="PanelContainer/VBoxContainer/Header"]
+layout_mode = 2
+text = " X "
+
+[node name="TabContainer" type="TabContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Profile" type="MarginContainer" parent="PanelContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/TabContainer/Profile"]
+layout_mode = 2
+
+[node name="ClarityLabel" type="Label" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+layout_mode = 2
+text = "Clarity"
+
+[node name="ClarityBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+layout_mode = 2
+
+[node name="EmpathyLabel" type="Label" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+layout_mode = 2
+text = "Empathy"
+
+[node name="EmpathyBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+layout_mode = 2
+
+[node name="PolitenessLabel" type="Label" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+layout_mode = 2
+text = "Politeness"
+
+[node name="PolitenessBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+layout_mode = 2
+
+[node name="ExpressionLabel" type="Label" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+layout_mode = 2
+text = "Expression"
+
+[node name="ExpressionBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+layout_mode = 2
+
+[node name="GrowthReport" type="VBoxContainer" parent="PanelContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ReportText" type="RichTextLabel" parent="PanelContainer/VBoxContainer/TabContainer/GrowthReport"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Click 'Generate Report' to analyze your communication patterns."
+
+[node name="RefreshButton" type="Button" parent="PanelContainer/VBoxContainer/TabContainer/GrowthReport"]
+layout_mode = 2
+text = "Generate Growth Report"
