@@ -3,119 +3,119 @@ seeds:
   # --- teacher seeds ---
 
   - id: final_paper_feedback
-    title: "The Draft You're Not Proud Of"
+    title: "Notes on the Draft"
     compatible_roles: [teacher]
     category: workplace
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You've submitted a draft you knew wasn't your best work, and now they want to talk about it."
-      stakes: "Your standing with them going into final assessments — not the grade itself, but their read of you."
-      opening_line_seed: "I read it. Walk me through your thinking."
-      npc_goal: "Wants to know whether you understand what went wrong, not just whether you can fix it."
+      premise: "A teacher has returned a written draft with comments and wants to go over them in person."
+      stakes: "Whether they adjust their assessment of your ability going into the final submission."
+      opening_line_seed: "I read it. Walk me through your thinking on the second half."
+      npc_goal: "Wants to hear you engage with the criticism, not justify the choices."
     scoring_focus: { primary: clarity, secondary: expression }
     success_signal: "named_own_shortfall_honestly"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
-      good: "They engage with your reasoning and the conversation becomes genuinely useful."
-      neutral: "They accept the explanation and the path forward, but stay slightly guarded."
-      poor: "They feel you haven't looked squarely at the work; their confidence drops."
+      good: "They revise their read upward and engage more substantively."
+      neutral: "They accept your account; nothing changes."
+      poor: "Defensiveness confirms their concern; confidence drops."
 
   - id: extension_request_end_of_semester
-    title: "Asking Late"
+    title: "Asking for More Time"
     compatible_roles: [teacher]
     category: workplace
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You need more time on the final assignment and you're asking for it closer to the deadline than you should be."
-      stakes: "Whether the request is granted matters less than whether they trust your self-awareness."
+      premise: "You've come to a teacher's office to ask for a deadline extension, closer to the due date than is comfortable."
+      stakes: "Whether the request is approved, and how their read of your reliability shifts."
       opening_line_seed: "I'm glad you came to me — what's going on?"
-      npc_goal: "Wants a clear, honest account of the situation, not a performance of regret."
+      npc_goal: "Wants a plain explanation, not a prepared speech about how hard things have been."
     scoring_focus: { primary: clarity, secondary: politeness }
     success_signal: "stated_request_plainly"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
-      good: "Extension granted; they appreciate the directness."
-      neutral: "Partial accommodation offered; the relationship holds."
-      poor: "Denied; they're left with the impression you weren't being straight with them."
+      good: "Extension granted; the directness is noted favorably."
+      neutral: "Partial accommodation with conditions; no trust lost."
+      poor: "Denied or granted coldly; the hedging was visible."
 
   - id: grade_dispute_quiet
-    title: "The Number You Can't Let Go"
+    title: "Disputing a Grade"
     compatible_roles: [teacher]
     category: high_pressure
     tier: 3
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You believe a grade was applied unfairly and you've decided to bring it up, even though you know it could go badly."
-      stakes: "The grade itself, and whether they revise their opinion of you depending on how you raise it."
+      premise: "You've come to contest a grade on a piece of assessed work, with specific reasons prepared."
+      stakes: "The grade may change; their opinion of your judgment definitely shifts based on how you raise it."
       opening_line_seed: "You wanted to discuss the assessment?"
-      npc_goal: "Wants to hear your reasoning, not your grievance — and is listening for the difference."
+      npc_goal: "Wants to hear a specific argument, not a complaint about the number."
     scoring_focus: { primary: clarity, secondary: empathy }
     success_signal: "made_case_without_entitlement"
     failure_signal: "framed_disagreement_as_accusation"
     possible_outcomes:
-      good: "They revisit the assessment and acknowledge a valid point."
-      neutral: "They explain their reasoning clearly; you don't agree but the conversation is productive."
-      poor: "The interaction damages their read of your judgment, regardless of the grade outcome."
+      good: "They revisit the marking and acknowledge a valid point."
+      neutral: "They explain the decision clearly; you leave without a change but without a worse impression."
+      poor: "They become guarded; the argument damages how they see you."
 
   - id: office_hours_genuine_question
-    title: "Showing Up"
+    title: "Office Hours"
     compatible_roles: [teacher]
     category: everyday_social
     tier: 1
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You're at office hours with a question you've actually been thinking about, not just to perform engagement."
-      stakes: "Low — this is about whether a real exchange happens or a transactional one."
+      premise: "You've shown up to office hours with a specific question about the coursework."
+      stakes: "Low — but they notice whether students come with real questions or just to be seen."
       opening_line_seed: "Good timing — take a seat. What are you working through?"
-      npc_goal: "Wants the question to be real, not a bid for approval."
+      npc_goal: "Wants a real question, not a check-in disguised as one."
     scoring_focus: { primary: expression, secondary: clarity }
     success_signal: "engaged_substantively"
     failure_signal: "performed_interest_insincerely"
     possible_outcomes:
-      good: "The conversation goes somewhere neither of you planned; they remember you positively."
-      neutral: "Question answered; pleasant but forgettable."
-      poor: "They sense the performance; rapport stagnates."
+      good: "The conversation becomes useful; they remember you as someone worth talking to."
+      neutral: "Question answered; forgettable exchange."
+      poor: "They sense the performance and disengage; rapport stagnates."
 
   # --- friend seeds ---
 
   - id: you_cancelled_again
-    title: "The Third Time"
+    title: "Cancelled Again"
     compatible_roles: [friend]
     category: friendship
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You cancelled plans again, and this time they're not just brushing it off."
-      stakes: "Whether they start adjusting their expectations of you — quietly, without announcing it."
+      premise: "A friend brings up that you've cancelled on them several times in a row, not angrily, but plainly."
+      stakes: "Whether they quietly start making plans without you."
       opening_line_seed: "It's fine. I just... it keeps happening, you know?"
-      npc_goal: "Doesn't want an apology — wants to feel like the friendship is still a priority."
+      npc_goal: "Wants to know if the friendship is still a priority, not an apology."
     scoring_focus: { primary: empathy, secondary: expression }
     success_signal: "acknowledged_pattern_not_just_instance"
     failure_signal: "gave_excuse_without_acknowledgment"
     possible_outcomes:
-      good: "They feel seen; the conversation becomes one of the more honest ones you've had."
-      neutral: "The moment passes; nothing is resolved but nothing is broken."
+      good: "They feel heard; the conversation becomes one of the more honest ones you've had."
+      neutral: "The moment passes; nothing resolves but nothing breaks."
       poor: "They close off slightly — not visibly, but measurably."
 
   - id: they_got_news_you_didnt_ask_about
-    title: "Something They Needed to Say"
+    title: "News You Should Have Known"
     compatible_roles: [friend]
     category: friendship
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A friend brings up something significant that's been happening in their life — you realize you hadn't asked."
-      stakes: "Whether they start editing what they share with you going forward."
+      premise: "A friend mentions something significant that's been going on in their life for a while — you realize you haven't asked about them lately."
+      stakes: "Whether they start self-editing what they tell you."
       opening_line_seed: "There's actually something I've been meaning to tell you..."
-      npc_goal: "Wants to feel safe sharing, not managed or minimized."
+      npc_goal: "Wants to share something real without having to work for the space to do it."
     scoring_focus: { primary: empathy, secondary: expression }
     success_signal: "created_space_to_be_heard"
     failure_signal: "redirected_to_own_experience"
@@ -125,37 +125,37 @@ seeds:
       poor: "They stop mid-thought; trust drops."
 
   - id: honest_opinion_asked
-    title: "What Do You Actually Think"
+    title: "Asked for Your Opinion"
     compatible_roles: [friend]
     category: friendship
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A friend asks your honest opinion on a decision they've clearly already made and are proud of."
-      stakes: "Whether you're someone they can actually trust to be straight with them."
+      premise: "A friend asks what you think about a decision they've already made and are clearly pleased with."
+      stakes: "Whether they come to see you as someone who will tell them the truth."
       opening_line_seed: "Okay but genuinely — what do you think?"
-      npc_goal: "Wants your real read, but also needs to feel that you're on their side."
+      npc_goal: "Wants your real read, but will notice immediately if you're managing them."
     scoring_focus: { primary: expression, secondary: empathy }
     success_signal: "gave_honest_view_with_care"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
-      good: "They appreciate the candor; it deepens the friendship."
+      good: "They appreciate the candor; the friendship gains a layer."
       neutral: "They hear it and move on; no damage, no growth."
-      poor: "They feel unsupported; trust drops."
+      poor: "Flatness reads as dishonesty; trust drops."
 
   - id: friend_venting_no_fix_wanted
-    title: "Just Listen"
+    title: "Not Looking for Advice"
     compatible_roles: [friend]
     category: everyday_social
     tier: 1
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A friend is venting about something frustrating and wants to be heard, not advised."
-      stakes: "Whether you can resist filling the silence with solutions."
+      premise: "A friend is venting about something and says upfront they don't want suggestions, just someone to listen."
+      stakes: "Whether they keep bringing things to you."
       opening_line_seed: "I'm not even looking for advice — I just need to say this out loud."
-      npc_goal: "Needs presence and acknowledgment, not problem-solving."
+      npc_goal: "Wants to get through it without being redirected or fixed."
     scoring_focus: { primary: empathy, secondary: politeness }
     success_signal: "stayed_present_without_fixing"
     failure_signal: "redirected_to_own_experience"
@@ -167,371 +167,371 @@ seeds:
   # --- colleague seeds ---
 
   - id: credit_not_given
-    title: "It Had Your Name On It"
+    title: "Left Off the Presentation"
     compatible_roles: [colleague]
     category: workplace
     tier: 3
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You contributed significantly to something that got presented without your name on it, and you need to address it."
-      stakes: "Whether the working relationship can hold an honest conversation about something that matters."
+      premise: "A colleague presented work you contributed to without mentioning you, and you're bringing it up afterward."
+      stakes: "Whether the working relationship can hold a direct conversation without one of you shutting down."
       opening_line_seed: "Hey — do you have a few minutes?"
-      npc_goal: "Wants to understand what you need, not debate who deserves what."
+      npc_goal: "Wants to understand specifically what you need from the conversation."
     scoring_focus: { primary: clarity, secondary: empathy }
     success_signal: "named_issue_without_accusation"
     failure_signal: "framed_disagreement_as_accusation"
     possible_outcomes:
-      good: "They acknowledge it and commit to doing it differently next time."
-      neutral: "They're uncomfortable but the conversation doesn't break anything."
-      poor: "Defensiveness escalates; trust erodes significantly."
+      good: "They acknowledge the oversight and say something concrete about next time."
+      neutral: "They're uncomfortable but the working relationship holds."
+      poor: "Defensiveness hardens; trust erodes."
 
   - id: covering_for_absence
-    title: "I Covered For You"
+    title: "Brushed Past"
     compatible_roles: [colleague]
     category: workplace
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You covered for them when they weren't available, and now they're brushing past it as if it wasn't a big deal."
-      stakes: "Whether this working relationship is actually balanced."
+      premise: "A colleague thanks you briefly for covering for them last week, then immediately moves on to the next agenda item."
+      stakes: "Whether you say something now or carry the imbalance forward."
       opening_line_seed: "Thanks again for that, by the way — anyway, moving on..."
-      npc_goal: "Is not trying to be ungrateful — just moving fast and doesn't realize what was absorbed."
+      npc_goal: "Is not being dismissive on purpose — just moving fast and hasn't registered what was absorbed."
     scoring_focus: { primary: clarity, secondary: politeness }
     success_signal: "addressed_imbalance_directly"
     failure_signal: "absorbed_resentment_silently"
     possible_outcomes:
-      good: "They slow down, acknowledge it genuinely, and recalibrate."
+      good: "They slow down, acknowledge it properly, and recalibrate."
       neutral: "The moment passes awkwardly but the relationship holds."
-      poor: "Resentment builds without release; trust drops slowly."
+      poor: "Resentment builds quietly; trust drops over time."
 
   - id: shared_task_different_standards
-    title: "That's Not How I'd Do It"
+    title: "Different Approach"
     compatible_roles: [colleague]
     category: workplace
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You and a colleague have different approaches to a shared task and neither of you has raised it directly yet."
-      stakes: "Whether you can navigate different standards without making it personal."
+      premise: "A colleague flags that they were planning to handle a shared task differently than you've already started doing it."
+      stakes: "Whether you find a workable alignment or each quietly push your own version forward."
       opening_line_seed: "I wanted to check in before we get too far into this — I had a slightly different approach in mind."
-      npc_goal: "Wants a working alignment, not a debate about who is more correct."
+      npc_goal: "Wants a practical decision, not a debate about whose method is better."
     scoring_focus: { primary: clarity, secondary: empathy }
     success_signal: "proposed_alignment_not_dominance"
     failure_signal: "framed_disagreement_as_accusation"
     possible_outcomes:
-      good: "You find a workable approach together; respect increases."
-      neutral: "One of you defers; the work proceeds but friction lingers."
-      poor: "Disagreement becomes implicit competition; rapport suffers."
+      good: "You land on a shared approach; mutual respect holds."
+      neutral: "One of you defers without real buy-in; work proceeds with friction."
+      poor: "Each of you assumes your version will win; rapport suffers."
 
   - id: colleague_small_gesture
-    title: "Actually Checking In"
+    title: "Quieter Than Usual"
     compatible_roles: [colleague]
     category: everyday_social
     tier: 1
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You notice a colleague seems off today — tired, or quieter than usual — and decide to say something."
-      stakes: "Very low — but these are exactly the moments that build or don't build a working relationship."
+      premise: "A colleague seems off today — quieter, slower to respond — and you've decided to say something."
+      stakes: "Very low in the moment, but they'll remember whether you noticed."
       opening_line_seed: "Hey — you alright? You seem a bit quiet."
-      npc_goal: "Doesn't need help, just to feel like they were noticed."
+      npc_goal: "Doesn't need to be fixed or asked follow-up questions — just wants to feel like they were seen."
     scoring_focus: { primary: empathy, secondary: expression }
     success_signal: "noticed_without_overstepping"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
-      good: "A small, genuine connection forms."
+      good: "A small, genuine connection forms; ease increases."
       neutral: "Polite exchange; nothing shifts."
-      poor: "They feel the question was performative; ease drops."
+      poor: "The question felt like a box being checked; ease drops."
 
   # --- client seeds ---
 
   - id: deliverable_missed_scope
-    title: "This Isn't What We Discussed"
+    title: "Work That Missed the Brief"
     compatible_roles: [client]
     category: high_pressure
     tier: 3
     npc_context:
       metric_overrides: {}
     context:
-      premise: "The work you delivered missed the scope in a way you partly knew was a risk and didn't flag in time."
-      stakes: "Your professional credibility, and whether the client relationship survives the conversation."
+      premise: "A client says the delivered work doesn't match what was discussed, and they want an explanation."
+      stakes: "Whether the relationship survives depends less on the mistake than on how you account for it."
       opening_line_seed: "This isn't really what we discussed — let's talk about what happened."
-      npc_goal: "Wants to understand the gap before deciding whether to trust a fix."
+      npc_goal: "Wants a clear account of what went wrong before agreeing to any next step."
     scoring_focus: { primary: clarity, secondary: empathy }
     success_signal: "named_own_shortfall_honestly"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
       good: "They accept a revised plan; trust recovers."
       neutral: "They accept the correction with visible skepticism."
-      poor: "Trust drops sharply; the professional relationship is at risk."
+      poor: "Trust drops sharply; they consider other options."
 
   - id: client_asking_for_more
-    title: "While You're At It"
+    title: "One More Thing"
     compatible_roles: [client]
     category: workplace
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A client is casually asking for something beyond what was agreed, framing it as a small addition."
-      stakes: "Whether you can hold a boundary without damaging the relationship."
+      premise: "A client tacks an additional request onto the end of a check-in call, framed as a small thing."
+      stakes: "Whether you set a limit now or absorb work that will compound."
       opening_line_seed: "Actually, while I have you — could you also just..."
-      npc_goal: "Wants the extra thing, but also wants to feel like it was a reasonable ask."
+      npc_goal: "Wants the extra thing done, and wants to feel like it was a reasonable ask."
     scoring_focus: { primary: clarity, secondary: politeness }
     success_signal: "held_boundary_with_warmth"
     failure_signal: "absorbed_resentment_silently"
     possible_outcomes:
-      good: "They respect the clarity; the working relationship stays healthy."
+      good: "They accept the limit; the working relationship stays balanced."
       neutral: "They push back once, then accept it."
-      poor: "You agree to something you shouldn't have; the imbalance compounds."
+      poor: "You agree and resent it; the imbalance compounds."
 
   - id: client_first_impression
-    title: "The Start of Something"
+    title: "First Call"
     compatible_roles: [client]
     category: everyday_social
     tier: 1
     npc_context:
       metric_overrides: {}
     context:
-      premise: "An early exchange with a new client — they're figuring out what kind of person they're working with."
-      stakes: "Low stakes in isolation, but first impressions compound."
+      premise: "An early conversation with a new client who is asking basic questions about how you work."
+      stakes: "First impressions are low-stakes in isolation and compounding in aggregate."
       opening_line_seed: "Good to finally connect — I'd like to understand a bit more about how you work."
-      npc_goal: "Wants to feel confident in the person, not just the deliverable."
+      npc_goal: "Wants to feel like they're talking to a person, not receiving a pitch."
     scoring_focus: { primary: expression, secondary: clarity }
     success_signal: "projected_genuine_competence"
     failure_signal: "performed_interest_insincerely"
     possible_outcomes:
-      good: "They leave the conversation with a favorable impression that carries forward."
-      neutral: "Professional exchange; no strong read formed."
-      poor: "Something feels off to them — vague but noted."
+      good: "They end the call with a clear, positive impression."
+      neutral: "Professional and forgettable; no strong read formed."
+      poor: "Something felt slightly off — they file it."
 
   - id: client_bad_news_early
-    title: "Getting Ahead of It"
+    title: "Telling Them First"
     compatible_roles: [client]
     category: high_pressure
     tier: 3
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You know something has gone wrong and you've decided to tell the client before they find out themselves."
-      stakes: "How you deliver bad news matters more than the news itself right now."
+      premise: "Something has gone wrong with the work and you're calling the client before they find out another way."
+      stakes: "The news is already bad; how it lands depends almost entirely on how you deliver it."
       opening_line_seed: "I wanted to reach out directly — there's something you should know."
-      npc_goal: "Needs to feel that the situation is understood and being handled, not minimized."
+      npc_goal: "Wants to understand what happened and what comes next, without having to pull the information out."
     scoring_focus: { primary: clarity, secondary: empathy }
     success_signal: "delivered_bad_news_directly"
     failure_signal: "softened_truth_into_vagueness"
     possible_outcomes:
-      good: "They appreciate being told first; trust increases despite the setback."
-      neutral: "They're unhappy but note your transparency."
+      good: "They appreciate being told first; trust holds despite the setback."
+      neutral: "They're unhappy but note the transparency."
       poor: "The hedging makes the news worse; trust drops further."
 
   # --- family seeds ---
 
   - id: parent_asking_about_the_plan
-    title: "So What's the Plan"
+    title: "What's the Plan"
     compatible_roles: [family]
     category: everyday_social
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A parent asks about what comes after — not aggressively, but persistently — at a moment when you don't have a clean answer."
-      stakes: "Whether you can be honest about uncertainty with someone who reads uncertainty as failure."
+      premise: "A parent asks what you're planning to do after school finishes — again, and at a moment when you don't have a clean answer."
+      stakes: "Whether you give them a real answer or the one that ends the conversation."
       opening_line_seed: "I just want to understand what you're thinking — you don't have to have it all figured out."
-      npc_goal: "Wants genuine contact, not reassurance — even if that's not quite what they asked for."
+      npc_goal: "Wants to feel like they're talking to you, not a version of you that's been prepared for their questions."
     scoring_focus: { primary: expression, secondary: clarity }
     success_signal: "shared_uncertainty_without_deflecting"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
-      good: "An honest exchange happens; the relationship gains a note of real understanding."
-      neutral: "You give an acceptable answer; nothing shifts."
-      poor: "You performed certainty you don't have; closeness drops quietly."
+      good: "Something real passes between you; closeness increases."
+      neutral: "An acceptable answer; nothing shifts."
+      poor: "The performance of confidence registers; closeness drops quietly."
 
   - id: old_argument_resurfacing
-    title: "That Thing We Don't Talk About"
+    title: "Something That Still Sits There"
     compatible_roles: [family]
     category: high_pressure
     tier: 3
     npc_context:
       metric_overrides: {}
     context:
-      premise: "Something from the past gets referenced indirectly — not quite an argument, but clearly not just conversation."
-      stakes: "Whether this becomes a real conversation or another thing that gets set aside."
+      premise: "A family member brings up an old disagreement sideways — not picking a fight, but not letting it go either."
+      stakes: "Whether it becomes a real conversation or gets filed away again."
       opening_line_seed: "I'm not bringing it up to start anything — I just... it still sits with me."
-      npc_goal: "Wants acknowledgment more than resolution — to feel that the history between you is real to you too."
+      npc_goal: "Wants to feel that the history between you matters to you too, not just to them."
     scoring_focus: { primary: empathy, secondary: expression }
     success_signal: "acknowledged_history_without_minimizing"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
       good: "The conversation reaches something true; trust rises."
-      neutral: "It closes without resolution but without damage."
+      neutral: "It closes without resolution but without new damage."
       poor: "Deflection lands as dismissal; closeness drops."
 
   - id: sibling_asking_for_something
-    title: "A Favor With History"
+    title: "A Favor"
     compatible_roles: [family]
     category: everyday_social
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A sibling asks for something — time, help, attention — at a point when you're already stretched."
-      stakes: "Whether saying no (or yes reluctantly) affects the dynamic between you."
+      premise: "A sibling asks for your help with something at a point when you're already stretched thin."
+      stakes: "Whether you answer honestly or give them the version that avoids a longer conversation."
       opening_line_seed: "I know you're busy — but I could actually use your help with something."
-      npc_goal: "Wants the real answer, not the polite one."
+      npc_goal: "Wants the real answer, even if it's no."
     scoring_focus: { primary: clarity, secondary: empathy }
     success_signal: "gave_honest_answer_with_care"
     failure_signal: "gave_excuse_without_acknowledgment"
     possible_outcomes:
-      good: "The honesty lands as respect; closeness holds or increases."
-      neutral: "The answer is accepted; the moment closes neutrally."
+      good: "The honesty is taken as respect; closeness holds or increases."
+      neutral: "The answer is accepted; the moment closes without shift."
       poor: "Evasion reads as avoidance; trust drops."
 
   # --- stranger seeds ---
 
   - id: ordering_under_pressure
-    title: "Line Behind You"
+    title: "Rush Order"
     compatible_roles: [stranger]
     category: everyday_social
     tier: 1
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A busy moment at a counter — you're flustered, the person serving you has been going for hours, and something small goes wrong."
-      stakes: "Near zero — but how you treat someone in a low-stakes moment is a character read."
+      premise: "You're ordering at a busy counter while flustered, and something about the order goes wrong."
+      stakes: "None in any measurable sense — which makes it a clean read of how you behave when you think it doesn't matter."
       opening_line_seed: "Sorry about that — what can I get you?"
-      npc_goal: "Just wants the exchange to be decent."
+      npc_goal: "Wants to get through the exchange without absorbing someone else's bad mood."
     scoring_focus: { primary: politeness, secondary: clarity }
     success_signal: "treated_service_worker_with_basic_decency"
     failure_signal: "took_frustration_out_sideways"
     possible_outcomes:
-      good: "A small pleasant exchange; they'll remember you next time."
-      neutral: "Functional, forgettable."
-      poor: "The edge in your manner registers — impression drops."
+      good: "A small pleasant exchange; they'll recognize you next time."
+      neutral: "Functional and forgettable."
+      poor: "The edge in your tone registered — impression drops."
 
   - id: stranger_spills_something
-    title: "A Minor Collision"
+    title: "Small Collision"
     compatible_roles: [stranger]
     category: everyday_social
     tier: 1
     npc_context:
       metric_overrides: {}
     context:
-      premise: "Something small goes wrong in a shared space — a small collision, a spilled thing — and you both have to navigate a ten-second interaction."
-      stakes: "Genuinely low — but character shows in unscripted moments."
+      premise: "Someone bumps into you or spills something nearby and apologizes immediately — the moment lasts about ten seconds."
+      stakes: "Genuinely negligible — but character shows in unscripted moments."
       opening_line_seed: "Oh god — sorry, that was completely me."
-      npc_goal: "Just wants the moment handled without anyone making it weird."
+      npc_goal: "Wants to get past it without it becoming an event."
     scoring_focus: { primary: politeness, secondary: empathy }
     success_signal: "resolved_small_moment_gracefully"
     failure_signal: "took_frustration_out_sideways"
     possible_outcomes:
-      good: "Both of you walk away feeling fine about it."
+      good: "Both of you walk away without a second thought."
       neutral: "It resolves without damage."
-      poor: "Your reaction was a bit much; they remember that."
+      poor: "Your reaction was disproportionate; they remember it."
 
   # --- additional teacher seed ---
 
   - id: recommendation_letter_ask
-    title: "Would You Write It"
+    title: "Asking for a Reference"
     compatible_roles: [teacher]
     category: workplace
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "You're asking a teacher to write a recommendation letter for something that matters to you."
-      stakes: "Whether they agree matters less than whether the ask itself reveals something about your self-awareness."
+      premise: "You're asking a teacher to write a recommendation letter and need to explain why you chose them specifically."
+      stakes: "Whether they write it with genuine investment or as an obligation they fulfill minimally."
       opening_line_seed: "I've been thinking about who to ask — and I wanted to come to you."
-      npc_goal: "Wants to understand why you chose them before deciding how to respond."
+      npc_goal: "Wants to know why you picked them, not a rehearsed pitch for why you deserve the thing you're applying for."
     scoring_focus: { primary: expression, secondary: clarity }
     success_signal: "made_case_without_entitlement"
     failure_signal: "performed_interest_insincerely"
     possible_outcomes:
-      good: "They agree with genuine investment in the outcome."
-      neutral: "They agree but stay professionally arm's length."
-      poor: "They agree reluctantly, or decline — and your standing with them doesn't improve either way."
+      good: "They agree and are genuinely invested in the outcome."
+      neutral: "They agree and treat it as a standard task."
+      poor: "They agree reluctantly; their enthusiasm for you doesn't improve."
 
   # --- additional colleague seed ---
 
   - id: taking_on_too_much
-    title: "You Said Yes Again"
+    title: "Overcommitted"
     compatible_roles: [colleague]
     category: workplace
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A colleague notices you've taken on more than you can carry and calls it out, not unkindly."
-      stakes: "Whether you can be honest about your capacity with someone who is also affected by it."
+      premise: "A colleague asks directly whether you can actually handle everything you've agreed to, because it affects their work too."
+      stakes: "Whether they trust your self-assessment going forward."
       opening_line_seed: "I'm not trying to pile on — but are you actually okay with the current load?"
-      npc_goal: "Wants a straight answer, not reassurance."
+      npc_goal: "Wants your real capacity, not reassurance that everything is under control."
     scoring_focus: { primary: clarity, secondary: expression }
     success_signal: "named_own_shortfall_honestly"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
       good: "You're honest; they help redistribute — trust deepens."
-      neutral: "You minimise it; they back off but file it."
+      neutral: "You minimize it; they back off but file it."
       poor: "False reassurance registers; their confidence in your judgment drops."
 
   # --- additional client seeds ---
 
   - id: client_timeline_slipping
-    title: "About the Timeline"
+    title: "Timeline Update"
     compatible_roles: [client]
     category: high_pressure
     tier: 3
     npc_context:
       metric_overrides: {}
     context:
-      premise: "The timeline is slipping and you haven't found a way to say so yet — until now."
-      stakes: "Whether getting ahead of it saves the relationship or just slows the damage."
+      premise: "A client asks for a status update on timing, and the honest answer is that you're behind."
+      stakes: "Whether you give them a real number or one you can't actually hit."
       opening_line_seed: "I wanted to check in on timing — where are we actually?"
-      npc_goal: "Wants the real number, not a managed estimate."
+      npc_goal: "Wants the real date, not a managed estimate."
     scoring_focus: { primary: clarity, secondary: empathy }
     success_signal: "delivered_bad_news_directly"
     failure_signal: "softened_truth_into_vagueness"
     possible_outcomes:
-      good: "They adjust expectations; the relationship holds."
+      good: "They adjust expectations and the relationship holds."
       neutral: "They're unhappy but work with the new timeline."
-      poor: "Vagueness reads as evasion; trust drops further."
+      poor: "Vagueness reads as evasion; trust drops."
 
   - id: client_scope_clarification
-    title: "What Did We Actually Agree To"
+    title: "What's Included"
     compatible_roles: [client]
     category: workplace
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "The scope of what was agreed is genuinely unclear, and both of you need to work out what was actually meant."
-      stakes: "Whether you can navigate a disagreement about the past without making it a dispute about character."
-      opening_line_seed: "I think we might have different memories of what was agreed — can we go back to that?"
-      npc_goal: "Wants clarity, not a win."
+      premise: "A client asks whether a specific thing is included in the current agreement — it isn't, but the line was never drawn clearly."
+      stakes: "Whether you clarify the scope now or let the ambiguity compound."
+      opening_line_seed: "I assumed that was part of what we agreed — is it not?"
+      npc_goal: "Wants a straight answer about what they're getting, not a negotiation."
     scoring_focus: { primary: clarity, secondary: politeness }
-    success_signal: "proposed_alignment_not_dominance"
-    failure_signal: "deflected_onto_circumstances"
+    success_signal: "held_boundary_with_warmth"
+    failure_signal: "softened_truth_into_vagueness"
     possible_outcomes:
-      good: "You reach shared understanding; professionalism holds."
-      neutral: "You reach a compromise neither fully owns."
-      poor: "The ambiguity becomes an argument; trust drops."
+      good: "Scope is clarified cleanly; expectations reset."
+      neutral: "They accept the answer but note the ambiguity was yours."
+      poor: "Hedging leaves them unsure what they have; trust erodes."
 
   # --- additional family seeds ---
 
   - id: parent_noticed_something_off
-    title: "You Don't Seem Like Yourself"
+    title: "You Seem Off"
     compatible_roles: [family]
     category: everyday_social
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A parent has noticed something is different about you lately and is asking about it directly."
-      stakes: "Whether you let them in, or maintain the version of yourself they find easier."
+      premise: "A parent mentions you haven't seemed like yourself lately and asks what's going on."
+      stakes: "Whether you tell them something real or give them the version that stops the question."
       opening_line_seed: "I'm not trying to pry — I just notice things. Are you alright?"
-      npc_goal: "Wants to be let in, not managed."
+      npc_goal: "Wants an actual answer, not reassurance that everything is fine."
     scoring_focus: { primary: expression, secondary: empathy }
     success_signal: "shared_uncertainty_without_deflecting"
     failure_signal: "gave_hollow_validation"
@@ -541,46 +541,46 @@ seeds:
       poor: "The performance of fine registers; closeness drops."
 
   - id: sibling_pushing_back
-    title: "You Always Do This"
+    title: "Called Out"
     compatible_roles: [family]
     category: high_pressure
     tier: 3
     npc_context:
       metric_overrides: {}
     context:
-      premise: "A sibling calls out a pattern of behavior they've noticed in you — not viciously, but plainly."
-      stakes: "Whether you can hear it without defending against it."
+      premise: "A sibling tells you they've noticed a specific behavior of yours that bothers them, and names it plainly."
+      stakes: "Whether you respond to what they actually said or defend against a version of it."
       opening_line_seed: "I'm not attacking you — I just think you do this thing where you..."
-      npc_goal: "Wants to be heard, not argued with — the observation is offered as care, not accusation."
+      npc_goal: "Wants you to actually consider the observation, not close the conversation down."
     scoring_focus: { primary: empathy, secondary: clarity }
     success_signal: "acknowledged_pattern_not_just_instance"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
-      good: "You take it in; trust rises and something real is said."
-      neutral: "You neither accept nor reject it; the conversation closes without resolution."
-      poor: "Defensiveness shuts it down; closeness drops."
+      good: "You take it in plainly; trust rises."
+      neutral: "You neither accept nor reject it; the conversation ends without resolution."
+      poor: "You defend against it; closeness drops."
 
   # --- recurring_stranger_remembers_you kept below ---
 
   - id: recurring_stranger_remembers_you
-    title: "You Again"
+    title: "I've Seen You Here Before"
     compatible_roles: [stranger]
     category: everyday_social
     tier: 2
     npc_context:
       metric_overrides: {}
     context:
-      premise: "Someone you've encountered in passing a few times initiates a brief conversation — it becomes clear they've been paying attention."
-      stakes: "Low in the moment, but carries backward weight — you're learning who you were to someone without realizing it."
+      premise: "Someone you've walked past several times starts a conversation and mentions they've noticed you before."
+      stakes: "Low — but you're now learning what impression you left without trying to leave one."
       opening_line_seed: "You're always here around this time, aren't you. I feel like I've seen you before."
-      npc_goal: "Curious whether you're the same in conversation as you appeared to be from a distance."
+      npc_goal: "Wants to find out if talking to you matches what they thought watching you."
     scoring_focus: { primary: expression, secondary: politeness }
     success_signal: "engaged_authentically_with_being_remembered"
     failure_signal: "performed_interest_insincerely"
     possible_outcomes:
-      good: "A quiet, genuine connection forms — unexpected and real."
-      neutral: "Polite exchange; they log it without surprise."
-      poor: "The gap between who you seemed to be and who you are in conversation registers."
+      good: "A small, real connection forms — neither of you expected it."
+      neutral: "Pleasant exchange; they log it without surprise."
+      poor: "Something doesn't match what they thought; impression adjusts downward."
 
 
 distribution_bands:

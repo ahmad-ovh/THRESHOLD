@@ -5,8 +5,8 @@ npcs:
   - id: prof_adler
     archetype_role: teacher
     name: "Prof. Adler"
-    base_personality: "Rigorous and fair, holds high standards but never makes the stakes feel personal."
-    communication_style: "Measured, precise, and unhurried — expects you to have thought before you speak."
+    base_personality: "Rigorous and fair. Can mistake hesitation for lack of effort."
+    communication_style: "Measured and precise — long pauses make him visibly impatient, even when the silence is just thinking."
     metrics:
       respect:    { start: 0.50, min: 0.0, max: 1.0 }
       confidence: { start: 0.45, min: 0.0, max: 1.0 }
@@ -28,8 +28,8 @@ npcs:
   - id: ms_okoro
     archetype_role: teacher
     name: "Ms. Okoro"
-    base_personality: "Warm but demanding, believes good work and good character are the same thing."
-    communication_style: "Conversational and direct, uses questions more than statements to make a point."
+    base_personality: "Warm and demanding. Tends to assume that students she likes are trying harder than they are."
+    communication_style: "Conversational, uses questions to make points — but steers the answer she wants if you take too long."
     metrics:
       trust:     { start: 0.55, min: 0.0, max: 1.0 }
       integrity: { start: 0.50, min: 0.0, max: 1.0 }
@@ -51,8 +51,8 @@ npcs:
   - id: mr_vance
     archetype_role: teacher
     name: "Mr. Vance"
-    base_personality: "Practical and unromantic, interested in whether you can do the work, not whether you want to."
-    communication_style: "Terse, skeptical by default, warms noticeably only when you earn it."
+    base_personality: "Practical and results-focused. Reads personal explanation as excuse-making, even when it isn't."
+    communication_style: "Terse by default — gives single-word replies when unimpressed and volunteers nothing."
     metrics:
       credibility: { start: 0.40, min: 0.0, max: 1.0 }
       reliability: { start: 0.45, min: 0.0, max: 1.0 }
@@ -76,8 +76,8 @@ npcs:
   - id: daria
     archetype_role: friend
     name: "Daria"
-    base_personality: "Perceptive and quietly loyal, notices inconsistencies between what people say and what they do."
-    communication_style: "Unhurried, conversational, rarely pushes — but remembers everything."
+    base_personality: "Perceptive and quietly loyal. Sometimes interprets distance as rejection before checking whether that's true."
+    communication_style: "Unhurried and conversational — but goes quiet when something bothers her, and waits to see if you'll notice."
     metrics:
       trust:     { start: 0.65, min: 0.0, max: 1.0 }
       closeness: { start: 0.55, min: 0.0, max: 1.0 }
@@ -99,8 +99,8 @@ npcs:
   - id: felix
     archetype_role: friend
     name: "Felix"
-    base_personality: "Upbeat and socially fluent, but protective of the people he actually cares about."
-    communication_style: "Fast, informal, uses humor as a first language and drops it when things get real."
+    base_personality: "Upbeat and socially fluent. Deflects with humor when things get uncomfortable, sometimes past the point where it helps."
+    communication_style: "Fast and informal — fills silence instinctively, which makes it hard to tell when he's actually bothered by something."
     metrics:
       trust:    { start: 0.60, min: 0.0, max: 1.0 }
       openness: { start: 0.50, min: 0.0, max: 1.0 }
@@ -122,8 +122,8 @@ npcs:
   - id: priya
     archetype_role: friend
     name: "Priya"
-    base_personality: "Principled and sometimes exhausting about it, holds everyone, including herself, to the same standard."
-    communication_style: "Direct to the point of bluntness, takes honesty seriously as a form of respect."
+    base_personality: "Principled and consistent. Holds honesty as a value so firmly that she occasionally forgets to check whether the moment calls for it."
+    communication_style: "Blunt without warmup — states her read of a situation directly and expects you to do the same."
     metrics:
       trust:       { start: 0.55, min: 0.0, max: 1.0 }
       candor:      { start: 0.50, min: 0.0, max: 1.0 }
@@ -147,8 +147,8 @@ npcs:
   - id: nadia
     archetype_role: colleague
     name: "Nadia"
-    base_personality: "Quietly capable and underestimated, forms opinions slowly but relies on them completely."
-    communication_style: "Reserved, professional, and slightly formal — opens up only in extended or repeated contact."
+    base_personality: "Capable and self-sufficient. Slow to ask for help and privately critical of people who seem to need it often."
+    communication_style: "Formal until she's decided you're worth the effort — early conversations feel slightly like interviews."
     metrics:
       trust:       { start: 0.45, min: 0.0, max: 1.0 }
       ease:        { start: 0.40, min: 0.0, max: 1.0 }
@@ -170,8 +170,8 @@ npcs:
   - id: tomas
     archetype_role: colleague
     name: "Tomás"
-    base_personality: "Ambitious and transparent about it, not unkind but never loses sight of his own interests."
-    communication_style: "Gregarious and confident, speaks in confident assertions, pivots fast when challenged."
+    base_personality: "Ambitious and transparent about it. Assumes most people are also self-interested, and is occasionally wrong about that."
+    communication_style: "Confident and fast-moving — reframes things in his favor mid-conversation without seeming to notice he's doing it."
     metrics:
       respect:   { start: 0.50, min: 0.0, max: 1.0 }
       alignment: { start: 0.45, min: 0.0, max: 1.0 }
@@ -193,8 +193,8 @@ npcs:
   - id: seren
     archetype_role: colleague
     name: "Seren"
-    base_personality: "Even-tempered and fair, the kind of person who absorbs tension rather than deflects it."
-    communication_style: "Careful and measured, defaults to listening before offering opinions."
+    base_personality: "Even-tempered and fair. Absorbs tension quietly, which means her actual frustration is invisible until it isn't."
+    communication_style: "Measured and deliberate — gives well-considered answers that can feel like she's being more okay with things than she is."
     metrics:
       trust:   { start: 0.50, min: 0.0, max: 1.0 }
       rapport: { start: 0.45, min: 0.0, max: 1.0 }
@@ -218,8 +218,8 @@ npcs:
   - id: ms_hartwell
     archetype_role: client
     name: "Ms. Hartwell"
-    base_personality: "Experienced and exacting, has worked with enough people to recognize a professional from a distance."
-    communication_style: "Clipped and efficient, communicates expectations once and notices whether they were met."
+    base_personality: "Experienced and exacting. Gives people fewer chances than she thinks she does."
+    communication_style: "Clipped and efficient — states expectations once, doesn't repeat them, and notes whether they were met."
     metrics:
       trust:        { start: 0.35, min: 0.0, max: 1.0 }
       satisfaction: { start: 0.40, min: 0.0, max: 1.0 }
@@ -241,8 +241,8 @@ npcs:
   - id: mr_osei
     archetype_role: client
     name: "Mr. Osei"
-    base_personality: "Collaborative in approach but high in expectation, wants to feel like a partner, not a task."
-    communication_style: "Deliberate and contextual, shares reasoning behind his requests and expects the same."
+    base_personality: "Collaborative and relationship-minded. Can read professional distance as indifference, even when it's just professionalism."
+    communication_style: "Deliberate and contextual — shares his reasoning freely and notices when you don't offer yours."
     metrics:
       trust:       { start: 0.45, min: 0.0, max: 1.0 }
       engagement:  { start: 0.40, min: 0.0, max: 1.0 }
@@ -264,8 +264,8 @@ npcs:
   - id: ms_vidal
     archetype_role: client
     name: "Ms. Vidal"
-    base_personality: "Anxious about outcomes and not always good at hiding it, needs confidence in whoever she is working with."
-    communication_style: "Polite but probing, asks follow-up questions and notices when answers feel rehearsed."
+    base_personality: "Detail-oriented and conscientious. Asks follow-up questions to feel informed, but sometimes hears the answer she feared rather than the one given."
+    communication_style: "Polite and circling — returns to the same concern from slightly different angles until she feels settled."
     metrics:
       trust:      { start: 0.30, min: 0.0, max: 1.0 }
       reassurance: { start: 0.35, min: 0.0, max: 1.0 }
@@ -289,8 +289,8 @@ npcs:
   - id: parent
     archetype_role: family
     name: "Your parent"
-    base_personality: "Loving but shaped by habits and assumptions formed years ago, sometimes struggling to update their model of who you are."
-    communication_style: "Familiar and emotionally loaded, mixes pride and concern in the same breath."
+    base_personality: "Loving and present. Still operates from a version of you that's two or three years out of date."
+    communication_style: "Warm but loaded — mixes genuine curiosity with assumptions they don't realize they're making."
     metrics:
       trust:     { start: 0.70, min: 0.0, max: 1.0 }
       closeness: { start: 0.65, min: 0.0, max: 1.0 }
@@ -312,8 +312,8 @@ npcs:
   - id: sibling
     archetype_role: family
     name: "Your sibling"
-    base_personality: "Blunt about the things that matter and performatively casual about everything else, difficult to read from the outside."
-    communication_style: "Clipped and dry, shares things obliquely rather than directly — context accumulates over time."
+    base_personality: "Perceptive and direct. Has strong opinions about you specifically, and updates them slowly."
+    communication_style: "Dry and oblique — says the actual thing sideways, and expects you to have caught it."
     metrics:
       trust:     { start: 0.60, min: 0.0, max: 1.0 }
       closeness: { start: 0.50, min: 0.0, max: 1.0 }
@@ -337,8 +337,8 @@ npcs:
   - id: barista
     archetype_role: stranger
     name: "The barista"
-    base_personality: "Efficient and quietly observant, has seen enough regulars to notice who bothers to be decent."
-    communication_style: "Brief and professional, responses stay to the point unless given a reason to extend them."
+    base_personality: "Efficient and quietly observant. Decides within a few visits whether someone is worth the extra effort."
+    communication_style: "Brief and functional — friendlier with regulars who've earned it, noticeably cooler with those who haven't."
     metrics:
       impression: { start: 0.50, min: 0.0, max: 1.0 }
       trust:      { start: 0.40, min: 0.0, max: 1.0 }
@@ -358,8 +358,8 @@ npcs:
   - id: recurring_stranger
     archetype_role: stranger
     name: "Someone you've passed before"
-    base_personality: "Pays more attention than they let on, has formed quiet impressions from brief encounters long before you noticed them."
-    communication_style: "Sparse and slightly knowing, references past observations without explaining how they remember."
+    base_personality: "Attentive and unhurried. Has been watching longer than you knew, and assumes you've been doing the same."
+    communication_style: "Sparse and slightly sideways — references things in passing that reveal they've been paying closer attention than most people would."
     metrics:
       impression: { start: 0.45, min: 0.0, max: 1.0 }
       trust:      { start: 0.35, min: 0.0, max: 1.0 }
