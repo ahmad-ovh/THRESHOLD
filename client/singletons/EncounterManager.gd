@@ -13,26 +13,27 @@ func start_encounter(npc_id: String) -> void:
 	if player:
 		player.set_physics_process(false)
 		
+	# Instantly show Dialogue UI in Connecting mode
+	_ensure_dialogue_ui()
+	dialogue_ui_ref.show_connecting_state(npc_id)
+	
+	# Fetch opening line from backend
 	var res = await ApiClient.start_interaction(PlayerStore.player_id, npc_id)
 	if res.has("error"):
+		var detail = res.get("detail", "Could not connect to server.")
+		dialogue_ui_ref.display_error(detail)
 		if player:
 			player.set_physics_process(true)
 		return
 		
 	current_state = State.ACTIVE
-	
-	# Open Dialogue UI
-	if not dialogue_ui_ref:
-		var ui_scene = preload("res://scenes/ui/DialogueUI.tscn")
-		dialogue_ui_ref = ui_scene.instantiate()
-		get_tree().root.add_child(dialogue_ui_ref)
-		dialogue_ui_ref.message_submitted.connect(_on_player_message_submitted)
-		
 	dialogue_ui_ref.open_dialogue(res.get("npc_name", npc_id), res.get("opening_line", ""))
 
 func _on_player_message_submitted(text: String) -> void:
 	var res = await ApiClient.send_message(PlayerStore.player_id, active_npc_id, text)
 	if res.has("error"):
+		var detail = res.get("detail", "Failed to send message.")
+		dialogue_ui_ref.display_error(detail)
 		return
 		
 	dialogue_ui_ref.display_reply(res.get("npc_reply", ""))
@@ -64,3 +65,10 @@ func _finalize_encounter() -> void:
 		player.set_physics_process(true)
 		
 	current_state = State.LOBBY
+
+func _ensure_dialogue_ui() -> void:
+	if not dialogue_ui_ref:
+		var ui_scene = preload("res://scenes/ui/DialogueUI.tscn")
+		dialogue_ui_ref = ui_scene.instantiate()
+		get_tree().root.add_child(dialogue_ui_ref)
+		dialogue_ui_ref.message_submitted.connect(_on_player_message_submitted)

@@ -10,23 +10,32 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -220.0
+offset_top = -240.0
 grow_horizontal = 2
 grow_vertical = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DialogueBox"]
 layout_mode = 2
 
-[node name="SpeakerLabel" type="Label" parent="DialogueBox/VBoxContainer"]
+[node name="HeaderContainer" type="HBoxContainer" parent="DialogueBox/VBoxContainer"]
 layout_mode = 2
+
+[node name="SpeakerLabel" type="Label" parent="DialogueBox/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "NPC Name"
-horizontal_alignment = 0
+
+[node name="LoadingLabel" type="Label" parent="DialogueBox/VBoxContainer/HeaderContainer"]
+visible = false
+layout_mode = 2
+text = "💭 Thinking..."
 
 [node name="DialogueText" type="RichTextLabel" parent="DialogueBox/VBoxContainer"]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 size_flags_vertical = 3
-text = "Dialogue text lines..."
+bbcode_enabled = true
+text = "Dialogue lines..."
 
 [node name="InputContainer" type="HBoxContainer" parent="DialogueBox/VBoxContainer"]
 layout_mode = 2
