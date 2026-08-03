@@ -62,8 +62,11 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _handle_ground_movement(delta: float) -> void:
-	var raw_input = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var is_running = Input.is_key_pressed(KEY_SHIFT)
+	var raw_input = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	if raw_input == Vector2.ZERO:
+		raw_input = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+
+	var is_running = Input.is_action_pressed("sprint") or Input.is_key_pressed(KEY_SHIFT)
 	var target_speed = run_speed if is_running else walk_speed
 
 	# Calculate direction relative to camera facing
