@@ -23,12 +23,14 @@ This guide is a step-by-step, zero-guesswork tutorial for building the entire **
 
 ### Step 1.3: Configure Window & Stretch Mode
 1. Go to **Project -> Project Settings -> General -> Display -> Window**.
-2. **Viewport Width**: `1280`
-3. **Viewport Height**: `720`
-4. Scroll down to **Stretch**:
-   - **Mode**: `canvas_items`
-   - **Aspect**: `expand`
-5. Click **Close**.
+2. Under the **Size** section (at the top):
+   - **Viewport Width**: `1280`
+   - **Viewport Height**: `720`
+   - **Mode**: Keep as `Windowed` (or your preferred window mode; do not confuse this with Stretch Mode below).
+3. Scroll down to the **Stretch** subsection (at the bottom of the Window settings page):
+   - **Mode**: Select `canvas_items` *(Note: This is under the Stretch sub-header, NOT the Window Mode at the top!)*
+   - **Aspect**: Select `expand`
+4. Click **Close**.
 
 ### Step 1.4: Create Folder Structure
 In the **FileSystem** dock (bottom-left panel in Godot), right-click `res://` and create the following directory tree:
