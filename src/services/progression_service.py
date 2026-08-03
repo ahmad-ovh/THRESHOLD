@@ -130,11 +130,21 @@ def apply_xp_and_level(
 def determine_outcome(
     avg_scores: dict[str, float],
     seed: ScenarioSeed,
+    narrative_outcome: str | None = None,
 ) -> str:
     """
     Determine encounter outcome (good / neutral / poor) from average scores
-    weighted by seed's scoring focus.
+    weighted by seed's scoring focus, aligned with LLM narrative outcome when triggered.
     """
+    if narrative_outcome:
+        lowered = str(narrative_outcome).lower()
+        if "good" in lowered:
+            return "good"
+        elif "poor" in lowered:
+            return "poor"
+        elif "neutral" in lowered:
+            return "neutral"
+
     primary_dim = seed.scoring_focus.primary
     secondary_dim = seed.scoring_focus.secondary
 

@@ -329,7 +329,8 @@ async def send_message(
     perf_outcome = progression_service.determine_outcome(
         {dim: sum(s.get(dim, 0.5) for s in session.accumulated_scores) / len(session.accumulated_scores)
          for dim in ("clarity", "empathy", "politeness", "expression")} if session.accumulated_scores else turn_scores,
-        seed
+        seed,
+        narrative_outcome=outcome_triggered or session.narrative_outcome,
     )
     session.performance_outcome = perf_outcome
 
@@ -422,7 +423,9 @@ async def end_interaction(
     else:
         avg_scores = {"clarity": 0.5, "empathy": 0.5, "politeness": 0.5, "expression": 0.5}
 
-    performance_outcome = progression_service.determine_outcome(avg_scores, seed)
+    performance_outcome = progression_service.determine_outcome(
+        avg_scores, seed, narrative_outcome=narrative_outcome
+    )
 
     # 2. Write encounter-summary memory entry
     # Determine the dominant interpretation from accumulated turns
