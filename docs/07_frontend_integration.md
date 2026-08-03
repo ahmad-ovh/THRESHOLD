@@ -1,622 +1,597 @@
-# THRESHOLD — Frontend Integration Guide
+# THRESHOLD — Frontend Integration & Game Engine Guide
 
-This document is a comprehensive, developer-facing integration guide for building a frontend client for **THRESHOLD**. It defines how the client UI layer maps backend FastAPI endpoints and state transformations into interactive gameplay.
+This document is a comprehensive, developer-facing guide for building a game client and frontend for **THRESHOLD**. It defines how to integrate backend REST APIs with game engine systems (such as **Godot 4.x**, Unity, or Unreal Engine), mapping server responses into 3D world behavior, character animations, cinematic camera cuts, UI overlays, and game state transitions.
 
 ---
 
 ## 1. Architecture Overview & Data Flow
 
-THRESHOLD's backend operates as a stateless HTTP REST API with server-side persistent SQLite storage. All gameplay logic—scoring, metric calculations, state rule resolution, LLM dialogue generation, and progression formulas—runs strictly on the backend.
-
-The frontend client serves as the **presentation and state orchestration layer**, driving the encounter lifecycle through a sequential 4-stage flow.
+THRESHOLD uses a hybrid architecture: a **stateless FastAPI REST backend** handling all state evaluation, metric updates, progression, and LLM dialogue generation; and a **3D game engine client** responsible for spatial interaction, character rendering, camera control, visual effects, and UI presentation.
 
 ```
-                  ┌────────────────────────────────────────────────────────┐
-                  │                 GET /interaction/daily                 │
-                  │                 GET /player/status                     │
-                  └──────────────────────────┬─────────────────────────────┘
-                                             │
-                                   [1. Game Launch / Lobby]
-                                             │
-                                             ▼
-                  ┌────────────────────────────────────────────────────────┐
-                  │                POST /interaction/start                 │
-                  └──────────────────────────┬─────────────────────────────┘
-                                             │
-                                 [2. Encounter Initialization]
-                                             │
-                                             ▼
-   ┌──────────────────────────────────────────────────────────────────────────────────┐
-   │                               3. Interaction Loop                                │
-   │                                                                                  │
-   │   Player Types Message ──► POST /interaction/message ──► Response Received      │
-   │            ▲                                                    │                │
-   │            │                                                    ▼                │
-   │            └──────────────── [ encounter_over == false ] ───────┤                │
-   └─────────────────────────────────────────────────────────────────┼────────────────┘
-                                                                     │
-                                                        [ encounter_over == true ]
-                                                                     │
-                                                                     ▼
-                  ┌────────────────────────────────────────────────────────┐
-                  │                 4. Encounter Resolution                │
-                  │                 POST /interaction/end                  │
-                  └──────────────────────────┬─────────────────────────────┘
-                                             │
-                                 [5. Results & Rewards Modal]
-                                             │
-                                             ▼
-                  ┌────────────────────────────────────────────────────────┐
-                  │                 POST /interaction/report               │
-                  └────────────────────────────────────────────────────────┘
++-----------------------------------------------------------------------------------------------+
+|                                      GAME CLIENT ENGINE                                       |
+|                                                                                               |
+|   ┌─────────────────────┐       ┌───────────────────────┐       ┌─────────────────────────┐   |
+|   │ Spatial Triggers    │ ────► │ EncounterManager      │ ────► │ ApiClient (HTTP REST)   │   |
+|   │ (Area3D Interaction)│       │ (State Machine)       │       │ (Async Network Calls)   │   |
+|   └─────────────────────┘       └───────────┬───────────┘       └────────────┬────────────┘   |
+|                                             │                                │                |
+|                                             ▼                                │                |
+|   ┌──────────────────────────────────────────────────────────────────┐       │                |
+|   │                      3D World & UI Presenters                    │       │                |
+|   │  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐  │       │                |
+|   │  │ CameraSystem │  │ NpcController│  │ Dialogue & Feedback UI │  │       │                |
+|   │  └──────────────┘  └──────────────┘  └────────────────────────┘  │       │                |
+|   └──────────────────────────────────────────────────────────────────┘       │                |
++------------------------------------------------------------------------------┼----------------+
+                                                                               │ HTTP Requests
+                                                                               ▼
++-----------------------------------------------------------------------------------------------+
+|                                       THRESHOLD BACKEND                                       |
+|   FastAPI REST API ──► State Engine ──► Relationship Service ──► OpenAI SDK (LLM Pipelines)   |
++-----------------------------------------------------------------------------------------------+
 ```
-
-### Turn Loop Breakdown (Player Action → API → UI Update)
-
-1. **Player Action**: Player enters text into the message input field and presses Send.
-2. **Client Locking**: Input field is disabled, submit button enters loading state, and an ambient NPC "thinking" animation is triggered.
-3. **API Invocation**: Client sends `POST /interaction/message` with `{ player_id, npc_id, message }`.
-4. **Backend Processing**:
-   - Memory Formation LLM scores message across four dimensions (`clarity`, `empathy`, `politeness`, `expression`) and selects an interpretation label.
-   - Relationship Service updates running effective metrics and evaluates state rules and relationship tier.
-   - Character Voice LLM generates NPC reply text, emotional expression, coach hint, and optional narrative closure signal.
-5. **Response Resolution**: Client receives `MessageResponse`.
-6. **UI Synchronization**:
-   - **Dialogue Panel**: Appends player text and triggers typewriter effect for `npc_reply`.
-   - **Character Visuals**: Transitions portrait asset/sprite to match `npc_expression`.
-   - **Scoring & Feedback**: Renders radar chart / metric bars for `turn_scores`, updates `strength` and `improvement` text cards.
-   - **Coach Hint**: Displays coach hint tooltip/banner if `coach_hint.shown` is `true`.
-   - **Badges**: Updates `relationship_tier` and `npc_state` badge chips.
-   - **Encounter Check**: If `encounter_over` is `true`, locks input permanently and presents the "Complete Encounter" resolution CTA. Otherwise, re-enables text input for the next turn.
 
 ---
 
-## 2. API Endpoint Specifications
+### Turn Loop Sequence (Player Action → 3D World & UI Reaction)
+
+```
+   PLAYER ACTION (3D World / UI)
+         │
+         ├───► 1. Player presses "Send" in Dialogue UI
+         │
+   GAME CLIENT ENGINE
+         │
+         ├───► 2. Lock UI Input (Disable text field, set is_submitting = true)
+         ├───► 3. Trigger NPC "Thinking" Animation (Head tilt, subtle idle shift)
+         ├───► 4. ApiClient fires POST /interaction/message async
+         │
+   FASTAPI BACKEND
+         │
+         ├───► 5. Scoring LLM evaluates turn scores & interpretation signal
+         ├───► 6. Metric update formula updates effective metrics & evaluates NPC state
+         ├───► 7. Character Voice LLM generates reply, expression enum, coach hint & outcome
+         │
+   GAME CLIENT ENGINE (Response Processing)
+         │
+         ├───► 8. ApiClient receives MessageResponse JSON
+         ├───► 9. NpcController transitions animation tree & blendshapes to npc_expression
+         ├───► 10. CameraDirector triggers cinematic shot cut based on turn_scores & npc_state
+         ├───► 11. LightingController updates color grading/vignette accent
+         ├───► 12. DialogueUI presents npc_reply via typewriter text effect
+         ├───► 13. FeedbackUI animates score radar chart, strength/improvement cards, & hints
+         ├───► 14. StatusUI updates relationship_tier and npc_state badge chips
+         │
+         └───► 15. IF encounter_over == true:
+                     - Lock input permanently
+                     - Trigger CameraDirector "Encounter Resolution Shot"
+                     - Show "Complete Encounter" CTA
+                   ELSE:
+                     - Unlock input field for next turn
+```
+
+---
+
+## 2. Recommended Game Client Architecture
+
+To maintain clean separation of concerns, the game client should split responsibilities into distinct singletons (Autoloads), controllers, and presenters.
+
+```
+res://
+├── singletons/
+│   ├── ApiClient.gd          # Handles HTTP REST requests, DTO parsing, & network errors
+│   ├── EncounterManager.gd   # Global state machine governing encounter lifecycle
+│   └── PlayerStore.gd        # Stores persistent player profile (level, skill vector, XP)
+├── controllers/
+│   ├── NpcController.gd      # Controls 3D NPC model, animation tree, IK look-at, & blendshapes
+│   ├── CameraDirector.gd     # Manages 3D cameras, shot cuts, FOV transitions, & camera shake
+│   └── EnvironmentDirector.gd# Manages lighting, color grading, post-processing, & audio cues
+├── ui/
+│   ├── DialogueOverlay.tscn  # Speech bubbles, typewriter effect, text input box
+│   ├── FeedbackPanel.tscn    # Turn score meters, radar chart, strength/improvement cards
+│   ├── CoachHintBanner.tscn  # Floating hint banner
+│   ├── StatusHeader.tscn     # Tier badge, mood badge, level progress bar
+│   └── SettlementModal.tscn  # End-of-encounter results, Observer insight, level-up splash
+└── scenes/
+    ├── MainLobby.tscn        # Main menu / daily challenge selection hub
+    └── EncounterScene.tscn   # 3D encounter environment with staged NPC & camera rigs
+```
+
+---
+
+## 3. Game Subsystems Specification
+
+### 3.1 EncounterManager (State Machine)
+
+The `EncounterManager` is the central orchestrator of the game client. It exposes signals for scene elements to react to state changes without hard coupling.
+
+**Client Game States (`EncounterState` Enum):**
+- `LOBBY`: Navigating menus, inspecting daily challenge or player report.
+- `ENCOUNTER_INITIALIZING`: Spatial interaction triggered; calling `POST /interaction/start`.
+- `ENCOUNTER_ACTIVE`: Conversation loop in progress (`POST /interaction/message`).
+- `ENCOUNTER_RESOLVING`: Encounter ended on backend (`encounter_over == true`); awaiting final settlement.
+- `ENCOUNTER_SETTLEMENT`: Displaying results modal after `POST /interaction/end`.
+
+**Exposed Signals:**
+- `encounter_started(start_response: StartResponse)`
+- `turn_submitted(message: String)`
+- `turn_completed(message_response: MessageResponse)`
+- `expression_changed(expression: String)`
+- `scores_updated(turn_scores: Dictionary)`
+- `encounter_resolution_ready(narrative_outcome: String, performance_outcome: String)`
+- `encounter_ended(end_response: EndResponse)`
+
+---
+
+### 3.2 3D NPC Controller (`NpcController`)
+
+The `NpcController` attaches to the 3D NPC character instance in the scene. It manages body posture, facial expressions, and head tracking.
+
+#### Component Structure:
+1. **AnimationTree (AnimationNodeStateMachine)**:
+   - Base layer: Idle loops (`idle_neutral`, `idle_warm`, `idle_tense`, `idle_withdrawn`).
+   - Gesture layer: One-shot upper body gestures (`nod_approving`, `shake_disappointed`, `arms_crossed`).
+2. **BlendShape / Face Driver**:
+   - Maps backend `npc_expression` string to facial mesh BlendShape target weights (e.g. `smile`, `brow_furrow`, `jaw_clench`, `eye_squint`).
+3. **SkeletonIK3D / Head Tracker**:
+   - Rotates NPC head and neck bones to track `Camera3D` or the player avatar position with smooth damping.
+
+#### Expression Mapping Matrix:
+
+| Backend `npc_expression` | Animation State | BlendShape Weights | Body Gesture |
+|---|---|---|---|
+| `neutral` | `idle_neutral` | Default | Hands at sides / relaxed stance |
+| `warm` | `idle_relaxed` | `smile`: 0.6, `eye_soft`: 0.5 | Leaning slightly forward |
+| `hurt` | `idle_withdrawn` | `brow_inner_up`: 0.7, `lip_tight`: 0.5 | Head tilted down, averted eyes |
+| `guarded` | `idle_tense` | `brow_down`: 0.4, `eye_squint`: 0.3 | Arms crossed, stiff torso |
+| `irritated` | `idle_tense` | `brow_down`: 0.8, `jaw_clench`: 0.7 | Sharp head turn, erect posture |
+| `concerned` | `idle_attentive` | `brow_inner_up`: 0.8, `mouth_open`: 0.2 | Hand near chin / chest gesture |
+| `disappointed` | `idle_withdrawn` | `mouth_sad`: 0.6, `brow_down`: 0.5 | Slow head shake, sigh gesture |
+| `approving` | `idle_relaxed` | `smile`: 0.8, `eye_soft`: 0.7 | Firm single nod |
+| `dismissive` | `idle_distant` | `eye_squint`: 0.5, `head_turn_away`: 0.6 | Wave off gesture / shoulder shrug |
+| `satisfied` | `idle_relaxed` | `smile`: 0.9, `brow_relaxed`: 1.0 | Relaxed shoulders, open hands |
+| `frustrated` | `idle_tense` | `brow_down`: 0.9, `lip_press`: 0.8 | Pinching bridge of nose gesture |
+| `hostile` | `idle_aggressive` | `brow_down`: 1.0, `eye_wide`: 0.6, `jaw_clench`: 0.9 | Stepping forward, rigid arms |
+| `defensive` | `idle_tense` | `brow_inner_up`: 0.5, `eye_wide`: 0.4 | Leaning back, palms outward |
+| `withdrawn` | `idle_withdrawn` | `gaze_down`: 0.8, `mouth_flat`: 0.7 | Recessed posture, minimal motion |
+| `collaborative` | `idle_attentive` | `smile`: 0.5, `eye_soft`: 0.8 | Open hand gestures, direct gaze |
+
+---
+
+### 3.3 Cinematic Camera Director (`CameraDirector`)
+
+Rather than maintaining a static camera angle, conversations feel cinematic when the camera cuts between dynamic camera shots based on turn flow, scores, and emotional intensity.
+
+```
+       [CAM_OTS_PLAYER]                 [CAM_MEDIUM_NPC]                [CAM_CLOSEUP_NPC]
+ (Over-The-Shoulder View)            (Standard Dialogue Shot)          (Intense Emotion Shot)
+ ┌──────────────────────┐            ┌──────────────────────┐          ┌──────────────────────┐
+ │ [Player Back]  [NPC] │            │     [NPC Bust]       │          │   [NPC Face Detail]  │
+ └──────────────────────┘            └──────────────────────┘          └──────────────────────┘
+```
+
+#### Camera Shot Types:
+- `CAM_OVER_SHOULDER`: Standard default camera angle framing the player's shoulder on the left, NPC on the right.
+- `CAM_MEDIUM_NPC`: Medium shot focused on NPC upper body. Used during opening lines and normal exchanges.
+- `CAM_CLOSEUP_NPC`: Tight close-up on NPC face. Triggered when `turn_scores.empathy < 0.3` or when `npc_expression` is `hurt`, `hostile`, or `frustrated`.
+- `CAM_REACTION_WIDE`: Wide shot capturing both characters and environment. Used during high-performance turns (`turn_scores` average > 0.85) or encounter resolution.
+
+#### Camera Cut Rules:
+- On turn response: Smooth transition or hard cut to `CAM_MEDIUM_NPC`.
+- On low score (`empathy` or `clarity` < 0.35): Cut to `CAM_CLOSEUP_NPC` with slight FOV narrowing (e.g. 75° → 60°) to heighten tension.
+- On high score (`turn_scores` avg > 0.80): Cut to `CAM_OVER_SHOULDER` with warm depth-of-field.
+- On `encounter_over == true`: Transition to `CAM_REACTION_WIDE` for closing narrative dialogue.
+
+---
+
+### 3.4 Environmental & Lighting Controller (`EnvironmentDirector`)
+
+Lighting and post-processing accents amplify emotional resonance without altering backend data.
+
+- **Color Grading**: Interpolate `WorldEnvironment` color adjustment properties based on `relationship_tier` and `npc_state`.
+  - Positive states (`warm`, `satisfied`, `approving`): Shift ambient tint toward warm gold (+10% saturation).
+  - Negative states (`hostile`, `hurt`, `withdrawn`): Shift ambient tint toward cool blue/grey (-15% saturation, +10% contrast).
+- **Vignette Control**: Increase screen vignette opacity when `npc_state` is `hostile`, `defensive`, or `frustrated`.
+- **Audio Stings**:
+  - Soft chime on `coach_hint.shown == true`.
+  - Minor key low pad on `encounter_over == true` with `narrative_outcome == "poor"`.
+  - Major key warm chord on `encounter_over == true` with `narrative_outcome == "good"`.
+  - Level-Up fan fare on `level_up` object received in `/end`.
+
+---
+
+## 4. Godot 4.x Reference Architecture
+
+Below is a reference Godot 4.x project structure demonstrating how nodes, scripts, and signals connect to the backend.
+
+### 4.1 Node Hierarchy Tree
+
+```
+EncounterScene (Node3D)
+├── WorldEnvironment (WorldEnvironment)
+├── DirectionalLight3D (DirectionalLight3D)
+├── Environment3D (Node3D)
+│   ├── RoomMesh (MeshInstance3D)
+│   └── Furniture (Node3D)
+├── CameraDirector (Node3D) [script: CameraDirector.gd]
+│   ├── CamOverShoulder (Camera3D)
+│   ├── CamMediumNpc (Camera3D)
+│   └── CamCloseUpNpc (Camera3D)
+├── PlayerStaging (Node3D)
+│   └── PlayerMarker (Marker3D)
+├── NPC_Character (CharacterBody3D) [script: NpcController.gd]
+│   ├── Skeleton3D (Skeleton3D)
+│   │   └── FaceMesh (MeshInstance3D)
+│   ├── AnimationPlayer (AnimationPlayer)
+│   ├── AnimationTree (AnimationTree)
+│   └── SkeletonIK3D (SkeletonIK3D)
+└── CanvasLayer (CanvasLayer)
+    ├── DialogueUI (Control) [script: DialogueUI.gd]
+    │   ├── ChatContainer (VBoxContainer)
+    │   │   └── ScrollContainer (ScrollContainer)
+    │   │       └── ChatStream (VBoxContainer)
+    │   └── InputBar (HBoxContainer)
+    │       ├── MessageInput (LineEdit)
+    │       └── SendButton (Button)
+    ├── FeedbackPanel (Control) [script: FeedbackPanel.gd]
+    │   ├── TurnScoresBar (HBoxContainer)
+    │   └── FeedbackCards (VBoxContainer)
+    ├── StatusHeader (Control) [script: StatusHeader.gd]
+    │   ├── TierBadge (Label)
+    │   └── MoodBadge (Label)
+    └── SettlementModal (Control) [script: SettlementModal.gd]
+```
+
+---
+
+### 4.2 Core GDScript Implementation Examples
+
+#### 1. `ApiClient.gd` (Autoload Singleton)
+
+```gdscript
+# res://singletons/ApiClient.gd
+extends Node
+
+signal request_failed(error_message: String)
+
+const BASE_URL := "http://127.0.0.1:8000"
+
+func start_interaction(player_id: String, npc_id: String) -> Dictionary:
+	var payload := {"player_id": player_id, "npc_id": npc_id}
+	return await _http_post("/interaction/start", payload)
+
+func send_message(player_id: String, npc_id: String, message: String) -> Dictionary:
+	var payload := {"player_id": player_id, "npc_id": npc_id, "message": message}
+	return await _http_post("/interaction/message", payload)
+
+func end_interaction(player_id: String, npc_id: String) -> Dictionary:
+	var payload := {"player_id": player_id, "npc_id": npc_id}
+	return await _http_post("/interaction/end", payload)
+
+func _http_post(path: String, body: Dictionary) -> Dictionary:
+	var http := HTTPRequest.new()
+	add_child(http)
+	
+	var json_body := JSON.stringify(body)
+	var headers := ["Content-Type: application/json"]
+	
+	var err := http.request(BASE_URL + path, headers, HTTPClient.METHOD_POST, json_body)
+	if err != OK:
+		request_failed.emit("Failed to initiate HTTP request")
+		http.queue_free()
+		return {}
+	
+	var result: Array = await http.request_completed
+	http.queue_free()
+	
+	var response_code: int = result[1]
+	var response_body: PackedByteArray = result[3]
+	var parsed = JSON.parse_string(response_body.get_string_from_utf8())
+	
+	if response_code >= 400:
+		var detail = parsed.get("detail", "HTTP Error %d" % response_code) if parsed else "Network Error"
+		request_failed.emit(detail)
+		return {"error": true, "code": response_code, "detail": detail}
+		
+	return parsed
+```
+
+---
+
+#### 2. `EncounterManager.gd` (Autoload Singleton)
+
+```gdscript
+# res://singletons/EncounterManager.gd
+extends Node
+
+enum State { LOBBY, INITIALIZING, ACTIVE, RESOLVING, SETTLEMENT }
+
+var current_state: State = State.LOBBY
+var current_player_id: String = "player_01"
+var current_npc_id: String = ""
+var active_session_id: String = ""
+var turn_count: int = 0
+var is_over: bool = false
+
+signal encounter_started(data: Dictionary)
+signal turn_completed(data: Dictionary)
+signal encounter_ended(data: Dictionary)
+signal state_changed(new_state: State)
+
+func start_encounter(npc_id: String) -> void:
+	current_npc_id = npc_id
+	_set_state(State.INITIALIZING)
+	
+	var res := await ApiClient.start_interaction(current_player_id, current_npc_id)
+	if res.has("error"):
+		_set_state(State.LOBBY)
+		return
+		
+	active_session_id = res.get("interaction_id", "")
+	turn_count = 0
+	is_over = false
+	
+	_set_state(State.ACTIVE)
+	encounter_started.emit(res)
+
+func submit_player_message(message_text: String) -> void:
+	if current_state != State.ACTIVE or is_over:
+		return
+		
+	var res := await ApiClient.send_message(current_player_id, current_npc_id, message_text)
+	if res.has("error"):
+		return
+		
+	turn_count += 1
+	is_over = res.get("encounter_over", false)
+	
+	turn_completed.emit(res)
+	
+	if is_over:
+		_set_state(State.RESOLVING)
+
+func finalize_encounter() -> void:
+	var res := await ApiClient.end_interaction(current_player_id, current_npc_id)
+	if res.has("error"):
+		return
+		
+	_set_state(State.SETTLEMENT)
+	encounter_ended.emit(res)
+
+func _set_state(new_state: State) -> void:
+	current_state = new_state
+	state_changed.emit(new_state)
+```
+
+---
+
+#### 3. `NpcController.gd` (3D NPC Component)
+
+```gdscript
+# res://controllers/NpcController.gd
+extends CharacterBody3D
+
+@onready var anim_tree: AnimationTree = $AnimationTree
+@onready var face_mesh: MeshInstance3D = $Skeleton3D/FaceMesh
+@onready var ik_lookat: SkeletonIK3D = $SkeletonIK3D
+
+const EXPRESSION_BLENDSHAPES := {
+	"neutral": {"smile": 0.0, "brow_down": 0.0, "brow_up": 0.0},
+	"warm": {"smile": 0.7, "brow_down": 0.0, "brow_up": 0.2},
+	"hurt": {"smile": 0.0, "brow_down": 0.0, "brow_up": 0.8},
+	"guarded": {"smile": 0.0, "brow_down": 0.5, "brow_up": 0.0},
+	"irritated": {"smile": 0.0, "brow_down": 0.9, "brow_up": 0.0},
+	"approving": {"smile": 0.8, "brow_down": 0.0, "brow_up": 0.3},
+	"hostile": {"smile": 0.0, "brow_down": 1.0, "brow_up": 0.0},
+}
+
+func _ready() -> void:
+	EncounterManager.encounter_started.connect(_on_encounter_started)
+	EncounterManager.turn_completed.connect(_on_turn_completed)
+	if ik_lookat:
+		ik_lookat.start()
+
+func _on_encounter_started(data: Dictionary) -> void:
+	var expr: String = data.get("npc_expression", "neutral")
+	set_expression(expr)
+
+func _on_turn_completed(data: Dictionary) -> void:
+	var expr: String = data.get("npc_expression", "neutral")
+	set_expression(expr)
+
+func set_expression(expr_name: String) -> void:
+	var blend_data: Dictionary = EXPRESSION_BLENDSHAPES.get(expr_name, EXPRESSION_BLENDSHAPES["neutral"])
+	var mesh: ArrayMesh = face_mesh.mesh
+	
+	# Smoothly interpolate blendshapes
+	var tween := create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC)
+	for shape_name in blend_data.keys():
+		var idx := face_mesh.find_blend_shape_by_name(shape_name)
+		if idx != -1:
+			var target_weight: float = blend_data[shape_name]
+			tween.tween_method(
+				func(val: float): face_mesh.set_blend_shape_value(idx, val),
+				face_mesh.get_blend_shape_value(idx),
+				target_weight,
+				0.4
+			)
+			
+	# Update animation tree state machine
+	var playback: AnimationNodeStateMachinePlayback = anim_tree.get("parameters/playback")
+	if playback:
+		playback.travel("state_" + expr_name)
+```
+
+---
+
+## 5. AI Output vs. Deterministic Game Logic Boundary
+
+Game developers must clearly distinguish between backend AI-generated dynamic outputs and local/backend deterministic logic to avoid unnecessary client overhead or corrupting game rules.
+
+```
++---------------------------------------------------------------------------------------------------+
+|                                     GAME SYSTEM BOUNDARY MAP                                      |
++------------------------------------+----------------------------------+---------------------------+
+| System Feature                     | Authority / Driven By            | Deterministic vs. AI      |
++------------------------------------+----------------------------------+---------------------------+
+| 3D Player Movement & Collision     | Client Game Engine               | Fully Deterministic       |
+| Spatial Encounter Trigger Zones    | Client Game Engine               | Fully Deterministic       |
+| Camera Cuts & FOV Transitions      | Client CameraDirector            | Fully Deterministic       |
+| Dialogue UI Typewriter Effect      | Client DialogueUI                | Fully Deterministic       |
+| Local Animation Blending & IK      | Client NpcController             | Fully Deterministic       |
++------------------------------------+----------------------------------+---------------------------+
+| Metric Updates (Trust, Respect)    | Backend Relationship Service     | Fully Deterministic       |
+| NPC Mood State Resolution          | Backend State Engine (Rules)     | Fully Deterministic       |
+| Relationship Tier Resolution       | Backend Relationship Service     | Fully Deterministic       |
+| Scenario Seed Selection            | Backend Scenario Service         | Deterministic (Weighted)  |
+| Performance Outcome & XP Gain      | Backend Progression Service      | Fully Deterministic       |
+| Observer Pattern Trigger Check     | Backend Observer Service         | Fully Deterministic       |
++------------------------------------+----------------------------------+---------------------------+
+| Dialogue Text (`npc_reply`)        | Backend Character Voice LLM      | AI Generated              |
+| Initial Line Personalization       | Backend Personalization LLM      | AI Generated              |
+| Message Scoring & Interpretation   | Backend Memory Formation LLM     | AI Generated (Clamped)    |
+| Emotional Expression Selection     | Backend LLM / State Fallback     | AI Selected (Enum)        |
+| Coach Hint Line (`coach_hint`)     | Backend Character Voice LLM      | AI Generated              |
+| Observer Pattern Summary Message   | Backend Observer Phrasing LLM    | AI Generated              |
+| Player Communication Report        | Backend Report Generation LLM    | AI Generated              |
++------------------------------------+----------------------------------+---------------------------+
+```
+
+---
+
+## 6. 3D Scene Design & Staging Guide
+
+Every NPC encounter scenario in THRESHOLD belongs to an archetype (`teacher`, `friend`, `colleague`, `client`, `family`, `stranger`). 3D scene environments should be staged to reflect these narrative contexts.
+
+```
+┌─────────────────────────┬───────────────────────────────┬────────────────────────────────────────┐
+│ Archetype / NPC         │ Recommended 3D Scene Setting  │ Staging & Camera Framing               │
+├─────────────────────────┼───────────────────────────────┼────────────────────────────────────────┤
+│ teacher                 │ University Office / Classroom │ Desk separating player and NPC.        │
+│ (prof_adler, ms_okoro)  │ Bookshelves, dim warm lamps   │ Camera angle looking slightly up at NPC.│
+├─────────────────────────┼───────────────────────────────┼────────────────────────────────────────┤
+│ friend                  │ Coffee Shop / Apartment Couch │ Intimate seating, side-by-side angle.  │
+│ (daria, felix, priya)   │ Soft natural window light     │ Shallow depth-of-field, warm grading.  │
+├─────────────────────────┼───────────────────────────────┼────────────────────────────────────────┤
+│ colleague               │ Corporate Meeting Room        │ Clean modern conference table.         │
+│ (nadia, tomas, seren)   │ Bright fluorescent/glass light│ Symmetrical eye-level camera framing.  │
+├─────────────────────────┼───────────────────────────────┼────────────────────────────────────────┤
+│ client                  │ Executive Office Suite        │ Large corner office desk, city backdrop│
+│ (ms_hartwell, mr_osei)  │ High contrast cool lighting   │ Formal over-the-shoulder wide angle.   │
+├─────────────────────────┼───────────────────────────────┼────────────────────────────────────────┤
+│ family                  │ Kitchen Island / Living Room  │ Domestic setting, warm ambient lamp.   │
+│ (parent, sibling)       │ Casual cozy props (coffee mugs)│ Close medium shots, high emotional proximity│
+├─────────────────────────┼───────────────────────────────┼────────────────────────────────────────┤
+│ stranger                │ Espresso Bar / Street Counter │ Outdoor/public urban counter.          │
+│ (barista, recurring)    │ Ambient passerby movement     │ Dynamic wide-angle background framing. │
+└─────────────────────────┴───────────────────────────────┴────────────────────────────────────────┘
+```
+
+---
+
+## 7. Developer Implementation Roadmap (Build Order)
+
+To construct the THRESHOLD game client efficiently, developers should follow this 5-phase implementation order:
+
+```
+  PHASE 1: Core REST Client & Headless Harness
+  ├── Build ApiClient singleton & DTO parsers
+  └── Create text-only UI harness to test /start, /message, /end API loops
+
+  PHASE 2: Client State Machine & Dialogue UI
+  ├── Implement EncounterManager state machine & signals
+  └── Build DialogueUI (typewriter effect, input field, scroll container)
+
+  PHASE 3: 3D Scene & Character Animation Rigs
+  ├── Create 3D stage environments & light presets
+  ├── Set up 3D NPC model with AnimationTree & SkeletonIK3D look-at
+  └── Implement BlendShape face driver mapped to npc_expression enums
+
+  PHASE 4: Cinematic Camera & Environmental Accents
+  ├── Build CameraDirector with 3 shot types & dynamic score cuts
+  └── Set up EnvironmentDirector color grading & audio sting controllers
+
+  PHASE 5: Progression, Observer & Settlement Modals
+  ├── Build SettlementModal for /end response (Observer reveal & XP bars)
+  ├── Build Player Report Dashboard for /report
+  └── Add final sound effects, UI particle polish, & input locking guards
+```
+
+---
+
+## 8. API Endpoint Reference Specifications
+
+*(Maintained from original specification for completeness)*
 
 Base URL: `http://<host>:<port>` (default dev: `http://127.0.0.1:8000`)
 
 ---
 
-### 2.1 GET /health
-
-- **When Frontend Calls It**: App initialization / splash screen to verify backend service availability.
+### 8.1 GET /health
+- **When Frontend Calls It**: App initialization / splash screen.
 - **Request Inputs**: None.
-- **Response Fields**:
-  - `status` (`string`): `"ok"`
-  - `service` (`string`): `"THRESHOLD Backend"`
-- **Game Usage**:
-  - `status == "ok"`: Proceed to main menu.
-  - Failure/Error: Display offline maintenance overlay with reconnect retry button.
+- **Response Fields**: `status` (`"ok"`), `service` (`"THRESHOLD Backend"`).
+
+### 8.2 GET /player/status
+- **When Frontend Calls It**: Lobby screen & profile load.
+- **Request Inputs**: `player_id` (`string`, Query Param).
+- **Response Fields**: `player_id`, `level`, `skill_vector`, `xp_progress`, `daily_streak`, `created_at`.
+
+### 8.3 POST /player/reset
+- **When Frontend Calls It**: Settings "Reset Progress" button.
+- **Request Inputs**: `player_id` (`string`).
+- **Response Fields**: `player_id`, `reset` (`true`).
+
+### 8.4 GET /interaction/daily
+- **When Frontend Calls It**: Lobby screen featured card load.
+- **Request Inputs**: `player_id` (`string`, Query Param).
+- **Response Fields**: `seed_id`, `npc_id`, `focus`, `streak_count`.
+
+### 8.5 POST /interaction/start
+- **When Frontend Calls It**: Player triggers spatial interaction / selects scenario.
+- **Request Inputs**: `player_id`, `npc_id`.
+- **Response Fields**: `npc_name`, `npc_expression`, `opening_line`, `interaction_id`, `encounter_over`.
+
+### 8.6 POST /interaction/message
+- **When Frontend Calls It**: Player submits message turn.
+- **Request Inputs**: `player_id`, `npc_id`, `message`.
+- **Response Fields**: `npc_expression`, `npc_reply`, `coach_hint`, `turn_scores`, `relationship_tier`, `npc_state`, `feedback`, `encounter_over`, `narrative_outcome`, `performance_outcome`.
+
+### 8.7 POST /interaction/end
+- **When Frontend Calls It**: Player clicks "Complete Encounter" after `encounter_over == true`.
+- **Request Inputs**: `player_id`, `npc_id`.
+- **Response Fields**: `observer_event`, `encounter_summary`, `level_up` (optional).
+
+### 8.8 POST /interaction/report
+- **When Frontend Calls It**: Player views Communication Report screen.
+- **Request Inputs**: `player_id`.
+- **Response Fields**: `current_level`, `skill_vector`, `strongest_skill`, `improving_area`, `recent_pattern_summary`, `recommended_practice`.
 
 ---
 
-### 2.2 GET /player/status
+## 9. Error, Latency & Loading Strategies in 3D Environments
 
-- **When Frontend Calls It**: Main menu / player profile dashboard load; after returning from encounters.
-- **Request Inputs**:
-  - `player_id` (`string`, Query Param, Required): Player identifier.
-- **Response Fields**:
-  - `player_id` (`string`): Player ID.
-  - `level` (`integer`): Current player level (1–100).
-  - `skill_vector` (`object`): Dict of floats `0.0–1.0` for `clarity`, `empathy`, `politeness`, `expression`.
-  - `xp_progress` (`float`): Experience progress within current level (`0.0–1.0`).
-  - `daily_streak` (`integer`): Daily login/encounter streak count.
-  - `created_at` (`string`, ISO 8601): Account creation timestamp.
-- **Game Usage**:
-  - `level`: Rendered in top navigation bar and player avatar frame.
-  - `xp_progress`: Drives the top bar XP progress bar width (`percentage = xp_progress * 100%`).
-  - `skill_vector`: Renders player overall communication skill profile (radar chart / stat bars).
-  - `daily_streak`: Displays streak counter flame/icon in header.
+### 9.1 Network Latency (1.5s - 3.5s per turn)
+Because `/message` executes two sequential LLM pipeline calls (Memory Formation scoring and Character Voice dialogue generation), response latency ranges from **1.5 to 3.5 seconds**.
+
+- **In-World Idle Animations**: During request wait time, `NpcController` should transition the NPC to an active "thinking" idle animation (`idle_attentive`, subtle head tilt, breathing motion) to prevent the character from feeling frozen.
+- **UI Lock & Submitting State**: Input text field is disabled with a translucent overlay. A animated ellipsis typing bubble ("{NPC} is thinking...") appears in the chat stream.
+
+### 9.2 Error Recovery
+- **400 Bad Request (Session Over)**: Locks message input immediately; prompts player to click "Complete Encounter".
+- **404 Not Found (Session Expired/Server Restart)**: Displays an in-game modal: *"Encounter state lost."* Returns player gracefully to the 3D lobby view.
+- **500 Server Error**: Unlocks input field, restores drafted text, and displays a temporary warning toast: *"Connection timeout. Please retry."*
 
 ---
 
-### 2.3 POST /player/reset
-
-- **When Frontend Calls It**: Developer debug menu, settings "Reset Progress" button, or demo reset flow.
-- **Request Inputs**:
-  - `player_id` (`string`, JSON Body, Required): Player identifier.
-- **Response Fields**:
-  - `player_id` (`string`): Player ID.
-  - `reset` (`boolean`): Always `true`.
-- **Game Usage**:
-  - Flushes client-side state cache, resets player store to defaults, navigates to welcome screen.
-
----
-
-### 2.4 GET /interaction/daily
-
-- **When Frontend Calls It**: Main lobby screen initialization to present the "Featured Scenario of the Day" card.
-- **Request Inputs**:
-  - `player_id` (`string`, Query Param, Required): Player identifier (auto-creates player if new).
-- **Response Fields**:
-  - `seed_id` (`string`): Featured scenario seed ID.
-  - `npc_id` (`string`): Matched NPC template ID.
-  - `focus` (`string`): Human-readable focus string (e.g. `"Clarity + Politeness"`).
-  - `streak_count` (`integer`): Current daily streak.
-- **Game Usage**:
-  - `seed_id` & `npc_id`: Pre-populates the "Start Daily Challenge" banner card. Clicking triggers `POST /interaction/start` with `npc_id`.
-  - `focus`: Rendered as focus tags on the daily challenge card.
-  - `streak_count`: Updates daily streak badge UI.
-
----
-
-### 2.5 POST /interaction/start
-
-- **When Frontend Calls It**: When player selects an NPC / scenario seed and clicks "Begin Conversation".
-- **Request Inputs**:
-  ```json
-  {
-    "player_id": "player_01",
-    "npc_id": "daria"
-  }
-  ```
-- **Response Fields**:
-  - `npc_name` (`string`): NPC display name (e.g. `"Daria"`).
-  - `npc_expression` (`string`, Enum): Opening emotional expression.
-  - `opening_line` (`string`): LLM-personalized opening line of dialogue.
-  - `interaction_id` (`string`): Selected scenario seed ID.
-  - `encounter_over` (`boolean`): Always `false` on start.
-- **Game Usage**:
-  - Initializes active encounter view.
-  - Sets portrait asset/animation to `npc_expression`.
-  - Sets header title to `npc_name` and scenario badge to `interaction_id`.
-  - Clears chat history list and inserts `opening_line` as the first message (`role: "npc"`).
-  - Enables message input text box and sets turn counter to 0.
-
----
-
-### 2.6 POST /interaction/message
-
-- **When Frontend Calls It**: On submitting a message during an active encounter turn loop.
-- **Request Inputs**:
-  ```json
-  {
-    "player_id": "player_01",
-    "npc_id": "daria",
-    "message": "I'm really sorry for canceling last minute, work was overwhelming."
-  }
-  ```
-- **Response Fields**:
-  - `npc_expression` (`string`, Enum): NPC emotional expression for this reply.
-  - `npc_reply` (`string`): NPC dialogue response text.
-  - `coach_hint` (`object`): `{ "shown": boolean, "line": string }`. Factual feedback observation.
-  - `turn_scores` (`object`): `{ "clarity": float, "empathy": float, "politeness": float, "expression": float }` (values `0.0–1.0`).
-  - `relationship_tier` (`string`): Current tier label (e.g., `"Comfortable"`, `"Trusted"`).
-  - `npc_state` (`string`): Current deterministic state label (e.g., `"withdrawn"`, `"attentive"`).
-  - `feedback` (`object`): `{ "strength": string, "improvement": string }`.
-  - `encounter_over` (`boolean`): `true` if narrative outcome triggered or 8-turn safety cap hit.
-  - `narrative_outcome` (`string | null`): `"good"`, `"neutral"`, `"poor"`, or `null`.
-  - `performance_outcome` (`string`): `"good"`, `"neutral"`, or `"poor"`.
-- **Game Usage**:
-  - `npc_reply`: Appended to chat stream with typewriter effect.
-  - `npc_expression`: Triggers portrait emotion state transition (e.g. cross-fade sprite to `irritated` or `warm`).
-  - `turn_scores`: Animated score meters / radar chart update for current turn.
-  - `feedback`: Renders "Key Strength" and "Growth Opportunity" info cards.
-  - `coach_hint`: If `shown == true`, animates coach hint tooltip into view.
-  - `relationship_tier` & `npc_state`: Updates status pill tags in header.
-  - `encounter_over`: If `true`, disables input box, displays end-of-encounter overlay CTA ("View Encounter Results").
-
----
-
-### 2.7 POST /interaction/end
-
-- **When Frontend Calls It**: When `encounter_over` is `true` and player clicks "Complete Encounter" (or when player manually exits early).
-- **Request Inputs**:
-  ```json
-  {
-    "player_id": "player_01",
-    "npc_id": "daria"
-  }
-  ```
-- **Response Fields**:
-  - `observer_event` (`object`): `{ "fired": boolean, "npc_id": string, "message": string | null }`.
-  - `encounter_summary` (`object`): `{ "narrative_outcome": string | null, "performance_outcome": string }`.
-  - `level_up` (`object`, Optional): Present only if leveled up: `{ "new_level": integer }`.
-- **Game Usage**:
-  - Opens Encounter Settlement Modal.
-  - `encounter_summary`: Renders performance outcome badge (`GOOD`, `NEUTRAL`, `POOR`) and narrative conclusion summary.
-  - `observer_event`: If `fired == true`, displays special "Observer Insight" card/modal with `message`.
-  - `level_up`: If present, triggers Level-Up splash particle animation and updates stored player level.
-  - Closes active encounter view and updates player status in background.
-
----
-
-### 2.8 POST /interaction/report
-
-- **When Frontend Calls It**: Player opens the "Communication Growth Report" tab/modal.
-- **Request Inputs**:
-  ```json
-  {
-    "player_id": "player_01"
-  }
-  ```
-- **Response Fields**:
-  - `current_level` (`integer`): Player level.
-  - `skill_vector` (`object`): Dict of floats `0.0–1.0` for 4 dimensions.
-  - `strongest_skill` (`string`): One of `clarity`, `empathy`, `politeness`, `expression`.
-  - `improving_area` (`string`): Interpretive area key (e.g. `emotional_acknowledgment`).
-  - `recent_pattern_summary` (`string`): AI-generated synthesis of recent communication pattern.
-  - `recommended_practice` (`string`): AI recommendation for next encounter focus.
-- **Game Usage**:
-  - Displays comprehensive player growth report dashboard with radar graph, pattern analysis text card, and recommended practice call-to-action button.
-
----
-
-## 3. Gameplay Component & Response Mapping
-
-| Backend Response Field | Frontend Component / Target | Visual / Behavioural Effect |
-|---|---|---|
-| `opening_line` | Dialogue Stream | Appends initial NPC message bubble with typewriter effect |
-| `npc_reply` | Dialogue Stream | Appends turn reply bubble; autoscrolls chat window to bottom |
-| `npc_expression` | NPC Portrait Container | Swaps sprite texture or triggers animation clip (`warm`, `hurt`, `guarded`, etc.) |
-| `coach_hint.shown` | Coach Hint Bar | Shows/hides hint container |
-| `coach_hint.line` | Coach Hint Bar | Renders factual coaching text note |
-| `turn_scores` | Score Breakdown Panel | Updates 4 dimension progress bars (0–100%) or radar chart |
-| `feedback.strength` | Feedback Card (Green) | Displays primary positive observation |
-| `feedback.improvement` | Feedback Card (Amber) | Displays primary growth area observation |
-| `relationship_tier` | Header Status Bar | Updates relationship status chip (e.g. `Comfortable` → `Trusted`) |
-| `npc_state` | Header Status Bar | Updates NPC mood badge (e.g. `neutral` → `attentive`) |
-| `encounter_over` | Input Container & CTA | Disables text input, hides send button, shows "View Results" CTA |
-| `narrative_outcome` | Summary Modal | Displays story closure badge (`good`, `neutral`, `poor`, or `safety limit reached`) |
-| `performance_outcome` | Summary Modal | Displays mechanical performance rating driving XP rewards |
-| `observer_event.fired` | Observer Insight Modal | Triggers pattern reveal popup if `true` |
-| `observer_event.message` | Observer Insight Modal | Renders factual multi-encounter pattern observation text |
-| `level_up` | Overlay / Banner | Triggers Level-Up celebration banner & sound effect |
-| `xp_progress` | Player Header Bar | Animate-fills top XP bar |
-
----
-
-## 4. NPC Expressions & Visual Animations
-
-The backend returns `npc_expression` as an enum string in `/start` and `/message` responses. The frontend maps these enum keys to visual portrait assets, lighting/vignette overlays, and posture presets.
-
-```
-+------------------+----------------------------------------------------+----------------------------+
-| Enum Value       | Visual Mood / Facial Asset Mapping                  | Color / Vignette Accent    |
-+------------------+----------------------------------------------------+----------------------------+
-| neutral          | Default posture, relaxed eye contact               | Neutral grey / Clear       |
-| warm             | Gentle smile, relaxed eyebrows, leaning forward    | Warm gold (#E6B800)        |
-| hurt             | Averted glance, furrowed brow, tightened lips      | Muted slate blue           |
-| guarded          | Crossed arms, reserved eye contact, slight distance| Cool grey                  |
-| irritated        | Sharp gaze, tense jaw, stiff posture               | Burnt amber                |
-| concerned        | Slightly raised inner eyebrows, focused gaze       | Soft cyan                  |
-| disappointed     | Lowered gaze, slight head shake posture            | Dimmed grey                |
-| approving        | Slight nodding frame, warm confident smile         | Vibrant emerald            |
-| dismissive       | Head turned slightly away, neutral eye fold        | Dusty purple               |
-| satisfied        | Confident smile, relaxed shoulders                 | Soft green                 |
-| frustrated       | Pressed lips, tension around eyes                  | Deep orange                |
-| hostile          | Direct intense gaze, rigid stance                  | Muted crimson              |
-| defensive        | Slightly leaned back, closed body language         | Steel blue                 |
-| withdrawn        | Downward gaze, hands clasped, recessed lighting    | Dark grey vignette         |
-| collaborative    | Open posture, direct engaging eye contact          | Soft indigo                |
-+------------------+----------------------------------------------------+----------------------------+
-```
-
----
-
-## 5. Client-Side State Architecture
-
-The frontend must maintain state organized into distinct logical domains:
-
-```
-                                  ┌────────────────────────┐
-                                  │      Client Store      │
-                                  └───────────┬────────────┘
-                                              │
-      ┌──────────────────┬────────────────────┼──────────────────┬──────────────────┐
-      │                  │                    │                  │                  │
-      ▼                  ▼                    ▼                  ▼                  ▼
-┌──────────────┐   ┌───────────┐     ┌──────────────────┐   ┌──────────┐   ┌────────────────┐
-│  Encounter   │   │ NPC State │     │   Conversation   │   │ Outcomes │   │     Player     │
-│    State     │   │   Store   │     │   History Store  │   │  Store   │   │  Progression   │
-└──────────────┘   └───────────┘     └──────────────────┘   └──────────┘   └────────────────┘
-```
-
-### 5.1 Store Definitions
-
-#### 1. Encounter State
-- `sessionId` (`string | null`): Current active scenario seed ID (`interaction_id`).
-- `activeNpcId` (`string | null`): Selected NPC template ID.
-- `turnCount` (`number`): Current turn count (starts at 0, incremented per message).
-- `isOver` (`boolean`): Flags whether encounter turn loop has concluded.
-- `isSubmitting` (`boolean`): Loading guard during backend API request.
-
-#### 2. NPC State
-- `npcName` (`string`): Active NPC name.
-- `currentExpression` (`NpcExpression`): Current emotional expression.
-- `currentState` (`string`): Current deterministic state label (e.g. `"attentive"`).
-- `relationshipTier` (`string`): Current relationship tier (e.g. `"Comfortable"`).
-
-#### 3. Conversation History
-- `messages` (`Array<ChatMessage>`): Array of chat objects:
-  ```typescript
-  interface ChatMessage {
-    id: string;
-    role: "player" | "npc";
-    text: string;
-    timestamp: number;
-    turnScores?: TurnScores;
-    feedback?: Feedback;
-    expression?: NpcExpression;
-  }
-  ```
-
-#### 4. Outcomes State
-- `narrativeOutcome` (`"good" | "neutral" | "poor" | null`): LLM narrative outcome.
-- `performanceOutcome` (`"good" | "neutral" | "poor" | null`): Deterministic rating.
-- `observerEvent` (`ObserverEvent | null`): Observer pattern payload if fired.
-
-#### 5. Player Progression State
-- `playerId` (`string`): Current player identifier.
-- `level` (`number`): Player level.
-- `xpProgress` (`number`): Float `0.0–1.0`.
-- `dailyStreak` (`number`): Current daily streak.
-- `skillVector` (`SkillVector`): `{ clarity, empathy, politeness, expression }`.
-
----
-
-## 6. Encounter Lifecycle & State Machine
-
-```
-              ┌──────────────────────────────────────────────────┐
-              │                   [UNINITIALIZED]                │
-              └─────────────────────────┬────────────────────────┘
-                                        │
-                             POST /interaction/start
-                                        │
-                                        ▼
-              ┌──────────────────────────────────────────────────┐
-              │                     [ACTIVE]                     │
-              │             Turn 0: Opening line shown           │
-              └─────────────────────────┬────────────────────────┘
-                                        │
-                         POST /interaction/message (×N)
-                                        │
-                                        ▼
-             ┌────────────────────────────────────────────────────┐
-             │                 [RESOLUTION_READY]                 │
-             │           encounter_over == true returned          │
-             └──────────────────────────┬─────────────────────────┘
-                                        │
-                              POST /interaction/end
-                                        │
-                                        ▼
-              ┌──────────────────────────────────────────────────┐
-              │                    [RESOLVED]                    │
-              │          Encounter Settlement Modal shown        │
-              └──────────────────────────────────────────────────┘
-```
-
-### Stage 1: Initialization (`POST /interaction/start`)
-- Client sends `player_id` and `npc_id`.
-- Client resets turn history and sets `encounter_over = false`.
-- Receives `opening_line` and opening `npc_expression`.
-- UI displays NPC greeting bubble and activates message input box.
-
-### Stage 2: Turn Loop (`POST /interaction/message`)
-- Player inputs text → client validates message is non-empty (`message.trim().length > 0`).
-- Input locked (`isSubmitting = true`).
-- Response returns updated `npc_expression`, `npc_reply`, `turn_scores`, `feedback`, `coach_hint`, `relationship_tier`, and `npc_state`.
-- UI updates all corresponding components.
-- If `encounter_over` is `false`, input unlocks (`isSubmitting = false`).
-
-### Stage 3: Resolution Ready (`encounter_over == true`)
-- Backend sets `encounter_over = true` either when:
-  - Character Voice LLM triggers narrative closure (after `min_turns_before_end` = 3 turns).
-  - Safety cap (`max_turns_safety_limit` = 8 turns) is reached.
-- Client permanently locks message input field.
-- CTA button changes to "Complete Encounter".
-
-### Stage 4: End & Settlement (`POST /interaction/end`)
-- Client calls `/interaction/end`.
-- Receives `observer_event`, `encounter_summary`, and optional `level_up`.
-- Settlement modal displays narrative + performance outcomes.
-- If `observer_event.fired == true`, displays Observer modal.
-- If `level_up` is returned, displays Level Up animation.
-- Navigates back to main menu.
-
----
-
-## 7. Data Models & TypeScript Interfaces
-
-Below are production-ready TypeScript definitions matching backend FastAPI models.
-
-```typescript
-// ── Enums & Literal Types ──
-
-export type NpcExpression =
-  | "neutral"
-  | "warm"
-  | "hurt"
-  | "guarded"
-  | "irritated"
-  | "concerned"
-  | "disappointed"
-  | "approving"
-  | "dismissive"
-  | "satisfied"
-  | "frustrated"
-  | "hostile"
-  | "defensive"
-  | "withdrawn"
-  | "collaborative";
-
-export type PerformanceOutcome = "good" | "neutral" | "poor";
-export type NarrativeOutcome = "good" | "neutral" | "poor" | null;
-
-export type ArchetypeRole =
-  | "teacher"
-  | "friend"
-  | "colleague"
-  | "client"
-  | "family"
-  | "stranger";
-
-// ── Sub-Structures ──
-
-export interface SkillVector {
-  clarity: number;
-  empathy: number;
-  politeness: number;
-  expression: number;
-}
-
-export interface TurnScores {
-  clarity: number;
-  empathy: number;
-  politeness: number;
-  expression: number;
-}
-
-export interface CoachHint {
-  shown: boolean;
-  line: string;
-}
-
-export interface Feedback {
-  strength: string;
-  improvement: string;
-}
-
-export interface ObserverEvent {
-  fired: boolean;
-  npc_id: string;
-  message: string | null;
-}
-
-export interface EncounterSummary {
-  narrative_outcome: NarrativeOutcome;
-  performance_outcome: PerformanceOutcome;
-}
-
-export interface LevelUpInfo {
-  new_level: number;
-}
-
-// ── API Request DTOs ──
-
-export interface StartRequest {
-  player_id: string;
-  npc_id: string;
-}
-
-export interface MessageRequest {
-  player_id: string;
-  npc_id: string;
-  message: string;
-}
-
-export interface EndRequest {
-  player_id: string;
-  npc_id: string;
-}
-
-export interface ReportRequest {
-  player_id: string;
-}
-
-export interface ResetRequest {
-  player_id: string;
-}
-
-// ── API Response DTOs ──
-
-export interface HealthResponse {
-  status: string;
-  service: string;
-}
-
-export interface PlayerStatusResponse {
-  player_id: string;
-  level: number;
-  skill_vector: SkillVector;
-  xp_progress: number;
-  daily_streak: number;
-  created_at: string;
-}
-
-export interface ResetResponse {
-  player_id: string;
-  reset: boolean;
-}
-
-export interface DailyResponse {
-  seed_id: string;
-  npc_id: string;
-  focus: string;
-  streak_count: number;
-}
-
-export interface StartResponse {
-  npc_name: string;
-  npc_expression: NpcExpression;
-  opening_line: string;
-  interaction_id: string;
-  encounter_over: boolean;
-}
-
-export interface MessageResponse {
-  npc_expression: NpcExpression;
-  npc_reply: string;
-  coach_hint: CoachHint;
-  turn_scores: TurnScores;
-  relationship_tier: string;
-  npc_state: string;
-  feedback: Feedback;
-  encounter_over: boolean;
-  narrative_outcome: NarrativeOutcome;
-  performance_outcome: PerformanceOutcome;
-}
-
-export interface EndResponse {
-  observer_event: ObserverEvent;
-  encounter_summary: EncounterSummary;
-  level_up?: LevelUpInfo;
-}
-
-export interface ReportResponse {
-  current_level: number;
-  skill_vector: SkillVector;
-  strongest_skill: string;
-  improving_area: string;
-  recent_pattern_summary: string;
-  recommended_practice: string;
-}
-```
-
----
-
-## 8. Error Handling & Loading Strategies
-
-### 8.1 HTTP Status Code Handling
-
-| HTTP Code | Condition / Cause | Frontend Action |
-|---|---|---|
-| **400 Bad Request** | Encounter is already over (call `/message` after `encounter_over == true`). | Lock message input immediately; prompt user to click "Complete Encounter". |
-| **404 Not Found** | `npc_id` invalid, player not found, or active session missing. | Display error modal ("Session expired or lost"); redirect to scenario selection screen to call `/start`. |
-| **422 Unprocessable Entity** | `message` field is empty or whitespace-only. | Show inline input validation error ("Please enter a message before sending"). |
-| **500 Internal Error** | Scenario seed missing or LLM API exception. | Display toast error ("Server error occurred. Please retry."); unlock submit button. |
-| **Network Timeout** | Backend API / LLM latency spike (>10s). | Show retry banner; keep draft message in input box. |
-
-### 8.2 Loading UI & Pessimistic Locking
-
-Because backend response times depend on two sequential LLM pipeline calls (Memory Formation scoring and Character Voice dialogue generation), response latency typically ranges from **1.5 to 3.5 seconds per turn**.
-
-- **Pessimistic Locking**: Optimistic message bubbles must **not** be appended until `/message` succeeds, as turn score and NPC reaction depend on backend scoring.
-- **Thinking / Typing Indicator**:
-  1. Immediately append player message to chat stream with a "sending..." status icon.
-  2. Display an animated "NPC is thinking..." bubble in the chat view.
-  3. Disable text input field and send button.
-  4. On response, replace typing indicator with `npc_reply` text and activate typewriter effect.
-
----
-
-## 9. Existing Architecture Gaps & TODOs
-
-The following features or metrics are required for complete frontend rendering but are currently missing or unexposed in the existing backend architecture:
-
-- **TODO (Raw Metrics Exposure)**: Individual underlying metric float values (e.g. `trust: 0.55`, `respect: 0.60`, `patience: 0.40`) are updated server-side but are **not exposed** in `StartResponse` or `MessageResponse` (only `npc_state` and `relationship_tier` string labels are returned). If the UI needs raw metric bars/sliders, the backend must expose `effective_metrics` in API responses.
-- **TODO (Memory Archive API)**: Memory entries are stored in the backend `memory_entries` table, but there is no GET endpoint for fetching an NPC's full memory history list to display in a "Relationship Memory Journal" UI tab.
-- **TODO (Daily Streak Tracking Logic)**: `daily_streak` is returned in `/player/status` and `/interaction/daily`, but backend logic to increment streaks based on daily calendar logins is not implemented.
-- **TODO (Streaming Responses)**: `POST /interaction/message` is a blocking HTTP REST endpoint. Implementing Server-Sent Events (SSE) or WebSockets for streaming LLM response tokens would significantly improve perceived dialogue latency.
-- **TODO (Authentication & Player Accounts)**: `player_id` is an unauthenticated client-supplied string. Production frontend integration will require JWT / session auth headers.
+## 10. Existing Architecture Gaps & TODOs
+
+The following items are missing or unexposed in the current backend and must be accounted for in client development:
+
+- **TODO (Raw Metrics Exposure)**: Underlying metric float values (`trust`, `respect`, `closeness`, etc.) are processed server-side but are **not exposed** in REST responses (only `npc_state` and `relationship_tier` string labels are returned). If the game client needs numeric metric progress bars, the backend must expose `effective_metrics` in `/start` and `/message` responses.
+- **TODO (Memory Journal API)**: Memory entries are stored in backend SQLite tables, but there is no GET endpoint for retrieving an NPC's full memory history list for an in-game "Memory Log / Relationship Journal" UI.
+- **TODO (Daily Streak Tracking Logic)**: `daily_streak` is returned in status APIs, but automatic calendar day streak incrementation logic is not implemented on the backend.
+- **TODO (Streaming LLM Token Support)**: `/interaction/message` is a blocking REST call. Adding WebSockets or Server-Sent Events (SSE) for streaming dialogue text would allow real-time typewriter playback as LLM tokens generate.
+- **TODO (Client Authentication)**: `player_id` is an unauthenticated client string. Production deployment requires session authentication tokens.
