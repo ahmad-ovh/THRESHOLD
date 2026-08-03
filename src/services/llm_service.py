@@ -153,11 +153,13 @@ and generate their authentic response to the player.
 
 You MUST return valid JSON with exactly this schema:
 {
-  "npc_reply":      <string — what the character says>,
-  "npc_expression": <string enum — one of: neutral, warm, hurt, guarded, irritated, concerned,
-                     disappointed, approving, dismissive, satisfied, frustrated, hostile,
-                     defensive, withdrawn, collaborative>,
-  "coach_hint":     <string — one factual observation about the conversation, never prescriptive>
+  "npc_reply":        <string — what the character says>,
+  "npc_expression":   <string enum — one of: neutral, warm, hurt, guarded, irritated, concerned,
+                       disappointed, approving, dismissive, satisfied, frustrated, hostile,
+                       defensive, withdrawn, collaborative>,
+  "coach_hint":       <string — one factual observation about the conversation, never prescriptive>,
+  "outcome_triggered": <string — one of: "good", "neutral", "poor", or null>,
+  "end_encounter":    <boolean>
 }
 
 Rules:
@@ -168,6 +170,18 @@ Rules:
     what you said about feeling left out."). NEVER tell the player what to say or prescribe an action.
   - You do not choose NPC state — you write from within the state you are given.
   - Do not invent new scenario premises.
+
+Narrative outcome detection rules:
+  - outcome_triggered must be null unless the conversation has naturally and clearly reached
+    one of the described scenario outcome conditions.
+  - NEVER trigger an outcome before the minimum turn count is satisfied (this is enforced externally,
+    but do not force an early close even if you could justify it).
+  - Evaluate only: has the narrative actually resolved in a way that matches a trigger condition?
+  - If outcome_triggered is set to a value (not null), end_encounter MUST be true.
+  - If no outcome has been reached, outcome_triggered must be null and end_encounter must be false.
+  - When an outcome is triggered, generate the npc_reply as the closing message using the
+    closing_seed for guidance: treat it as a narrative direction, NOT as literal text to copy.
+    Transform it into a natural closing line in the character's voice.
 """.strip()
 
 
@@ -179,15 +193,32 @@ async def character_voice(
     memory_context: str,
     conversation_history: list[dict],
     scenario_context: dict,
+    possible_outcomes: dict | None = None,
+    min_turns_reached: bool = True,
 ) -> dict:
     """
-    Generate the NPC's reply, expression, and coach hint.
+    Generate the NPC's reply, expression, coach hint, and narrative outcome assessment.
 
-    Returns: { npc_reply, npc_expression, coach_hint }
+    Returns: { npc_reply, npc_expression, coach_hint, outcome_triggered, end_encounter }
     """
     history_text = "\n".join(
         f"{m['role'].upper()}: {m['text']}" for m in conversation_history[-8:]
     )
+
+    outcomes_text = ""
+    if possible_outcomes:
+        outcomes_text = f"""
+Possible narrative outcomes (evaluate whether the conversation has reached one of these):
+  good outcome trigger:    {possible_outcomes.get('good_trigger', '')}
+  good closing_seed:       {possible_outcomes.get('good_closing_seed', '')}
+  neutral outcome trigger: {possible_outcomes.get('neutral_trigger', '')}
+  neutral closing_seed:    {possible_outcomes.get('neutral_closing_seed', '')}
+  poor outcome trigger:    {possible_outcomes.get('poor_trigger', '')}
+  poor closing_seed:       {possible_outcomes.get('poor_closing_seed', '')}
+
+Minimum turn threshold met (early ending is allowed): {min_turns_reached}
+If minimum turns NOT met, outcome_triggered MUST be null and end_encounter MUST be false.
+""".strip()
 
     user_prompt = f"""
 Character: {npc_name}
@@ -206,6 +237,8 @@ Long-term memory of this relationship:
 Conversation so far (this encounter):
 {history_text}
 
+{outcomes_text}
+
 Respond as {npc_name} in their current state. Return JSON.
 """.strip()
 
@@ -216,6 +249,25 @@ Respond as {npc_name} in their current state. Return JSON.
     result.setdefault("npc_reply", f"{npc_name} says nothing.")
     result.setdefault("npc_expression", npc_state)
     result.setdefault("coach_hint", "")
+    result.setdefault("outcome_triggered", None)
+    result.setdefault("end_encounter", False)
+
+    # Enforce constraint: if outcome_triggered is set, end_encounter must be true
+    if result["outcome_triggered"] is not None:
+        result["end_encounter"] = True
+    else:
+        result["end_encounter"] = False
+
+    # Enforce: if minimum turns not reached, cannot end
+    if not min_turns_reached:
+        result["outcome_triggered"] = None
+        result["end_encounter"] = False
+
+    # Validate outcome value
+    valid_outcomes = {"good", "neutral", "poor"}
+    if result["outcome_triggered"] not in valid_outcomes and result["outcome_triggered"] is not None:
+        result["outcome_triggered"] = None
+        result["end_encounter"] = False
 
     return result
 
@@ -242,6 +294,17 @@ CRITICAL constraints:
   - Only personalize: tone, wording, how the personality expresses itself.
   - The opening_line must feel consistent with the character's communication style and current state.
   - Never invent a new scenario; only re-word the provided opening_line_seed.
+
+SEED INTENT RULE — this is critical:
+  - The opening_line_seed represents the INTENT of the opening, not the literal text to use.
+  - You must NEVER output the seed verbatim unless it coincidentally is the most natural phrasing.
+  - Transform the seed into a line that sounds like this specific character would actually say it,
+    given their personality, communication style, and emotional state.
+  - Example: seed "Good to finally connect — I'd like to understand a bit more about how you work."
+    might become: "Hey, glad we could finally chat. Before we jump in, I'm curious how you usually
+    approach projects like this." — or — "Nice to meet you properly. I wanted to get a feel for
+    how you like working with people."
+  - Preserve the meaning and intent; the exact words should almost never be copied.
 """.strip()
 
 
@@ -263,7 +326,7 @@ Communication style: {npc_identity.get('communication_style', '')}
 
 Scenario title: {seed_data.get('title', '')}
 Scenario premise: {seed_data.get('premise', '')}
-Opening line seed (to personalize, not replace): "{seed_data.get('opening_line_seed', '')}"
+Opening line seed (narrative intent only — do NOT copy verbatim): "{seed_data.get('opening_line_seed', '')}"
 NPC goal: {seed_data.get('npc_goal', '')}
 
 Current NPC metrics (emotional state at encounter start):

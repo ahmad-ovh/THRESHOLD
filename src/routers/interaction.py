@@ -281,6 +281,19 @@ async def send_message(
         "npc_goal": seed.context.npc_goal,
     }
 
+    # Build possible_outcomes dict for the LLM
+    outcomes_payload = {
+        "good_trigger":         seed.possible_outcomes.good.trigger,
+        "good_closing_seed":    seed.possible_outcomes.good.closing_seed,
+        "neutral_trigger":      seed.possible_outcomes.neutral.trigger,
+        "neutral_closing_seed": seed.possible_outcomes.neutral.closing_seed,
+        "poor_trigger":         seed.possible_outcomes.poor.trigger,
+        "poor_closing_seed":    seed.possible_outcomes.poor.closing_seed,
+    }
+
+    # Minimum 3 player turns before narrative closure is allowed
+    min_turns_reached = session.turn_count >= settings.min_turns_before_end
+
     voice_result = await llm_service.character_voice(
         npc_name=template.name,
         npc_personality=template.base_personality,
@@ -289,11 +302,14 @@ async def send_message(
         memory_context=memory_ctx,
         conversation_history=history,
         scenario_context=scenario_context,
+        possible_outcomes=outcomes_payload,
+        min_turns_reached=min_turns_reached,
     )
 
     npc_reply = voice_result.get("npc_reply", "")
     npc_expression = voice_result.get("npc_expression", new_state)
     coach_hint_text = voice_result.get("coach_hint", "")
+    outcome_triggered = voice_result.get("outcome_triggered")  # "good"|"neutral"|"poor"|None
 
     # Append NPC reply to conversation history
     history = session.conversation_history
@@ -301,8 +317,17 @@ async def send_message(
     session.conversation_history = history
 
     # 5. Encounter termination check
-    encounter_over = session.turn_count >= settings.max_turns_per_encounter
-    session.encounter_over = encounter_over
+    # Narrative closure: LLM triggered an outcome
+    narrative_ended = bool(outcome_triggered)
+    # Safety fallback: maximum turn limit
+    safety_limit_hit = session.turn_count >= settings.max_turns_safety_limit
+
+    encounter_over = narrative_ended or safety_limit_hit
+
+    if encounter_over:
+        session.encounter_over = True
+        if outcome_triggered:
+            session.narrative_outcome = outcome_triggered
 
     # 6. Build feedback (strength + improvement from scores)
     feedback = _build_feedback(turn_scores, seed)
@@ -318,6 +343,7 @@ async def send_message(
         "npc_state": new_state,
         "feedback": feedback,
         "encounter_over": encounter_over,
+        "narrative_outcome": outcome_triggered,
     }
 
 
@@ -375,8 +401,9 @@ async def end_interaction(
     accumulated = session.accumulated_scores
     final_effective = session.effective_metrics
     conversation_history = session.conversation_history
+    narrative_outcome = session.narrative_outcome  # LLM-selected, may be None
 
-    # 1. Determine outcome
+    # 1. Determine performance outcome (deterministic — always computed)
     if accumulated:
         avg_scores = {
             dim: sum(s.get(dim, 0.5) for s in accumulated) / len(accumulated)
@@ -385,7 +412,10 @@ async def end_interaction(
     else:
         avg_scores = {"clarity": 0.5, "empathy": 0.5, "politeness": 0.5, "expression": 0.5}
 
-    outcome = progression_service.determine_outcome(avg_scores, seed)
+    performance_outcome = progression_service.determine_outcome(avg_scores, seed)
+
+    # Use narrative_outcome for XP/progression if available; fall back to performance_outcome
+    outcome_for_progression = narrative_outcome if narrative_outcome else performance_outcome
 
     # 2. Write encounter-summary memory entry
     # Determine the dominant interpretation from accumulated turns
@@ -419,7 +449,7 @@ async def end_interaction(
     xp_gain = progression_service.compute_xp_gain(
         turn_scores_list=accumulated,
         seed=seed,
-        outcome=outcome,
+        outcome=outcome_for_progression,
         player_level=player.level,
     )
     new_skill_vector = progression_service.compute_skill_vector_update(
@@ -450,7 +480,7 @@ async def end_interaction(
         player_id=body.player_id,
         npc_template_id=body.npc_id,
         scenario_id=session.scenario_id,
-        outcome=outcome,
+        outcome=outcome_for_progression,
         xp_gained=xp_gain,
     )
     history_record.avg_scores = avg_scores
@@ -468,7 +498,10 @@ async def end_interaction(
             "npc_id": body.npc_id,
             "message": observer_result.get("message"),
         },
-        "encounter_summary": {"outcome": outcome},
+        "encounter_summary": {
+            "narrative_outcome": narrative_outcome,
+            "performance_outcome": performance_outcome,
+        },
     }
     if leveled_up:
         response["level_up"] = {"new_level": new_level}

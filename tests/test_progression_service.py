@@ -2,7 +2,7 @@
 Tests for the deterministic Progression Service.
 """
 import pytest
-from src.content import ScenarioSeed, ScenarioContext, ScoringFocus, PossibleOutcomes
+from src.content import ScenarioSeed, ScenarioContext, ScoringFocus, PossibleOutcomes, OutcomeDetail
 from src.services.progression_service import (
     compute_xp_gain,
     compute_skill_vector_update,
@@ -25,7 +25,11 @@ def _make_seed(primary: str = "empathy", secondary: str = "clarity") -> Scenario
         scoring_focus=ScoringFocus(primary=primary, secondary=secondary),
         success_signal="acknowledged_feelings_first",
         failure_signal="avoided_emotional_acknowledgment",
-        possible_outcomes=PossibleOutcomes(good="Good.", neutral="Neutral.", poor="Poor."),
+        possible_outcomes=PossibleOutcomes(
+            good=OutcomeDetail(trigger="Good outcome reached.", closing_seed="That went well."),
+            neutral=OutcomeDetail(trigger="Neutral outcome reached.", closing_seed="We'll see."),
+            poor=OutcomeDetail(trigger="Poor outcome reached.", closing_seed="That didn't go well."),
+        ),
     )
 
 

@@ -22,6 +22,8 @@ class Settings(BaseSettings):
 
     # Encounter
     max_turns_per_encounter: int = 6
+    max_turns_safety_limit: int = 8
+    min_turns_before_end: int = 3
 
 
 @lru_cache

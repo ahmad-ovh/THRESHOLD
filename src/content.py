@@ -61,10 +61,16 @@ class ScoringFocus:
 
 
 @dataclass
+class OutcomeDetail:
+    trigger: str
+    closing_seed: str
+
+
+@dataclass
 class PossibleOutcomes:
-    good: str
-    neutral: str
-    poor: str
+    good: OutcomeDetail
+    neutral: OutcomeDetail
+    poor: OutcomeDetail
 
 
 @dataclass
@@ -168,7 +174,11 @@ class ContentRegistry:
                 scoring_focus=ScoringFocus(**raw["scoring_focus"]),
                 success_signal=raw["success_signal"],
                 failure_signal=raw["failure_signal"],
-                possible_outcomes=PossibleOutcomes(**raw["possible_outcomes"]),
+                possible_outcomes=PossibleOutcomes(
+                    good=OutcomeDetail(**raw["possible_outcomes"]["good"]),
+                    neutral=OutcomeDetail(**raw["possible_outcomes"]["neutral"]),
+                    poor=OutcomeDetail(**raw["possible_outcomes"]["poor"]),
+                ),
             )
             self._seeds[seed.id] = seed
 

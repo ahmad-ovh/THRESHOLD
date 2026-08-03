@@ -113,6 +113,8 @@ class InteractionSession(Base):
     encounter_over: Mapped[bool] = mapped_column(Boolean, default=False)
     # accumulated turn scores for progression at encounter end
     accumulated_scores_json: Mapped[str] = mapped_column(Text, default="[]")
+    # narrative outcome selected by Character Voice LLM (null until triggered)
+    narrative_outcome: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
     npc_instance: Mapped["NpcInstance"] = relationship("NpcInstance", back_populates="session")

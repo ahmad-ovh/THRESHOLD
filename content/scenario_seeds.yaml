@@ -18,9 +18,15 @@ seeds:
     success_signal: "named_own_shortfall_honestly"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
-      good: "They revise their read upward and engage more substantively."
-      neutral: "They accept your account; nothing changes."
-      poor: "Defensiveness confirms their concern; confidence drops."
+      good:
+        trigger: "The teacher has revised their assessment upward and is engaging with your thinking substantively."
+        closing_seed: "That's actually more interesting than I expected."
+      neutral:
+        trigger: "The teacher has accepted your account and the conversation is winding down without a strong change in either direction."
+        closing_seed: "Alright. We'll see how the final submission reflects that."
+      poor:
+        trigger: "The defensiveness in your responses has confirmed the teacher's concern and the conversation has reached a cold close."
+        closing_seed: "I was hoping for something more self-aware."
 
   - id: extension_request_end_of_semester
     title: "Asking for More Time"
@@ -38,9 +44,15 @@ seeds:
     success_signal: "stated_request_plainly"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
-      good: "Extension granted; the directness is noted favorably."
-      neutral: "Partial accommodation with conditions; no trust lost."
-      poor: "Denied or granted coldly; the hedging was visible."
+      good:
+        trigger: "The teacher has granted the extension and noted the directness favorably — the conversation has reached a natural close."
+        closing_seed: "Come back if anything else comes up."
+      neutral:
+        trigger: "A partial accommodation has been reached and the conversation is settling into an acceptable resolution with conditions."
+        closing_seed: "Let's see how you handle the rest of the semester."
+      poor:
+        trigger: "The request has been denied or granted coldly — the hedging was visible and the teacher is moving on."
+        closing_seed: "I hope you find a way to manage this better going forward."
 
   - id: grade_dispute_quiet
     title: "Disputing a Grade"
@@ -58,9 +70,15 @@ seeds:
     success_signal: "made_case_without_entitlement"
     failure_signal: "framed_disagreement_as_accusation"
     possible_outcomes:
-      good: "They revisit the marking and acknowledge a valid point."
-      neutral: "They explain the decision clearly; you leave without a change but without a worse impression."
-      poor: "They become guarded; the argument damages how they see you."
+      good:
+        trigger: "The teacher has acknowledged a valid point and is willing to revisit the marking — the argument has landed."
+        closing_seed: "Send me the specific section you're referring to and I'll take another look."
+      neutral:
+        trigger: "The teacher has explained the decision clearly and the conversation is closing without a grade change but without a worse impression."
+        closing_seed: "I understand where you're coming from, even if I see it differently."
+      poor:
+        trigger: "The argument has become adversarial — the teacher has grown guarded and the conversation has soured."
+        closing_seed: "I think we've covered this sufficiently."
 
   - id: office_hours_genuine_question
     title: "Office Hours"
@@ -78,9 +96,15 @@ seeds:
     success_signal: "engaged_substantively"
     failure_signal: "performed_interest_insincerely"
     possible_outcomes:
-      good: "The conversation becomes useful; they remember you as someone worth talking to."
-      neutral: "Question answered; forgettable exchange."
-      poor: "They sense the performance and disengage; rapport stagnates."
+      good:
+        trigger: "The conversation has become genuinely useful — the teacher is engaged and the exchange has found its own momentum."
+        closing_seed: "Good question, actually. Come back if you hit another wall."
+      neutral:
+        trigger: "The question has been answered and the conversation is closing without much texture on either side."
+        closing_seed: "Alright, that should get you unstuck."
+      poor:
+        trigger: "The teacher has sensed the performance and disengaged — the exchange is ending on a flat note."
+        closing_seed: "Is there anything else, or was that it?"
 
   # --- friend seeds ---
 
@@ -100,9 +124,15 @@ seeds:
     success_signal: "acknowledged_pattern_not_just_instance"
     failure_signal: "gave_excuse_without_acknowledgment"
     possible_outcomes:
-      good: "They feel heard; the conversation becomes one of the more honest ones you've had."
-      neutral: "The moment passes; nothing resolves but nothing breaks."
-      poor: "They close off slightly — not visibly, but measurably."
+      good:
+        trigger: "The friend feels genuinely heard — something real passed between you and the conversation has found its own resolution."
+        closing_seed: "I'm glad we talked about this."
+      neutral:
+        trigger: "The moment has passed without resolution or rupture — the conversation is drifting to a close."
+        closing_seed: "Anyway. Let's just make sure it doesn't keep happening."
+      poor:
+        trigger: "The friend has closed off slightly — the conversation is ending without the honesty they needed."
+        closing_seed: "Yeah, it's fine. Don't worry about it."
 
   - id: they_got_news_you_didnt_ask_about
     title: "News You Should Have Known"
@@ -120,9 +150,15 @@ seeds:
     success_signal: "created_space_to_be_heard"
     failure_signal: "redirected_to_own_experience"
     possible_outcomes:
-      good: "They open up fully; trust increases."
-      neutral: "They share the surface of it and move on."
-      poor: "They stop mid-thought; trust drops."
+      good:
+        trigger: "The friend has opened up fully — the space you created was enough and the conversation has reached a warm natural end."
+        closing_seed: "Thanks for actually listening. I needed that."
+      neutral:
+        trigger: "The friend has shared the surface of it and is moving on — the conversation is winding down without going deeper."
+        closing_seed: "Anyway, that's the situation. I'll figure it out."
+      poor:
+        trigger: "The friend has stopped mid-thought — something redirected them away from what they were sharing."
+        closing_seed: "Actually, never mind. It's not that important."
 
   - id: honest_opinion_asked
     title: "Asked for Your Opinion"
@@ -140,9 +176,15 @@ seeds:
     success_signal: "gave_honest_view_with_care"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
-      good: "They appreciate the candor; the friendship gains a layer."
-      neutral: "They hear it and move on; no damage, no growth."
-      poor: "Flatness reads as dishonesty; trust drops."
+      good:
+        trigger: "The friend has received an honest read with care and the conversation has found a genuine close."
+        closing_seed: "Yeah. That's actually what I needed to hear."
+      neutral:
+        trigger: "The friend has heard your view and is moving on — no damage, no particular growth."
+        closing_seed: "Fair enough. I'll think about it."
+      poor:
+        trigger: "The flatness in your response has read as dishonesty — the friend is closing the conversation with reduced trust."
+        closing_seed: "You could have just said nothing."
 
   - id: friend_venting_no_fix_wanted
     title: "Not Looking for Advice"
@@ -160,9 +202,15 @@ seeds:
     success_signal: "stayed_present_without_fixing"
     failure_signal: "redirected_to_own_experience"
     possible_outcomes:
-      good: "They feel understood; the friendship deepens quietly."
-      neutral: "They get through it; the moment closes without damage."
-      poor: "They feel managed rather than heard; warmth cools."
+      good:
+        trigger: "The friend has felt genuinely heard — you stayed present without fixing anything and the conversation has found its own quiet close."
+        closing_seed: "Okay. Thanks. I actually feel a bit better."
+      neutral:
+        trigger: "The friend has gotten through it — the moment is closing without damage and without particular depth."
+        closing_seed: "Anyway, that's the whole thing. Just needed to say it."
+      poor:
+        trigger: "The friend has felt managed rather than heard — the warmth has cooled and the conversation is ending on a flat note."
+        closing_seed: "It's fine. Forget it."
 
   # --- colleague seeds ---
 
@@ -182,9 +230,15 @@ seeds:
     success_signal: "named_issue_without_accusation"
     failure_signal: "framed_disagreement_as_accusation"
     possible_outcomes:
-      good: "They acknowledge the oversight and say something concrete about next time."
-      neutral: "They're uncomfortable but the working relationship holds."
-      poor: "Defensiveness hardens; trust erodes."
+      good:
+        trigger: "The colleague has acknowledged the oversight and said something concrete about next time — the conversation is closing on stable ground."
+        closing_seed: "You're right. I'll make sure that's clear next time."
+      neutral:
+        trigger: "The colleague is uncomfortable but the working relationship is holding — the conversation is reaching an awkward but survivable close."
+        closing_seed: "I hear you. I don't think I meant for it to come across that way."
+      poor:
+        trigger: "The defensiveness has hardened — the conversation has turned adversarial and trust is eroding as it ends."
+        closing_seed: "I really don't want to get into this right now."
 
   - id: covering_for_absence
     title: "Brushed Past"
@@ -202,9 +256,15 @@ seeds:
     success_signal: "addressed_imbalance_directly"
     failure_signal: "absorbed_resentment_silently"
     possible_outcomes:
-      good: "They slow down, acknowledge it properly, and recalibrate."
-      neutral: "The moment passes awkwardly but the relationship holds."
-      poor: "Resentment builds quietly; trust drops over time."
+      good:
+        trigger: "The colleague has slowed down, acknowledged what was absorbed properly, and recalibrated — the exchange is closing on better footing."
+        closing_seed: "You're right, I should have said that more properly. I appreciate it."
+      neutral:
+        trigger: "The moment has passed awkwardly but the relationship is holding — the conversation is winding down without clean resolution."
+        closing_seed: "Right. Okay. Anyway, moving on."
+      poor:
+        trigger: "The resentment has built quietly and the conversation is ending without acknowledgment — the imbalance remains."
+        closing_seed: "Sure. No problem."
 
   - id: shared_task_different_standards
     title: "Different Approach"
@@ -222,9 +282,15 @@ seeds:
     success_signal: "proposed_alignment_not_dominance"
     failure_signal: "framed_disagreement_as_accusation"
     possible_outcomes:
-      good: "You land on a shared approach; mutual respect holds."
-      neutral: "One of you defers without real buy-in; work proceeds with friction."
-      poor: "Each of you assumes your version will win; rapport suffers."
+      good:
+        trigger: "A shared approach has been landed on — mutual respect is holding and the conversation is closing with actual alignment."
+        closing_seed: "Okay, I think we're on the same page. Let's just go with that."
+      neutral:
+        trigger: "One of you has deferred without full buy-in — the conversation is closing but friction remains underneath."
+        closing_seed: "Fine, we'll try it your way. We'll see how it goes."
+      poor:
+        trigger: "Both sides are quietly assuming their version will win — the conversation is ending without real resolution."
+        closing_seed: "Sure. Whatever you think is best."
 
   - id: colleague_small_gesture
     title: "Quieter Than Usual"
@@ -242,9 +308,15 @@ seeds:
     success_signal: "noticed_without_overstepping"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
-      good: "A small, genuine connection forms; ease increases."
-      neutral: "Polite exchange; nothing shifts."
-      poor: "The question felt like a box being checked; ease drops."
+      good:
+        trigger: "A small genuine connection has formed — the colleague felt seen and the exchange is closing with a little more ease than it opened with."
+        closing_seed: "Thanks for asking, actually."
+      neutral:
+        trigger: "A polite exchange has concluded — nothing has shifted but nothing has been lost."
+        closing_seed: "I'm fine. Just one of those days."
+      poor:
+        trigger: "The question felt like a box being checked — the colleague is closing off as the conversation ends."
+        closing_seed: "Yeah. I'm fine."
 
   # --- client seeds ---
 
@@ -264,9 +336,15 @@ seeds:
     success_signal: "named_own_shortfall_honestly"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
-      good: "They accept a revised plan; trust recovers."
-      neutral: "They accept the correction with visible skepticism."
-      poor: "Trust drops sharply; they consider other options."
+      good:
+        trigger: "The client has accepted a revised plan and the conversation is closing with trust visibly recovering."
+        closing_seed: "Okay. Let's move forward on that basis. I appreciate you being straight with me."
+      neutral:
+        trigger: "The correction has been accepted with visible skepticism — the conversation is concluding without warmth but without a clean break."
+        closing_seed: "Alright. Let's see how the revision looks."
+      poor:
+        trigger: "Trust has dropped sharply — the client is ending the conversation while considering other options."
+        closing_seed: "I'll need to think about how we proceed from here."
 
   - id: client_asking_for_more
     title: "One More Thing"
@@ -284,9 +362,15 @@ seeds:
     success_signal: "held_boundary_with_warmth"
     failure_signal: "absorbed_resentment_silently"
     possible_outcomes:
-      good: "They accept the limit; the working relationship stays balanced."
-      neutral: "They push back once, then accept it."
-      poor: "You agree and resent it; the imbalance compounds."
+      good:
+        trigger: "The client has accepted the limit and the working relationship is closing this exchange in balance."
+        closing_seed: "Fair enough. Let's keep the scope where it is for now."
+      neutral:
+        trigger: "The client pushed back once and then accepted — the conversation is ending with mild friction but no rupture."
+        closing_seed: "Okay, I get it. We can revisit next phase."
+      poor:
+        trigger: "The extra work has been absorbed without honest pushback — the conversation is closing with the imbalance unchallenged."
+        closing_seed: "Great, I knew you'd be flexible."
 
   - id: client_first_impression
     title: "First Call"
@@ -304,9 +388,15 @@ seeds:
     success_signal: "projected_genuine_competence"
     failure_signal: "performed_interest_insincerely"
     possible_outcomes:
-      good: "They end the call with a clear, positive impression."
-      neutral: "Professional and forgettable; no strong read formed."
-      poor: "Something felt slightly off — they file it."
+      good:
+        trigger: "The client has formed a clear, positive impression and the call is reaching a natural close with warmth."
+        closing_seed: "Good to meet you properly. I think this is going to work well."
+      neutral:
+        trigger: "The call has been professional and forgettable — no strong read has formed and the conversation is ending functionally."
+        closing_seed: "Okay. Let's touch base again once we have something concrete."
+      poor:
+        trigger: "Something felt slightly off and the client has filed it — the call is ending with a quiet reservation."
+        closing_seed: "Right. I'll follow up with the details."
 
   - id: client_bad_news_early
     title: "Telling Them First"
@@ -324,9 +414,15 @@ seeds:
     success_signal: "delivered_bad_news_directly"
     failure_signal: "softened_truth_into_vagueness"
     possible_outcomes:
-      good: "They appreciate being told first; trust holds despite the setback."
-      neutral: "They're unhappy but note the transparency."
-      poor: "The hedging makes the news worse; trust drops further."
+      good:
+        trigger: "The client has appreciated being told first and trust is holding despite the setback — the conversation is concluding on an honest footing."
+        closing_seed: "I appreciate you calling. This is a setback but I'd rather know now."
+      neutral:
+        trigger: "The client is unhappy but has noted the transparency — the conversation is ending with dissatisfaction but without a rupture."
+        closing_seed: "Okay. Not ideal, but okay. What's the next step?"
+      poor:
+        trigger: "The hedging made the news worse — the client is ending the call with less trust than the situation required."
+        closing_seed: "I'm going to need you to be clearer with me going forward."
 
   # --- family seeds ---
 
@@ -346,9 +442,15 @@ seeds:
     success_signal: "shared_uncertainty_without_deflecting"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
-      good: "Something real passes between you; closeness increases."
-      neutral: "An acceptable answer; nothing shifts."
-      poor: "The performance of confidence registers; closeness drops quietly."
+      good:
+        trigger: "Something real has passed between you — the conversation has reached a moment of genuine closeness."
+        closing_seed: "I'm glad you told me that. I worry about you, you know."
+      neutral:
+        trigger: "An acceptable answer has been given and the conversation is settling to a close without much shift."
+        closing_seed: "Okay. Well, let me know if anything changes."
+      poor:
+        trigger: "The performance of confidence has registered and the parent is ending the conversation without what they were looking for."
+        closing_seed: "Alright. Just... keep me in the loop, okay?"
 
   - id: old_argument_resurfacing
     title: "Something That Still Sits There"
@@ -366,9 +468,15 @@ seeds:
     success_signal: "acknowledged_history_without_minimizing"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
-      good: "The conversation reaches something true; trust rises."
-      neutral: "It closes without resolution but without new damage."
-      poor: "Deflection lands as dismissal; closeness drops."
+      good:
+        trigger: "The conversation has reached something true — the history between you has been acknowledged and something has shifted."
+        closing_seed: "I didn't expect us to actually talk about it. I'm glad we did."
+      neutral:
+        trigger: "The conversation is closing without resolution but without new damage — the subject is being set aside again."
+        closing_seed: "Okay. I just needed to say it out loud, I think."
+      poor:
+        trigger: "The deflection has landed as dismissal — the family member is closing off as the conversation ends."
+        closing_seed: "Right. Never mind. It doesn't matter."
 
   - id: sibling_asking_for_something
     title: "A Favor"
@@ -386,9 +494,15 @@ seeds:
     success_signal: "gave_honest_answer_with_care"
     failure_signal: "gave_excuse_without_acknowledgment"
     possible_outcomes:
-      good: "The honesty is taken as respect; closeness holds or increases."
-      neutral: "The answer is accepted; the moment closes without shift."
-      poor: "Evasion reads as avoidance; trust drops."
+      good:
+        trigger: "The honesty has been received as respect — the conversation is closing with closeness holding or increasing."
+        closing_seed: "Okay. Fair. I appreciate you being straight with me."
+      neutral:
+        trigger: "The answer has been accepted without much texture — the moment is closing without shift."
+        closing_seed: "Alright, no worries. I'll figure something else out."
+      poor:
+        trigger: "The evasion has read as avoidance — the sibling is closing the conversation with reduced trust."
+        closing_seed: "It's fine. I'll sort it out myself."
 
   # --- stranger seeds ---
 
@@ -408,9 +522,15 @@ seeds:
     success_signal: "treated_service_worker_with_basic_decency"
     failure_signal: "took_frustration_out_sideways"
     possible_outcomes:
-      good: "A small pleasant exchange; they'll recognize you next time."
-      neutral: "Functional and forgettable."
-      poor: "The edge in your tone registered — impression drops."
+      good:
+        trigger: "A small pleasant exchange has resolved cleanly — both of you move on without a second thought."
+        closing_seed: "No problem at all. Have a good one."
+      neutral:
+        trigger: "The exchange has been functional and forgettable — it's over."
+        closing_seed: "That'll be ready in a moment."
+      poor:
+        trigger: "The edge in your tone registered — the interaction is ending with a dropped impression."
+        closing_seed: "Right. I'll get that sorted."
 
   - id: stranger_spills_something
     title: "Small Collision"
@@ -428,9 +548,15 @@ seeds:
     success_signal: "resolved_small_moment_gracefully"
     failure_signal: "took_frustration_out_sideways"
     possible_outcomes:
-      good: "Both of you walk away without a second thought."
-      neutral: "It resolves without damage."
-      poor: "Your reaction was disproportionate; they remember it."
+      good:
+        trigger: "The small collision has resolved gracefully — both of you move on without it becoming an event."
+        closing_seed: "Thank you, really. Sorry again."
+      neutral:
+        trigger: "The moment has resolved without damage — the exchange is over."
+        closing_seed: "Sorry about that. Have a good day."
+      poor:
+        trigger: "The reaction was disproportionate — the stranger is walking away having registered something about you."
+        closing_seed: "Right. Sorry for the trouble."
 
   # --- additional teacher seed ---
 
@@ -450,9 +576,15 @@ seeds:
     success_signal: "made_case_without_entitlement"
     failure_signal: "performed_interest_insincerely"
     possible_outcomes:
-      good: "They agree and are genuinely invested in the outcome."
-      neutral: "They agree and treat it as a standard task."
-      poor: "They agree reluctantly; their enthusiasm for you doesn't improve."
+      good:
+        trigger: "The teacher has agreed and is genuinely invested — the conversation is closing with real warmth."
+        closing_seed: "I'd be glad to write it. I think I have something genuine to say."
+      neutral:
+        trigger: "The teacher has agreed and will treat it as a standard task — the exchange is closing professionally."
+        closing_seed: "Sure. Send me the details and I'll put something together."
+      poor:
+        trigger: "The teacher has agreed reluctantly — their enthusiasm for you has not improved and the conversation is ending flatly."
+        closing_seed: "I'll do it. Send me what you need."
 
   # --- additional colleague seed ---
 
@@ -472,9 +604,15 @@ seeds:
     success_signal: "named_own_shortfall_honestly"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
-      good: "You're honest; they help redistribute — trust deepens."
-      neutral: "You minimize it; they back off but file it."
-      poor: "False reassurance registers; their confidence in your judgment drops."
+      good:
+        trigger: "The honesty has prompted a genuine offer to help redistribute — trust has deepened and the conversation is closing with alignment."
+        closing_seed: "Okay. Let's look at the list together and figure out what makes sense."
+      neutral:
+        trigger: "The minimization has been noted — the colleague is backing off but filing it, and the conversation is winding down."
+        closing_seed: "Alright. Just let me know if anything shifts."
+      poor:
+        trigger: "The false reassurance has registered — the colleague's confidence in your judgment has dropped and the conversation is ending with that weight."
+        closing_seed: "Right. Well, I hope it doesn't become a problem for the rest of us."
 
   # --- additional client seeds ---
 
@@ -494,9 +632,15 @@ seeds:
     success_signal: "delivered_bad_news_directly"
     failure_signal: "softened_truth_into_vagueness"
     possible_outcomes:
-      good: "They adjust expectations and the relationship holds."
-      neutral: "They're unhappy but work with the new timeline."
-      poor: "Vagueness reads as evasion; trust drops."
+      good:
+        trigger: "The client has adjusted expectations and the relationship is holding — the conversation is closing with honest footing established."
+        closing_seed: "Okay. I appreciate the heads-up. Let's work with that."
+      neutral:
+        trigger: "The client is unhappy but working with the new timeline — the conversation is ending with dissatisfaction but no rupture."
+        closing_seed: "It's not ideal, but okay. Keep me updated."
+      poor:
+        trigger: "The vagueness has read as evasion — the client is ending the call with reduced trust and visible frustration."
+        closing_seed: "I need real numbers from you, not approximations."
 
   - id: client_scope_clarification
     title: "What's Included"
@@ -514,9 +658,15 @@ seeds:
     success_signal: "held_boundary_with_warmth"
     failure_signal: "softened_truth_into_vagueness"
     possible_outcomes:
-      good: "Scope is clarified cleanly; expectations reset."
-      neutral: "They accept the answer but note the ambiguity was yours."
-      poor: "Hedging leaves them unsure what they have; trust erodes."
+      good:
+        trigger: "Scope has been clarified cleanly and expectations have been reset — the conversation is closing with clear mutual understanding."
+        closing_seed: "Alright. That's actually clearer than I expected. Thanks for being direct."
+      neutral:
+        trigger: "The answer has been accepted but the ambiguity has been noted as yours — the conversation is ending with a mild reservation."
+        closing_seed: "Okay. I just wanted it on the record."
+      poor:
+        trigger: "The hedging has left the client unsure what they have — trust is eroding as the conversation closes."
+        closing_seed: "I'm still not sure I know exactly what I'm getting."
 
   # --- additional family seeds ---
 
@@ -536,9 +686,15 @@ seeds:
     success_signal: "shared_uncertainty_without_deflecting"
     failure_signal: "gave_hollow_validation"
     possible_outcomes:
-      good: "A real moment passes between you; closeness rises."
-      neutral: "You give enough to satisfy; nothing shifts."
-      poor: "The performance of fine registers; closeness drops."
+      good:
+        trigger: "A real moment has passed between you — something genuine was shared and closeness has risen."
+        closing_seed: "Thank you for telling me. I'm always here, you know that."
+      neutral:
+        trigger: "Enough was given to satisfy the question — the conversation is closing without shift."
+        closing_seed: "Okay. Well, I'm glad you're alright."
+      poor:
+        trigger: "The performance of fine has registered — the parent is ending the conversation with the same concern they started with."
+        closing_seed: "Alright. Let me know if you need anything."
 
   - id: sibling_pushing_back
     title: "Called Out"
@@ -556,9 +712,15 @@ seeds:
     success_signal: "acknowledged_pattern_not_just_instance"
     failure_signal: "deflected_onto_circumstances"
     possible_outcomes:
-      good: "You take it in plainly; trust rises."
-      neutral: "You neither accept nor reject it; the conversation ends without resolution."
-      poor: "You defend against it; closeness drops."
+      good:
+        trigger: "The observation was taken in plainly — something shifted and the conversation is closing with trust having risen."
+        closing_seed: "I'm glad you didn't just get defensive. That's all I wanted."
+      neutral:
+        trigger: "Neither accepted nor rejected — the conversation is ending without resolution."
+        closing_seed: "Okay. Just think about it."
+      poor:
+        trigger: "The defense against the observation has closed the conversation down — closeness has dropped."
+        closing_seed: "Fine. Forget I said anything."
 
   # --- recurring_stranger_remembers_you kept below ---
 
@@ -578,9 +740,15 @@ seeds:
     success_signal: "engaged_authentically_with_being_remembered"
     failure_signal: "performed_interest_insincerely"
     possible_outcomes:
-      good: "A small, real connection forms — neither of you expected it."
-      neutral: "Pleasant exchange; they log it without surprise."
-      poor: "Something doesn't match what they thought; impression adjusts downward."
+      good:
+        trigger: "A small real connection has formed that neither expected — the conversation is closing with something having shifted."
+        closing_seed: "I'm glad I said something. See you around."
+      neutral:
+        trigger: "A pleasant exchange has concluded — the stranger logged it without surprise."
+        closing_seed: "Anyway. Good to finally say hello."
+      poor:
+        trigger: "Something didn't match what they thought — the impression has adjusted downward and the conversation is ending awkwardly."
+        closing_seed: "Right. Well. Anyway."
 
 
 distribution_bands:
