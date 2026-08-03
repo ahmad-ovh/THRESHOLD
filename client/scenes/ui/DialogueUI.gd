@@ -12,6 +12,11 @@ extends CanvasLayer
 @onready var message_input: LineEdit = $DialogueBox/HBoxRoot/VBoxMain/InputContainer/MessageInput
 @onready var send_button: Button = $DialogueBox/HBoxRoot/VBoxMain/InputContainer/SendButton
 
+@onready var overall_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/OverallContainer/OverallLabel
+@onready var delta_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/OverallContainer/DeltaLabel
+@onready var overall_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/OverallProgressBar
+@onready var status_badge_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/StatusBadgeLabel
+
 @onready var clarity_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/ClarityLabel
 @onready var clarity_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/ClarityBar
 @onready var empathy_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/EmpathyLabel
@@ -31,6 +36,10 @@ var is_thinking: bool = false
 var thinking_timer: float = 0.0
 var dot_count: int = 1
 
+# Cumulative Encounter Performance Tracking
+var turn_history_scores: Array[Dictionary] = []
+var previous_overall_score: float = 50.0
+
 func _ready() -> void:
 	visible = false
 	loading_label.visible = false
@@ -38,6 +47,7 @@ func _ready() -> void:
 	send_button.pressed.connect(_on_send_pressed)
 	leave_button.pressed.connect(_on_leave_pressed)
 	message_input.text_submitted.connect(_on_text_submitted)
+	_reset_encounter_metrics()
 
 func _process(delta: float) -> void:
 	if is_thinking:
@@ -49,6 +59,25 @@ func _process(delta: float) -> void:
 			loading_label.text = "💭 Thinking" + dots
 			_update_history_with_thinking(dots)
 
+func _reset_encounter_metrics() -> void:
+	turn_history_scores.clear()
+	previous_overall_score = 50.0
+	overall_label.text = "Overall: 50%"
+	delta_label.text = "[--]"
+	delta_label.remove_theme_color_override("font_color")
+	overall_bar.value = 50.0
+	status_badge_label.text = "Status: 😐 Baseline"
+	status_badge_label.remove_theme_color_override("font_color")
+	
+	clarity_bar.value = 50.0
+	clarity_label.text = "Clarity: 50%"
+	empathy_bar.value = 50.0
+	empathy_label.text = "Empathy: 50%"
+	politeness_bar.value = 50.0
+	politeness_label.text = "Politeness: 50%"
+	expression_bar.value = 50.0
+	expression_label.text = "Expression: 50%"
+
 func show_connecting_state(npc_name: String) -> void:
 	active_npc_name = npc_name.capitalize()
 	speaker_label.text = active_npc_name
@@ -56,6 +85,7 @@ func show_connecting_state(npc_name: String) -> void:
 	mood_label.text = "[Mood: neutral]"
 	visible = true
 	dialogue_history.clear()
+	_reset_encounter_metrics()
 	dialogue_text.text = "[color=yellow][i]Approaching " + active_npc_name + "... Connecting to conversation...[/i][/color]"
 	message_input.editable = false
 	send_button.disabled = true
@@ -103,22 +133,11 @@ func update_turn_data(data: Dictionary) -> void:
 	else:
 		coach_hint_banner.visible = false
 		
-	# Update Turn Score Bars
-	var scores = data.get("turn_scores", {})
-	if scores is Dictionary:
-		var c = scores.get("clarity", 0.0) * 100.0
-		var e = scores.get("empathy", 0.0) * 100.0
-		var p = scores.get("politeness", 0.0) * 100.0
-		var x = scores.get("expression", 0.0) * 100.0
-		
-		clarity_bar.value = c
-		clarity_label.text = "Clarity: %d%%" % int(c)
-		empathy_bar.value = e
-		empathy_label.text = "Empathy: %d%%" % int(e)
-		politeness_bar.value = p
-		politeness_label.text = "Politeness: %d%%" % int(p)
-		expression_bar.value = x
-		expression_label.text = "Expression: %d%%" % int(x)
+	# Process Cumulative Turn Scores
+	var turn_scores = data.get("turn_scores", {})
+	if turn_scores is Dictionary and turn_scores.size() > 0:
+		turn_history_scores.append(turn_scores)
+		_recalculate_cumulative_performance()
 		
 	# Update Feedback Text
 	var fb = data.get("feedback", {})
@@ -131,6 +150,67 @@ func update_turn_data(data: Dictionary) -> void:
 		if imp_text != "":
 			txt += "[color=yellow][b]Improvement:[/b] " + str(imp_text) + "[/color]"
 		feedback_text.text = txt
+
+func _recalculate_cumulative_performance() -> void:
+	if turn_history_scores.size() == 0:
+		return
+		
+	var sum_c: float = 0.0
+	var sum_e: float = 0.0
+	var sum_p: float = 0.0
+	var sum_x: float = 0.0
+	var count = float(turn_history_scores.size())
+	
+	for turn in turn_history_scores:
+		sum_c += turn.get("clarity", 0.5)
+		sum_e += turn.get("empathy", 0.5)
+		sum_p += turn.get("politeness", 0.5)
+		sum_x += turn.get("expression", 0.5)
+		
+	var avg_c = (sum_c / count) * 100.0
+	var avg_e = (sum_e / count) * 100.0
+	var avg_p = (sum_p / count) * 100.0
+	var avg_x = (sum_x / count) * 100.0
+	
+	var overall = (avg_c + avg_e + avg_p + avg_x) / 4.0
+	var delta = overall - previous_overall_score
+	previous_overall_score = overall
+	
+	# Update Overall Score & Bar with smooth animation
+	overall_label.text = "Overall: %d%%" % int(overall)
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(overall_bar, "value", overall, 0.4)
+	tween.tween_property(clarity_bar, "value", avg_c, 0.4)
+	tween.tween_property(empathy_bar, "value", avg_e, 0.4)
+	tween.tween_property(politeness_bar, "value", avg_p, 0.4)
+	tween.tween_property(expression_bar, "value", avg_x, 0.4)
+	
+	clarity_label.text = "Clarity: %d%%" % int(avg_c)
+	empathy_label.text = "Empathy: %d%%" % int(avg_e)
+	politeness_label.text = "Politeness: %d%%" % int(avg_p)
+	expression_label.text = "Expression: %d%%" % int(avg_x)
+	
+	# Update Delta Badge
+	if delta > 0.5:
+		delta_label.text = "+%d%% ↑" % int(delta)
+		delta_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.4))
+	elif delta < -0.5:
+		delta_label.text = "%d%% ↓" % int(delta)
+		delta_label.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
+	else:
+		delta_label.text = "[=" + "]"
+		delta_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
+		
+	# Update Overall Performance Status Badge
+	if overall >= 70.0:
+		status_badge_label.text = "Status: 🌟 Doing Great! (GOOD)"
+		status_badge_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.4))
+	elif overall >= 45.0:
+		status_badge_label.text = "Status: 😐 Doing Okay (NEUTRAL)"
+		status_badge_label.add_theme_color_override("font_color", Color(0.9, 0.8, 0.2))
+	else:
+		status_badge_label.text = "Status: ⚠️ Needs Work (POOR)"
+		status_badge_label.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
 
 func start_thinking() -> void:
 	is_thinking = true

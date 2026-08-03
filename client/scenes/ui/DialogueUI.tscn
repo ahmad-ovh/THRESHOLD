@@ -10,7 +10,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -280.0
+offset_top = -290.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -74,43 +74,71 @@ layout_mode = 2
 text = "Send"
 
 [node name="FeedbackPanel" type="VBoxContainer" parent="DialogueBox/HBoxRoot"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 
 [node name="ScoresHeader" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
-text = "📊 Turn Analysis"
+text = "📊 Encounter Performance"
+
+[node name="OverallContainer" type="HBoxContainer" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+
+[node name="OverallLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel/OverallContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Overall: 50%"
+
+[node name="DeltaLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel/OverallContainer"]
+layout_mode = 2
+text = "[--]"
+
+[node name="OverallProgressBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+value = 50.0
+
+[node name="StatusBadgeLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+text = "Status: Baseline"
+
+[node name="HSeparator" type="HSeparator" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
 
 [node name="ClarityLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
-text = "Clarity: 0%"
+text = "Clarity: 50%"
 
 [node name="ClarityBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
+value = 50.0
 
 [node name="EmpathyLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
-text = "Empathy: 0%"
+text = "Empathy: 50%"
 
 [node name="EmpathyBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
+value = 50.0
 
 [node name="PolitenessLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
-text = "Politeness: 0%"
+text = "Politeness: 50%"
 
 [node name="PolitenessBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
+value = 50.0
 
 [node name="ExpressionLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
-text = "Expression: 0%"
+text = "Expression: 50%"
 
 [node name="ExpressionBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
+value = 50.0
 
 [node name="FeedbackText" type="RichTextLabel" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
