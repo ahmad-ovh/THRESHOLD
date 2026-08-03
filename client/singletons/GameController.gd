@@ -14,6 +14,7 @@ enum Phase {
 var current_phase: Phase = Phase.MAIN_MENU
 var is_paused: bool = false
 var pause_menu_ref: CanvasLayer = null
+var hud_ref: CanvasLayer = null
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS # Run even when get_tree().paused is true
@@ -57,10 +58,20 @@ func start_new_game(p_id: String) -> void:
 		PlayerStore.update_from_status(status)
 		
 	set_phase(Phase.EXPLORING)
+	_ensure_hud()
+	hud_ref.visible = true
 	SceneManager.change_room("res://scenes/rooms/Room_Start.tscn")
 
 func return_to_main_menu() -> void:
 	if is_paused:
 		set_paused(false)
+	if hud_ref:
+		hud_ref.visible = false
 	set_phase(Phase.MAIN_MENU)
 	SceneManager.change_room("res://scenes/main_menu/MainMenu.tscn")
+
+func _ensure_hud() -> void:
+	if not hud_ref:
+		var scene = preload("res://scenes/ui/HUD.tscn")
+		hud_ref = scene.instantiate()
+		get_tree().root.add_child(hud_ref)

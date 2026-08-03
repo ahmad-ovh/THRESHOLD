@@ -29,6 +29,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			current_target.interact()
 			return
 
+	if event.is_action_pressed("toggle_journal"):
+		if GameController and GameController.hud_ref:
+			GameController.hud_ref._toggle_journal()
+			return
+
 	# Right-click mouse drag to orbit camera
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
