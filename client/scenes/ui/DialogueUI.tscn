@@ -10,7 +10,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -290.0
+offset_top = -320.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -29,6 +29,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "NPC Name"
 
+[node name="RoleBadge" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
+layout_mode = 2
+text = "[Role: Peer]"
+
 [node name="TierLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
 layout_mode = 2
 text = "[Tier: Stranger]"
@@ -45,6 +49,13 @@ text = "💭 Thinking..."
 [node name="LeaveButton" type="Button" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
 layout_mode = 2
 text = " Leave / End Encounter "
+
+[node name="ScenarioGoalBanner" type="PanelContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
+layout_mode = 2
+
+[node name="ScenarioGoalLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/ScenarioGoalBanner"]
+layout_mode = 2
+text = "🎯 Scenario Goal: Practice active listening and validate emotions."
 
 [node name="CoachHintBanner" type="PanelContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
 visible = false
@@ -67,14 +78,14 @@ layout_mode = 2
 [node name="MessageInput" type="LineEdit" parent="DialogueBox/HBoxRoot/VBoxMain/InputContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Type your message here..."
+placeholder_text = "Type your response here..."
 
 [node name="SendButton" type="Button" parent="DialogueBox/HBoxRoot/VBoxMain/InputContainer"]
 layout_mode = 2
 text = "Send"
 
 [node name="FeedbackPanel" type="VBoxContainer" parent="DialogueBox/HBoxRoot"]
-custom_minimum_size = Vector2(260, 0)
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 
 [node name="ScoresHeader" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
@@ -108,6 +119,7 @@ layout_mode = 2
 [node name="ClarityLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Clarity: 50%"
+tooltip_text = "Clarity: How clearly and directly you state your point."
 
 [node name="ClarityBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
@@ -116,6 +128,7 @@ value = 50.0
 [node name="EmpathyLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Empathy: 50%"
+tooltip_text = "Empathy: Validating feelings and acknowledging emotions."
 
 [node name="EmpathyBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
@@ -124,6 +137,7 @@ value = 50.0
 [node name="PolitenessLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Politeness: 50%"
+tooltip_text = "Politeness: Maintaining a respectful and considerate tone."
 
 [node name="PolitenessBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
@@ -132,6 +146,7 @@ value = 50.0
 [node name="ExpressionLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Expression: 50%"
+tooltip_text = "Expression: Emotional honesty and authentic personal engagement."
 
 [node name="ExpressionBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
 layout_mode = 2

@@ -5,45 +5,58 @@
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud_script")
 
-[node name="TopBar" type="PanelContainer" parent="."]
+[node name="VBoxRoot" type="VBoxContainer" parent="."]
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 50.0
+offset_bottom = 90.0
 grow_horizontal = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="TopBar"]
+[node name="TopBar" type="PanelContainer" parent="VBoxRoot"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TopBar/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxRoot/TopBar"]
 layout_mode = 2
 
-[node name="PlayerIdLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxRoot/TopBar/MarginContainer"]
+layout_mode = 2
+
+[node name="PlayerIdLabel" type="Label" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Player: player_01"
 
-[node name="VSeparator1" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer"]
+[node name="VSeparator1" type="VSeparator" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="LevelLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+[node name="LevelLabel" type="Label" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Lvl 1"
 
-[node name="XPProgressBar" type="ProgressBar" parent="TopBar/MarginContainer/HBoxContainer"]
+[node name="XPProgressBar" type="ProgressBar" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="VSeparator2" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer"]
+[node name="VSeparator2" type="VSeparator" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="StreakLabel" type="Label" parent="TopBar/MarginContainer/HBoxContainer"]
+[node name="StreakLabel" type="Label" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "🔥 0"
 
-[node name="Control" type="Control" parent="TopBar/MarginContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="JournalButton" type="Button" parent="TopBar/MarginContainer/HBoxContainer"]
+[node name="JournalButton" type="Button" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Journal [J]"
+
+[node name="ObjectiveBanner" type="PanelContainer" parent="VBoxRoot"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ObjectiveLabel" type="Label" parent="VBoxRoot/ObjectiveBanner"]
+layout_mode = 2
+text = "🎯 Objective: Explore the room & press [E] near an NPC to talk"
+horizontal_alignment = 1

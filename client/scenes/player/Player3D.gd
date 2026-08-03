@@ -10,17 +10,22 @@ extends CharacterBody3D
 @export var max_pitch: float = 30.0  # Degrees looking down
 
 @onready var camera_pivot: Node3D = $CameraPivot
+@onready var spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
 @onready var character_mesh: Node3D = $CharacterMesh
 @onready var interaction_detector: Area3D = $InteractionDetector
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var current_target: Node3D = null
 var is_orbiting_camera: bool = false
+var default_spring_length: float = 4.0
+var dialogue_spring_length: float = 2.2
 
 func _ready() -> void:
 	add_to_group("player")
 	interaction_detector.area_entered.connect(_on_area_entered)
 	interaction_detector.area_exited.connect(_on_area_exited)
+	if spring_arm:
+		default_spring_length = spring_arm.spring_length
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Interaction trigger
@@ -58,6 +63,11 @@ func _physics_process(delta: float) -> void:
 		can_move = false
 	if EncounterManager and EncounterManager.current_state != EncounterManager.State.LOBBY:
 		can_move = false
+
+	# Camera Dialogue Framing Interpolation
+	if spring_arm:
+		var target_len = dialogue_spring_length if not can_move else default_spring_length
+		spring_arm.spring_length = lerp(spring_arm.spring_length, target_len, 6.0 * delta)
 
 	if can_move:
 		_handle_ground_movement(delta)

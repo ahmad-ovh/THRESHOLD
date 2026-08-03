@@ -14,6 +14,9 @@ func start_encounter(npc_id: String) -> void:
 	if player:
 		player.set_physics_process(false)
 		
+	if GameController and GameController.hud_ref and GameController.hud_ref.has_method("hide_objective"):
+		GameController.hud_ref.hide_objective()
+		
 	# Instantly show Dialogue UI in Connecting mode
 	_ensure_dialogue_ui()
 	dialogue_ui_ref.show_connecting_state(npc_id)
@@ -58,9 +61,9 @@ func _finalize_encounter() -> void:
 		return
 	current_state = State.RESOLVING
 	
-	# Hide dialogue window immediately
+	# Allow final closing line to rest gracefully before closing window
 	if dialogue_ui_ref:
-		dialogue_ui_ref.close_dialogue()
+		await dialogue_ui_ref.close_dialogue_gracefully()
 		
 	var end_res = await ApiClient.end_interaction(PlayerStore.player_id, active_npc_id)
 	

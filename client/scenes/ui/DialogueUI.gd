@@ -2,10 +2,13 @@
 extends CanvasLayer
 
 @onready var speaker_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/SpeakerLabel
+@onready var role_badge: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/RoleBadge
 @onready var tier_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/TierLabel
 @onready var mood_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/MoodLabel
 @onready var loading_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/LoadingLabel
 @onready var leave_button: Button = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/LeaveButton
+@onready var scenario_goal_banner: PanelContainer = $DialogueBox/HBoxRoot/VBoxMain/ScenarioGoalBanner
+@onready var scenario_goal_label: Label = $DialogueBox/HBoxRoot/VBoxMain/ScenarioGoalBanner/ScenarioGoalLabel
 @onready var coach_hint_banner: PanelContainer = $DialogueBox/HBoxRoot/VBoxMain/CoachHintBanner
 @onready var coach_hint_label: Label = $DialogueBox/HBoxRoot/VBoxMain/CoachHintBanner/CoachHintLabel
 @onready var dialogue_text: RichTextLabel = $DialogueBox/HBoxRoot/VBoxMain/DialogueText
@@ -78,11 +81,17 @@ func _reset_encounter_metrics() -> void:
 	expression_bar.value = 50.0
 	expression_label.text = "Expression: 50%"
 
+func set_scenario_context(role: String, goal_text: String) -> void:
+	role_badge.text = "[Role: " + role.capitalize() + "]"
+	scenario_goal_label.text = "🎯 Scenario Goal: " + goal_text
+
 func show_connecting_state(npc_name: String) -> void:
 	active_npc_name = npc_name.capitalize()
 	speaker_label.text = active_npc_name
+	role_badge.text = "[Role: Peer]"
 	tier_label.text = "[Tier: Stranger]"
 	mood_label.text = "[Mood: neutral]"
+	scenario_goal_label.text = "🎯 Scenario Goal: Practicing social communication"
 	visible = true
 	dialogue_history.clear()
 	_reset_encounter_metrics()
@@ -234,10 +243,11 @@ func display_reply(text: String) -> void:
 	dialogue_history.append(npc_line)
 	_refresh_dialogue_text()
 	
-	# Typewriter effect on dialogue text
+	# Typewriter effect on dialogue text with audio ticks
 	dialogue_text.visible_ratio = 0.0
 	var tween = create_tween()
 	tween.tween_property(dialogue_text, "visible_ratio", 1.0, 1.0)
+	AudioManager.play_typewriter_tick()
 	
 	message_input.editable = true
 	message_input.placeholder_text = "Type your response here..."
@@ -252,6 +262,14 @@ func display_error(error_msg: String) -> void:
 	message_input.editable = true
 	send_button.disabled = false
 	leave_button.disabled = false
+
+func close_dialogue_gracefully() -> void:
+	# 1.5s Graceful delay so player can read final parting line before modal opens
+	message_input.editable = false
+	send_button.disabled = true
+	leave_button.disabled = true
+	await get_tree().create_timer(1.5).timeout
+	close_dialogue()
 
 func close_dialogue() -> void:
 	stop_thinking()
@@ -277,9 +295,11 @@ func _on_send_pressed() -> void:
 		return
 	var txt = message_input.text.strip_edges()
 	if txt != "":
+		AudioManager.play_click()
 		message_input.text = ""
 		append_player_message(txt)
 		message_submitted.emit(txt)
 
 func _on_leave_pressed() -> void:
+	AudioManager.play_click()
 	leave_requested.emit()

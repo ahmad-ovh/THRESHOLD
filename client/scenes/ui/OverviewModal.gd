@@ -62,9 +62,11 @@ func show_settlement(end_data: Dictionary, level_data: Dictionary = {}) -> void:
 	if is_lvl_up:
 		level_up_banner.visible = true
 		level_up_text.text = "🎉 LEVEL UP! You reached Level " + str(new_lvl) + "!"
+		AudioManager.play_level_up()
 	else:
 		level_up_banner.visible = false
 
 func _on_close_pressed() -> void:
+	AudioManager.play_click()
 	visible = false
 	closed.emit()

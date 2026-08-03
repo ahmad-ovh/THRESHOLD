@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+AudioManager="*res://singletons/AudioManager.gd"
 ToastManager="*res://singletons/ToastManager.gd"
 GameController="*res://singletons/GameController.gd"
 SceneManager="*res://singletons/SceneManager.gd"

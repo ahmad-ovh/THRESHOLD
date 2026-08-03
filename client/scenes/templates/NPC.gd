@@ -12,11 +12,14 @@ extends CharacterBody3D
 @onready var mesh_container: Node3D = $MeshContainer
 @onready var mood_sprite: Sprite3D = $HeadMarker/MoodSprite3D
 @onready var prompt_label: Label3D = $HeadMarker/PromptLabel3D
+@onready var ground_ring: MeshInstance3D = $GroundRing
 
 var active_data: NPCData
 
 func _ready() -> void:
 	add_to_group("npcs")
+	if ground_ring:
+		ground_ring.visible = false
 	if npc_data_registry.has(npc_id):
 		active_data = npc_data_registry[npc_id]
 		_setup_visuals()
@@ -42,11 +45,14 @@ func set_mood_emoji(expression: String) -> void:
 
 func _animate_mood_popin() -> void:
 	mood_sprite.scale = Vector3.ZERO
+	AudioManager.play_mood_pop()
 	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(mood_sprite, "scale", Vector3.ONE * 0.8, 0.35)
 
 func show_prompt(visible_state: bool) -> void:
 	prompt_label.visible = visible_state
+	if ground_ring:
+		ground_ring.visible = visible_state
 
 func interact() -> void:
 	EncounterManager.start_encounter(npc_id)
