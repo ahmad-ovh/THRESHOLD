@@ -41,6 +41,7 @@ func _on_player_message_submitted(text: String) -> void:
 		dialogue_ui_ref.display_error(detail)
 		return
 		
+	dialogue_ui_ref.update_turn_data(res)
 	dialogue_ui_ref.display_reply(res.get("npc_reply", ""))
 	
 	# Update mood emoji on active NPC

@@ -5,8 +5,17 @@ signal request_failed(detail: String)
 
 const BASE_URL := "http://127.0.0.1:8000"
 
+func get_health() -> Dictionary:
+	return await _http_get("/health")
+
 func get_player_status(p_id: String) -> Dictionary:
 	return await _http_get("/player/status?player_id=" + p_id.uri_encode())
+
+func reset_player(p_id: String) -> Dictionary:
+	return await _http_post("/player/reset", {"player_id": p_id})
+
+func get_daily_challenge(p_id: String) -> Dictionary:
+	return await _http_get("/interaction/daily?player_id=" + p_id.uri_encode())
 
 func start_interaction(p_id: String, npc_id: String) -> Dictionary:
 	return await _http_post("/interaction/start", {"player_id": p_id, "npc_id": npc_id})

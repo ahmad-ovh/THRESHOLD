@@ -1,12 +1,26 @@
 # res://scenes/ui/DialogueUI.gd
 extends CanvasLayer
 
-@onready var speaker_label: Label = $DialogueBox/VBoxContainer/HeaderContainer/SpeakerLabel
-@onready var loading_label: Label = $DialogueBox/VBoxContainer/HeaderContainer/LoadingLabel
-@onready var leave_button: Button = $DialogueBox/VBoxContainer/HeaderContainer/LeaveButton
-@onready var dialogue_text: RichTextLabel = $DialogueBox/VBoxContainer/DialogueText
-@onready var message_input: LineEdit = $DialogueBox/VBoxContainer/InputContainer/MessageInput
-@onready var send_button: Button = $DialogueBox/VBoxContainer/InputContainer/SendButton
+@onready var speaker_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/SpeakerLabel
+@onready var tier_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/TierLabel
+@onready var mood_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/MoodLabel
+@onready var loading_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/LoadingLabel
+@onready var leave_button: Button = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/LeaveButton
+@onready var coach_hint_banner: PanelContainer = $DialogueBox/HBoxRoot/VBoxMain/CoachHintBanner
+@onready var coach_hint_label: Label = $DialogueBox/HBoxRoot/VBoxMain/CoachHintBanner/CoachHintLabel
+@onready var dialogue_text: RichTextLabel = $DialogueBox/HBoxRoot/VBoxMain/DialogueText
+@onready var message_input: LineEdit = $DialogueBox/HBoxRoot/VBoxMain/InputContainer/MessageInput
+@onready var send_button: Button = $DialogueBox/HBoxRoot/VBoxMain/InputContainer/SendButton
+
+@onready var clarity_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/ClarityLabel
+@onready var clarity_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/ClarityBar
+@onready var empathy_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/EmpathyLabel
+@onready var empathy_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/EmpathyBar
+@onready var politeness_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/PolitenessLabel
+@onready var politeness_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/PolitenessBar
+@onready var expression_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/ExpressionLabel
+@onready var expression_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/ExpressionBar
+@onready var feedback_text: RichTextLabel = $DialogueBox/HBoxRoot/FeedbackPanel/FeedbackText
 
 signal message_submitted(text: String)
 signal leave_requested
@@ -20,6 +34,7 @@ var dot_count: int = 1
 func _ready() -> void:
 	visible = false
 	loading_label.visible = false
+	coach_hint_banner.visible = false
 	send_button.pressed.connect(_on_send_pressed)
 	leave_button.pressed.connect(_on_leave_pressed)
 	message_input.text_submitted.connect(_on_text_submitted)
@@ -37,6 +52,8 @@ func _process(delta: float) -> void:
 func show_connecting_state(npc_name: String) -> void:
 	active_npc_name = npc_name.capitalize()
 	speaker_label.text = active_npc_name
+	tier_label.text = "[Tier: Stranger]"
+	mood_label.text = "[Mood: neutral]"
 	visible = true
 	dialogue_history.clear()
 	dialogue_text.text = "[color=yellow][i]Approaching " + active_npc_name + "... Connecting to conversation...[/i][/color]"
@@ -45,6 +62,8 @@ func show_connecting_state(npc_name: String) -> void:
 	leave_button.disabled = true
 	loading_label.visible = true
 	loading_label.text = "⏳ Connecting..."
+	coach_hint_banner.visible = false
+	feedback_text.text = "Awaiting first response..."
 
 func open_dialogue(npc_name: String, opening_line: String) -> void:
 	active_npc_name = npc_name.capitalize()
@@ -69,6 +88,50 @@ func append_player_message(text: String) -> void:
 	_refresh_dialogue_text()
 	start_thinking()
 
+func update_turn_data(data: Dictionary) -> void:
+	# Update Status Pills
+	if data.has("relationship_tier"):
+		tier_label.text = "[Tier: " + str(data.get("relationship_tier", "Stranger")) + "]"
+	if data.has("npc_state"):
+		mood_label.text = "[Mood: " + str(data.get("npc_state", "neutral")) + "]"
+		
+	# Update Coach Hint Banner
+	var hint = data.get("coach_hint", {})
+	if hint is Dictionary and hint.get("shown", false) == true:
+		coach_hint_banner.visible = true
+		coach_hint_label.text = "💡 Coach Hint: " + str(hint.get("line", ""))
+	else:
+		coach_hint_banner.visible = false
+		
+	# Update Turn Score Bars
+	var scores = data.get("turn_scores", {})
+	if scores is Dictionary:
+		var c = scores.get("clarity", 0.0) * 100.0
+		var e = scores.get("empathy", 0.0) * 100.0
+		var p = scores.get("politeness", 0.0) * 100.0
+		var x = scores.get("expression", 0.0) * 100.0
+		
+		clarity_bar.value = c
+		clarity_label.text = "Clarity: %d%%" % int(c)
+		empathy_bar.value = e
+		empathy_label.text = "Empathy: %d%%" % int(e)
+		politeness_bar.value = p
+		politeness_label.text = "Politeness: %d%%" % int(p)
+		expression_bar.value = x
+		expression_label.text = "Expression: %d%%" % int(x)
+		
+	# Update Feedback Text
+	var fb = data.get("feedback", {})
+	if fb is Dictionary:
+		var str_text = fb.get("strength", "")
+		var imp_text = fb.get("improvement", "")
+		var txt = ""
+		if str_text != "":
+			txt += "[color=green][b]Strength:[/b] " + str(str_text) + "[/color]\n"
+		if imp_text != "":
+			txt += "[color=yellow][b]Improvement:[/b] " + str(imp_text) + "[/color]"
+		feedback_text.text = txt
+
 func start_thinking() -> void:
 	is_thinking = true
 	thinking_timer = 0.0
@@ -78,7 +141,7 @@ func start_thinking() -> void:
 	message_input.editable = false
 	message_input.placeholder_text = active_npc_name + " is thinking..."
 	send_button.disabled = true
-	leave_button.disabled = false # Player can leave even while NPC is thinking!
+	leave_button.disabled = false
 	_update_history_with_thinking(".")
 
 func stop_thinking() -> void:

@@ -10,45 +10,108 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -240.0
+offset_top = -280.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DialogueBox"]
+[node name="HBoxRoot" type="HBoxContainer" parent="DialogueBox"]
 layout_mode = 2
 
-[node name="HeaderContainer" type="HBoxContainer" parent="DialogueBox/VBoxContainer"]
+[node name="VBoxMain" type="VBoxContainer" parent="DialogueBox/HBoxRoot"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HeaderContainer" type="HBoxContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
 layout_mode = 2
 
-[node name="SpeakerLabel" type="Label" parent="DialogueBox/VBoxContainer/HeaderContainer"]
+[node name="SpeakerLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "NPC Name"
 
-[node name="LoadingLabel" type="Label" parent="DialogueBox/VBoxContainer/HeaderContainer"]
+[node name="TierLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
+layout_mode = 2
+text = "[Tier: Stranger]"
+
+[node name="MoodLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
+layout_mode = 2
+text = "[Mood: neutral]"
+
+[node name="LoadingLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
 visible = false
 layout_mode = 2
 text = "💭 Thinking..."
 
-[node name="LeaveButton" type="Button" parent="DialogueBox/VBoxContainer/HeaderContainer"]
+[node name="LeaveButton" type="Button" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
 layout_mode = 2
 text = " Leave / End Encounter "
 
-[node name="DialogueText" type="RichTextLabel" parent="DialogueBox/VBoxContainer"]
+[node name="CoachHintBanner" type="PanelContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
+visible = false
+layout_mode = 2
+
+[node name="CoachHintLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/CoachHintBanner"]
+layout_mode = 2
+text = "💡 Coach Hint: ..."
+
+[node name="DialogueText" type="RichTextLabel" parent="DialogueBox/HBoxRoot/VBoxMain"]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "Dialogue lines..."
 
-[node name="InputContainer" type="HBoxContainer" parent="DialogueBox/VBoxContainer"]
+[node name="InputContainer" type="HBoxContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
 layout_mode = 2
 
-[node name="MessageInput" type="LineEdit" parent="DialogueBox/VBoxContainer/InputContainer"]
+[node name="MessageInput" type="LineEdit" parent="DialogueBox/HBoxRoot/VBoxMain/InputContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Type your message here..."
 
-[node name="SendButton" type="Button" parent="DialogueBox/VBoxContainer/InputContainer"]
+[node name="SendButton" type="Button" parent="DialogueBox/HBoxRoot/VBoxMain/InputContainer"]
 layout_mode = 2
 text = "Send"
+
+[node name="FeedbackPanel" type="VBoxContainer" parent="DialogueBox/HBoxRoot"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+
+[node name="ScoresHeader" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+text = "📊 Turn Analysis"
+
+[node name="ClarityLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+text = "Clarity: 0%"
+
+[node name="ClarityBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+
+[node name="EmpathyLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+text = "Empathy: 0%"
+
+[node name="EmpathyBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+
+[node name="PolitenessLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+text = "Politeness: 0%"
+
+[node name="PolitenessBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+
+[node name="ExpressionLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+text = "Expression: 0%"
+
+[node name="ExpressionBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+layout_mode = 2
+
+[node name="FeedbackText" type="RichTextLabel" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Feedback hints..."

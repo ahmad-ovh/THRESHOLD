@@ -2,7 +2,12 @@
 extends CharacterBody3D
 
 @export var npc_id: String = ""
-@export var npc_data_registry: Dictionary = {}
+@export var npc_data_registry: Dictionary = {
+	"daria": preload("res://resources/npc_data/daria_data.tres"),
+	"prof_adler": preload("res://resources/npc_data/prof_adler_data.tres"),
+	"ms_hartwell": preload("res://resources/npc_data/ms_hartwell_data.tres"),
+	"barista": preload("res://resources/npc_data/barista_data.tres")
+}
 
 @onready var mesh_container: Node3D = $MeshContainer
 @onready var mood_sprite: Sprite3D = $HeadMarker/MoodSprite3D
@@ -16,7 +21,7 @@ func _ready() -> void:
 		active_data = npc_data_registry[npc_id]
 		_setup_visuals()
 	else:
-		# Fallback placeholder if data resource isn't assigned yet
+		# Fallback placeholder if custom data resource isn't assigned
 		prompt_label.text = "Press [E] to talk to " + npc_id.capitalize()
 		prompt_label.visible = false
 
