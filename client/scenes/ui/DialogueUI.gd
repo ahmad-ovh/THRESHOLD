@@ -3,11 +3,13 @@ extends CanvasLayer
 
 @onready var speaker_label: Label = $DialogueBox/VBoxContainer/HeaderContainer/SpeakerLabel
 @onready var loading_label: Label = $DialogueBox/VBoxContainer/HeaderContainer/LoadingLabel
+@onready var leave_button: Button = $DialogueBox/VBoxContainer/HeaderContainer/LeaveButton
 @onready var dialogue_text: RichTextLabel = $DialogueBox/VBoxContainer/DialogueText
 @onready var message_input: LineEdit = $DialogueBox/VBoxContainer/InputContainer/MessageInput
 @onready var send_button: Button = $DialogueBox/VBoxContainer/InputContainer/SendButton
 
 signal message_submitted(text: String)
+signal leave_requested
 
 var dialogue_history: Array[String] = []
 var active_npc_name: String = ""
@@ -19,6 +21,7 @@ func _ready() -> void:
 	visible = false
 	loading_label.visible = false
 	send_button.pressed.connect(_on_send_pressed)
+	leave_button.pressed.connect(_on_leave_pressed)
 	message_input.text_submitted.connect(_on_text_submitted)
 
 func _process(delta: float) -> void:
@@ -39,6 +42,7 @@ func show_connecting_state(npc_name: String) -> void:
 	dialogue_text.text = "[color=yellow][i]Approaching " + active_npc_name + "... Connecting to conversation...[/i][/color]"
 	message_input.editable = false
 	send_button.disabled = true
+	leave_button.disabled = true
 	loading_label.visible = true
 	loading_label.text = "⏳ Connecting..."
 
@@ -55,6 +59,7 @@ func open_dialogue(npc_name: String, opening_line: String) -> void:
 	
 	message_input.editable = true
 	send_button.disabled = false
+	leave_button.disabled = false
 	message_input.placeholder_text = "Type your response here..."
 	message_input.grab_focus()
 
@@ -73,6 +78,7 @@ func start_thinking() -> void:
 	message_input.editable = false
 	message_input.placeholder_text = active_npc_name + " is thinking..."
 	send_button.disabled = true
+	leave_button.disabled = false # Player can leave even while NPC is thinking!
 	_update_history_with_thinking(".")
 
 func stop_thinking() -> void:
@@ -93,6 +99,7 @@ func display_reply(text: String) -> void:
 	message_input.editable = true
 	message_input.placeholder_text = "Type your response here..."
 	send_button.disabled = false
+	leave_button.disabled = false
 	message_input.grab_focus()
 
 func display_error(error_msg: String) -> void:
@@ -101,6 +108,7 @@ func display_error(error_msg: String) -> void:
 	_refresh_dialogue_text()
 	message_input.editable = true
 	send_button.disabled = false
+	leave_button.disabled = false
 
 func close_dialogue() -> void:
 	stop_thinking()
@@ -129,3 +137,6 @@ func _on_send_pressed() -> void:
 		message_input.text = ""
 		append_player_message(txt)
 		message_submitted.emit(txt)
+
+func _on_leave_pressed() -> void:
+	leave_requested.emit()

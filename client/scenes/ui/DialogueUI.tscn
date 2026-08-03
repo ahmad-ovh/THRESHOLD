@@ -30,6 +30,10 @@ visible = false
 layout_mode = 2
 text = "💭 Thinking..."
 
+[node name="LeaveButton" type="Button" parent="DialogueBox/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+text = " Leave / End Encounter "
+
 [node name="DialogueText" type="RichTextLabel" parent="DialogueBox/VBoxContainer"]
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2

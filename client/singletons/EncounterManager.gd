@@ -30,6 +30,10 @@ func start_encounter(npc_id: String) -> void:
 	current_state = State.ACTIVE
 	dialogue_ui_ref.open_dialogue(res.get("npc_name", npc_id), res.get("opening_line", ""))
 
+func end_encounter_early() -> void:
+	if current_state == State.ACTIVE:
+		_finalize_encounter()
+
 func _on_player_message_submitted(text: String) -> void:
 	var res = await ApiClient.send_message(PlayerStore.player_id, active_npc_id, text)
 	if res.has("error"):
@@ -49,7 +53,14 @@ func _on_player_message_submitted(text: String) -> void:
 		_finalize_encounter()
 
 func _finalize_encounter() -> void:
+	if current_state == State.RESOLVING:
+		return
 	current_state = State.RESOLVING
+	
+	# Hide dialogue window immediately
+	if dialogue_ui_ref:
+		dialogue_ui_ref.close_dialogue()
+		
 	var end_res = await ApiClient.end_interaction(PlayerStore.player_id, active_npc_id)
 	
 	# Refresh player status after encounter end
@@ -57,10 +68,6 @@ func _finalize_encounter() -> void:
 	if not status.has("error"):
 		PlayerStore.update_from_status(status)
 
-	# Hide dialogue window
-	if dialogue_ui_ref:
-		dialogue_ui_ref.close_dialogue()
-		
 	# Present Settlement Overview Modal
 	if not end_res.has("error"):
 		_ensure_overview_modal()
@@ -79,6 +86,7 @@ func _ensure_dialogue_ui() -> void:
 		dialogue_ui_ref = ui_scene.instantiate()
 		get_tree().root.add_child(dialogue_ui_ref)
 		dialogue_ui_ref.message_submitted.connect(_on_player_message_submitted)
+		dialogue_ui_ref.leave_requested.connect(end_encounter_early)
 
 func _ensure_overview_modal() -> void:
 	if not overview_modal_ref:
