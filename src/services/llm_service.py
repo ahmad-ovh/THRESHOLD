@@ -370,14 +370,15 @@ You MUST return valid JSON with exactly this schema:
 
 Rules:
   - State what happened as a plain fact. Do not coach, advise, or prescribe.
-  - Do not use the word "you" to assign blame. Describe the pattern.
+  - Do NOT output generic, boilerplate, or copy-paste text like "A pattern repeated in this relationship".
+  - Ground your observation directly in the provided turn events and the character being spoken to. Name the specific behavior (e.g., emotional deflection, passive concession, abrupt topic shifts) and how it manifested in the conversation.
   - Speak in a quiet, observational register — like a wise narrator, not a critic.
   - Never tell the player what they should have said or should do next.
   - Your trigger data (the memory entries) is the only source of truth. Do not invent.
 """.strip()
 
 
-async def observer_phrasing(matching_entries: list[dict]) -> dict:
+async def observer_phrasing(matching_entries: list[dict], npc_name: str = "") -> dict:
     """
     Phrase the Observer's reveal message from the matching memory entries.
 
@@ -388,12 +389,15 @@ async def observer_phrasing(matching_entries: list[dict]) -> dict:
         for e in matching_entries
     )
 
+    npc_context = f" in exchanges with {npc_name}" if npc_name else ""
+
     user_prompt = f"""
-The following pattern has repeated in this relationship:
+The following specific pattern of behavior has repeated{npc_context}:
 
 {entries_text}
 
-Write one or two sentences that factually name what has happened, without coaching or prescribing.
+Write one or two observational sentences that specifically describe what happened across these turns, grounding the statement in the specific events and interpretation label.
+Do NOT use generic boilerplate sentences. State the specific observed pattern clearly.
 Return as JSON.
 """.strip()
 

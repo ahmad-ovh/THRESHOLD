@@ -451,7 +451,7 @@ async def end_interaction(
 
     # 3. Observer Service
     all_entries = await memory_service.get_memory_entries(db, instance.npc_instance_id)
-    observer_result = await observer_service.run_observer(all_entries)
+    observer_result = await observer_service.run_observer(all_entries, npc_name=template.name)
 
     # 4. Progression: XP + skill vector (strictly deterministic using performance_outcome)
     xp_gain = progression_service.compute_xp_gain(
