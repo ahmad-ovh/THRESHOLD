@@ -196,10 +196,11 @@ Each seed has the following top-level fields:
 | `scoring_focus` | dict | `primary` and `secondary` scoring dimensions |
 | `success_signal` | string | Memory interpretation label on good performance |
 | `failure_signal` | string | Memory interpretation label on poor performance |
-| `possible_outcomes` | dict | `good`, `neutral`, `poor` — each with `trigger` (narrative condition for LLM) and `closing_seed` (NPC's closing line seed) |
+| `possible_outcomes` | dict | `good`, `neutral`, `poor` — each with `trigger` (narrative condition for LLM) and `closing_seed` (NPC's closing line seed). Formatted into flat payload (`good_trigger`, `good_closing_seed`, etc.) for LLM prompt evaluation. |
 | `npc_context.metric_overrides` | dict | Per-metric value overrides applied at encounter start |
 
-**`possible_outcomes` detail:** The `trigger` field is passed to the Character Voice LLM as prose describing the narrative state that would constitute that outcome. The LLM selects one and signals `end_encounter=True` when the trigger condition is met (after `min_turns_before_end` turns). The `closing_seed` is the seed phrase used to personalize the NPC's final line.
+**`possible_outcomes` detail:** The `trigger` field is passed to the Character Voice LLM as prose describing the narrative state that would constitute that outcome. The LLM evaluates these conditions during the RESOLUTION phase (`turn_count >= MIN_TURNS_BEFORE_END`), and when a trigger condition is met, returns `outcome_triggered`, `narrative_outcome`, and `end_encounter=True`. The `closing_seed` is used as narrative guidance for generating the NPC's final closing line.
+
 
 ---
 

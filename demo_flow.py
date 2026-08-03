@@ -25,8 +25,9 @@ import uvicorn
 sys.path.insert(0, str(Path(__file__).parent))
 
 PLAYER_ID = "demo_player_01"
-NPC_ID = "sara"  # friend archetype
+NPC_ID = "daria"  # friend archetype
 HOST = "127.0.0.1"
+
 PORT = 18765
 BASE_URL = f"http://{HOST}:{PORT}"
 
@@ -166,7 +167,9 @@ def run_demo() -> None:
         print(f"\n  [OBSERVER]: {end_data['observer_event']['message']}")
     else:
         print(f"\n  Observer did not fire this encounter (pattern not yet established).")
-    print(f"  Outcome: {end_data['encounter_summary']['outcome']}")
+    print(f"  Narrative Outcome: {end_data['encounter_summary'].get('narrative_outcome')}")
+    print(f"  Performance Outcome: {end_data['encounter_summary'].get('performance_outcome')}")
+
     if "level_up" in end_data and end_data["level_up"]:
         print(f"  ** Level up! -> Level {end_data['level_up']['new_level']} **")
 

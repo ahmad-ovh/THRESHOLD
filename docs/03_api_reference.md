@@ -534,7 +534,8 @@ Transient. Created at `/start`, deleted at `/end`.
 | `effective_metrics_json` | Text | JSON: running metrics for this encounter (not persisted to instance until end) |
 | `encounter_over` | Boolean | Default: false |
 | `accumulated_scores_json` | Text | JSON array of per-turn score dicts |
-| `narrative_outcome` | String or null | `"good"`, `"neutral"`, `"poor"` when set by narrative closure; null until then |
+| `narrative_outcome` | String or null | LLM-generated narrative interpretation when set by narrative closure; null until then |
+| `performance_outcome` | String or null | Deterministic outcome rating (`"good"`, `"neutral"`, `"poor"`) calculated from turn scores |
 | `created_at` | DateTime (UTC) | |
 
 ### `encounter_history`
@@ -545,7 +546,9 @@ Transient. Created at `/start`, deleted at `/end`.
 | `player_id` | String (FK → players) | |
 | `npc_template_id` | String | NPC template ID |
 | `scenario_id` | String | Scenario seed ID |
-| `outcome` | String | `"good"`, `"neutral"`, or `"poor"` — the progression-driving outcome: `narrative_outcome` if set, else `performance_outcome` |
+| `performance_outcome` | String | `"good"`, `"neutral"`, or `"poor"` — strictly deterministic, drives XP and skill progression |
+| `narrative_outcome` | String or null | AI-generated narrative interpretation (or outcome ID) retained from encounter closure |
 | `avg_scores_json` | Text | JSON: average turn scores dict |
 | `xp_gained` | Float | XP awarded for this encounter |
 | `completed_at` | DateTime (UTC) | |
+

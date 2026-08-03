@@ -21,7 +21,7 @@ DAILY CHALLENGE / NPC SELECTION
    ─ NPC opens in their voice, personalized to history
          │
          ▼
-  PLAYER SENDS MESSAGE  (up to 6 turns)
+  PLAYER SENDS MESSAGE  (up to 8 turns)
    ─ scored on clarity, empathy, politeness, expression
    ─ NPC replies in character with current emotional state
    ─ coach hint surfaces a factual observation
@@ -29,7 +29,7 @@ DAILY CHALLENGE / NPC SELECTION
    ─ relationship metrics update after each turn
          │
          ▼
-   ENCOUNTER ENDS (turn 6 or explicit /end call)
+   ENCOUNTER ENDS (turn 8 or explicit /end call)
    ─ outcome determined: good / neutral / poor
    ─ encounter memory written to NPC instance
    ─ observer checks for repeated patterns across memory

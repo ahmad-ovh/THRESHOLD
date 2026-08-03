@@ -235,16 +235,17 @@ The seed's `npc_context.metric_overrides` can force specific metric values at en
 
 An encounter ends (`encounter_over=True`) via one of two paths:
 
-1. **Narrative closure (preferred):** The Character Voice LLM sets `end_encounter=True` and provides an `outcome_triggered` value. This is only possible once `turn_count >= min_turns_before_end` (default: 3). The `outcome_triggered` value is stored as `narrative_outcome` on the session.
+1. **Narrative closure (preferred):** During the **RESOLUTION phase** (`turn_count >= min_turns_before_end`, default: 3), the Character Voice LLM evaluates scene completion and may set `end_encounter=True`, returning `outcome_triggered` and a `narrative_outcome` interpretation. During the **DEVELOPMENT phase** (`turn_count < min_turns_before_end`), the prompt explicitly instructs the LLM to continue developing the scene without farewell dialogue, and the backend parser strictly suppresses any premature outcome fields (`end_encounter=False`, `outcome_triggered=null`, `narrative_outcome=null`).
 
 2. **Safety limit:** If `turn_count >= max_turns_safety_limit` (default: 8), the encounter is force-ended regardless. In this case `narrative_outcome` remains `null`.
 
 | Config key | Default | Description |
 |---|---|---|
-| `min_turns_before_end` | `3` | Minimum turns before LLM may trigger closure |
+| `min_turns_before_end` | `3` | Minimum turns required to transition from DEVELOPMENT to RESOLUTION phase |
 | `max_turns_safety_limit` | `8` | Hard turn cap (force-end) |
 
-The `performance_outcome` (from `determine_outcome`) is always computed from avg_scores regardless of which path ended the encounter.
+The `performance_outcome` (from `determine_outcome`) is calculated deterministically from average turn scores and **exclusively drives XP calculation and skill vector updates**. The `narrative_outcome` serves as an independent narrative interpretation and never alters mechanical progression.
+
 
 ---
 
