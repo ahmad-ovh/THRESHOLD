@@ -68,28 +68,30 @@ On demand, the player can request a **report**: an AI-generated personal summary
 
 ## Characters and Relationships
 
-There are four NPCs. Each has a distinct archetype role, personality, communication style, and set of relationship metrics.
+There are 16 NPCs across 6 archetype roles (`teacher`, `friend`, `colleague`, `client`, `family`, `stranger`). Each has a distinct personality, communication style, metric update formulas, and state rules.
 
-| ID | Name | Role | Personality | Communication Style |
-|---|---|---|---|---|
-| `sara` | Sara | friend | Direct but caring, reads as blunt if you don't know her | Casual, expressive, texts in fragments |
-| `mr_teo` | Mr. Teo | teacher | Patient but direct. Expects ownership and brevity | Formal, measured, economy of words |
-| `jun` | Jun | colleague | Conflict-avoidant but quietly watches how people treat others | Measured, professional, occasionally dry |
-| `ms_reyes` | Ms. Reyes | client | Professional, results-driven, does not hide dissatisfaction | Terse, precise, expects the same |
+| Archetype | Sample NPCs | Key Metrics | Typical Dynamics |
+|---|---|---|---|
+| `teacher` | Prof. Adler, Ms. Okoro, Mr. Vance | `respect`, `confidence`, `trust`, `integrity`, `credibility`, `reliability` | Evaluates ownership, clarity, and genuine engagement; sensitive to excuses. |
+| `friend` | Daria, Felix, Priya | `trust`, `closeness`, `openness`, `candor` | Values empathy and emotional honesty; interprets distance or deflection quickly. |
+| `colleague` | Nadia, Tomás, Seren | `trust`, `ease`, `respect`, `alignment`, `rapport` | Balancing professional competence with personal rapport and alignment. |
+| `client` | Ms. Hartwell, Mr. Osei, Ms. Vidal | `trust`, `satisfaction`, `engagement`, `reassurance` | Results-driven, expects clear boundaries, rapid metric decay when dissatisfied. |
+| `family` | Your parent, Your sibling | `trust`, `closeness` | Deep history; high baseline trust but sensitive to being brushed off or patronized. |
+| `stranger` | The barista, Recurring stranger | `impression`, `trust` | Rapid impression decay; small gestures of politeness build recognition over time. |
 
-Each NPC exists as a **persistent instance** per player. Their metrics carry over between encounters. The player's relationship with Sara from encounter 1 is the same Sara in encounter 4 — she remembers how she was treated.
+Each NPC exists as a **persistent instance** per player. Their metrics carry over between encounters. The player's relationship with Daria from encounter 1 is the same Daria in encounter 4 — she remembers how she was treated.
 
 ### Relationship Tiers
 
-Tiers are derived from the `trust` metric against global thresholds. Each archetype has its own tier labels.
+Tiers are derived from the primary `trust` metric against global thresholds (`[0.0, 0.25, 0.45, 0.65, 0.85]`). Each archetype has its own tier labels.
 
-| Trust Threshold | friend | teacher | colleague | client |
-|---|---|---|---|---|
-| 0.0 | Stranger | Unfamiliar | Unfamiliar | Unknown |
-| 0.25 | Acquaintance | Noted | Coworker | Skeptical |
-| 0.45 | Comfortable | Respected | Dependable | Professional |
-| 0.65 | Trusted | Trusted | Trusted | Reliable |
-| 0.85 | Close Friend | Regarded Highly | Strong Ally | Trusted Partner |
+| Trust Threshold | friend | teacher | colleague | client | family | stranger |
+|---|---|---|---|---|---|---|
+| 0.00 | Stranger | Unfamiliar | Unfamiliar | Unknown | Estranged | Unnoticed |
+| 0.25 | Acquaintance | Noted | Coworker | Skeptical | Distant | Noticed |
+| 0.45 | Comfortable | Respected | Dependable | Professional | Present | Familiar |
+| 0.65 | Trusted | Trusted | Trusted | Reliable | Close | Warmly Familiar |
+| 0.85 | Close Friend | Regarded Highly | Strong Ally | Trusted Partner | Deeply Connected | Unexpectedly Known |
 
 ---
 
@@ -108,12 +110,16 @@ Each dimension returns a float `0.0–1.0`. These scores drive everything downst
 
 ### Relationship / Metric System
 
-Each NPC has 2–3 relationship metrics. These are updated deterministically after every turn based on the turn scores and the NPC's configured `metric_updates` rules. Metrics drive the NPC's state via the State Engine.
+Each NPC has 2 relationship metrics. These are updated deterministically after every turn based on the turn scores and the NPC's configured `metric_updates` rules. Metrics drive the NPC's state via the State Engine.
 
-**Sara** — `trust`, `patience`, `openness`  
-**Mr. Teo** — `trust`, `respect`  
-**Jun** — `trust`, `comfort_level`  
-**Ms. Reyes** — `trust`, `satisfaction`
+**Sample Metrics by Archetype:**
+- **Prof. Adler** (teacher) — `respect`, `confidence`
+- **Daria** (friend) — `trust`, `closeness`
+- **Nadia** (colleague) — `trust`, `ease`
+- **Ms. Hartwell** (client) — `trust`, `satisfaction`
+- **Your Parent** (family) — `trust`, `closeness`
+- **The Barista** (stranger) — `impression`, `trust`
+
 
 ### State Engine
 

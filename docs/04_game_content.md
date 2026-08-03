@@ -6,187 +6,173 @@ All content is defined in YAML files under `content/`. These files are loaded on
 
 ## NPC Templates (`content/npc_templates.yaml`)
 
-### NPC: Sara
+The game features 16 unique NPC templates across 6 archetype roles (`teacher`, `friend`, `colleague`, `client`, `family`, `stranger`). Each template defines persistent relationship metrics, metric update blend weights, passive turn decays, and deterministic state resolution rules.
 
-| Field | Value |
-|---|---|
-| **id** | `sara` |
-| **archetype_role** | `friend` |
-| **name** | Sara |
-| **base_personality** | Direct but caring, reads as blunt if you don't know her. |
-| **communication_style** | Casual, expressive, texts in fragments. |
+### Teacher Archetype
 
-**Metrics:**
+#### Prof. Adler (`prof_adler`)
+- **Base Personality:** Rigorous and fair. Can mistake hesitation for lack of effort.
+- **Communication Style:** Measured and precise — long pauses make him visibly impatient, even when the silence is just thinking.
+- **Metrics:** `respect` (start: 0.50), `confidence` (start: 0.45)
+- **Updates:** `respect` (clarity × 0.55 + politeness × 0.30 + empathy × 0.15, decay: 0.01), `confidence` (clarity × 0.70 + expression × 0.30, decay: 0.02)
+- **States:** `respect < 0.25` → `dismissive`; `confidence < 0.25` → `doubtful`; `respect >= 0.70 and confidence >= 0.65` → `encouraging`; `respect >= 0.55` → `attentive`; default → `neutral`
 
-| Metric | Start | Min | Max |
-|---|---|---|---|
-| `trust` | 0.7 | 0.0 | 1.0 |
-| `patience` | 0.6 | 0.0 | 1.0 |
-| `openness` | 0.4 | 0.0 | 1.0 |
+#### Ms. Okoro (`ms_okoro`)
+- **Base Personality:** Warm and demanding. Tends to assume that students she likes are trying harder than they are.
+- **Communication Style:** Conversational, uses questions to make points — but steers the answer she wants if you take too long.
+- **Metrics:** `trust` (start: 0.55), `integrity` (start: 0.50)
+- **Updates:** `trust` (empathy × 0.50 + clarity × 0.30 + politeness × 0.20, decay: 0.01), `integrity` (clarity × 0.40 + empathy × 0.40 + expression × 0.20, decay: 0.01)
+- **States:** `integrity < 0.25` → `disappointed`; `trust < 0.30` → `guarded`; `trust >= 0.65 and integrity >= 0.60` → `invested`; `trust >= 0.45` → `receptive`; default → `neutral`
 
-**Metric Update Rules:**
-
-| Metric | Influenced By | Turn Decay |
-|---|---|---|
-| `trust` | empathy × 0.6 + clarity × 0.4 | 0.0 |
-| `patience` | politeness × 1.0 | 0.05 |
-| `openness` | expression × 0.7 + empathy × 0.3 | 0.0 |
-
-`patience` naturally decays by 0.05 per turn regardless of the player's score. All other metrics decay at 0.0 (no passive decay).
-
-**State Rules (evaluated in order, first match wins):**
-
-| Condition | State |
-|---|---|
-| `trust < 0.3` | `guarded` |
-| `trust >= 0.3 and patience < 0.3` | `irritated` |
-| `trust >= 0.6 and openness >= 0.6` | `warm` |
-| `default` | `neutral` |
+#### Mr. Vance (`mr_vance`)
+- **Base Personality:** Practical and results-focused. Reads personal explanation as excuse-making, even when it isn't.
+- **Communication Style:** Terse by default — gives single-word replies when unimpressed and volunteers nothing.
+- **Metrics:** `credibility` (start: 0.40), `reliability` (start: 0.45)
+- **Updates:** `credibility` (clarity × 0.65 + expression × 0.35, decay: 0.02), `reliability` (clarity × 0.50 + politeness × 0.30 + empathy × 0.20, decay: 0.03)
+- **States:** `credibility < 0.25` → `skeptical`; `reliability < 0.25` → `impatient`; `credibility >= 0.70 and reliability >= 0.65` → `approving`; `credibility >= 0.50` → `watchful`; default → `neutral`
 
 ---
 
-### NPC: Mr. Teo
+### Friend Archetype
 
-| Field | Value |
-|---|---|
-| **id** | `mr_teo` |
-| **archetype_role** | `teacher` |
-| **name** | Mr. Teo |
-| **base_personality** | Patient but direct. Expects ownership and brevity. |
-| **communication_style** | Formal, measured, economy of words. |
+#### Daria (`daria`)
+- **Base Personality:** Perceptive and quietly loyal. Sometimes interprets distance as rejection before checking whether that's true.
+- **Communication Style:** Unhurried and conversational — but goes quiet when something bothers her, and waits to see if you'll notice.
+- **Metrics:** `trust` (start: 0.65), `closeness` (start: 0.55)
+- **Updates:** `trust` (empathy × 0.55 + clarity × 0.30 + expression × 0.15, decay: 0.0), `closeness` (expression × 0.60 + empathy × 0.40, decay: 0.0)
+- **States:** `trust < 0.25` → `withdrawn`; `trust >= 0.25 and closeness < 0.25` → `distant`; `trust >= 0.70 and closeness >= 0.65` → `close`; `trust >= 0.50` → `comfortable`; default → `neutral`
 
-**Metrics:**
+#### Felix (`felix`)
+- **Base Personality:** Upbeat and socially fluent. Deflects with humor when things get uncomfortable, sometimes past the point where it helps.
+- **Communication Style:** Fast and informal — fills silence instinctively, which makes it hard to tell when he's actually bothered by something.
+- **Metrics:** `trust` (start: 0.60), `openness` (start: 0.50)
+- **Updates:** `trust` (empathy × 0.45 + expression × 0.35 + clarity × 0.20, decay: 0.0), `openness` (expression × 0.55 + empathy × 0.30 + clarity × 0.15, decay: 0.0)
+- **States:** `trust < 0.25` → `shut_out`; `trust >= 0.25 and openness < 0.25` → `surface_level`; `trust >= 0.65 and openness >= 0.60` → `candid`; `trust >= 0.45` → `easy`; default → `neutral`
 
-| Metric | Start | Min | Max |
-|---|---|---|---|
-| `trust` | 0.5 | 0.0 | 1.0 |
-| `respect` | 0.5 | 0.0 | 1.0 |
-
-**Metric Update Rules:**
-
-| Metric | Influenced By | Turn Decay |
-|---|---|---|
-| `trust` | clarity × 0.6 + politeness × 0.4 | 0.0 |
-| `respect` | clarity × 0.5 + empathy × 0.3 + politeness × 0.2 | 0.02 |
-
-`respect` decays by 0.02 per turn.
-
-**State Rules:**
-
-| Condition | State |
-|---|---|
-| `trust < 0.3` | `disappointed` |
-| `respect < 0.3` | `dismissive` |
-| `trust >= 0.65 and respect >= 0.65` | `approving` |
-| `default` | `neutral` |
+#### Priya (`priya`)
+- **Base Personality:** Principled and consistent. Holds honesty as a value so firmly that she occasionally forgets to check whether the moment calls for it.
+- **Communication Style:** Blunt without warmup — states her read of a situation directly and expects you to do the same.
+- **Metrics:** `trust` (start: 0.55), `candor` (start: 0.50)
+- **Updates:** `trust` (empathy × 0.40 + clarity × 0.40 + expression × 0.20, decay: 0.0), `candor` (clarity × 0.50 + expression × 0.30 + empathy × 0.20, decay: 0.0)
+- **States:** `trust < 0.25` → `cold`; `candor < 0.25` → `skeptical`; `trust >= 0.70 and candor >= 0.65` → `deeply_trusting`; `trust >= 0.45` → `engaged`; default → `neutral`
 
 ---
 
-### NPC: Jun
+### Colleague Archetype
 
-| Field | Value |
-|---|---|
-| **id** | `jun` |
-| **archetype_role** | `colleague` |
-| **name** | Jun |
-| **base_personality** | Conflict-avoidant but quietly watches how people treat others. |
-| **communication_style** | Measured, professional, occasionally dry. |
+#### Nadia (`nadia`)
+- **Base Personality:** Capable and self-sufficient. Slow to ask for help and privately critical of people who seem to need it often.
+- **Communication Style:** Formal until she's decided you're worth the effort — early conversations feel slightly like interviews.
+- **Metrics:** `trust` (start: 0.45), `ease` (start: 0.40)
+- **Updates:** `trust` (empathy × 0.45 + clarity × 0.35 + politeness × 0.20, decay: 0.01), `ease` (politeness × 0.50 + expression × 0.30 + empathy × 0.20, decay: 0.02)
+- **States:** `trust < 0.25` → `standoffish`; `ease < 0.25` → `stiff`; `trust >= 0.65 and ease >= 0.60` → `collaborative`; `trust >= 0.45` → `cordial`; default → `neutral`
 
-**Metrics:**
+#### Tomás (`tomas`)
+- **Base Personality:** Ambitious and transparent about it. Assumes most people are also self-interested, and is occasionally wrong about that.
+- **Communication Style:** Confident and fast-moving — reframes things in his favor mid-conversation without seeming to notice he's doing it.
+- **Metrics:** `respect` (start: 0.50), `alignment` (start: 0.45)
+- **Updates:** `respect` (clarity × 0.55 + expression × 0.30 + politeness × 0.15, decay: 0.02), `alignment` (clarity × 0.40 + empathy × 0.35 + expression × 0.25, decay: 0.03)
+- **States:** `respect < 0.25` → `dismissive`; `alignment < 0.25` → `competitive`; `respect >= 0.65 and alignment >= 0.60` → `allied`; `respect >= 0.45` → `civil`; default → `neutral`
 
-| Metric | Start | Min | Max |
-|---|---|---|---|
-| `trust` | 0.5 | 0.0 | 1.0 |
-| `comfort_level` | 0.5 | 0.0 | 1.0 |
-
-**Metric Update Rules:**
-
-| Metric | Influenced By | Turn Decay |
-|---|---|---|
-| `trust` | empathy × 0.5 + clarity × 0.5 | 0.0 |
-| `comfort_level` | politeness × 0.6 + expression × 0.4 | 0.03 |
-
-`comfort_level` decays by 0.03 per turn.
-
-**State Rules:**
-
-| Condition | State |
-|---|---|
-| `trust < 0.3` | `withdrawn` |
-| `comfort_level < 0.3` | `defensive` |
-| `trust >= 0.65 and comfort_level >= 0.6` | `collaborative` |
-| `default` | `neutral` |
+#### Seren (`seren`)
+- **Base Personality:** Even-tempered and fair. Absorbs tension quietly, which means her actual frustration is invisible until it isn't.
+- **Communication Style:** Measured and deliberate — gives well-considered answers that can feel like she's being more okay with things than she is.
+- **Metrics:** `trust` (start: 0.50), `rapport` (start: 0.45)
+- **Updates:** `trust` (empathy × 0.50 + clarity × 0.30 + politeness × 0.20, decay: 0.01), `rapport` (expression × 0.45 + empathy × 0.35 + politeness × 0.20, decay: 0.02)
+- **States:** `trust < 0.25` → `cautious`; `rapport < 0.25` → `professional_only`; `trust >= 0.65 and rapport >= 0.60` → `genuinely_warm`; `trust >= 0.45` → `steady`; default → `neutral`
 
 ---
 
-### NPC: Ms. Reyes
+### Client Archetype
 
-| Field | Value |
-|---|---|
-| **id** | `ms_reyes` |
-| **archetype_role** | `client` |
-| **name** | Ms. Reyes |
-| **base_personality** | Professional, results-driven, does not hide dissatisfaction. |
-| **communication_style** | Terse, precise, expects the same. |
+#### Ms. Hartwell (`ms_hartwell`)
+- **Base Personality:** Experienced and exacting. Gives people fewer chances than she thinks she does.
+- **Communication Style:** Clipped and efficient — states expectations once, doesn't repeat them, and notes whether they were met.
+- **Metrics:** `trust` (start: 0.35), `satisfaction` (start: 0.40)
+- **Updates:** `trust` (clarity × 0.65 + politeness × 0.25 + empathy × 0.10, decay: 0.03), `satisfaction` (clarity × 0.55 + empathy × 0.30 + politeness × 0.15, decay: 0.05)
+- **States:** `trust < 0.20` → `hostile`; `satisfaction < 0.25` → `frustrated`; `trust >= 0.65 and satisfaction >= 0.60` → `satisfied`; `trust >= 0.45` → `professional`; default → `neutral`
 
-**Metrics:**
+#### Mr. Osei (`mr_osei`)
+- **Base Personality:** Collaborative and relationship-minded. Can read professional distance as indifference, even when it's just professionalism.
+- **Communication Style:** Deliberate and contextual — shares his reasoning freely and notices when you don't offer yours.
+- **Metrics:** `trust` (start: 0.45), `engagement` (start: 0.40)
+- **Updates:** `trust` (empathy × 0.45 + clarity × 0.35 + expression × 0.20, decay: 0.03), `engagement` (expression × 0.40 + empathy × 0.35 + clarity × 0.25, decay: 0.04)
+- **States:** `trust < 0.20` → `disengaged`; `engagement < 0.25` → `transactional`; `trust >= 0.65 and engagement >= 0.60` → `invested`; `trust >= 0.45` → `attentive`; default → `neutral`
 
-| Metric | Start | Min | Max |
-|---|---|---|---|
-| `trust` | 0.4 | 0.0 | 1.0 |
-| `satisfaction` | 0.4 | 0.0 | 1.0 |
+#### Ms. Vidal (`ms_vidal`)
+- **Base Personality:** Detail-oriented and conscientious. Asks follow-up questions to feel informed, but sometimes hears the answer she feared rather than the one given.
+- **Communication Style:** Polite and circling — returns to the same concern from slightly different angles until she feels settled.
+- **Metrics:** `trust` (start: 0.30), `reassurance` (start: 0.35)
+- **Updates:** `trust` (clarity × 0.50 + empathy × 0.35 + politeness × 0.15, decay: 0.04), `reassurance` (empathy × 0.55 + clarity × 0.30 + expression × 0.15, decay: 0.05)
+- **States:** `trust < 0.20` → `skeptical`; `reassurance < 0.20` → `anxious`; `trust >= 0.60 and reassurance >= 0.55` → `reassured`; `trust >= 0.40` → `cautiously_hopeful`; default → `neutral`
 
-**Metric Update Rules:**
+---
 
-| Metric | Influenced By | Turn Decay |
-|---|---|---|
-| `trust` | clarity × 0.7 + politeness × 0.3 | 0.0 |
-| `satisfaction` | clarity × 0.5 + empathy × 0.5 | 0.04 |
+### Family Archetype
 
-`satisfaction` decays by 0.04 per turn — the fastest decay of any metric in the game.
+#### Your Parent (`parent`)
+- **Base Personality:** Loving and present. Still operates from a version of you that's two or three years out of date.
+- **Communication Style:** Warm but loaded — mixes genuine curiosity with assumptions they don't realize they're making.
+- **Metrics:** `trust` (start: 0.70), `closeness` (start: 0.65)
+- **Updates:** `trust` (clarity × 0.40 + empathy × 0.40 + expression × 0.20, decay: 0.0), `closeness` (expression × 0.50 + empathy × 0.35 + clarity × 0.15, decay: 0.0)
+- **States:** `trust < 0.30` → `hurt`; `closeness < 0.30` → `drifting`; `trust >= 0.75 and closeness >= 0.70` → `connected`; `trust >= 0.50` → `present`; default → `neutral`
 
-**State Rules:**
+#### Your Sibling (`sibling`)
+- **Base Personality:** Perceptive and direct. Has strong opinions about you specifically, and updates them slowly.
+- **Communication Style:** Dry and oblique — says the actual thing sideways, and expects you to have caught it.
+- **Metrics:** `trust` (start: 0.60), `closeness` (start: 0.50)
+- **Updates:** `trust` (empathy × 0.50 + clarity × 0.30 + expression × 0.20, decay: 0.0), `closeness` (expression × 0.55 + empathy × 0.30 + clarity × 0.15, decay: 0.0)
+- **States:** `trust < 0.25` → `shut_down`; `closeness < 0.25` → `surface_only`; `trust >= 0.70 and closeness >= 0.65` → `genuinely_close`; `trust >= 0.45` → `familiar`; default → `neutral`
 
-| Condition | State |
-|---|---|
-| `trust < 0.25` | `hostile` |
-| `satisfaction < 0.3` | `frustrated` |
-| `trust >= 0.6 and satisfaction >= 0.6` | `satisfied` |
-| `default` | `neutral` |
+---
+
+### Stranger Archetype
+
+#### The Barista (`barista`)
+- **Base Personality:** Efficient and quietly observant. Decides within a few visits whether someone is worth the extra effort.
+- **Communication Style:** Brief and functional — friendlier with regulars who've earned it, noticeably cooler with those who haven't.
+- **Metrics:** `impression` (start: 0.50), `trust` (start: 0.40)
+- **Updates:** `impression` (politeness × 0.55 + empathy × 0.30 + clarity × 0.15, decay: 0.05), `trust` (politeness × 0.45 + empathy × 0.35 + expression × 0.20, decay: 0.05)
+- **States:** `impression < 0.25` → `cold`; `trust >= 0.65 and impression >= 0.65` → `recognizes_you`; `impression >= 0.50` → `pleasant`; default → `neutral`
+
+#### Recurring Stranger (`recurring_stranger`)
+- **Base Personality:** Attentive and unhurried. Has been watching longer than you knew, and assumes you've been doing the same.
+- **Communication Style:** Sparse and slightly sideways — references things in passing that reveal they've been paying closer attention than most people would.
+- **Metrics:** `impression` (start: 0.45), `trust` (start: 0.35)
+- **Updates:** `impression` (politeness × 0.40 + empathy × 0.35 + expression × 0.25, decay: 0.03), `trust` (empathy × 0.45 + clarity × 0.35 + politeness × 0.20, decay: 0.03)
+- **States:** `impression < 0.20` → `guarded`; `trust < 0.25` → `reserved`; `trust >= 0.60 and impression >= 0.60` → `openly_remembered_you`; `impression >= 0.45` → `quietly_watching`; default → `neutral`
 
 ---
 
 ## Relationship Tier Configuration
 
-Tiers are derived from the `trust` metric value. The thresholds and labels are defined globally in `scenario_seeds.yaml`.
+Tiers are derived from the primary `trust` metric value. Thresholds and labels are defined globally in `scenario_seeds.yaml`.
 
 **Thresholds:** `[0.0, 0.25, 0.45, 0.65, 0.85]`
 
-Resolution: the highest threshold that `trust >= threshold` is satisfied gives the tier index. Labels are archetype-specific.
+Resolution: the highest threshold satisfied (`trust >= threshold`) gives the tier index (0–4). Labels are archetype-specific.
 
-| Trust Value | Index | friend | teacher | colleague | client |
-|---|---|---|---|---|---|
-| 0.00 – 0.24 | 0 | Stranger | Unfamiliar | Unfamiliar | Unknown |
-| 0.25 – 0.44 | 1 | Acquaintance | Noted | Coworker | Skeptical |
-| 0.45 – 0.64 | 2 | Comfortable | Respected | Dependable | Professional |
-| 0.65 – 0.84 | 3 | Trusted | Trusted | Trusted | Reliable |
-| 0.85 – 1.00 | 4 | Close Friend | Regarded Highly | Strong Ally | Trusted Partner |
+| Trust Range | Tier Index | friend | teacher | colleague | client | family | stranger |
+|---|---|---|---|---|---|---|---|
+| 0.00 – 0.24 | 0 | Stranger | Unfamiliar | Unfamiliar | Unknown | Estranged | Unnoticed |
+| 0.25 – 0.44 | 1 | Acquaintance | Noted | Coworker | Skeptical | Distant | Noticed |
+| 0.45 – 0.64 | 2 | Comfortable | Respected | Dependable | Professional | Present | Familiar |
+| 0.65 – 0.84 | 3 | Trusted | Trusted | Trusted | Reliable | Close | Warmly Familiar |
+| 0.85 – 1.00 | 4 | Close Friend | Regarded Highly | Strong Ally | Trusted Partner | Deeply Connected | Unexpectedly Known |
 
 ---
 
 ## Scenario Seeds (`content/scenario_seeds.yaml`)
 
-Each seed defines a scenario that can be selected for an encounter. Seeds are selected by compatible NPC role and player level.
+Each seed defines a scenario that can be selected for an encounter. Seeds are selected by compatible NPC archetype role and player level.
 
 ### Seed Schema
-
-Each seed has the following top-level fields:
 
 | Field | Type | Description |
 |---|---|---|
 | `id` | string | Unique identifier |
 | `title` | string | Human-readable name |
-| `compatible_roles` | list | NPC archetype roles this seed works with |
+| `compatible_roles` | list | NPC archetype roles this seed works with (`teacher`, `friend`, `colleague`, `client`, `family`, `stranger`) |
 | `category` | string | `everyday_social`, `friendship`, `workplace`, `high_pressure` |
 | `tier` | int | 1–3; maps loosely to encounter difficulty |
 | `context.premise` | string | Scene setup |
@@ -199,14 +185,11 @@ Each seed has the following top-level fields:
 | `possible_outcomes` | dict | `good`, `neutral`, `poor` — each with `trigger` (narrative condition for LLM) and `closing_seed` (NPC's closing line seed). Formatted into flat payload (`good_trigger`, `good_closing_seed`, etc.) for LLM prompt evaluation. |
 | `npc_context.metric_overrides` | dict | Per-metric value overrides applied at encounter start |
 
-**`possible_outcomes` detail:** The `trigger` field is passed to the Character Voice LLM as prose describing the narrative state that would constitute that outcome. The LLM evaluates these conditions during the RESOLUTION phase (`turn_count >= MIN_TURNS_BEFORE_END`), and when a trigger condition is met, returns `outcome_triggered`, `narrative_outcome`, and `end_encounter=True`. The `closing_seed` is used as narrative guidance for generating the NPC's final closing line.
-
-
 ---
 
-### All Seeds (Summary)
+### All 28 Scenario Seeds (Summary)
 
-| ID | Title | Roles | Category | Tier | Primary | Secondary |
+| ID | Title | Compatible Roles | Category | Tier | Primary Focus | Secondary Focus |
 |---|---|---|---|---|---|---|
 | `final_paper_feedback` | Notes on the Draft | teacher | workplace | 2 | clarity | expression |
 | `extension_request_end_of_semester` | Asking for More Time | teacher | workplace | 2 | clarity | politeness |
@@ -250,12 +233,12 @@ Category probability weights by player level band. Used to select scenario categ
 | 71–100 | 5 | 20 | 35 | 40 |
 
 **Selection algorithm:**
-1. Determine the player's level band
-2. Restrict category weights to categories that actually exist for the NPC's archetype role
-3. Weighted-random pick a category
-4. Filter seeds: compatible role AND picked category AND not in exclusion list
-5. If pool is empty after filtering, try other available categories in alphabetical order
-6. If everything is excluded, reset exclusion and use all role-compatible seeds
+1. Determine the player's level band.
+2. Restrict category weights to categories that actually exist for the NPC's archetype role.
+3. Weighted-random pick a category.
+4. Filter seeds: compatible role AND picked category AND not in exclusion list.
+5. If pool is empty after filtering, try other available categories in alphabetical order.
+6. If everything is excluded, reset exclusion list and use all role-compatible seeds.
 
 ---
 
@@ -293,8 +276,6 @@ Each seed defines exactly two interpretation labels used by the Memory Formation
 | `parent_noticed_something_off` | `shared_uncertainty_without_deflecting` | `gave_hollow_validation` |
 | `sibling_pushing_back` | `acknowledged_pattern_not_just_instance` | `deflected_onto_circumstances` |
 | `recurring_stranger_remembers_you` | `engaged_authentically_with_being_remembered` | `performed_interest_insincerely` |
-
-Note: Several seeds share common signal IDs (e.g., `deflected_onto_circumstances`, `gave_hollow_validation`, `framed_disagreement_as_accusation`). Pattern detection across these seeds using the same NPC will aggregate on the shared signal label.
 
 ---
 

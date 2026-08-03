@@ -30,7 +30,8 @@ pytest tests/ -v
 python demo_flow.py
 ```
 
-**Available NPCs:** `sara` (friend), `mr_teo` (teacher), `jun` (colleague), `ms_reyes` (client)
+**Available Archetypes & NPCs:** 16 NPCs across 6 archetypes — `teacher` (`prof_adler`, `ms_okoro`, `mr_vance`), `friend` (`daria`, `felix`, `priya`), `colleague` (`nadia`, `tomas`, `seren`), `client` (`ms_hartwell`, `mr_osei`, `ms_vidal`), `family` (`parent`, `sibling`), `stranger` (`barista`, `recurring_stranger`).
+
 
 **Encounter lifecycle:**
 ```

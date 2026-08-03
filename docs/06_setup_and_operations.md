@@ -120,7 +120,8 @@ python_functions = test_*
 
 ## Running the Demo
 
-The demo script runs the full encounter lifecycle against a live server and prints results to stdout. It uses the `sara` NPC and a set of 6 predefined messages designed to trigger the Observer pattern.
+The demo script runs the full encounter lifecycle against a live server and prints results to stdout. It uses the `daria` NPC and a set of predefined messages designed to trigger the Observer pattern.
+
 
 ```powershell
 python demo_flow.py

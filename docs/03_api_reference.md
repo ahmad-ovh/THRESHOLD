@@ -44,8 +44,9 @@ If an active session already exists for this player+NPC pair it is silently disc
 ```json
 {
   "player_id": "player_01",
-  "npc_id": "sara"
+  "npc_id": "daria"
 }
+
 ```
 
 **Response:**
@@ -206,8 +207,9 @@ Performs: outcome determination, encounter memory write, Observer pattern check,
 ```json
 {
   "player_id": "player_01",
-  "npc_id": "sara"
+  "npc_id": "daria"
 }
+
 ```
 
 **Response:**
