@@ -11,11 +11,4 @@ func _ready() -> void:
 func _on_start_pressed() -> void:
 	var name_txt = username_input.text.strip_edges()
 	if name_txt != "":
-		PlayerStore.player_id = name_txt
-		
-		# Fetch initial status
-		var status = await ApiClient.get_player_status(name_txt)
-		if not status.has("error"):
-			PlayerStore.update_from_status(status)
-			
-		SceneManager.change_room("res://scenes/rooms/Room_Start.tscn")
+		GameController.start_new_game(name_txt)

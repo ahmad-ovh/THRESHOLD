@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+GameController="*res://singletons/GameController.gd"
 SceneManager="*res://singletons/SceneManager.gd"
 PlayerStore="*res://singletons/PlayerStore.gd"
 ApiClient="*res://singletons/ApiClient.gd"
