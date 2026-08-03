@@ -115,6 +115,8 @@ class InteractionSession(Base):
     accumulated_scores_json: Mapped[str] = mapped_column(Text, default="[]")
     # narrative outcome selected by Character Voice LLM (null until triggered)
     narrative_outcome: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
+    # performance outcome calculated deterministically (null until evaluated)
+    performance_outcome: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
     npc_instance: Mapped["NpcInstance"] = relationship("NpcInstance", back_populates="session")
@@ -159,7 +161,8 @@ class EncounterHistory(Base):
     player_id: Mapped[str] = mapped_column(String, ForeignKey("players.player_id"))
     npc_template_id: Mapped[str] = mapped_column(String)
     scenario_id: Mapped[str] = mapped_column(String)
-    outcome: Mapped[str] = mapped_column(String)  # "good" | "neutral" | "poor"
+    performance_outcome: Mapped[str] = mapped_column(String, default="")  # "good" | "neutral" | "poor"
+    narrative_outcome: Mapped[str | None] = mapped_column(String, nullable=True, default=None)
     # average scores for this encounter
     avg_scores_json: Mapped[str] = mapped_column(Text, default="{}")
     xp_gained: Mapped[float] = mapped_column(Float, default=0.0)
@@ -168,9 +171,18 @@ class EncounterHistory(Base):
     player: Mapped["Player"] = relationship("Player", back_populates="encounter_history")
 
     @property
+    def outcome(self) -> str:
+        return self.performance_outcome
+
+    @outcome.setter
+    def outcome(self, value: str) -> None:
+        self.performance_outcome = value
+
+    @property
     def avg_scores(self) -> dict:
         return json.loads(self.avg_scores_json)
 
     @avg_scores.setter
     def avg_scores(self, value: dict) -> None:
         self.avg_scores_json = json.dumps(value)
+

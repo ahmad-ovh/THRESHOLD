@@ -159,6 +159,7 @@ You MUST return valid JSON with exactly this schema:
                        defensive, withdrawn, collaborative>,
   "coach_hint":       <string — one factual observation about the conversation, never prescriptive>,
   "outcome_triggered": <string — one of: "good", "neutral", "poor", or null>,
+  "narrative_outcome": <string — generated story interpretation when outcome is triggered, or null>,
   "end_encounter":    <boolean>
 }
 
@@ -171,17 +172,12 @@ Rules:
   - You do not choose NPC state — you write from within the state you are given.
   - Do not invent new scenario premises.
 
-Narrative outcome detection rules:
-  - outcome_triggered must be null unless the conversation has naturally and clearly reached
-    one of the described scenario outcome conditions.
-  - NEVER trigger an outcome before the minimum turn count is satisfied (this is enforced externally,
-    but do not force an early close even if you could justify it).
-  - Evaluate only: has the narrative actually resolved in a way that matches a trigger condition?
-  - If outcome_triggered is set to a value (not null), end_encounter MUST be true.
-  - If no outcome has been reached, outcome_triggered must be null and end_encounter must be false.
-  - When an outcome is triggered, generate the npc_reply as the closing message using the
-    closing_seed for guidance: treat it as a narrative direction, NOT as literal text to copy.
-    Transform it into a natural closing line in the character's voice.
+Encounter Phase & Outcome Guidance:
+  - Follow the current encounter phase instructions provided in the prompt.
+  - In DEVELOPMENT phase: Do NOT trigger outcomes, say farewell, or end the encounter.
+  - In RESOLUTION phase: Evaluate if the narrative has resolved. If triggered, set outcome_triggered,
+    provide a narrative_outcome description, set end_encounter to true, and generate npc_reply
+    using the closing_seed for guidance (treat it as narrative direction, NOT literal text).
 """.strip()
 
 
@@ -199,7 +195,7 @@ async def character_voice(
     """
     Generate the NPC's reply, expression, coach hint, and narrative outcome assessment.
 
-    Returns: { npc_reply, npc_expression, coach_hint, outcome_triggered, end_encounter }
+    Returns: { npc_reply, npc_expression, coach_hint, outcome_triggered, narrative_outcome, end_encounter }
     """
     history_text = "\n".join(
         f"{m['role'].upper()}: {m['text']}" for m in conversation_history[-8:]
@@ -207,17 +203,31 @@ async def character_voice(
 
     outcomes_text = ""
     if possible_outcomes:
+        if not min_turns_reached:
+            phase_text = """
+CURRENT PHASE: DEVELOPMENT PHASE (Early Turn)
+- You can review the potential narrative outcomes below to understand the scenario's direction.
+- You MUST NOT trigger an outcome, end the encounter, or speak farewell dialogue yet.
+- Focus on building rapport, exploring conflict, or developing the interaction.
+""".strip()
+        else:
+            phase_text = """
+CURRENT PHASE: RESOLUTION PHASE (Min Turns Met)
+- You may now evaluate if the conversation has reached a natural conclusion.
+- If an outcome condition is met: set outcome_triggered ("good", "neutral", or "poor"), provide a narrative_outcome description, set end_encounter to true, and use the corresponding closing_seed as narrative guidance for npc_reply.
+- If the interaction is ongoing, keep outcome_triggered as null and end_encounter as false.
+""".strip()
+
         outcomes_text = f"""
-Possible narrative outcomes (evaluate whether the conversation has reached one of these):
+{phase_text}
+
+Possible narrative outcomes:
   good outcome trigger:    {possible_outcomes.get('good_trigger', '')}
   good closing_seed:       {possible_outcomes.get('good_closing_seed', '')}
   neutral outcome trigger: {possible_outcomes.get('neutral_trigger', '')}
   neutral closing_seed:    {possible_outcomes.get('neutral_closing_seed', '')}
   poor outcome trigger:    {possible_outcomes.get('poor_trigger', '')}
   poor closing_seed:       {possible_outcomes.get('poor_closing_seed', '')}
-
-Minimum turn threshold met (early ending is allowed): {min_turns_reached}
-If minimum turns NOT met, outcome_triggered MUST be null and end_encounter MUST be false.
 """.strip()
 
     user_prompt = f"""
@@ -250,26 +260,24 @@ Respond as {npc_name} in their current state. Return JSON.
     result.setdefault("npc_expression", npc_state)
     result.setdefault("coach_hint", "")
     result.setdefault("outcome_triggered", None)
+    result.setdefault("narrative_outcome", None)
     result.setdefault("end_encounter", False)
-
-    # Enforce constraint: if outcome_triggered is set, end_encounter must be true
-    if result["outcome_triggered"] is not None:
-        result["end_encounter"] = True
-    else:
-        result["end_encounter"] = False
-
-    # Enforce: if minimum turns not reached, cannot end
-    if not min_turns_reached:
-        result["outcome_triggered"] = None
-        result["end_encounter"] = False
 
     # Validate outcome value
     valid_outcomes = {"good", "neutral", "poor"}
-    if result["outcome_triggered"] not in valid_outcomes and result["outcome_triggered"] is not None:
+    if result["outcome_triggered"] not in valid_outcomes:
         result["outcome_triggered"] = None
+
+    # Enforce phase constraints: if minimum turns not reached, cannot end or trigger outcomes
+    if not min_turns_reached:
+        result["outcome_triggered"] = None
+        result["narrative_outcome"] = None
         result["end_encounter"] = False
+    elif result["outcome_triggered"] is not None:
+        result["end_encounter"] = True
 
     return result
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────

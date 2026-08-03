@@ -45,6 +45,7 @@ async def write_encounter_memory(
     conversation_history: list[dict],
     interpretation: str,
     final_turn: int,
+    narrative_outcome: str | None = None,
 ) -> None:
     """
     Write a summarizing memory entry for a completed encounter.
@@ -52,11 +53,9 @@ async def write_encounter_memory(
     """
     # Derive a compact event description from the last player message
     player_turns = [m for m in conversation_history if m.get("role") == "player"]
-    if player_turns:
-        last_player_msg = player_turns[-1].get("text", "")[:80]
-        event = f"encounter_ended: {last_player_msg}"
-    else:
-        event = "encounter_ended"
+    last_player_msg = player_turns[-1].get("text", "")[:80] if player_turns else ""
+    outcome_str = f" [{narrative_outcome}]" if narrative_outcome else ""
+    event = f"encounter_ended{outcome_str}: {last_player_msg}".strip()
 
     await write_memory_entry(
         db=db,
@@ -65,6 +64,7 @@ async def write_encounter_memory(
         interpretation=interpretation,
         turn=final_turn,
     )
+
 
 
 def format_memory_for_context(entries: list[MemoryEntry]) -> str:

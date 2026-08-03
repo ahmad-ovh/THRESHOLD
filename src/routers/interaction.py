@@ -310,6 +310,7 @@ async def send_message(
     npc_expression = voice_result.get("npc_expression", new_state)
     coach_hint_text = voice_result.get("coach_hint", "")
     outcome_triggered = voice_result.get("outcome_triggered")  # "good"|"neutral"|"poor"|None
+    narrative_outcome = voice_result.get("narrative_outcome")
 
     # Append NPC reply to conversation history
     history = session.conversation_history
@@ -324,10 +325,18 @@ async def send_message(
 
     encounter_over = narrative_ended or safety_limit_hit
 
+    # Calculate deterministic performance outcome for this turn state
+    perf_outcome = progression_service.determine_outcome(
+        {dim: sum(s.get(dim, 0.5) for s in session.accumulated_scores) / len(session.accumulated_scores)
+         for dim in ("clarity", "empathy", "politeness", "expression")} if session.accumulated_scores else turn_scores,
+        seed
+    )
+    session.performance_outcome = perf_outcome
+
     if encounter_over:
         session.encounter_over = True
         if outcome_triggered:
-            session.narrative_outcome = outcome_triggered
+            session.narrative_outcome = narrative_outcome or outcome_triggered
 
     # 6. Build feedback (strength + improvement from scores)
     feedback = _build_feedback(turn_scores, seed)
@@ -343,7 +352,8 @@ async def send_message(
         "npc_state": new_state,
         "feedback": feedback,
         "encounter_over": encounter_over,
-        "narrative_outcome": outcome_triggered,
+        "narrative_outcome": session.narrative_outcome,
+        "performance_outcome": perf_outcome,
     }
 
 
@@ -414,9 +424,6 @@ async def end_interaction(
 
     performance_outcome = progression_service.determine_outcome(avg_scores, seed)
 
-    # Use narrative_outcome for XP/progression if available; fall back to performance_outcome
-    outcome_for_progression = narrative_outcome if narrative_outcome else performance_outcome
-
     # 2. Write encounter-summary memory entry
     # Determine the dominant interpretation from accumulated turns
     if accumulated:
@@ -439,17 +446,18 @@ async def end_interaction(
         conversation_history=conversation_history,
         interpretation=dominant_interpretation,
         final_turn=session.turn_count,
+        narrative_outcome=narrative_outcome,
     )
 
     # 3. Observer Service
     all_entries = await memory_service.get_memory_entries(db, instance.npc_instance_id)
     observer_result = await observer_service.run_observer(all_entries)
 
-    # 4. Progression: XP + skill vector
+    # 4. Progression: XP + skill vector (strictly deterministic using performance_outcome)
     xp_gain = progression_service.compute_xp_gain(
         turn_scores_list=accumulated,
         seed=seed,
-        outcome=outcome_for_progression,
+        outcome=performance_outcome,
         player_level=player.level,
     )
     new_skill_vector = progression_service.compute_skill_vector_update(
@@ -475,14 +483,18 @@ async def end_interaction(
     instance.current_state = new_state
     instance.relationship_tier = new_tier
 
-    # 6. Record encounter history for reporting
+    # 6. Record encounter history for reporting (saving both performance & narrative outcomes)
     history_record = EncounterHistory(
         player_id=body.player_id,
         npc_template_id=body.npc_id,
         scenario_id=session.scenario_id,
-        outcome=outcome_for_progression,
+        performance_outcome=performance_outcome,
+        narrative_outcome=narrative_outcome,
         xp_gained=xp_gain,
     )
+    history_record.avg_scores = avg_scores
+    db.add(history_record)
+
     history_record.avg_scores = avg_scores
     db.add(history_record)
 
