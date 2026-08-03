@@ -539,18 +539,79 @@ func interact() -> void:
 
 ---
 
-## 8. Development Build Order & Roadmap
+## 8. Godot 4 Developer Step-by-Step Build Order
 
-Follow this 5-phase build sequence to construct the Godot 4 web client:
+If you are new to Godot 4 or learning by watching YouTube tutorials for different game modules, build the game in this exact chronological order. Each step is visually testable before moving to the next:
 
 ```mermaid
 flowchart TD
-    Phase1["Phase 1: Player Auth & Singletons<br/>• MainMenu.tscn (Username input)<br/>• ApiClient.gd & SceneManager.gd Autoloads"] --> Phase2
-    Phase2["Phase 2: Modular Rooms & Player Controller<br/>• Player3D.tscn (Movement & Area3D interaction)<br/>• Door3D.gd & Room_Start.tscn / Room_Office.tscn<br/>• SceneManager.change_room() transitions"] --> Phase3
-    Phase3["Phase 3: NPC Template & Floating Mood Emoji<br/>• NPCData custom resource registry & NPC.tscn<br/>• HeadMarker/MoodSprite3D billboard tweens"] --> Phase4
-    Phase4["Phase 4: Dialogue UI & Turn Loop<br/>• DialogueUI.tscn (Typewriter, input box, scores)<br/>• Wire EncounterManager.gd to /start, /message, /end"] --> Phase5
-    Phase5["Phase 5: HUD, Journal Book & Overview Modal<br/>• HUD.tscn (Level, XP progress bar, Streak, J key)<br/>• JournalUI.tscn profile & /report tabs<br/>• OverviewModal.tscn for performance & Observer reveal"]
+    Step1["Step 1: 3D Movement & Test Room<br/>• Create Player3D.tscn (CharacterBody3D)<br/>• Add Room_Start.tscn & test WASD movement"] --> Step2
+    Step2["Step 2: Doors & Room Transitions<br/>• Build Door3D.tscn (Area3D trigger)<br/>• Implement SceneManager.gd (fade transition)"] --> Step3
+    Step3["Step 3: NPC & Floating Mood Emoji<br/>• Create NPCData.gd custom resource<br/>• Build NPC.tscn & Sprite3D mood emoji pop-in"] --> Step4
+    Step4["Step 4: Dialogue UI & Typewriter Effect<br/>• Build DialogueUI.tscn (CanvasLayer & input box)<br/>• Implement typewriter text effect & UI lock"] --> Step5
+    Step5["Step 5: Backend REST API Integration<br/>• Implement ApiClient.gd & EncounterManager.gd<br/>• Wire E-key interaction -> /start -> /message -> /end"] --> Step6
+    Step6["Step 6: HUD, Journal Book & Overview Modal<br/>• Build HUD.tscn (Level, XP bar, Streak)<br/>• Build OverviewModal.tscn & JournalUI.tscn (/report)"] --> Step7
+    Step7["Step 7: Web (HTML5) Export & Polish<br/>• Configure Godot Web Export Preset<br/>• Verify memory management & browser build"]
 ```
+
+### Detailed Chronological Step Breakdown
+
+#### Step 1: 3D Character Controller & Test Room
+- **What to search/watch**: *"Godot 4 3D CharacterBody3D movement tutorial"*
+- **Implementation**:
+  1. Create `res://scenes/player/Player3D.tscn` using a `CharacterBody3D` root, a `MeshInstance3D` (Capsule Mesh), a `CollisionShape3D`, and a `Camera3D`.
+  2. Add basic WASD movement in `Player3D.gd` using `Input.get_vector()` and `move_and_slide()`.
+  3. Create `res://scenes/rooms/Room_Start.tscn` with a `CSGBox3D` floor and lighting.
+  4. Test running the scene to verify smooth 3D walking.
+
+#### Step 2: Door Interactions & Room Scene Transitions
+- **What to search/watch**: *"Godot 4 Area3D interaction & Autoload Scene Switcher tutorial"*
+- **Implementation**:
+  1. Create `res://scenes/rooms/Door3D.tscn` with an `Area3D` interaction zone and a `Label3D` ("Press [E] to Enter").
+  2. Create `res://singletons/SceneManager.gd` as a `CanvasLayer` Autoload singleton.
+  3. Add a full-screen `ColorRect` to `SceneManager` for screen fades.
+  4. Implement `change_room(scene_path, spawn_id)` using `get_tree().change_scene_to_file()`.
+  5. Add `SpawnMarker3D` nodes in rooms so the player spawns in front of the door after loading.
+  6. Test walking to a door, pressing 'E', and fading smoothly into `Room_Office.tscn`!
+
+#### Step 3: Visual NPC Template & Floating Billboard Mood Emoji
+- **What to search/watch**: *"Godot 4 Custom Resource & Sprite3D Billboard tutorial"*
+- **Implementation**:
+  1. Create `res://resources/npc_data/NPCData.gd` extending `Resource` (`@export var npc_id`, `@export var display_name`, `@export var mesh_scene`, `@export var mood_emojis`).
+  2. Create `.tres` resource files for NPCs (e.g. `daria_data.tres`, `prof_adler_data.tres`).
+  3. Build `res://scenes/templates/NPC.tscn` with a `HeadMarker3D` and a `Sprite3D` (Billboard Y-Axis mode enabled).
+  4. Add an `Area3D` interaction zone ("Press [E] to talk to [Name]").
+  5. Write `set_mood_emoji(expression)` in `NPC.gd` using a Godot `Tween` to pop-in scale the emoji icon.
+  6. Place an NPC in `Room_Start.tscn` and test emoji pop-ins.
+
+#### Step 4: Dialogue UI & Typewriter Effect
+- **What to search/watch**: *"Godot 4 Dialogue Box & Typewriter Effect tutorial"*
+- **Implementation**:
+  1. Create `res://scenes/ui/DialogueUI.tscn` (`CanvasLayer` root with text stream container, `LineEdit` text box, and Send button).
+  2. Write typewriter text animation in GDScript (`create_tween().tween_property(label, "visible_ratio", 1.0, duration)`).
+  3. Test typing messages and displaying mock text bubbles locally without backend calls first.
+
+#### Step 5: Backend REST API Integration
+- **What to search/watch**: *"Godot 4 HTTPRequest & Async REST API tutorial"*
+- **Implementation**:
+  1. Create `res://singletons/ApiClient.gd` Autoload using Godot `HTTPRequest` nodes to call FastAPI REST endpoints (`POST /start`, `POST /message`, `POST /end`).
+  2. Create `res://singletons/EncounterManager.gd` Autoload to manage state (`LOBBY` -> `ACTIVE` -> `RESOLVING` -> `SETTLEMENT`).
+  3. Connect spatial interaction: Pressing 'E' near an NPC freezes player movement, triggers `POST /start`, opens `DialogueUI.tscn`, and updates the NPC's floating mood emoji.
+  4. Test sending text to the real backend running locally on `http://127.0.0.1:8000`!
+
+#### Step 6: In-Game HUD, Overview Settlement & Journal Book
+- **What to search/watch**: *"Godot 4 UI Layouts & TabContainer tutorial"*
+- **Implementation**:
+  1. Build `res://scenes/ui/HUD.tscn` (top bar with Level badge, XP progress bar, Daily streak counter, Journal button).
+  2. Build `res://scenes/ui/OverviewModal.tscn` for post-encounter summary (performance rating, XP gained, Observer pattern insight popup).
+  3. Build `res://scenes/ui/JournalUI.tscn` tabbed profile modal ('J' key toggle) displaying Profile/Skill Vector meters and calling `POST /interaction/report` for AI pattern analysis.
+
+#### Step 7: Web (HTML5) Export & Optimization
+- **What to search/watch**: *"Godot 4 Web Export HTML5 tutorial"*
+- **Implementation**:
+  1. Add Web export preset in Godot (`Project -> Export -> Web`).
+  2. Verify HTML5 export runs cleanly in the web browser.
+  3. Confirm room switching frees old room nodes properly to keep WebAssembly memory lightweight.
 
 ---
 
