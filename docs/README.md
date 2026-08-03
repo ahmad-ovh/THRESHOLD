@@ -10,7 +10,7 @@
 | [04_game_content.md](./04_game_content.md) | All NPCs (metrics, update rules, state rules), relationship tier config, all scenario seeds (context, scoring focus, outcomes, overrides), distribution bands, interpretation vocabulary, expression enum |
 | [05_systems.md](./05_systems.md) | How each system works: player, NPC, memory, scoring, relationship/metric update formula, state engine, scenario selection, progression (XP/level/outcome formulas), observer, all 5 LLM pipelines, AI vs. deterministic boundary table |
 | [06_setup_and_operations.md](./06_setup_and_operations.md) | Environment variables, local setup, running the server, running tests, running the demo, database files, deployment notes, content extension guide |
-| [07_frontend_integration.md](./07_frontend_integration.md) | Game client & 3D game engine integration guide (Godot 4.x reference, NpcController, CameraDirector, 3D staging, signals, build order, API mapping, TypeScript/GDScript types, AI vs deterministic boundaries) |
+| [07_frontend_integration.md](./07_frontend_integration.md) | Godot 4 Web & Game Engine Integration Guide (Modular room architecture, SceneManager, reusable NPC template & resource registry, floating billboard mood emojis, GDScript Autoloads, API mapping, HUD & Journal overlay, build roadmap) |
 
 ## Quick Reference
 
