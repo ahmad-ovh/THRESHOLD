@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cplayer3d001"]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/player/Player3D.gd" id="1_player_script"]
 

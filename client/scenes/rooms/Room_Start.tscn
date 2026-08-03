@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://croomstart001"]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="PackedScene" uid="uid://cplayer3d001" path="res://scenes/player/Player3D.tscn" id="1_player"]
-[ext_resource type="PackedScene" uid="uid://cdoor3d001" path="res://scenes/rooms/Door3D.tscn" id="2_door"]
-[ext_resource type="PackedScene" uid="uid://cnpc001" path="res://scenes/templates/NPC.tscn" id="3_npc"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="2_door"]
+[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="3_npc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.2, 0.25, 0.3, 1)

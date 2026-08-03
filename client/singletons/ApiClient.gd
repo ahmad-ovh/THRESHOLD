@@ -29,7 +29,12 @@ func _http_get(path: String) -> Dictionary:
 		return {"error": true}
 	var res = await http.request_completed
 	http.queue_free()
-	return JSON.parse_string(res[3].get_string_from_utf8())
+	
+	var body_bytes: PackedByteArray = res[3]
+	var parsed = JSON.parse_string(body_bytes.get_string_from_utf8())
+	if parsed is Dictionary:
+		return parsed
+	return {"error": true}
 
 func _http_post(path: String, body: Dictionary) -> Dictionary:
 	var http = HTTPRequest.new()
@@ -44,9 +49,12 @@ func _http_post(path: String, body: Dictionary) -> Dictionary:
 	http.queue_free()
 	
 	var code: int = res[1]
-	var parsed = JSON.parse_string(res[3].get_string_from_utf8())
-	if code >= 400:
-		var detail = parsed.get("detail", "HTTP Error %d" % code) if parsed else "Error"
-		request_failed.emit(detail)
-		return {"error": true, "code": code, "detail": detail}
-	return parsed
+	var body_bytes: PackedByteArray = res[3]
+	var parsed = JSON.parse_string(body_bytes.get_string_from_utf8())
+	if parsed is Dictionary:
+		if code >= 400:
+			var detail = parsed.get("detail", "HTTP Error %d" % code)
+			request_failed.emit(detail)
+			return {"error": true, "code": code, "detail": detail}
+		return parsed
+	return {"error": true}

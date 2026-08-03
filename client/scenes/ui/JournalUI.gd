@@ -11,8 +11,11 @@ extends CanvasLayer
 
 func _ready() -> void:
 	visible = false
-	close_btn.pressed.connect(func(): visible = false)
+	close_btn.pressed.connect(_on_close_pressed)
 	refresh_report_btn.pressed.connect(_fetch_report)
+
+func _on_close_pressed() -> void:
+	visible = false
 
 func toggle() -> void:
 	visible = not visible

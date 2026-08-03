@@ -15,7 +15,8 @@ func start_encounter(npc_id: String) -> void:
 		
 	var res = await ApiClient.start_interaction(PlayerStore.player_id, npc_id)
 	if res.has("error"):
-		if player: player.set_physics_process(true)
+		if player:
+			player.set_physics_process(true)
 		return
 		
 	current_state = State.ACTIVE
@@ -47,7 +48,7 @@ func _on_player_message_submitted(text: String) -> void:
 
 func _finalize_encounter() -> void:
 	current_state = State.RESOLVING
-	var res = await ApiClient.end_interaction(PlayerStore.player_id, active_npc_id)
+	var _end_res = await ApiClient.end_interaction(PlayerStore.player_id, active_npc_id)
 	
 	# Refresh player status after encounter end
 	var status = await ApiClient.get_player_status(PlayerStore.player_id)

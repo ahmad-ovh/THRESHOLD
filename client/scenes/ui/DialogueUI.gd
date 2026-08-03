@@ -11,7 +11,10 @@ signal message_submitted(text: String)
 func _ready() -> void:
 	visible = false
 	send_button.pressed.connect(_on_send_pressed)
-	message_input.text_submitted.connect(func(_text): _on_send_pressed())
+	message_input.text_submitted.connect(_on_text_submitted)
+
+func _on_text_submitted(_text: String) -> void:
+	_on_send_pressed()
 
 func open_dialogue(npc_name: String, opening_line: String) -> void:
 	speaker_label.text = npc_name
