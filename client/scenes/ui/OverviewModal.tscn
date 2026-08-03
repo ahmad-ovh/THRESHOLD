@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/OverviewModal.gd" id="1_overview_script"]
+
+[node name="OverviewModal" type="CanvasLayer"]
+layer = 60
+script = ExtResource("1_overview_script")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(600, 420)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -210.0
+offset_right = 300.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "🏆 Encounter Summary"
+horizontal_alignment = 1
+
+[node name="OutcomeBadge" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = " PERFORMANCE: GOOD "
+horizontal_alignment = 1
+
+[node name="NarrativeText" type="RichTextLabel" parent="PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Narrative outcome summary..."
+
+[node name="ObserverCard" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/ObserverCard"]
+layout_mode = 2
+
+[node name="HeaderLabel" type="Label" parent="PanelContainer/VBoxContainer/ObserverCard/VBoxContainer"]
+layout_mode = 2
+text = "👁️ Observer Pattern Insight"
+
+[node name="ObserverText" type="Label" parent="PanelContainer/VBoxContainer/ObserverCard/VBoxContainer"]
+layout_mode = 2
+text = "Pattern text..."
+autowrap_mode = 3
+
+[node name="LevelUpBanner" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="LevelUpText" type="Label" parent="PanelContainer/VBoxContainer/LevelUpBanner"]
+layout_mode = 2
+text = "🎉 LEVEL UP! Level 2"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Continue"
