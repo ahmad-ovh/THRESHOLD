@@ -86,7 +86,7 @@ class TestRelationshipTier:
     def test_friend_tiers(self):
         """Test all five friend tier thresholds."""
         from src.content import registry
-        template = registry.get_template("sara")
+        template = registry.get_template("daria")
         assert template is not None
 
         # trust = 0.0 -> Stranger
@@ -102,7 +102,7 @@ class TestRelationshipTier:
 
     def test_teacher_tiers(self):
         from src.content import registry
-        template = registry.get_template("mr_teo")
+        template = registry.get_template("prof_adler")
         assert template is not None
         assert resolve_tier(template, {"trust": 0.0}) == "Unfamiliar"
         assert resolve_tier(template, {"trust": 0.85}) == "Regarded Highly"

@@ -1,86 +1,379 @@
 npcs:
-  - id: sara
-    archetype_role: friend
-    name: Sara
-    base_personality: "Direct but caring, reads as blunt if you don't know her."
-    communication_style: "Casual, expressive, texts in fragments."
-    metrics:
-      trust:    { start: 0.7, min: 0.0, max: 1.0 }
-      patience: { start: 0.6, min: 0.0, max: 1.0 }
-      openness: { start: 0.4, min: 0.0, max: 1.0 }
-    metric_updates:
-      trust:    { influenced_by: { empathy: 0.6, clarity: 0.4 },    turn_decay: 0.0  }
-      patience: { influenced_by: { politeness: 1.0 },               turn_decay: 0.05 }
-      openness: { influenced_by: { expression: 0.7, empathy: 0.3 }, turn_decay: 0.0  }
-    state_rules:
-      - condition: "trust < 0.3"
-        state: guarded
-      - condition: "trust >= 0.3 and patience < 0.3"
-        state: irritated
-      - condition: "trust >= 0.6 and openness >= 0.6"
-        state: warm
-      - condition: "default"
-        state: neutral
 
-  - id: mr_teo
+  # --- teacher ---
+
+  - id: prof_adler
     archetype_role: teacher
-    name: "Mr. Teo"
-    base_personality: "Patient but direct. Expects ownership and brevity."
-    communication_style: "Formal, measured, economy of words."
+    name: "Prof. Adler"
+    base_personality: "Rigorous and fair, holds high standards but never makes the stakes feel personal."
+    communication_style: "Measured, precise, and unhurried — expects you to have thought before you speak."
     metrics:
-      trust:   { start: 0.5, min: 0.0, max: 1.0 }
-      respect: { start: 0.5, min: 0.0, max: 1.0 }
+      respect:    { start: 0.50, min: 0.0, max: 1.0 }
+      confidence: { start: 0.45, min: 0.0, max: 1.0 }
     metric_updates:
-      trust:   { influenced_by: { clarity: 0.6, politeness: 0.4 }, turn_decay: 0.0  }
-      respect: { influenced_by: { clarity: 0.5, empathy: 0.3, politeness: 0.2 }, turn_decay: 0.02 }
+      respect:    { influenced_by: { clarity: 0.55, politeness: 0.30, empathy: 0.15 }, turn_decay: 0.01 }
+      confidence: { influenced_by: { clarity: 0.70, expression: 0.30 },               turn_decay: 0.02 }
     state_rules:
-      - condition: "trust < 0.3"
-        state: disappointed
-      - condition: "respect < 0.3"
+      - condition: "respect < 0.25"
         state: dismissive
-      - condition: "trust >= 0.65 and respect >= 0.65"
-        state: approving
+      - condition: "confidence < 0.25"
+        state: doubtful
+      - condition: "respect >= 0.70 and confidence >= 0.65"
+        state: encouraging
+      - condition: "respect >= 0.55"
+        state: attentive
       - condition: "default"
         state: neutral
 
-  - id: jun
-    archetype_role: colleague
-    name: Jun
-    base_personality: "Conflict-avoidant but quietly watches how people treat others."
-    communication_style: "Measured, professional, occasionally dry."
+  - id: ms_okoro
+    archetype_role: teacher
+    name: "Ms. Okoro"
+    base_personality: "Warm but demanding, believes good work and good character are the same thing."
+    communication_style: "Conversational and direct, uses questions more than statements to make a point."
     metrics:
-      trust:        { start: 0.5, min: 0.0, max: 1.0 }
-      comfort_level: { start: 0.5, min: 0.0, max: 1.0 }
+      trust:     { start: 0.55, min: 0.0, max: 1.0 }
+      integrity: { start: 0.50, min: 0.0, max: 1.0 }
     metric_updates:
-      trust:         { influenced_by: { empathy: 0.5, clarity: 0.5 },       turn_decay: 0.0  }
-      comfort_level: { influenced_by: { politeness: 0.6, expression: 0.4 }, turn_decay: 0.03 }
+      trust:     { influenced_by: { empathy: 0.50, clarity: 0.30, politeness: 0.20 }, turn_decay: 0.01 }
+      integrity: { influenced_by: { clarity: 0.40, empathy: 0.40, expression: 0.20 }, turn_decay: 0.01 }
     state_rules:
-      - condition: "trust < 0.3"
-        state: withdrawn
-      - condition: "comfort_level < 0.3"
-        state: defensive
-      - condition: "trust >= 0.65 and comfort_level >= 0.6"
-        state: collaborative
+      - condition: "integrity < 0.25"
+        state: disappointed
+      - condition: "trust < 0.30"
+        state: guarded
+      - condition: "trust >= 0.65 and integrity >= 0.60"
+        state: invested
+      - condition: "trust >= 0.45"
+        state: receptive
       - condition: "default"
         state: neutral
 
-  - id: ms_reyes
-    archetype_role: client
-    name: "Ms. Reyes"
-    base_personality: "Professional, results-driven, does not hide dissatisfaction."
-    communication_style: "Terse, precise, expects the same."
+  - id: mr_vance
+    archetype_role: teacher
+    name: "Mr. Vance"
+    base_personality: "Practical and unromantic, interested in whether you can do the work, not whether you want to."
+    communication_style: "Terse, skeptical by default, warms noticeably only when you earn it."
     metrics:
-      trust:       { start: 0.4, min: 0.0, max: 1.0 }
-      satisfaction: { start: 0.4, min: 0.0, max: 1.0 }
+      credibility: { start: 0.40, min: 0.0, max: 1.0 }
+      reliability: { start: 0.45, min: 0.0, max: 1.0 }
     metric_updates:
-      trust:        { influenced_by: { clarity: 0.7, politeness: 0.3 },     turn_decay: 0.0  }
-      satisfaction: { influenced_by: { clarity: 0.5, empathy: 0.5 },        turn_decay: 0.04 }
+      credibility: { influenced_by: { clarity: 0.65, expression: 0.35 },                 turn_decay: 0.02 }
+      reliability: { influenced_by: { clarity: 0.50, politeness: 0.30, empathy: 0.20 },  turn_decay: 0.03 }
+    state_rules:
+      - condition: "credibility < 0.25"
+        state: skeptical
+      - condition: "reliability < 0.25"
+        state: impatient
+      - condition: "credibility >= 0.70 and reliability >= 0.65"
+        state: approving
+      - condition: "credibility >= 0.50"
+        state: watchful
+      - condition: "default"
+        state: neutral
+
+  # --- friend ---
+
+  - id: daria
+    archetype_role: friend
+    name: "Daria"
+    base_personality: "Perceptive and quietly loyal, notices inconsistencies between what people say and what they do."
+    communication_style: "Unhurried, conversational, rarely pushes — but remembers everything."
+    metrics:
+      trust:     { start: 0.65, min: 0.0, max: 1.0 }
+      closeness: { start: 0.55, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:     { influenced_by: { empathy: 0.55, clarity: 0.30, expression: 0.15 }, turn_decay: 0.0  }
+      closeness: { influenced_by: { expression: 0.60, empathy: 0.40 },               turn_decay: 0.0  }
     state_rules:
       - condition: "trust < 0.25"
+        state: withdrawn
+      - condition: "trust >= 0.25 and closeness < 0.25"
+        state: distant
+      - condition: "trust >= 0.70 and closeness >= 0.65"
+        state: close
+      - condition: "trust >= 0.50"
+        state: comfortable
+      - condition: "default"
+        state: neutral
+
+  - id: felix
+    archetype_role: friend
+    name: "Felix"
+    base_personality: "Upbeat and socially fluent, but protective of the people he actually cares about."
+    communication_style: "Fast, informal, uses humor as a first language and drops it when things get real."
+    metrics:
+      trust:    { start: 0.60, min: 0.0, max: 1.0 }
+      openness: { start: 0.50, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:    { influenced_by: { empathy: 0.45, expression: 0.35, clarity: 0.20 }, turn_decay: 0.0  }
+      openness: { influenced_by: { expression: 0.55, empathy: 0.30, clarity: 0.15 }, turn_decay: 0.0  }
+    state_rules:
+      - condition: "trust < 0.25"
+        state: shut_out
+      - condition: "trust >= 0.25 and openness < 0.25"
+        state: surface_level
+      - condition: "trust >= 0.65 and openness >= 0.60"
+        state: candid
+      - condition: "trust >= 0.45"
+        state: easy
+      - condition: "default"
+        state: neutral
+
+  - id: priya
+    archetype_role: friend
+    name: "Priya"
+    base_personality: "Principled and sometimes exhausting about it, holds everyone, including herself, to the same standard."
+    communication_style: "Direct to the point of bluntness, takes honesty seriously as a form of respect."
+    metrics:
+      trust:       { start: 0.55, min: 0.0, max: 1.0 }
+      candor:      { start: 0.50, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:       { influenced_by: { empathy: 0.40, clarity: 0.40, expression: 0.20 }, turn_decay: 0.0  }
+      candor:      { influenced_by: { clarity: 0.50, expression: 0.30, empathy: 0.20 }, turn_decay: 0.0  }
+    state_rules:
+      - condition: "trust < 0.25"
+        state: cold
+      - condition: "candor < 0.25"
+        state: skeptical
+      - condition: "trust >= 0.70 and candor >= 0.65"
+        state: deeply_trusting
+      - condition: "trust >= 0.45"
+        state: engaged
+      - condition: "default"
+        state: neutral
+
+  # --- colleague ---
+
+  - id: nadia
+    archetype_role: colleague
+    name: "Nadia"
+    base_personality: "Quietly capable and underestimated, forms opinions slowly but relies on them completely."
+    communication_style: "Reserved, professional, and slightly formal — opens up only in extended or repeated contact."
+    metrics:
+      trust:       { start: 0.45, min: 0.0, max: 1.0 }
+      ease:        { start: 0.40, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:       { influenced_by: { empathy: 0.45, clarity: 0.35, politeness: 0.20 }, turn_decay: 0.01 }
+      ease:        { influenced_by: { politeness: 0.50, expression: 0.30, empathy: 0.20 }, turn_decay: 0.02 }
+    state_rules:
+      - condition: "trust < 0.25"
+        state: standoffish
+      - condition: "ease < 0.25"
+        state: stiff
+      - condition: "trust >= 0.65 and ease >= 0.60"
+        state: collaborative
+      - condition: "trust >= 0.45"
+        state: cordial
+      - condition: "default"
+        state: neutral
+
+  - id: tomas
+    archetype_role: colleague
+    name: "Tomás"
+    base_personality: "Ambitious and transparent about it, not unkind but never loses sight of his own interests."
+    communication_style: "Gregarious and confident, speaks in confident assertions, pivots fast when challenged."
+    metrics:
+      respect:   { start: 0.50, min: 0.0, max: 1.0 }
+      alignment: { start: 0.45, min: 0.0, max: 1.0 }
+    metric_updates:
+      respect:   { influenced_by: { clarity: 0.55, expression: 0.30, politeness: 0.15 }, turn_decay: 0.02 }
+      alignment: { influenced_by: { clarity: 0.40, empathy: 0.35, expression: 0.25 },    turn_decay: 0.03 }
+    state_rules:
+      - condition: "respect < 0.25"
+        state: dismissive
+      - condition: "alignment < 0.25"
+        state: competitive
+      - condition: "respect >= 0.65 and alignment >= 0.60"
+        state: allied
+      - condition: "respect >= 0.45"
+        state: civil
+      - condition: "default"
+        state: neutral
+
+  - id: seren
+    archetype_role: colleague
+    name: "Seren"
+    base_personality: "Even-tempered and fair, the kind of person who absorbs tension rather than deflects it."
+    communication_style: "Careful and measured, defaults to listening before offering opinions."
+    metrics:
+      trust:   { start: 0.50, min: 0.0, max: 1.0 }
+      rapport: { start: 0.45, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:   { influenced_by: { empathy: 0.50, clarity: 0.30, politeness: 0.20 }, turn_decay: 0.01 }
+      rapport: { influenced_by: { expression: 0.45, empathy: 0.35, politeness: 0.20 }, turn_decay: 0.02 }
+    state_rules:
+      - condition: "trust < 0.25"
+        state: cautious
+      - condition: "rapport < 0.25"
+        state: professional_only
+      - condition: "trust >= 0.65 and rapport >= 0.60"
+        state: genuinely_warm
+      - condition: "trust >= 0.45"
+        state: steady
+      - condition: "default"
+        state: neutral
+
+  # --- client ---
+
+  - id: ms_hartwell
+    archetype_role: client
+    name: "Ms. Hartwell"
+    base_personality: "Experienced and exacting, has worked with enough people to recognize a professional from a distance."
+    communication_style: "Clipped and efficient, communicates expectations once and notices whether they were met."
+    metrics:
+      trust:        { start: 0.35, min: 0.0, max: 1.0 }
+      satisfaction: { start: 0.40, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:        { influenced_by: { clarity: 0.65, politeness: 0.25, empathy: 0.10 }, turn_decay: 0.03 }
+      satisfaction: { influenced_by: { clarity: 0.55, empathy: 0.30, politeness: 0.15 }, turn_decay: 0.05 }
+    state_rules:
+      - condition: "trust < 0.20"
         state: hostile
-      - condition: "satisfaction < 0.3"
+      - condition: "satisfaction < 0.25"
         state: frustrated
-      - condition: "trust >= 0.6 and satisfaction >= 0.6"
+      - condition: "trust >= 0.65 and satisfaction >= 0.60"
         state: satisfied
+      - condition: "trust >= 0.45"
+        state: professional
+      - condition: "default"
+        state: neutral
+
+  - id: mr_osei
+    archetype_role: client
+    name: "Mr. Osei"
+    base_personality: "Collaborative in approach but high in expectation, wants to feel like a partner, not a task."
+    communication_style: "Deliberate and contextual, shares reasoning behind his requests and expects the same."
+    metrics:
+      trust:       { start: 0.45, min: 0.0, max: 1.0 }
+      engagement:  { start: 0.40, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:       { influenced_by: { empathy: 0.45, clarity: 0.35, expression: 0.20 }, turn_decay: 0.03 }
+      engagement:  { influenced_by: { expression: 0.40, empathy: 0.35, clarity: 0.25 }, turn_decay: 0.04 }
+    state_rules:
+      - condition: "trust < 0.20"
+        state: disengaged
+      - condition: "engagement < 0.25"
+        state: transactional
+      - condition: "trust >= 0.65 and engagement >= 0.60"
+        state: invested
+      - condition: "trust >= 0.45"
+        state: attentive
+      - condition: "default"
+        state: neutral
+
+  - id: ms_vidal
+    archetype_role: client
+    name: "Ms. Vidal"
+    base_personality: "Anxious about outcomes and not always good at hiding it, needs confidence in whoever she is working with."
+    communication_style: "Polite but probing, asks follow-up questions and notices when answers feel rehearsed."
+    metrics:
+      trust:      { start: 0.30, min: 0.0, max: 1.0 }
+      reassurance: { start: 0.35, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:       { influenced_by: { clarity: 0.50, empathy: 0.35, politeness: 0.15 }, turn_decay: 0.04 }
+      reassurance: { influenced_by: { empathy: 0.55, clarity: 0.30, expression: 0.15 }, turn_decay: 0.05 }
+    state_rules:
+      - condition: "trust < 0.20"
+        state: skeptical
+      - condition: "reassurance < 0.20"
+        state: anxious
+      - condition: "trust >= 0.60 and reassurance >= 0.55"
+        state: reassured
+      - condition: "trust >= 0.40"
+        state: cautiously_hopeful
+      - condition: "default"
+        state: neutral
+
+  # --- family ---
+
+  - id: parent
+    archetype_role: family
+    name: "Your parent"
+    base_personality: "Loving but shaped by habits and assumptions formed years ago, sometimes struggling to update their model of who you are."
+    communication_style: "Familiar and emotionally loaded, mixes pride and concern in the same breath."
+    metrics:
+      trust:     { start: 0.70, min: 0.0, max: 1.0 }
+      closeness: { start: 0.65, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:     { influenced_by: { clarity: 0.40, empathy: 0.40, expression: 0.20 }, turn_decay: 0.0  }
+      closeness: { influenced_by: { expression: 0.50, empathy: 0.35, clarity: 0.15 }, turn_decay: 0.0  }
+    state_rules:
+      - condition: "trust < 0.30"
+        state: hurt
+      - condition: "closeness < 0.30"
+        state: drifting
+      - condition: "trust >= 0.75 and closeness >= 0.70"
+        state: connected
+      - condition: "trust >= 0.50"
+        state: present
+      - condition: "default"
+        state: neutral
+
+  - id: sibling
+    archetype_role: family
+    name: "Your sibling"
+    base_personality: "Blunt about the things that matter and performatively casual about everything else, difficult to read from the outside."
+    communication_style: "Clipped and dry, shares things obliquely rather than directly — context accumulates over time."
+    metrics:
+      trust:     { start: 0.60, min: 0.0, max: 1.0 }
+      closeness: { start: 0.50, min: 0.0, max: 1.0 }
+    metric_updates:
+      trust:     { influenced_by: { empathy: 0.50, clarity: 0.30, expression: 0.20 }, turn_decay: 0.0  }
+      closeness: { influenced_by: { expression: 0.55, empathy: 0.30, clarity: 0.15 }, turn_decay: 0.0  }
+    state_rules:
+      - condition: "trust < 0.25"
+        state: shut_down
+      - condition: "closeness < 0.25"
+        state: surface_only
+      - condition: "trust >= 0.70 and closeness >= 0.65"
+        state: genuinely_close
+      - condition: "trust >= 0.45"
+        state: familiar
+      - condition: "default"
+        state: neutral
+
+  # --- stranger ---
+
+  - id: barista
+    archetype_role: stranger
+    name: "The barista"
+    base_personality: "Efficient and quietly observant, has seen enough regulars to notice who bothers to be decent."
+    communication_style: "Brief and professional, responses stay to the point unless given a reason to extend them."
+    metrics:
+      impression: { start: 0.50, min: 0.0, max: 1.0 }
+      trust:      { start: 0.40, min: 0.0, max: 1.0 }
+    metric_updates:
+      impression: { influenced_by: { politeness: 0.55, empathy: 0.30, clarity: 0.15 }, turn_decay: 0.05 }
+      trust:      { influenced_by: { politeness: 0.45, empathy: 0.35, expression: 0.20 }, turn_decay: 0.05 }
+    state_rules:
+      - condition: "impression < 0.25"
+        state: cold
+      - condition: "trust >= 0.65 and impression >= 0.65"
+        state: recognizes_you
+      - condition: "impression >= 0.50"
+        state: pleasant
+      - condition: "default"
+        state: neutral
+
+  - id: recurring_stranger
+    archetype_role: stranger
+    name: "Someone you've passed before"
+    base_personality: "Pays more attention than they let on, has formed quiet impressions from brief encounters long before you noticed them."
+    communication_style: "Sparse and slightly knowing, references past observations without explaining how they remember."
+    metrics:
+      impression: { start: 0.45, min: 0.0, max: 1.0 }
+      trust:      { start: 0.35, min: 0.0, max: 1.0 }
+    metric_updates:
+      impression: { influenced_by: { politeness: 0.40, empathy: 0.35, expression: 0.25 }, turn_decay: 0.03 }
+      trust:      { influenced_by: { empathy: 0.45, clarity: 0.35, politeness: 0.20 },    turn_decay: 0.03 }
+    state_rules:
+      - condition: "impression < 0.20"
+        state: guarded
+      - condition: "trust < 0.25"
+        state: reserved
+      - condition: "trust >= 0.60 and impression >= 0.60"
+        state: openly_remembered_you
+      - condition: "impression >= 0.45"
+        state: quietly_watching
       - condition: "default"
         state: neutral
