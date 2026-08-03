@@ -1,6 +1,7 @@
 # res://scenes/ui/OverviewModal.gd
 extends CanvasLayer
 
+@onready var panel_container: PanelContainer = $PanelContainer
 @onready var title_label: Label = $PanelContainer/VBoxContainer/TitleLabel
 @onready var outcome_badge: Label = $PanelContainer/VBoxContainer/OutcomeBadge
 @onready var narrative_text: RichTextLabel = $PanelContainer/VBoxContainer/NarrativeText
@@ -18,6 +19,12 @@ func _ready() -> void:
 
 func show_settlement(end_data: Dictionary, level_data: Dictionary = {}) -> void:
 	visible = true
+	
+	# Smooth Scale Pop-In Micro-Animation
+	panel_container.scale = Vector2(0.8, 0.8)
+	panel_container.pivot_offset = panel_container.size / 2.0
+	var pop_tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	pop_tween.tween_property(panel_container, "scale", Vector2.ONE, 0.35)
 	
 	var summary = end_data.get("encounter_summary") if end_data.has("encounter_summary") and end_data["encounter_summary"] != null else {}
 	var perf_val = summary.get("performance_outcome", "NEUTRAL") if summary.has("performance_outcome") and summary["performance_outcome"] != null else "NEUTRAL"

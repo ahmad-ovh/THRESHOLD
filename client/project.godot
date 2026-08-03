@@ -25,6 +25,10 @@ PlayerStore="*res://singletons/PlayerStore.gd"
 ApiClient="*res://singletons/ApiClient.gd"
 EncounterManager="*res://singletons/EncounterManager.gd"
 
+[gui]
+
+theme/custom="res://resources/theme/main_theme.tres"
+
 [display]
 
 window/size/viewport_width=1280
