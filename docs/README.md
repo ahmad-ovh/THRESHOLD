@@ -11,6 +11,7 @@
 | [05_systems.md](./05_systems.md) | How each system works: player, NPC, memory, scoring, relationship/metric update formula, state engine, scenario selection, progression (XP/level/outcome formulas), observer, all 5 LLM pipelines, AI vs. deterministic boundary table |
 | [06_setup_and_operations.md](./06_setup_and_operations.md) | Environment variables, local setup, running the server, running tests, running the demo, database files, deployment notes, content extension guide |
 | [07_frontend_integration.md](./07_frontend_integration.md) | Godot 4 Web & Game Engine Integration Guide (Modular room architecture, SceneManager, reusable NPC template & resource registry, floating billboard mood emojis, GDScript Autoloads, API mapping, HUD & Journal overlay, build roadmap) |
+| [08_godot_setup_step_by_step.md](./08_godot_setup_step_by_step.md) | Dummy-proof Godot 4 project creation & setup guide (Project settings, Input Map, Window stretch, step-by-step scene creation, GDScript copy-paste snippets, Web export instructions) |
 
 ## Quick Reference
 
