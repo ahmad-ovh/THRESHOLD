@@ -178,185 +178,63 @@ Resolution: the highest threshold that `trust >= threshold` is satisfied gives t
 
 Each seed defines a scenario that can be selected for an encounter. Seeds are selected by compatible NPC role and player level.
 
----
+### Seed Schema
 
-### Seed: `missed_deadline_explain`
+Each seed has the following top-level fields:
 
-| Field | Value |
-|---|---|
-| **Title** | The Late Submission |
-| **Compatible Roles** | `teacher`, `colleague` |
-| **Category** | `workplace` |
-| **Tier** | 2 |
-| **Scoring Focus** | Primary: `clarity`, Secondary: `politeness` |
-| **Success Signal** | `owned_mistake_plainly` |
-| **Failure Signal** | `avoided_emotional_acknowledgment` |
+| Field | Type | Description |
+|---|---|---|
+| `id` | string | Unique identifier |
+| `title` | string | Human-readable name |
+| `compatible_roles` | list | NPC archetype roles this seed works with |
+| `category` | string | `everyday_social`, `friendship`, `workplace`, `high_pressure` |
+| `tier` | int | 1–3; maps loosely to encounter difficulty |
+| `context.premise` | string | Scene setup |
+| `context.stakes` | string | What is at stake |
+| `context.opening_line_seed` | string | Seed phrase for Scenario Personalization LLM |
+| `context.npc_goal` | string | NPC's internal objective for this encounter |
+| `scoring_focus` | dict | `primary` and `secondary` scoring dimensions |
+| `success_signal` | string | Memory interpretation label on good performance |
+| `failure_signal` | string | Memory interpretation label on poor performance |
+| `possible_outcomes` | dict | `good`, `neutral`, `poor` — each with `trigger` (narrative condition for LLM) and `closing_seed` (NPC's closing line seed) |
+| `npc_context.metric_overrides` | dict | Per-metric value overrides applied at encounter start |
 
-**Context:**
-- **Premise:** You missed a deadline by two days and need to explain yourself.
-- **Stakes:** Consequence is real but negotiable depending on how you handle it.
-- **Opening Line Seed:** "So — tell me what happened."
-- **NPC Goal:** Wants ownership before deciding leniency.
-
-**Possible Outcomes:**
-
-| Outcome | Description |
-|---|---|
-| good | Leniency granted; relationship unaffected or slightly improved. |
-| neutral | Consequence applies; professional tone maintained. |
-| poor | Consequence applies; trust drops. |
-
-**Metric Overrides at Start:** None
+**`possible_outcomes` detail:** The `trigger` field is passed to the Character Voice LLM as prose describing the narrative state that would constitute that outcome. The LLM selects one and signals `end_encounter=True` when the trigger condition is met (after `min_turns_before_end` turns). The `closing_seed` is the seed phrase used to personalize the NPC's final line.
 
 ---
 
-### Seed: `felt_ignored_lately`
+### All Seeds (Summary)
 
-| Field | Value |
-|---|---|
-| **Title** | The Distance |
-| **Compatible Roles** | `friend` |
-| **Category** | `friendship` |
-| **Tier** | 2 |
-| **Scoring Focus** | Primary: `empathy`, Secondary: `expression` |
-| **Success Signal** | `acknowledged_feelings_first` |
-| **Failure Signal** | `avoided_emotional_acknowledgment` |
-
-**Context:**
-- **Premise:** They've noticed you've been distant lately and want to talk about it.
-- **Stakes:** The relationship itself, not a task outcome.
-- **Opening Line Seed:** "Hey... can I ask why you've been off lately?"
-- **NPC Goal:** Wants to feel heard, not fixed.
-
-**Possible Outcomes:**
-
-| Outcome | Description |
-|---|---|
-| good | They feel heard; trust rises. |
-| neutral | Conversation resolves but stays guarded. |
-| poor | They shut down; trust drops. |
-
-**Metric Overrides at Start:** `openness` → `0.3` (Sara starts the encounter less open)
-
----
-
-### Seed: `unhappy_with_deliverable`
-
-| Field | Value |
-|---|---|
-| **Title** | The Pushback |
-| **Compatible Roles** | `client`, `colleague` |
-| **Category** | `high_pressure` |
-| **Tier** | 3 |
-| **Scoring Focus** | Primary: `clarity`, Secondary: `empathy` |
-| **Success Signal** | `validated_concern_specifically` |
-| **Failure Signal** | `avoided_emotional_acknowledgment` |
-
-**Context:**
-- **Premise:** They're unhappy with what you delivered and think it missed the mark.
-- **Stakes:** Professional credibility, possibly the relationship itself.
-- **Opening Line Seed:** "This isn't really what we discussed."
-- **NPC Goal:** Wants to know you understand the gap before trusting a fix.
-
-**Possible Outcomes:**
-
-| Outcome | Description |
-|---|---|
-| good | They agree to a revised plan; tension eases. |
-| neutral | They accept a fix but stay cool. |
-| poor | Trust drops significantly; they escalate or disengage. |
-
-**Metric Overrides at Start:** None
-
----
-
-### Seed: `first_meeting_small_talk`
-
-| Field | Value |
-|---|---|
-| **Title** | Breaking the Ice |
-| **Compatible Roles** | `friend`, `colleague` |
-| **Category** | `everyday_social` |
-| **Tier** | 1 |
-| **Scoring Focus** | Primary: `expression`, Secondary: `politeness` |
-| **Success Signal** | `warm_two_way_exchange` |
-| **Failure Signal** | `closed_off_exchange` |
-
-**Context:**
-- **Premise:** A casual, low-stakes first conversation — getting to know each other.
-- **Stakes:** Low. Sets the tone for the relationship going forward.
-- **Opening Line Seed:** "Hey, I don't think we've properly met — how's your week going?"
-- **NPC Goal:** Wants a genuine, comfortable exchange, nothing more.
-
-**Possible Outcomes:**
-
-| Outcome | Description |
-|---|---|
-| good | Comfortable rapport established; trust rises. |
-| neutral | Polite but forgettable exchange. |
-| poor | Feels awkward or one-sided; trust stagnates. |
-
-**Metric Overrides at Start:** `trust` → `0.4` (starts from a neutral rather than initial value)
-
----
-
-### Seed: `asking_for_extension`
-
-| Field | Value |
-|---|---|
-| **Title** | The Ask |
-| **Compatible Roles** | `teacher` |
-| **Category** | `everyday_social` |
-| **Tier** | 1 |
-| **Scoring Focus** | Primary: `clarity`, Secondary: `politeness` |
-| **Success Signal** | `stated_request_plainly` |
-| **Failure Signal** | `rambled_unclear_ask` |
-
-**Context:**
-- **Premise:** You need to ask for an extension on an assignment, and you know it's a big ask.
-- **Stakes:** Low-to-moderate — a reasonable request, badly delivered, can still go wrong.
-- **Opening Line Seed:** "You wanted to see me about the assignment?"
-- **NPC Goal:** Wants a clear, honest reason, not excessive justification.
-
-**Possible Outcomes:**
-
-| Outcome | Description |
-|---|---|
-| good | Extension granted, professional tone maintained. |
-| neutral | Partial extension or conditions attached. |
-| poor | Denied; trust drops due to poor communication, not the request itself. |
-
-**Metric Overrides at Start:** None
-
----
-
-### Seed: `teammate_not_pulling_weight`
-
-| Field | Value |
-|---|---|
-| **Title** | The Confrontation |
-| **Compatible Roles** | `colleague` |
-| **Category** | `high_pressure` |
-| **Tier** | 3 |
-| **Scoring Focus** | Primary: `empathy`, Secondary: `clarity` |
-| **Success Signal** | `named_issue_collaboratively` |
-| **Failure Signal** | `blamed_outright` |
-
-**Context:**
-- **Premise:** You need to address that they haven't been contributing to shared work, without damaging the relationship irreparably.
-- **Stakes:** High — an emotionally loaded confrontation with someone conflict-avoidant.
-- **Opening Line Seed:** "You wanted to talk to me about something?"
-- **NPC Goal:** Is bracing for blame and will shut down if attacked directly.
-
-**Possible Outcomes:**
-
-| Outcome | Description |
-|---|---|
-| good | They open up about why they've been checked out; issue starts resolving. |
-| neutral | They agree to do better but stay defensive. |
-| poor | They shut down entirely; trust drops significantly. |
-
-**Metric Overrides at Start:** `trust` → `0.35` (Jun starts the encounter with lower trust than default)
+| ID | Title | Roles | Category | Tier | Primary | Secondary |
+|---|---|---|---|---|---|---|
+| `final_paper_feedback` | Notes on the Draft | teacher | workplace | 2 | clarity | expression |
+| `extension_request_end_of_semester` | Asking for More Time | teacher | workplace | 2 | clarity | politeness |
+| `grade_dispute_quiet` | Disputing a Grade | teacher | high_pressure | 3 | clarity | empathy |
+| `office_hours_genuine_question` | Office Hours | teacher | everyday_social | 1 | expression | clarity |
+| `you_cancelled_again` | Cancelled Again | friend | friendship | 2 | empathy | expression |
+| `they_got_news_you_didnt_ask_about` | News You Should Have Known | friend | friendship | 2 | empathy | expression |
+| `honest_opinion_asked` | Asked for Your Opinion | friend | friendship | 2 | expression | empathy |
+| `friend_venting_no_fix_wanted` | Not Looking for Advice | friend | everyday_social | 1 | empathy | politeness |
+| `credit_not_given` | Left Off the Presentation | colleague | workplace | 3 | clarity | empathy |
+| `covering_for_absence` | Brushed Past | colleague | workplace | 2 | clarity | politeness |
+| `shared_task_different_standards` | Different Approach | colleague | workplace | 2 | clarity | empathy |
+| `colleague_small_gesture` | Quieter Than Usual | colleague | everyday_social | 1 | empathy | expression |
+| `deliverable_missed_scope` | Work That Missed the Brief | client | high_pressure | 3 | clarity | empathy |
+| `client_asking_for_more` | One More Thing | client | workplace | 2 | clarity | politeness |
+| `client_first_impression` | First Call | client | everyday_social | 1 | expression | clarity |
+| `client_bad_news_early` | Telling Them First | client | high_pressure | 3 | clarity | empathy |
+| `parent_asking_about_the_plan` | What's the Plan | family | everyday_social | 2 | expression | clarity |
+| `old_argument_resurfacing` | Something That Still Sits There | family | high_pressure | 3 | empathy | expression |
+| `sibling_asking_for_something` | A Favor | family | everyday_social | 2 | clarity | empathy |
+| `ordering_under_pressure` | Rush Order | stranger | everyday_social | 1 | politeness | clarity |
+| `stranger_spills_something` | Small Collision | stranger | everyday_social | 1 | politeness | empathy |
+| `recommendation_letter_ask` | Asking for a Reference | teacher | workplace | 2 | expression | clarity |
+| `taking_on_too_much` | Overcommitted | colleague | workplace | 2 | clarity | expression |
+| `client_timeline_slipping` | Timeline Update | client | high_pressure | 3 | clarity | empathy |
+| `client_scope_clarification` | What's Included | client | workplace | 2 | clarity | politeness |
+| `parent_noticed_something_off` | You Seem Off | family | everyday_social | 2 | expression | empathy |
+| `sibling_pushing_back` | Called Out | family | high_pressure | 3 | empathy | clarity |
+| `recurring_stranger_remembers_you` | I've Seen You Here Before | stranger | everyday_social | 2 | expression | politeness |
 
 ---
 
@@ -386,14 +264,36 @@ Each seed defines exactly two interpretation labels used by the Memory Formation
 
 | Seed | Success Signal | Failure Signal |
 |---|---|---|
-| `missed_deadline_explain` | `owned_mistake_plainly` | `avoided_emotional_acknowledgment` |
-| `felt_ignored_lately` | `acknowledged_feelings_first` | `avoided_emotional_acknowledgment` |
-| `unhappy_with_deliverable` | `validated_concern_specifically` | `avoided_emotional_acknowledgment` |
-| `first_meeting_small_talk` | `warm_two_way_exchange` | `closed_off_exchange` |
-| `asking_for_extension` | `stated_request_plainly` | `rambled_unclear_ask` |
-| `teammate_not_pulling_weight` | `named_issue_collaboratively` | `blamed_outright` |
+| `final_paper_feedback` | `named_own_shortfall_honestly` | `deflected_onto_circumstances` |
+| `extension_request_end_of_semester` | `stated_request_plainly` | `deflected_onto_circumstances` |
+| `grade_dispute_quiet` | `made_case_without_entitlement` | `framed_disagreement_as_accusation` |
+| `office_hours_genuine_question` | `engaged_substantively` | `performed_interest_insincerely` |
+| `you_cancelled_again` | `acknowledged_pattern_not_just_instance` | `gave_excuse_without_acknowledgment` |
+| `they_got_news_you_didnt_ask_about` | `created_space_to_be_heard` | `redirected_to_own_experience` |
+| `honest_opinion_asked` | `gave_honest_view_with_care` | `gave_hollow_validation` |
+| `friend_venting_no_fix_wanted` | `stayed_present_without_fixing` | `redirected_to_own_experience` |
+| `credit_not_given` | `named_issue_without_accusation` | `framed_disagreement_as_accusation` |
+| `covering_for_absence` | `addressed_imbalance_directly` | `absorbed_resentment_silently` |
+| `shared_task_different_standards` | `proposed_alignment_not_dominance` | `framed_disagreement_as_accusation` |
+| `colleague_small_gesture` | `noticed_without_overstepping` | `gave_hollow_validation` |
+| `deliverable_missed_scope` | `named_own_shortfall_honestly` | `deflected_onto_circumstances` |
+| `client_asking_for_more` | `held_boundary_with_warmth` | `absorbed_resentment_silently` |
+| `client_first_impression` | `projected_genuine_competence` | `performed_interest_insincerely` |
+| `client_bad_news_early` | `delivered_bad_news_directly` | `softened_truth_into_vagueness` |
+| `parent_asking_about_the_plan` | `shared_uncertainty_without_deflecting` | `gave_hollow_validation` |
+| `old_argument_resurfacing` | `acknowledged_history_without_minimizing` | `deflected_onto_circumstances` |
+| `sibling_asking_for_something` | `gave_honest_answer_with_care` | `gave_excuse_without_acknowledgment` |
+| `ordering_under_pressure` | `treated_service_worker_with_basic_decency` | `took_frustration_out_sideways` |
+| `stranger_spills_something` | `resolved_small_moment_gracefully` | `took_frustration_out_sideways` |
+| `recommendation_letter_ask` | `made_case_without_entitlement` | `performed_interest_insincerely` |
+| `taking_on_too_much` | `named_own_shortfall_honestly` | `gave_hollow_validation` |
+| `client_timeline_slipping` | `delivered_bad_news_directly` | `softened_truth_into_vagueness` |
+| `client_scope_clarification` | `held_boundary_with_warmth` | `softened_truth_into_vagueness` |
+| `parent_noticed_something_off` | `shared_uncertainty_without_deflecting` | `gave_hollow_validation` |
+| `sibling_pushing_back` | `acknowledged_pattern_not_just_instance` | `deflected_onto_circumstances` |
+| `recurring_stranger_remembers_you` | `engaged_authentically_with_being_remembered` | `performed_interest_insincerely` |
 
-Note: three seeds (`missed_deadline_explain`, `felt_ignored_lately`, `unhappy_with_deliverable`) share `avoided_emotional_acknowledgment` as their failure signal. Pattern detection across these seeds (using the same NPC) will aggregate.
+Note: Several seeds share common signal IDs (e.g., `deflected_onto_circumstances`, `gave_hollow_validation`, `framed_disagreement_as_accusation`). Pattern detection across these seeds using the same NPC will aggregate on the shared signal label.
 
 ---
 

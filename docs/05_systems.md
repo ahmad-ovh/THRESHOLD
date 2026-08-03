@@ -231,6 +231,23 @@ The seed's `npc_context.metric_overrides` can force specific metric values at en
 
 ---
 
+## Encounter-End Logic
+
+An encounter ends (`encounter_over=True`) via one of two paths:
+
+1. **Narrative closure (preferred):** The Character Voice LLM sets `end_encounter=True` and provides an `outcome_triggered` value. This is only possible once `turn_count >= min_turns_before_end` (default: 3). The `outcome_triggered` value is stored as `narrative_outcome` on the session.
+
+2. **Safety limit:** If `turn_count >= max_turns_safety_limit` (default: 8), the encounter is force-ended regardless. In this case `narrative_outcome` remains `null`.
+
+| Config key | Default | Description |
+|---|---|---|
+| `min_turns_before_end` | `3` | Minimum turns before LLM may trigger closure |
+| `max_turns_safety_limit` | `8` | Hard turn cap (force-end) |
+
+The `performance_outcome` (from `determine_outcome`) is always computed from avg_scores regardless of which path ended the encounter.
+
+---
+
 ## Progression System
 
 **Module:** `src/services/progression_service.py`
@@ -388,7 +405,7 @@ All LLM calls are routed through this single module. No other module calls the L
 
 ### Pipeline 2: Character Voice
 
-**Purpose:** Generate the NPC's reply, emotional expression, and coach hint.  
+**Purpose:** Generate the NPC's reply, emotional expression, coach hint, and optionally signal narrative encounter closure.  
 **Called by:** `interaction/message` (after scoring and metric update)  
 **Temperature:** 0.8
 
@@ -398,25 +415,34 @@ All LLM calls are routed through this single module. No other module calls the L
 - Formatted memory context (last 10 entries)
 - Last 8 turns of conversation history
 - Scenario premise, stakes, npc_goal
+- `possible_outcomes` — the seed's possible outcome labels (used to ground the narrative outcome decision)
+- `turn_count` and `min_turns_before_end` — so the LLM knows when it is permitted to trigger closure
 
 **LLM output schema:**
 ```json
 {
-  "npc_reply":      string,
-  "npc_expression": string (enum),
-  "coach_hint":     string
+  "npc_reply":        string,
+  "npc_expression":   string (enum),
+  "coach_hint":       string,
+  "outcome_triggered": string or null,
+  "end_encounter":     boolean
 }
 ```
+
+- `outcome_triggered` — `"good"`, `"neutral"`, or `"poor"` when the LLM decides the scenario has reached a natural conclusion; `null` otherwise. Only valid when `turn_count >= min_turns_before_end`.
+- `end_encounter` — `true` when `outcome_triggered` is non-null; `false` otherwise.
 
 **Defaults applied if fields missing:**
 - `npc_reply` → `"{npc_name} says nothing."`
 - `npc_expression` → current npc_state
 - `coach_hint` → `""`
+- `outcome_triggered` → `null`
+- `end_encounter` → `false`
 
 **What the LLM does NOT do:**
 - Choose the NPC's state (it receives the state as input)
 - Update metrics
-- Decide encounter outcome
+- Compute the performance outcome (that is always deterministic, via `progression_service.determine_outcome`)
 
 ---
 
@@ -522,11 +548,13 @@ All LLM calls are routed through this single module. No other module calls the L
 | Generate NPC reply | LLM (Character Voice) |
 | Select NPC expression | LLM (Character Voice, Scenario Personalization) |
 | Generate coach hint | LLM (Character Voice) |
+| Signal narrative encounter closure | LLM (Character Voice) — `outcome_triggered` + `end_encounter`; only after `min_turns_before_end` |
 | Select scenario | Deterministic code (weighted random, scenario_service) |
 | Personalize opening line | LLM (Scenario Personalization) |
 | Detect Observer pattern | Deterministic code (counter, observer_service) |
 | Phrase Observer message | LLM (Observer Phrasing) |
-| Determine encounter outcome | Deterministic code (progression_service) |
+| Determine narrative_outcome | LLM (Character Voice) — stored in session; null if ended by safety limit |
+| Determine performance_outcome | Deterministic code (progression_service) — always computed from avg_scores |
 | Calculate XP | Deterministic code (progression_service) |
 | Update skill vector | Deterministic code (progression_service) |
 | Level-up check | Deterministic code (progression_service) |

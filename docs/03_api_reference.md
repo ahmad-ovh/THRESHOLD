@@ -83,7 +83,7 @@ If an active session already exists for this player+NPC pair it is silently disc
 
 Send one player message and receive the NPC's reply, scores, feedback, and updated relationship state.
 
-This endpoint drives the conversation loop. Call it once per player turn. The encounter ends automatically when `encounter_over` becomes `true` (default: after 6 turns).
+This endpoint drives the conversation loop. Call it once per player turn. The encounter ends when `encounter_over` becomes `true` — either because the Character Voice LLM triggered a narrative outcome, or because `turn_count` reached the safety limit (`max_turns_safety_limit`, default 8).
 
 **Request body:**
 
@@ -113,7 +113,8 @@ This endpoint drives the conversation loop. Call it once per player turn. The en
 | `relationship_tier` | string | Current relationship tier label |
 | `npc_state` | string | Current NPC state (deterministic, from metric rules) |
 | `feedback` | object | See below |
-| `encounter_over` | boolean | `true` when turn_count >= max_turns_per_encounter |
+| `encounter_over` | boolean | `true` when the LLM triggers a narrative outcome OR turn_count >= max_turns_safety_limit |
+| `narrative_outcome` | string or null | `"good"`, `"neutral"`, `"poor"` if a narrative outcome was triggered this turn; `null` otherwise |
 
 **`coach_hint` object:**
 
@@ -171,7 +172,8 @@ This endpoint drives the conversation loop. Call it once per player turn. The en
     "strength": "You communicated your point clearly.",
     "improvement": "You responded to the words, but not the feeling behind them."
   },
-  "encounter_over": false
+  "encounter_over": false,
+  "narrative_outcome": null
 }
 ```
 
@@ -228,7 +230,8 @@ Performs: outcome determination, encounter memory write, Observer pattern check,
 
 | Field | Type | Description |
 |---|---|---|
-| `outcome` | string (enum) | `"good"`, `"neutral"`, or `"poor"` |
+| `narrative_outcome` | string or null | `"good"`, `"neutral"`, or `"poor"` if the LLM triggered a narrative closure; `null` if the encounter ended by safety limit |
+| `performance_outcome` | string (enum) | `"good"`, `"neutral"`, or `"poor"` — always computed from weighted average of avg_scores |
 
 **`level_up` object** (only present when `leveled_up == true`):
 
@@ -236,11 +239,14 @@ Performs: outcome determination, encounter memory write, Observer pattern check,
 |---|---|---|
 | `new_level` | integer | The player's new level |
 
-**Outcome determination:**  
-Computed from weighted average of avg_scores:  
-- Primary scoring focus dimension × 0.6  
-- Secondary scoring focus dimension × 0.3  
-- Remaining two dimensions × 0.05 each  
+**Outcome determination:**
+
+`narrative_outcome` — set by the Character Voice LLM when it decides the scenario has reached a natural conclusion. Only possible after `min_turns_before_end` turns (default: 3).
+
+`performance_outcome` — always computed from weighted average of avg_scores:
+- Primary scoring focus dimension × 0.6
+- Secondary scoring focus dimension × 0.3
+- Remaining two dimensions × 0.05 each
 
 Thresholds: weighted score ≥ 0.65 → `"good"`, ≥ 0.40 → `"neutral"`, < 0.40 → `"poor"`
 
@@ -253,12 +259,13 @@ Thresholds: weighted score ≥ 0.65 → `"good"`, ≥ 0.40 → `"neutral"`, < 0.
     "message": "Across these exchanges, the pattern of deflecting emotional acknowledgment recurred..."
   },
   "encounter_summary": {
-    "outcome": "neutral"
+    "narrative_outcome": "neutral",
+    "performance_outcome": "neutral"
   }
 }
 ```
 
-**Example response (no Observer, level-up):**
+**Example response (no Observer, level-up, ended by safety limit):**
 ```json
 {
   "observer_event": {
@@ -267,7 +274,8 @@ Thresholds: weighted score ≥ 0.65 → `"good"`, ≥ 0.40 → `"neutral"`, < 0.
     "message": null
   },
   "encounter_summary": {
-    "outcome": "good"
+    "narrative_outcome": null,
+    "performance_outcome": "good"
   },
   "level_up": {
     "new_level": 2
@@ -526,6 +534,7 @@ Transient. Created at `/start`, deleted at `/end`.
 | `effective_metrics_json` | Text | JSON: running metrics for this encounter (not persisted to instance until end) |
 | `encounter_over` | Boolean | Default: false |
 | `accumulated_scores_json` | Text | JSON array of per-turn score dicts |
+| `narrative_outcome` | String or null | `"good"`, `"neutral"`, `"poor"` when set by narrative closure; null until then |
 | `created_at` | DateTime (UTC) | |
 
 ### `encounter_history`
@@ -536,7 +545,7 @@ Transient. Created at `/start`, deleted at `/end`.
 | `player_id` | String (FK → players) | |
 | `npc_template_id` | String | NPC template ID |
 | `scenario_id` | String | Scenario seed ID |
-| `outcome` | String | `"good"`, `"neutral"`, or `"poor"` |
+| `outcome` | String | `"good"`, `"neutral"`, or `"poor"` — the progression-driving outcome: `narrative_outcome` if set, else `performance_outcome` |
 | `avg_scores_json` | Text | JSON: average turn scores dict |
 | `xp_gained` | Float | XP awarded for this encounter |
 | `completed_at` | DateTime (UTC) | |

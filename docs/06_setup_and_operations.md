@@ -12,7 +12,9 @@ All configuration is read from a `.env` file in the project root (or from enviro
 | `DB_URL` | `sqlite+aiosqlite:///./threshold.db` | SQLAlchemy async database URL. |
 | `XP_PER_LEVEL` | `100` | XP required per level. Present in settings; the level-up formula currently uses `>= 1.0` as the normalized threshold. |
 | `MAX_LEVEL` | `100` | Maximum player level. |
-| `MAX_TURNS_PER_ENCOUNTER` | `6` | Number of player turns before `encounter_over` becomes `true`. |
+| `MAX_TURNS_PER_ENCOUNTER` | `6` | Legacy field; present in settings but not used by encounter-end logic. |
+| `MAX_TURNS_SAFETY_LIMIT` | `8` | Hard cap on player turns. Encounter is force-ended if turn_count reaches this limit regardless of narrative state. |
+| `MIN_TURNS_BEFORE_END` | `3` | Minimum player turns that must occur before the Character Voice LLM is permitted to trigger a narrative outcome. |
 
 **Minimal `.env` for local development:**
 ```env

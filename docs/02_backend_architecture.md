@@ -107,11 +107,14 @@ HTTP POST /interaction/message
   │
   ├─ CHARACTER VOICE SERVICE
   │   └─ LLM: Character Voice pipeline
-  │       Input:  NPC identity+state, memory context, conversation history, scenario
-  │       Output: npc_reply, npc_expression, coach_hint
+  │       Input:  NPC identity+state, memory context, conversation history, scenario,
+  │               possible_outcomes, turn_count, min_turns_before_end
+  │       Output: npc_reply, npc_expression, coach_hint,
+  │               outcome_triggered (null|"good"|"neutral"|"poor"), end_encounter (bool)
   │
   ├─ Append NPC reply to conversation_history
-  ├─ Check turn_count >= max_turns_per_encounter → set encounter_over
+  ├─ Check: LLM end_encounter flag OR turn_count >= max_turns_safety_limit → set encounter_over
+  ├─ Store narrative_outcome if LLM triggered one
   ├─ Build feedback (deterministic, from turn_scores)
   │
   ├─ DB commit
@@ -134,7 +137,8 @@ HTTP POST /interaction/end
   ├─ Compute avg_scores from accumulated_scores
   │
   ├─ PROGRESSION SERVICE
-  │   └─ determine_outcome() [deterministic]
+  │   └─ determine_outcome() [deterministic — always computed from avg_scores]
+  │   (narrative_outcome read from session — set by Character Voice LLM during /message)
   │
   ├─ MEMORY SERVICE
   │   └─ write_encounter_memory() — summarizing entry with dominant interpretation
@@ -261,6 +265,8 @@ Owns the Observer trigger check (deterministic: count interpretation occurrences
 
 Owns all LLM calls. Five pipelines, each with a fixed system prompt, structured JSON output schema, and post-processing (clamping, vocabulary enforcement, defaults). Uses the OpenAI SDK with `response_format: json_object`. Temperature varies by pipeline (0.3 for scoring, 0.8 for character voice). Raises on API failure.
 
+The **Character Voice pipeline** is the only one that can end encounters: it receives `possible_outcomes` and the current `turn_count`/`min_turns_before_end` guard, and returns `outcome_triggered` + `end_encounter` in addition to the usual dialogue fields. The progression service (`determine_outcome`) is always run independently of the LLM and computes `performance_outcome` from avg_scores.
+
 ---
 
 ## Data Ownership
@@ -296,4 +302,5 @@ See [API and Data Models](./03_api_reference.md) for the full schema.
 - **Content registry**: Module-level singleton, populated once. All runtime content access is through `registry`, never direct YAML reads.
 - **LLM client**: A new `AsyncOpenAI` client is instantiated per call. No connection pooling at the client level.
 - **Transaction scope**: Each request uses a single `AsyncSession`. The session is committed once per request (at the end). Intermediate `flush()` calls are used to make inserts visible within the same session before commit.
-- **`max_turns_per_encounter`**: Defaults to 6 (configurable). The encounter is flagged `encounter_over=True` when `turn_count >= max_turns_per_encounter`. The client is expected to call `/end` after this flag is returned.
+- **Encounter-end logic**: The encounter ends (`encounter_over=True`) under two conditions: (a) the Character Voice LLM sets `end_encounter=True` in its response after `min_turns_before_end` turns (default: 3), signaling a natural narrative closure; or (b) `turn_count >= max_turns_safety_limit` (default: 8), a hard cap preventing runaway sessions. `max_turns_per_encounter` remains in config for legacy compatibility but is not used in the turn-end check.
+- **`narrative_outcome`**: Written to `InteractionSession.narrative_outcome` on the turn where the LLM triggers closure. Returned in `/end`'s `encounter_summary.narrative_outcome`. `null` if the encounter ended by safety limit.
