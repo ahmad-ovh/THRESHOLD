@@ -39,6 +39,10 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	if AudioManager:
 		AudioManager.play_typewriter_tick()
 
+func update_text_only(new_text: String) -> void:
+	message_text.text = new_text
+	message_text.visible_ratio = 1.0
+
 func _process(_delta: float) -> void:
 	_update_screen_position()
 

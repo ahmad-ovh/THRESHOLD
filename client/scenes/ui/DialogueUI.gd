@@ -68,8 +68,8 @@ func _process(delta: float) -> void:
 			dot_count = (dot_count % 3) + 1
 			var dots = ".".repeat(dot_count)
 			loading_label.text = "💭 Thinking" + dots
-			if active_npc_bubble and active_npc_bubble.has_method("setup"):
-				active_npc_bubble.setup(active_npc_name, "[i]Thinking" + dots + "[/i]", active_npc_node, false)
+			if active_npc_bubble and active_npc_bubble.has_method("update_text_only"):
+				active_npc_bubble.update_text_only("[i]Thinking" + dots + "[/i]")
 
 func _reset_encounter_metrics() -> void:
 	turn_history_scores.clear()
@@ -109,6 +109,9 @@ func show_connecting_state(npc_name: String) -> void:
 	_clear_bubbles()
 	_reset_encounter_metrics()
 	
+	# Spawn instant in-world connecting bubble above NPC
+	_spawn_npc_bubble("⏳ Connecting to " + active_npc_name + "...")
+	
 	message_input.editable = false
 	send_button.disabled = true
 	leave_button.disabled = true
@@ -122,9 +125,8 @@ func open_dialogue(npc_name: String, opening_line: String) -> void:
 	speaker_label.text = active_npc_name
 	visible = true
 	stop_thinking()
-	_clear_bubbles()
 	
-	# Spawn Animal Crossing / Tomodachi style floating NPC speech bubble
+	# Replace connecting bubble with actual opening line
 	_spawn_npc_bubble(opening_line)
 	
 	message_input.editable = true
@@ -241,7 +243,7 @@ func start_thinking() -> void:
 	message_input.placeholder_text = active_npc_name + " is thinking..."
 	send_button.disabled = true
 	leave_button.disabled = false
-	_spawn_npc_bubble("[i]Thinking...[/i]")
+	_spawn_npc_bubble("[i]Thinking.[/i]")
 
 func stop_thinking() -> void:
 	is_thinking = false
