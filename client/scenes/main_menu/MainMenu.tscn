@@ -1,6 +1,18 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scenes/main_menu/MainMenu.gd" id="1_main_menu_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_daily_orange"]
+bg_color = Color(1, 0.96, 0.88, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.6, 0.2, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [node name="MainMenu" type="CanvasLayer"]
 script = ExtResource("1_main_menu_script")
@@ -20,53 +32,65 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.12, 0.14, 0.18, 1)
+color = Color(0.85, 0.94, 0.98, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-custom_minimum_size = Vector2(360, 0)
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -180.0
-offset_top = -140.0
-offset_right = 180.0
-offset_bottom = 140.0
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 12
 
 [node name="TitleLabel" type="Label" parent="Control/VBoxContainer"]
 layout_mode = 2
-text = "THRESHOLD"
+theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
+theme_override_font_sizes/font_size = 32
+text = "🏝️ THRESHOLD"
 horizontal_alignment = 1
 
 [node name="SubtitleLabel" type="Label" parent="Control/VBoxContainer"]
 layout_mode = 2
-text = "Enter Player ID to Begin"
+theme_override_colors/font_color = Color(0.4, 0.35, 0.28, 1)
+theme_override_font_sizes/font_size = 15
+text = "Social Communication Simulation"
 horizontal_alignment = 1
 
 [node name="UsernameInput" type="LineEdit" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-placeholder_text = "Username / Player ID"
+placeholder_text = "Enter Player ID..."
 
 [node name="DailyCard" type="PanelContainer" parent="Control/VBoxContainer"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_daily_orange")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/DailyCard"]
 layout_mode = 2
 
 [node name="DailyHeader" type="Label" parent="Control/VBoxContainer/DailyCard/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.45, 0.1, 1)
+theme_override_font_sizes/font_size = 16
 text = "🔥 Daily Featured Scenario"
 
 [node name="DailyDetails" type="RichTextLabel" parent="Control/VBoxContainer/DailyCard/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
+theme_override_colors/default_color = Color(0.25, 0.22, 0.18, 1)
 bbcode_enabled = true
 text = "Loading daily scenario..."
 
 [node name="StartButton" type="Button" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-text = "Start Game"
+theme_override_font_sizes/font_size = 18
+text = "Start Game 🌿"

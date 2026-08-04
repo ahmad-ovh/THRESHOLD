@@ -5,83 +5,125 @@
 [node name="JournalUI" type="CanvasLayer"]
 script = ExtResource("1_journal_script")
 
+[node name="ColorRectBackdrop" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15, 0.2, 0.25, 0.4)
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(700, 500)
+custom_minimum_size = Vector2(680, 480)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -350.0
-offset_top = -250.0
-offset_right = 350.0
-offset_bottom = 250.0
+offset_left = -340.0
+offset_top = -240.0
+offset_right = 340.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer"]
 layout_mode = 2
 
-[node name="Header" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="TitleLabel" type="Label" parent="PanelContainer/VBoxContainer/Header"]
+[node name="TitleLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "  📖 Player Journal & Communication Profile"
+theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
+theme_override_font_sizes/font_size = 20
+text = "📖 Passport & Communication Profile"
 
-[node name="CloseButton" type="Button" parent="PanelContainer/VBoxContainer/Header"]
+[node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Header"]
+custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-text = " X "
+text = " ✖ "
 
-[node name="TabContainer" type="TabContainer" parent="PanelContainer/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="PanelContainer/Margin/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+current_tab = 0
 
-[node name="Profile" type="MarginContainer" parent="PanelContainer/VBoxContainer/TabContainer"]
+[node name="Profile" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/TabContainer/Profile"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile"]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="ClarityLabel" type="Label" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+[node name="ClarityLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
 text = "Clarity"
+tooltip_text = "Direct & clear communication"
 
-[node name="ClarityBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+[node name="ClarityBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 
-[node name="EmpathyLabel" type="Label" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+[node name="EmpathyLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
 text = "Empathy"
+tooltip_text = "Validating feelings & emotional awareness"
 
-[node name="EmpathyBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+[node name="EmpathyBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 
-[node name="PolitenessLabel" type="Label" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+[node name="PolitenessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
 text = "Politeness"
+tooltip_text = "Respectful & considerate tone"
 
-[node name="PolitenessBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+[node name="PolitenessBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 
-[node name="ExpressionLabel" type="Label" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+[node name="ExpressionLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
 text = "Expression"
+tooltip_text = "Emotional honesty & personal engagement"
 
-[node name="ExpressionBar" type="ProgressBar" parent="PanelContainer/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+[node name="ExpressionBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/VBoxContainer"]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 
-[node name="GrowthReport" type="VBoxContainer" parent="PanelContainer/VBoxContainer/TabContainer"]
+[node name="Growth Report" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
+theme_override_constants/separation = 8
+metadata/_tab_index = 1
 
-[node name="ReportText" type="RichTextLabel" parent="PanelContainer/VBoxContainer/TabContainer/GrowthReport"]
+[node name="ReportText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Growth Report"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.23, 0.2, 0.16, 1)
 bbcode_enabled = true
 text = "Click 'Generate Report' to analyze your communication patterns."
 
-[node name="RefreshButton" type="Button" parent="PanelContainer/VBoxContainer/TabContainer/GrowthReport"]
+[node name="RefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Growth Report"]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-text = "Generate Growth Report"
+text = "Generate Growth Report 📊"

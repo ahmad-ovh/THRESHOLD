@@ -22,32 +22,47 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.6)
+color = Color(0.15, 0.2, 0.25, 0.4)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-custom_minimum_size = Vector2(250, 0)
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
+custom_minimum_size = Vector2(280, 200)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -125.0
-offset_top = -60.0
-offset_right = 125.0
-offset_bottom = 60.0
+offset_left = -140.0
+offset_top = -100.0
+offset_right = 140.0
+offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleLabel" type="Label" parent="Control/VBoxContainer"]
+[node name="Margin" type="MarginContainer" parent="Control/PanelContainer"]
 layout_mode = 2
-text = "GAME PAUSED"
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Control/PanelContainer/Margin/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
+theme_override_font_sizes/font_size = 20
+text = "⏸️ Paused"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="Control/VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="Control/PanelContainer/Margin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-text = "Resume Game"
+text = "Resume Game 🌿"
 
-[node name="MainMenuButton" type="Button" parent="Control/VBoxContainer"]
+[node name="MainMenuButton" type="Button" parent="Control/PanelContainer/Margin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-text = "Quit to Main Menu"
+text = "Main Menu 🏠"
