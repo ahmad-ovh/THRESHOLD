@@ -1,125 +1,147 @@
-# THRESHOLD: Master World Lore & Relational Intelligence Blueprint
-*Tencent Cloud x UTM Hackathon 2026 "AI CAN DO IT" — Game Track Submission Blueprint*
-
-> **Challenge Track**: Relational Intelligence Engine (AI-Powered Communication & Social Skills Training Game)  
-> **Core Theme**: Gamifying real-life social scenarios, conflict resolution, and emotional intelligence through AI-driven role-play and 2.5D diorama gameplay.
+# THRESHOLD: Master Game Design Document & World Blueprint
+*Frontend Rendering & Visualization Layer for the Relational Intelligence Engine*
 
 ---
 
-## 📋 Hackathon Compliance & Alignment Matrix
+## 1. Executive Summary & Design Pillars
 
-| Hackathon Requirement | In-Game Narrative & System Implementation | Hackathon Scoring Focus |
-|---|---|---|
-| **Relational Intelligence Engine** | The core AI engine driving NPC emotional states, state transitions, and real-time sentiment analysis. | **Theme Alignment (30 pts)** |
-| **Progressive Level System (1–100)** | 3-Act Level Bands: Lv. 1–30 (Foundations), Lv. 31–70 (Relational Nuance), Lv. 71–100 (High-Stakes Crisis). | **Game Quality (30 pts)** |
-| **Multi-Dimensional Social Scoring** | 4D Skill Dimensions evaluated per turn: `Clarity`, `Empathy`, `Politeness`, `Expression`. | **Theme Alignment (30 pts)** |
-| **Adaptive AI Response** | Real-time sentiment engine adjusting NPC mood (`warm`, `guarded`, `irritated`) and dialogue branching. | **Use of AI Tools (40 pts)** |
-| **AI Growth Analytics Report** | In-game *Passport & Communication Profile* (`JournalUI`) generating AI-powered growth reports. | **Game Quality (30 pts)** |
-| **AI Creation Module** | Worldbuilding, NPC state machine rules, and dynamic scenario seed generation fully AI-crafted. | **AI Creation Requirement** |
+**THRESHOLD** is a 2.5D social simulation game where communication is the core gameplay verb. Set in a world of silent emotional isolation, players navigate physical and psychological "thresholds" — the split-second hesitation before speaking honestly, holding a boundary, or offering empathy.
 
----
-
-## 1. The Core Narrative Premise: "The Threshold"
-
-In the world of **THRESHOLD**, human connection has become fragmented. People live behind self-contained emotional armor — psychological boxes where unwritten rules, unspoken anxieties, and defensive habits dictate every interaction.
-
-A **Threshold** represents two overlapping realities:
-1. **The Physical Threshold**: The doorway of a 3-walled diorama room box where a person works, rests, or waits.
-2. **The Emotional Threshold**: The split-second choice before speaking — between defensiveness and honesty, between hollow validation and genuine empathy, or between shutting down and holding a healthy boundary.
-
-The player enters this world as a **Perceiver** — an individual equipped with a *Relational Intelligence Interface* capable of sensing the 4 hidden vectors of human communication (`Clarity`, `Empathy`, `Politeness`, `Expression`) and diagnosing subconscious "Observer Patterns" that cause people to repeat their worst social mistakes.
-
----
-
-## 2. Sector Emotional Lore & World Map
-
-The world is an **Open World with Sector Progression**, featuring 4 distinct physical sectors that players can explore freely while unlocking deeper relationship tiers (`Stranger` -> `Trusted Partner` / `Close Friend`).
+The frontend serves as an immersive **rendering and visualization layer** for a deterministic backend `Relational Intelligence Engine`. Every 3D room, street lamp, speech bubble, and camera interpolation translates backend metric updates (`trust`, `respect`, `closeness`) and 4D skill vectors (`clarity`, `empathy`, `politeness`, `expression`) into tangible, game-like player feedback.
 
 ```
-                  ┌─────────────────────────────────────────┐
-                  │          THE SECTOR MATRIX              │
-                  ├────────────────────┬────────────────────┤
-                  │     SECTOR I       │     SECTOR II      │
-                  │   SCHOOL & CAMPUS  │   DOWNTOWN CAFÉ    │
-                  │  "The Assessment"  │   "The Sanctuary"  │
-                  ├────────────────────┼────────────────────┤
-                  │    SECTOR III      │     SECTOR IV      │
-                  │  HOME & APARTMENT  │  CORPORATE SUITE   │
-                  │    "The Hearth"    │     "The Apex"     │
-                  └────────────────────┴────────────────────┘
++-------------------------------------------------------------------------------+
+|                             DESIGN PILLARS                                    |
++-------------------------------------------------------------------------------+
+| 1. EMOTIONAL AFFORDANCE: Social choices feel like authentic human encounters, |
+|    never dry e-learning quizzes or rigid multiple-choice trees.               |
+|                                                                               |
+| 2. SPATIAL METAPHOR: Room box lighting and street aesthetics reflect the      |
+|    emotional warmth of their primary occupants.                               |
+|                                                                               |
+| 3. NON-LINEAR RELATIONAL DISCOVERY: Free-roam street exploration with        |
+|    backend level-band scenario scaling (Lv. 1–100).                           |
++-------------------------------------------------------------------------------+
 ```
 
 ---
 
-### 🏛️ Sector I: School & Campus — "The Assessment Vault"
-*Primary Archetypes: Teachers (Prof. Adler, Ms. Okoro, Mr. Vance)*
+## 2. Core Gameplay Loops
 
-- **Atmospheric Lore**: Tall ceilings, slate-blue walls, heavy wooden desks, shadow-draped bookshelves.
-- **Emotional Theme**: *Validation vs. Integrity*. The fear of being found lacking. People defend themselves with performance of effort or academic jargon.
-- **Boss Encounter / Peak Trial**: **The Grade Defense** (*Prof. Adler*). Contesting an unfair mark with direct, unentitled clarity without getting defensive.
+### ⚡ Moment-to-Moment (0–30 Seconds)
+- **Action**: Player approaches an NPC in a 3D Diorama Room Box or Outdoor Street and presses `E` (`interact`).
+- **Feedback**: 
+  - Control locks instantly; `Approaching <NPC>...` floating speech bubble appears over the NPC head.
+  - Player glides to a parallel side-by-side standing spot (`2.4m` distance, facing profile).
+  - Camera smoothly transitions to an asymmetric left-framed dialogue view (+1.8m X offset).
+  - Typewriter text streams in cream Tomodachi speech bubbles with audio ticks.
+- **Reward**: Instant sentiment reaction, score delta indicators (`+15% ↑`), and mood badge shifts.
 
----
+### 🔄 Session Loop (5–30 Minutes)
+- **Goal**: Complete 2–3 dialogue encounters across different sectors (School, Café, Apartment, Office) to complete daily missions and earn XP.
+- **Tension**: Managing NPC emotional metrics (`patience` decay, `trust` thresholds, `state` shifts like `guarded` or `irritated`).
+- **Resolution**: Encounter completion triggers the *Conversation Reflection* (`OverviewModal`), updating the player's 4D skill vector, relationship tier, and daily streak.
 
-### ☕ Sector II: Downtown Café & The Commons — "The Echoing Sanctuary"
-*Primary Archetypes: Strangers & Friends (Daria, Felix, Priya, Barista, Recurring Stranger)*
-
-- **Atmospheric Lore**: Warm cream walls, soft ambient light, rain against the window, steaming mugs.
-- **Emotional Theme**: *Belonging vs. Isolation*. The fear of rejection if one stops entertaining or deflecting.
-- **Boss Encounter / Peak Trial**: **The Unbroken Silence** (*Daria*). Staying present with a grieving or distant friend without offering hollow advice or cheap fixes.
-
----
-
-### 🏡 Sector III: The Home & Apartment — "The Hearth of History"
-*Primary Archetypes: Family (Parent, Sibling)*
-
-- **Atmospheric Lore**: Muted wallpaper, worn rugs, childhood photo frames.
-- **Emotional Theme**: *Identity vs. Memory*. Fighting outgrown childhood roles while honoring shared history.
-- **Boss Encounter / Peak Trial**: **The Mirror Confrontation** (*Sibling*). Accepting direct personal criticism about your behavioral flaws without deflecting onto past circumstances.
+### 🌐 Long-Term Loop (Hours–Weeks)
+- **Progression**: Advance through 3 Level Bands (Lv. 1–30 Foundations, Lv. 31–70 Relational Nuance, Lv. 71–100 High-Stakes Crisis).
+- **Retention Hook**: Unlocking maximum Relationship Tiers (`Close Friend`, `Regarded Highly`, `Trusted Partner`), discovering deep *Observer Pattern Insights* in the Journal (`JournalUI`), and expanding street access.
 
 ---
 
-### 🏢 Sector IV: Corporate High-Rise — "The Apex of Expectations"
-*Primary Archetypes: Colleagues & Clients (Nadia, Tomás, Seren, Ms. Hartwell, Mr. Osei, Ms. Vidal)*
+## 3. World Architecture: Diorama Rooms & Street Connectors
 
-- **Atmospheric Lore**: Glass panels, polished steel, minimalist executive desks, sharp urban lighting.
-- **Emotional Theme**: *Boundaries vs. Compromise*. High-pressure accountability and professional survival.
-- **Boss Encounter / Peak Trial**: **The Scope Showdown** (*Ms. Hartwell*). Delivering bad news on a missed deliverable directly while holding scope boundaries under fire.
+The physical world combines **Modular Diorama Room Boxes** (interiors) with **2.5D Outdoor Street Connectors** (exteriors).
 
----
-
-## 3. The 3-Act Narrative Arc (Level 1–100 Progression)
-
-```mermaid
-timeline
-    title THRESHOLD 3-Act Campaign Flow
-    Act 1 : Level 1-30 : Breaking the Surface : Everyday greetings & low-stakes socials : First tier upgrade in the Café
-    Act 2 : Level 31-70 : The Weight of Unspoken Words : Observer Pattern discovery & scope boundaries : Facing unsaid resentment
-    Act 3 : Level 71-100 : Crossing the Threshold : High-stakes crisis & conflict resolution : Forging Trusted Partner & Close Friend bonds
+```
+ [ Sector I: Campus ] ◄── Street ──► [ Sector II: Café ]
+          │                                  │
+       Street                             Street
+          ▼                                  ▼
+ [ Sector III: Home ] ◄── Street ──► [ Sector IV: Office ]
 ```
 
-### 🟢 Act I: Breaking the Surface (Levels 1–30)
-- **Gameplay Focus**: Everyday greetings, small talk, basic politeness, and active listening.
-- **Player Journey**: Learning to enter a room without anxiety. Small wins like ordering under pressure or asking a genuine office hours question.
+### 🏙️ 1. Outdoor Street Connector (`StreetConnector.tscn`)
+- **Visual Style**: 2.5D side-scrolling street scene featuring low-poly buildings, mailboxes, wooden fences, streetlamps, trees, and sidewalks.
+- **Camera Behavior**: Smooth X-axis camera tracking (`lerp` with `5.0 * delta`) that follows the player along the sidewalk, clamped to street end walls.
+- **Door Interactivity**: Approaching a building door displays a 3D ground interaction ring (`E Enter`). Pressing `E` triggers a seamless threshold transition into the building's interior Diorama Room.
 
-### 🟡 Act II: The Weight of Unspoken Words (Levels 31–70)
-- **Gameplay Focus**: Relational nuance, workplace collaboration, handling unsaid resentment, and managing overcommitment.
-- **Player Journey**: The **Observer Pattern** activates — the AI detects your repeating communication flaws (e.g. hedging bad news or deflecting with humor) and challenges you to break the cycle.
-
-### 🔴 Act III: Crossing the Threshold (Levels 71–100)
-- **Gameplay Focus**: High-stakes conflict resolution, crisis communication, and executive boundary negotiation.
-- **Player Journey**: Navigating complex multi-turn emotional standoffs where a single wrong tone degrades trust. Unlocking maximum relationship tiers across all 4 sectors.
+### 📦 2. Indoor Diorama Room Box (`RoomTemplate.tscn`)
+- **Structure**: 3-walled diorama room box (16m W × 10m D × 5m H) with an open front wall.
+- **Camera Behavior**: Stationary camera anchor (`Vector3(0, 3.2, 7.5)`, `-14°` pitch) framing 100% of the room interior at all times.
+- **Dialogue Camera Interpolation**: During dialogue, the camera zooms into `2.6m` spring length and shifts `+1.8m` to the left, centering the characters in the open mid-left viewport (`25%–55%` width) and keeping the right `Communication Reflection` panel 100% clear.
 
 ---
 
-## 4. Reiteration & Improvement Rationale
+## 4. Frontend Mechanic Specifications
 
-### 💡 What Was Changed & Why:
+### 💬 Mechanic: 2.5D Screen-Projected Speech Bubbles
+- **Purpose**: Render clear, vector-crisp dialogue text over character heads in 3D space.
+- **Input**: Backend `ApiClient` dialogue response payload (`npc_reply`, `npc_expression`).
+- **Output**: 2D `CanvasLayer` speech bubble node positioned via `camera.unproject_position(world_pos)`.
+- **Visual Design**: Tomodachi Life cream background (`#fffef0`), rounded pill speaker badges (`Alice`, `You`), typewriter playback, bouncing down arrow (`▼`).
+- **Dynamic Auto-Height**: `fit_content = true` on `RichTextLabel` allows bubbles to expand downward vertically based on text length without scrollbars.
+- **Spatial Offsets**: Player bubble offsets `-0.7m` left; NPC bubble offsets `+0.7m` right to prevent overlap.
 
-1. **Explicit Hackathon Alignment Matrix Added**
-   - *Why*: Ensures judges immediately see how the narrative design maps 1-to-1 to the **Relational Intelligence Engine** track, 4D scoring, and AI Creation requirements (securing maximum points on Theme Alignment & AI Tools).
+### 📊 Mechanic: Real-Time Communication Reflection Panel
+- **Purpose**: Provide immediate multi-dimensional feedback on communication quality.
+- **Input**: Cumulative turn scores (`clarity`, `empathy`, `politeness`, `expression`) from backend `scoring_service`.
+- **Output**: Animated progress bars (`ProgressBar`), composite score (`Overall: X%`), and delta badges (`+15% ↑` in green, `-10% ↓` in red).
 
-2. **Boss Encounters / Peak Trials Introduced for Each Sector**
-   - *Why*: Prevents the story from feeling like a dull e-learning module. Adding climax trials gives each sector a satisfying RPG campaign structure ("Game Quality" requirement).
+### 🔍 Mechanic: Observer Pattern Insight Card
+- **Purpose**: Highlight subconscious repeating behavioral patterns when the player makes the same communication mistake twice across interactions.
+- **Trigger**: Backend `observer_service` detects `count(memory.interpretation == X) >= 2`.
+- **Visualization**: Displayed inside `OverviewModal` as a purple-accented insight card featuring tailored reflection feedback.
 
-3. **Integrated Gamification Mechanics into Lore**
-   - *Why*: Instead of treating levels (1–100), 4D scores, and AI analytics reports as external UI elements, they are woven into the story as the player's "Perceiver Diagnostic Interface," keeping the experience deeply immersive.
+---
+
+## 5. Economy & Skill Tuning Matrix
+
+All values represent the frontend rendering thresholds and feedback triggers for backend data:
+
+| Metric / Variable | Base Value | Min | Max | Frontend Rendering & Feedback Rationale |
+|---|---|---|---|---|
+| **Level XP Threshold** | `100 XP` | `0` | `100` | Bar fills in `HUD`; triggers Level Up banner modal at 100% |
+| **Skill Vector Min/Max** | `50%` | `0%` | `100%` | Rendered as 4 progress bars in `DialogueUI` & `JournalUI` |
+| **Trust Threshold (Friend)** | `0.65` | `0.0` | `1.0` | Upgrades relationship tier badge to `Trusted` |
+| **Trust Threshold (Close)** | `0.85` | `0.0` | `1.0` | Upgrades relationship tier badge to `Close Friend` |
+| **Dialogue Gap Distance** | `2.4m` | `1.8m` | `3.0m` | Parallel standing offset for side-by-side profile framing |
+| **Camera Left Shift** | `+1.8m` | `1.0m` | `2.5m` | Keeps right 300px performance panel 100% clear |
+| **Typewriter Speed** | `0.7s` | `0.3s` | `1.2s` | Smooth character playback time per message line |
+
+---
+
+## 6. Player Onboarding Flow & First 3 Minutes
+
+```
+[ Game Start: Main Menu ] ──"Start Game"──► [ Room_Start (Campus Entry) ]
+                                                    │
+                                           Ground Ring Active
+                                                    │
+                                         Player moves (WASD/Shift)
+                                                    │
+                                         Approaches NPC Daria (E)
+                                                    │
+                                         [ Dialogue Encounter 1 ]
+                                         - Parallel 2.4m glide
+                                         - Speech bubble pop-in
+                                         - First response sent
+                                                    │
+                                         [ OverviewModal ]
+                                         - Performance + XP gained
+                                         - Journal [J] unlocked
+                                                    │
+                                         Step Out to Street Connector!
+```
+
+---
+
+## 7. Reiteration & Improvement Rationale
+
+### 💡 Why This Blueprint Delivers Maximum Impact:
+
+1. **Unique Systems Design (Not a Generic Hackathon Checklist)**:
+   - Instead of listing hackathon guidelines as dry text, this document formats everything as an **authentic, ship-ready Game Design Document (GDD)**.
+2. **Integrates Street Connectors**:
+   - Explicitly defines the 2.5D Outdoor Street Connector scene (`StreetConnector.tscn`), connecting diorama room interiors with seamless low-poly street traversal.
+3. **Strict Separation of Frontend & Backend**:
+   - Treats the backend API, state engine, and scoring models as unmutable truth, focusing 100% on how Godot 4 renders, interpolates, and visualizes this data for maximum player delight.
