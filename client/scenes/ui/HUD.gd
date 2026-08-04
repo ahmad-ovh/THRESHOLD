@@ -7,7 +7,7 @@ extends CanvasLayer
 @onready var streak_label: Label = $VBoxRoot/TopBar/MarginContainer/HBoxContainer/StreakLabel
 @onready var journal_button: Button = $VBoxRoot/TopBar/MarginContainer/HBoxContainer/JournalButton
 @onready var objective_banner: PanelContainer = $VBoxRoot/ObjectiveBanner
-@onready var objective_label: Label = $VBoxRoot/ObjectiveBanner/ObjectiveLabel
+@onready var objective_label: Label = $VBoxRoot/ObjectiveBanner/MarginContainer/ObjectiveLabel
 
 var journal_ref: CanvasLayer = null
 
@@ -15,7 +15,7 @@ func _ready() -> void:
 	journal_button.pressed.connect(_on_journal_pressed)
 	PlayerStore.player_data_updated.connect(_update_hud)
 	_update_hud()
-	set_objective("🎯 Objective: Approach an NPC and press [E] to talk")
+	set_objective("Objective: Approach an NPC and press [E] to talk")
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_journal"):
@@ -32,10 +32,11 @@ func _update_hud() -> void:
 	player_id_label.text = "Player: " + PlayerStore.player_id
 	level_label.text = "Lvl " + str(PlayerStore.level)
 	xp_bar.value = PlayerStore.xp_progress * 100.0
-	streak_label.text = "🔥 " + str(PlayerStore.daily_streak)
+	streak_label.text = "Streak: " + str(PlayerStore.daily_streak)
 
 func _on_journal_pressed() -> void:
-	AudioManager.play_click()
+	if AudioManager:
+		AudioManager.play_click()
 	_toggle_journal()
 
 func _toggle_journal() -> void:

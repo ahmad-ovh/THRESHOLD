@@ -2,14 +2,14 @@
 extends CanvasLayer
 
 @onready var panel_container: PanelContainer = $PanelContainer
-@onready var title_label: Label = $PanelContainer/VBoxContainer/TitleLabel
-@onready var outcome_badge: Label = $PanelContainer/VBoxContainer/OutcomeBadge
-@onready var narrative_text: RichTextLabel = $PanelContainer/VBoxContainer/NarrativeText
-@onready var observer_card: PanelContainer = $PanelContainer/VBoxContainer/ObserverCard
-@onready var observer_text: Label = $PanelContainer/VBoxContainer/ObserverCard/VBoxContainer/ObserverText
-@onready var level_up_banner: PanelContainer = $PanelContainer/VBoxContainer/LevelUpBanner
-@onready var level_up_text: Label = $PanelContainer/VBoxContainer/LevelUpBanner/LevelUpText
-@onready var close_button: Button = $PanelContainer/VBoxContainer/CloseButton
+@onready var title_label: Label = $PanelContainer/Margin/VBoxContainer/TitleLabel
+@onready var outcome_badge: Label = $PanelContainer/Margin/VBoxContainer/OutcomeBadge
+@onready var narrative_text: RichTextLabel = $PanelContainer/Margin/VBoxContainer/NarrativeText
+@onready var observer_card: PanelContainer = $PanelContainer/Margin/VBoxContainer/ObserverCard
+@onready var observer_text: Label = $PanelContainer/Margin/VBoxContainer/ObserverCard/Margin/VBoxContainer/ObserverText
+@onready var level_up_banner: PanelContainer = $PanelContainer/Margin/VBoxContainer/LevelUpBanner
+@onready var level_up_text: Label = $PanelContainer/Margin/VBoxContainer/LevelUpBanner/Margin/LevelUpText
+@onready var close_button: Button = $PanelContainer/Margin/VBoxContainer/CloseButton
 
 signal closed
 
@@ -40,11 +40,11 @@ func show_settlement(end_data: Dictionary, level_data: Dictionary = {}) -> void:
 	outcome_badge.text = " PERFORMANCE: " + perf + " "
 	match perf:
 		"GOOD":
-			outcome_badge.add_theme_color_override("font_color", Color(0.3, 0.9, 0.4))
+			outcome_badge.add_theme_color_override("font_color", Color(0.18, 0.55, 0.25))
 		"POOR":
-			outcome_badge.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
+			outcome_badge.add_theme_color_override("font_color", Color(0.85, 0.25, 0.25))
 		_:
-			outcome_badge.add_theme_color_override("font_color", Color(0.9, 0.8, 0.2))
+			outcome_badge.add_theme_color_override("font_color", Color(0.85, 0.5, 0.1))
 			
 	narrative_text.text = "[b]Outcome:[/b]\n" + narr_str
 	
@@ -52,7 +52,7 @@ func show_settlement(end_data: Dictionary, level_data: Dictionary = {}) -> void:
 	if obs is Dictionary and obs.get("fired", false) == true:
 		observer_card.visible = true
 		var msg = obs.get("message", "Pattern observed in your communication.")
-		observer_text.text = "👁️ " + str(msg)
+		observer_text.text = str(msg)
 	else:
 		observer_card.visible = false
 		
@@ -68,12 +68,14 @@ func show_settlement(end_data: Dictionary, level_data: Dictionary = {}) -> void:
 		
 	if is_lvl_up:
 		level_up_banner.visible = true
-		level_up_text.text = "🎉 LEVEL UP! You reached Level " + str(new_lvl) + "!"
-		AudioManager.play_level_up()
+		level_up_text.text = "LEVEL UP! You reached Level " + str(new_lvl) + "!"
+		if AudioManager:
+			AudioManager.play_level_up()
 	else:
 		level_up_banner.visible = false
 
 func _on_close_pressed() -> void:
-	AudioManager.play_click()
+	if AudioManager:
+		AudioManager.play_click()
 	visible = false
 	closed.emit()

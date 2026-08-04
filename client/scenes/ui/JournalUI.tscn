@@ -46,7 +46,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
 theme_override_font_sizes/font_size = 20
-text = "📖 Passport & Communication Profile"
+text = "Passport & Communication Profile"
 
 [node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Header"]
 custom_minimum_size = Vector2(36, 36)
@@ -126,4 +126,4 @@ text = "Click 'Generate Report' to analyze your communication patterns."
 [node name="RefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Growth Report"]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-text = "Generate Growth Report 📊"
+text = "Generate Growth Report"

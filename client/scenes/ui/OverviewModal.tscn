@@ -67,7 +67,7 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
 theme_override_font_sizes/font_size = 22
-text = "🏆 Encounter Summary"
+text = "Encounter Summary"
 horizontal_alignment = 1
 
 [node name="OutcomeBadge" type="Label" parent="PanelContainer/Margin/VBoxContainer"]
@@ -103,7 +103,7 @@ layout_mode = 2
 [node name="HeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/ObserverCard/Margin/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.35, 0.75, 1)
-text = "👁️ Observer Pattern Insight"
+text = "Observer Pattern Insight"
 
 [node name="ObserverText" type="Label" parent="PanelContainer/Margin/VBoxContainer/ObserverCard/Margin/VBoxContainer"]
 layout_mode = 2
@@ -125,11 +125,11 @@ theme_override_constants/margin_bottom = 6
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.45, 0.05, 1)
 theme_override_font_sizes/font_size = 18
-text = "🎉 LEVEL UP! Level 2"
+text = "LEVEL UP! Level 2"
 horizontal_alignment = 1
 
 [node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer"]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Continue 🌿"
+text = "Continue"

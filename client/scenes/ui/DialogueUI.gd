@@ -67,7 +67,7 @@ func _process(delta: float) -> void:
 			thinking_timer = 0.0
 			dot_count = (dot_count % 3) + 1
 			var dots = ".".repeat(dot_count)
-			loading_label.text = "💭 Thinking" + dots
+			loading_label.text = "Thinking" + dots
 			if active_npc_bubble and active_npc_bubble.has_method("update_text_only"):
 				active_npc_bubble.update_text_only("[i]Thinking" + dots + "[/i]")
 
@@ -78,7 +78,7 @@ func _reset_encounter_metrics() -> void:
 	delta_label.text = "[--]"
 	delta_label.remove_theme_color_override("font_color")
 	overall_bar.value = 50.0
-	status_badge_label.text = "Status: 😐 Baseline"
+	status_badge_label.text = "Status: Baseline"
 	status_badge_label.remove_theme_color_override("font_color")
 	
 	clarity_bar.value = 50.0
@@ -96,7 +96,7 @@ func set_spatial_targets(npc_node: Node3D, player_node: Node3D) -> void:
 
 func set_scenario_context(role: String, goal_text: String) -> void:
 	role_badge.text = "[Role: " + role.capitalize() + "]"
-	scenario_goal_label.text = "🎯 Scenario Goal: " + goal_text
+	scenario_goal_label.text = "Scenario Goal: " + goal_text
 
 func show_connecting_state(npc_name: String) -> void:
 	active_npc_name = npc_name.capitalize()
@@ -104,19 +104,19 @@ func show_connecting_state(npc_name: String) -> void:
 	role_badge.text = "[Role: Peer]"
 	tier_label.text = "[Tier: Stranger]"
 	mood_label.text = "[Mood: neutral]"
-	scenario_goal_label.text = "🎯 Scenario Goal: Practicing social communication"
+	scenario_goal_label.text = "Scenario Goal: Practicing social communication"
 	visible = true
 	_clear_bubbles()
 	_reset_encounter_metrics()
 	
 	# Spawn instant in-world connecting bubble above NPC
-	_spawn_npc_bubble("⏳ Connecting to " + active_npc_name + "...")
+	_spawn_npc_bubble("Connecting to " + active_npc_name + "...")
 	
 	message_input.editable = false
 	send_button.disabled = true
 	leave_button.disabled = true
 	loading_label.visible = true
-	loading_label.text = "⏳ Connecting..."
+	loading_label.text = "Connecting..."
 	coach_hint_banner.visible = false
 	feedback_text.text = "Awaiting first response..."
 
@@ -150,7 +150,7 @@ func update_turn_data(data: Dictionary) -> void:
 	var hint = data.get("coach_hint", {})
 	if hint is Dictionary and hint.get("shown", false) == true:
 		coach_hint_banner.visible = true
-		coach_hint_label.text = "💡 Coach Hint: " + str(hint.get("line", ""))
+		coach_hint_label.text = "Coach Hint: " + str(hint.get("line", ""))
 	else:
 		coach_hint_banner.visible = false
 		
@@ -214,31 +214,31 @@ func _recalculate_cumulative_performance() -> void:
 	# Update Delta Badge
 	if delta > 0.5:
 		delta_label.text = "+%d%% ↑" % int(delta)
-		delta_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.4))
+		delta_label.add_theme_color_override("font_color", Color(0.18, 0.55, 0.25))
 	elif delta < -0.5:
 		delta_label.text = "%d%% ↓" % int(delta)
-		delta_label.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
+		delta_label.add_theme_color_override("font_color", Color(0.85, 0.25, 0.25))
 	else:
 		delta_label.text = "[=" + "]"
-		delta_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
+		delta_label.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4))
 		
 	# Update Overall Performance Status Badge
 	if overall >= 70.0:
-		status_badge_label.text = "Status: 🌟 Doing Great! (GOOD)"
-		status_badge_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.4))
+		status_badge_label.text = "Status: Doing Great! (GOOD)"
+		status_badge_label.add_theme_color_override("font_color", Color(0.18, 0.55, 0.25))
 	elif overall >= 45.0:
-		status_badge_label.text = "Status: 😐 Doing Okay (NEUTRAL)"
-		status_badge_label.add_theme_color_override("font_color", Color(0.9, 0.8, 0.2))
+		status_badge_label.text = "Status: Doing Okay (NEUTRAL)"
+		status_badge_label.add_theme_color_override("font_color", Color(0.85, 0.5, 0.1))
 	else:
-		status_badge_label.text = "Status: ⚠️ Needs Work (POOR)"
-		status_badge_label.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
+		status_badge_label.text = "Status: Needs Work (POOR)"
+		status_badge_label.add_theme_color_override("font_color", Color(0.85, 0.25, 0.25))
 
 func start_thinking() -> void:
 	is_thinking = true
 	thinking_timer = 0.0
 	dot_count = 1
 	loading_label.visible = true
-	loading_label.text = "💭 Thinking."
+	loading_label.text = "Thinking."
 	message_input.editable = false
 	message_input.placeholder_text = active_npc_name + " is thinking..."
 	send_button.disabled = true

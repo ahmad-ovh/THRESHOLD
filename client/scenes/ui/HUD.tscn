@@ -61,7 +61,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
 theme_override_font_sizes/font_size = 16
-text = "🌿 Lvl 1"
+text = "Lvl 1"
 
 [node name="XPProgressBar" type="ProgressBar" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(160, 16)
@@ -75,7 +75,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.45, 0.1, 1)
 theme_override_font_sizes/font_size = 15
-text = "🔥 0"
+text = "Streak: 0"
 
 [node name="Control" type="Control" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -83,7 +83,7 @@ size_flags_horizontal = 3
 
 [node name="JournalButton" type="Button" parent="VBoxRoot/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
-text = "📖 Journal [J]"
+text = "Journal [J]"
 
 [node name="ObjectiveBanner" type="PanelContainer" parent="VBoxRoot"]
 custom_minimum_size = Vector2(420, 0)
@@ -101,5 +101,5 @@ theme_override_constants/margin_bottom = 4
 [node name="ObjectiveLabel" type="Label" parent="VBoxRoot/ObjectiveBanner/MarginContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.35, 0.25, 0.1, 1)
-text = "🎯 Objective: Explore the room & press [E] near an NPC to talk"
+text = "Objective: Explore the room & press [E] near an NPC to talk"
 horizontal_alignment = 1

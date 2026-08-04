@@ -54,15 +54,15 @@ theme_override_constants/separation = 12
 layout_mode = 2
 theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
 theme_override_font_sizes/font_size = 20
-text = "⏸️ Paused"
+text = "Paused"
 horizontal_alignment = 1
 
 [node name="ResumeButton" type="Button" parent="Control/PanelContainer/Margin/VBoxContainer"]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-text = "Resume Game 🌿"
+text = "Resume Game"
 
 [node name="MainMenuButton" type="Button" parent="Control/PanelContainer/Margin/VBoxContainer"]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-text = "Main Menu 🏠"
+text = "Main Menu"
