@@ -82,12 +82,12 @@ func _update_dollhouse_camera(delta: float, can_move: bool) -> void:
 		camera_pivot.global_position.z = lerp(camera_pivot.global_position.z, target_z + 1.2, camera_follow_speed * delta)
 		spring_arm.spring_length = lerp(spring_arm.spring_length, default_spring_length, camera_follow_speed * delta)
 	else:
-		# Dialogue camera tween: Center between player and NPC side-by-side
+		# Dialogue camera tween: Center characters in open mid-left area of screen (+1.8m camera X offset)
 		var npcs = get_tree().get_nodes_in_group("npcs")
 		if npcs.size() > 0:
 			var target_npc = npcs[0]
 			var mid_point = (global_position + target_npc.global_position) / 2.0
-			camera_pivot.global_position.x = lerp(camera_pivot.global_position.x, mid_point.x, camera_follow_speed * delta)
+			camera_pivot.global_position.x = lerp(camera_pivot.global_position.x, mid_point.x + 1.8, camera_follow_speed * delta)
 			camera_pivot.global_position.z = lerp(camera_pivot.global_position.z, mid_point.z + 0.8, camera_follow_speed * delta)
 		spring_arm.spring_length = lerp(spring_arm.spring_length, dialogue_spring_length, camera_follow_speed * delta)
 
