@@ -1,25 +1,29 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cdoor3d001"]
 
-[ext_resource type="Script" path="res://scenes/rooms/Door3D.gd" id="1_door_script"]
+[ext_resource type="Script" uid="uid://dwm6ktc4qwgnx" path="res://scenes/rooms/Door3D.gd" id="1_door_script"]
+[ext_resource type="PackedScene" uid="uid://da0bestoajpk3" path="res://assets/rooms/door.glb" id="2_7uncb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_door"]
 size = Vector3(2, 2.5, 2)
 
-[node name="Door3D" type="Node3D"]
+[node name="Door3D" type="Node3D" unique_id=920156274]
 script = ExtResource("1_door_script")
 
-[node name="DoorMesh" type="CSGBox3D" parent="."]
+[node name="DoorMesh" type="CSGBox3D" parent="." unique_id=324001595]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+visible = false
 size = Vector3(1.5, 2.5, 0.2)
 
-[node name="TriggerArea" type="Area3D" parent="."]
+[node name="TriggerArea" type="Area3D" parent="." unique_id=1436844349]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TriggerArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TriggerArea" unique_id=1623598057]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 shape = SubResource("BoxShape3D_door")
 
-[node name="PromptLabel3D" type="Label3D" parent="."]
+[node name="PromptLabel3D" type="Label3D" parent="." unique_id=2139559836]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, 0)
 billboard = 1
 text = "Press [E] to Enter"
-font_size = 32
+
+[node name="door" parent="." unique_id=858987098 instance=ExtResource("2_7uncb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4171586, 0.17433596, 0.46311712)

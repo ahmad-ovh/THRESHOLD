@@ -17,8 +17,18 @@ func start_encounter(npc_id: String) -> void:
 	if GameController and GameController.hud_ref and GameController.hud_ref.has_method("hide_objective"):
 		GameController.hud_ref.hide_objective()
 		
+	# Find target NPC node
+	var target_npc: Node3D = null
+	var npcs = get_tree().get_nodes_in_group("npcs")
+	for npc in npcs:
+		if npc.get("npc_id") == npc_id:
+			target_npc = npc
+			break
+			
 	# Instantly show Dialogue UI in Connecting mode
 	_ensure_dialogue_ui()
+	if dialogue_ui_ref.has_method("set_spatial_targets"):
+		dialogue_ui_ref.set_spatial_targets(target_npc, player)
 	dialogue_ui_ref.show_connecting_state(npc_id)
 	
 	# Fetch opening line from backend

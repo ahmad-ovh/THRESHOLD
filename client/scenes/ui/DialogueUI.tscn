@@ -5,156 +5,201 @@
 [node name="DialogueUI" type="CanvasLayer"]
 script = ExtResource("1_dialogue_script")
 
-[node name="DialogueBox" type="PanelContainer" parent="."]
-anchors_preset = 12
-anchor_top = 1.0
+[node name="OverlayRoot" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -320.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
-[node name="HBoxRoot" type="HBoxContainer" parent="DialogueBox"]
-layout_mode = 2
+[node name="HeaderContainer" type="HBoxContainer" parent="OverlayRoot"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 50.0
+offset_right = -16.0
+offset_bottom = 85.0
+grow_horizontal = 2
 
-[node name="VBoxMain" type="VBoxContainer" parent="DialogueBox/HBoxRoot"]
+[node name="SpeakerLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="HeaderContainer" type="HBoxContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
-layout_mode = 2
-
-[node name="SpeakerLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
 text = "NPC Name"
 
-[node name="RoleBadge" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
+[node name="RoleBadge" type="Label" parent="OverlayRoot/HeaderContainer"]
 layout_mode = 2
 text = "[Role: Peer]"
 
-[node name="TierLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
+[node name="TierLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
 layout_mode = 2
 text = "[Tier: Stranger]"
 
-[node name="MoodLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
+[node name="MoodLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
 layout_mode = 2
 text = "[Mood: neutral]"
 
-[node name="LoadingLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
+[node name="LoadingLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
 visible = false
 layout_mode = 2
 text = "💭 Thinking..."
 
-[node name="LeaveButton" type="Button" parent="DialogueBox/HBoxRoot/VBoxMain/HeaderContainer"]
+[node name="LeaveButton" type="Button" parent="OverlayRoot/HeaderContainer"]
 layout_mode = 2
 text = " Leave / End Encounter "
 
-[node name="ScenarioGoalBanner" type="PanelContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
-layout_mode = 2
+[node name="ScenarioGoalBanner" type="PanelContainer" parent="OverlayRoot"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 90.0
+offset_right = 250.0
+offset_bottom = 125.0
+grow_horizontal = 2
 
-[node name="ScenarioGoalLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/ScenarioGoalBanner"]
+[node name="ScenarioGoalLabel" type="Label" parent="OverlayRoot/ScenarioGoalBanner"]
 layout_mode = 2
 text = "🎯 Scenario Goal: Practice active listening and validate emotions."
+horizontal_alignment = 1
 
-[node name="CoachHintBanner" type="PanelContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
+[node name="CoachHintBanner" type="PanelContainer" parent="OverlayRoot"]
 visible = false
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 135.0
+offset_right = 250.0
+offset_bottom = 170.0
+grow_horizontal = 2
 
-[node name="CoachHintLabel" type="Label" parent="DialogueBox/HBoxRoot/VBoxMain/CoachHintBanner"]
+[node name="CoachHintLabel" type="Label" parent="OverlayRoot/CoachHintBanner"]
 layout_mode = 2
 text = "💡 Coach Hint: ..."
+horizontal_alignment = 1
 
-[node name="DialogueText" type="RichTextLabel" parent="DialogueBox/HBoxRoot/VBoxMain"]
-custom_minimum_size = Vector2(0, 120)
+[node name="BottomInputPanel" type="PanelContainer" parent="OverlayRoot"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -76.0
+offset_right = -296.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="InputContainer" type="HBoxContainer" parent="OverlayRoot/BottomInputPanel"]
 layout_mode = 2
-size_flags_vertical = 3
-bbcode_enabled = true
-text = "Dialogue lines..."
 
-[node name="InputContainer" type="HBoxContainer" parent="DialogueBox/HBoxRoot/VBoxMain"]
-layout_mode = 2
-
-[node name="MessageInput" type="LineEdit" parent="DialogueBox/HBoxRoot/VBoxMain/InputContainer"]
+[node name="MessageInput" type="LineEdit" parent="OverlayRoot/BottomInputPanel/InputContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Type your response here..."
 
-[node name="SendButton" type="Button" parent="DialogueBox/HBoxRoot/VBoxMain/InputContainer"]
+[node name="SendButton" type="Button" parent="OverlayRoot/BottomInputPanel/InputContainer"]
 layout_mode = 2
-text = "Send"
+text = " Send "
 
-[node name="FeedbackPanel" type="VBoxContainer" parent="DialogueBox/HBoxRoot"]
-custom_minimum_size = Vector2(280, 0)
-layout_mode = 2
+[node name="FeedbackPanel" type="VBoxContainer" parent="OverlayRoot"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -276.0
+offset_top = -240.0
+offset_right = -16.0
+offset_bottom = 240.0
+grow_horizontal = 0
+grow_vertical = 2
 
-[node name="ScoresHeader" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="ScoresHeader" type="Label" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 text = "📊 Encounter Performance"
 
-[node name="OverallContainer" type="HBoxContainer" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="OverallContainer" type="HBoxContainer" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 
-[node name="OverallLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel/OverallContainer"]
+[node name="OverallLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Overall: 50%"
 
-[node name="DeltaLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel/OverallContainer"]
+[node name="DeltaLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer"]
 layout_mode = 2
 text = "[--]"
 
-[node name="OverallProgressBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="OverallProgressBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 value = 50.0
 
-[node name="StatusBadgeLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="StatusBadgeLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Status: Baseline"
 
-[node name="HSeparator" type="HSeparator" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="HSeparator" type="HSeparator" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 
-[node name="ClarityLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="ClarityLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Clarity: 50%"
 tooltip_text = "Clarity: How clearly and directly you state your point."
 
-[node name="ClarityBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="ClarityBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 value = 50.0
 
-[node name="EmpathyLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="EmpathyLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Empathy: 50%"
 tooltip_text = "Empathy: Validating feelings and acknowledging emotions."
 
-[node name="EmpathyBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="EmpathyBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 value = 50.0
 
-[node name="PolitenessLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="PolitenessLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Politeness: 50%"
 tooltip_text = "Politeness: Maintaining a respectful and considerate tone."
 
-[node name="PolitenessBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="PolitenessBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 value = 50.0
 
-[node name="ExpressionLabel" type="Label" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="ExpressionLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 text = "Expression: 50%"
 tooltip_text = "Expression: Emotional honesty and authentic personal engagement."
 
-[node name="ExpressionBar" type="ProgressBar" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="ExpressionBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
 value = 50.0
 
-[node name="FeedbackText" type="RichTextLabel" parent="DialogueBox/HBoxRoot/FeedbackPanel"]
+[node name="FeedbackText" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "Feedback hints..."
+
+[node name="BubblesContainer" type="Control" parent="OverlayRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

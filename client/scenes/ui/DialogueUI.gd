@@ -1,40 +1,48 @@
 # res://scenes/ui/DialogueUI.gd
 extends CanvasLayer
 
-@onready var speaker_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/SpeakerLabel
-@onready var role_badge: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/RoleBadge
-@onready var tier_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/TierLabel
-@onready var mood_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/MoodLabel
-@onready var loading_label: Label = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/LoadingLabel
-@onready var leave_button: Button = $DialogueBox/HBoxRoot/VBoxMain/HeaderContainer/LeaveButton
-@onready var scenario_goal_banner: PanelContainer = $DialogueBox/HBoxRoot/VBoxMain/ScenarioGoalBanner
-@onready var scenario_goal_label: Label = $DialogueBox/HBoxRoot/VBoxMain/ScenarioGoalBanner/ScenarioGoalLabel
-@onready var coach_hint_banner: PanelContainer = $DialogueBox/HBoxRoot/VBoxMain/CoachHintBanner
-@onready var coach_hint_label: Label = $DialogueBox/HBoxRoot/VBoxMain/CoachHintBanner/CoachHintLabel
-@onready var dialogue_text: RichTextLabel = $DialogueBox/HBoxRoot/VBoxMain/DialogueText
-@onready var message_input: LineEdit = $DialogueBox/HBoxRoot/VBoxMain/InputContainer/MessageInput
-@onready var send_button: Button = $DialogueBox/HBoxRoot/VBoxMain/InputContainer/SendButton
+@onready var speaker_label: Label = $OverlayRoot/HeaderContainer/SpeakerLabel
+@onready var role_badge: Label = $OverlayRoot/HeaderContainer/RoleBadge
+@onready var tier_label: Label = $OverlayRoot/HeaderContainer/TierLabel
+@onready var mood_label: Label = $OverlayRoot/HeaderContainer/MoodLabel
+@onready var loading_label: Label = $OverlayRoot/HeaderContainer/LoadingLabel
+@onready var leave_button: Button = $OverlayRoot/HeaderContainer/LeaveButton
 
-@onready var overall_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/OverallContainer/OverallLabel
-@onready var delta_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/OverallContainer/DeltaLabel
-@onready var overall_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/OverallProgressBar
-@onready var status_badge_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/StatusBadgeLabel
+@onready var scenario_goal_banner: PanelContainer = $OverlayRoot/ScenarioGoalBanner
+@onready var scenario_goal_label: Label = $OverlayRoot/ScenarioGoalBanner/ScenarioGoalLabel
+@onready var coach_hint_banner: PanelContainer = $OverlayRoot/CoachHintBanner
+@onready var coach_hint_label: Label = $OverlayRoot/CoachHintBanner/CoachHintLabel
 
-@onready var clarity_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/ClarityLabel
-@onready var clarity_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/ClarityBar
-@onready var empathy_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/EmpathyLabel
-@onready var empathy_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/EmpathyBar
-@onready var politeness_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/PolitenessLabel
-@onready var politeness_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/PolitenessBar
-@onready var expression_label: Label = $DialogueBox/HBoxRoot/FeedbackPanel/ExpressionLabel
-@onready var expression_bar: ProgressBar = $DialogueBox/HBoxRoot/FeedbackPanel/ExpressionBar
-@onready var feedback_text: RichTextLabel = $DialogueBox/HBoxRoot/FeedbackPanel/FeedbackText
+@onready var message_input: LineEdit = $OverlayRoot/BottomInputPanel/InputContainer/MessageInput
+@onready var send_button: Button = $OverlayRoot/BottomInputPanel/InputContainer/SendButton
+
+@onready var overall_label: Label = $OverlayRoot/FeedbackPanel/OverallContainer/OverallLabel
+@onready var delta_label: Label = $OverlayRoot/FeedbackPanel/OverallContainer/DeltaLabel
+@onready var overall_bar: ProgressBar = $OverlayRoot/FeedbackPanel/OverallProgressBar
+@onready var status_badge_label: Label = $OverlayRoot/FeedbackPanel/StatusBadgeLabel
+
+@onready var clarity_label: Label = $OverlayRoot/FeedbackPanel/ClarityLabel
+@onready var clarity_bar: ProgressBar = $OverlayRoot/FeedbackPanel/ClarityBar
+@onready var empathy_label: Label = $OverlayRoot/FeedbackPanel/EmpathyLabel
+@onready var empathy_bar: ProgressBar = $OverlayRoot/FeedbackPanel/EmpathyBar
+@onready var politeness_label: Label = $OverlayRoot/FeedbackPanel/PolitenessLabel
+@onready var politeness_bar: ProgressBar = $OverlayRoot/FeedbackPanel/PolitenessBar
+@onready var expression_label: Label = $OverlayRoot/FeedbackPanel/ExpressionLabel
+@onready var expression_bar: ProgressBar = $OverlayRoot/FeedbackPanel/ExpressionBar
+@onready var feedback_text: RichTextLabel = $OverlayRoot/FeedbackPanel/FeedbackText
+
+@onready var bubbles_container: Control = $OverlayRoot/BubblesContainer
 
 signal message_submitted(text: String)
 signal leave_requested
 
-var dialogue_history: Array[String] = []
 var active_npc_name: String = ""
+var active_npc_node: Node3D = null
+var active_player_node: Node3D = null
+
+var active_npc_bubble: Control = null
+var active_player_bubble: Control = null
+
 var is_thinking: bool = false
 var thinking_timer: float = 0.0
 var dot_count: int = 1
@@ -60,7 +68,8 @@ func _process(delta: float) -> void:
 			dot_count = (dot_count % 3) + 1
 			var dots = ".".repeat(dot_count)
 			loading_label.text = "💭 Thinking" + dots
-			_update_history_with_thinking(dots)
+			if active_npc_bubble and active_npc_bubble.has_method("setup"):
+				active_npc_bubble.setup(active_npc_name, "[i]Thinking" + dots + "[/i]", active_npc_node, false)
 
 func _reset_encounter_metrics() -> void:
 	turn_history_scores.clear()
@@ -81,6 +90,10 @@ func _reset_encounter_metrics() -> void:
 	expression_bar.value = 50.0
 	expression_label.text = "Expression: 50%"
 
+func set_spatial_targets(npc_node: Node3D, player_node: Node3D) -> void:
+	active_npc_node = npc_node
+	active_player_node = player_node
+
 func set_scenario_context(role: String, goal_text: String) -> void:
 	role_badge.text = "[Role: " + role.capitalize() + "]"
 	scenario_goal_label.text = "🎯 Scenario Goal: " + goal_text
@@ -93,9 +106,9 @@ func show_connecting_state(npc_name: String) -> void:
 	mood_label.text = "[Mood: neutral]"
 	scenario_goal_label.text = "🎯 Scenario Goal: Practicing social communication"
 	visible = true
-	dialogue_history.clear()
+	_clear_bubbles()
 	_reset_encounter_metrics()
-	dialogue_text.text = "[color=yellow][i]Approaching " + active_npc_name + "... Connecting to conversation...[/i][/color]"
+	
 	message_input.editable = false
 	send_button.disabled = true
 	leave_button.disabled = true
@@ -109,11 +122,10 @@ func open_dialogue(npc_name: String, opening_line: String) -> void:
 	speaker_label.text = active_npc_name
 	visible = true
 	stop_thinking()
+	_clear_bubbles()
 	
-	dialogue_history.clear()
-	var line = "[b]" + active_npc_name + ":[/b] " + opening_line
-	dialogue_history.append(line)
-	dialogue_text.text = line
+	# Spawn Animal Crossing / Tomodachi style floating NPC speech bubble
+	_spawn_npc_bubble(opening_line)
 	
 	message_input.editable = true
 	send_button.disabled = false
@@ -122,9 +134,7 @@ func open_dialogue(npc_name: String, opening_line: String) -> void:
 	message_input.grab_focus()
 
 func append_player_message(text: String) -> void:
-	var player_line = "[b]You:[/b] " + text
-	dialogue_history.append(player_line)
-	_refresh_dialogue_text()
+	_spawn_player_bubble(text)
 	start_thinking()
 
 func update_turn_data(data: Dictionary) -> void:
@@ -231,7 +241,7 @@ func start_thinking() -> void:
 	message_input.placeholder_text = active_npc_name + " is thinking..."
 	send_button.disabled = true
 	leave_button.disabled = false
-	_update_history_with_thinking(".")
+	_spawn_npc_bubble("[i]Thinking...[/i]")
 
 func stop_thinking() -> void:
 	is_thinking = false
@@ -239,15 +249,7 @@ func stop_thinking() -> void:
 
 func display_reply(text: String) -> void:
 	stop_thinking()
-	var npc_line = "[b]" + active_npc_name + ":[/b] " + text
-	dialogue_history.append(npc_line)
-	_refresh_dialogue_text()
-	
-	# Typewriter effect on dialogue text with audio ticks
-	dialogue_text.visible_ratio = 0.0
-	var tween = create_tween()
-	tween.tween_property(dialogue_text, "visible_ratio", 1.0, 1.0)
-	AudioManager.play_typewriter_tick()
+	_spawn_npc_bubble(text)
 	
 	message_input.editable = true
 	message_input.placeholder_text = "Type your response here..."
@@ -257,14 +259,12 @@ func display_reply(text: String) -> void:
 
 func display_error(error_msg: String) -> void:
 	stop_thinking()
-	dialogue_history.append("[color=red][b]Error:[/b] " + error_msg + "[/color]")
-	_refresh_dialogue_text()
+	_spawn_npc_bubble("[color=red][b]Error:[/b] " + error_msg + "[/color]")
 	message_input.editable = true
 	send_button.disabled = false
 	leave_button.disabled = false
 
 func close_dialogue_gracefully() -> void:
-	# 1.5s Graceful delay so player can read final parting line before modal opens
 	message_input.editable = false
 	send_button.disabled = true
 	leave_button.disabled = true
@@ -273,19 +273,42 @@ func close_dialogue_gracefully() -> void:
 
 func close_dialogue() -> void:
 	stop_thinking()
+	_clear_bubbles()
 	visible = false
 
-func _refresh_dialogue_text() -> void:
-	dialogue_text.text = "\n\n".join(dialogue_history)
-	await get_tree().process_frame
-	dialogue_text.scroll_to_line(dialogue_text.get_line_count())
+func _spawn_npc_bubble(text: String) -> void:
+	if active_npc_bubble and is_instance_valid(active_npc_bubble):
+		active_npc_bubble.queue_free()
+		
+	var target = active_npc_node
+	if not target:
+		var npcs = get_tree().get_nodes_in_group("npcs")
+		if npcs.size() > 0:
+			target = npcs[0]
+			
+	var scene = preload("res://scenes/ui/SpeechBubble.tscn")
+	active_npc_bubble = scene.instantiate()
+	bubbles_container.add_child(active_npc_bubble)
+	active_npc_bubble.setup(active_npc_name, text, target, false)
 
-func _update_history_with_thinking(dots: String) -> void:
-	var thinking_msg = "[color=gray][i]" + active_npc_name + " is thinking" + dots + "[/i][/color]"
-	var temp_list = dialogue_history.duplicate()
-	temp_list.append(thinking_msg)
-	dialogue_text.text = "\n\n".join(temp_list)
-	dialogue_text.scroll_to_line(dialogue_text.get_line_count())
+func _spawn_player_bubble(text: String) -> void:
+	if active_player_bubble and is_instance_valid(active_player_bubble):
+		active_player_bubble.queue_free()
+		
+	var target = active_player_node
+	if not target:
+		target = get_tree().get_first_node_in_group("player")
+		
+	var scene = preload("res://scenes/ui/SpeechBubble.tscn")
+	active_player_bubble = scene.instantiate()
+	bubbles_container.add_child(active_player_bubble)
+	active_player_bubble.setup("You", text, target, true)
+
+func _clear_bubbles() -> void:
+	for child in bubbles_container.get_children():
+		child.queue_free()
+	active_npc_bubble = null
+	active_player_bubble = null
 
 func _on_text_submitted(_text: String) -> void:
 	_on_send_pressed()
@@ -295,11 +318,13 @@ func _on_send_pressed() -> void:
 		return
 	var txt = message_input.text.strip_edges()
 	if txt != "":
-		AudioManager.play_click()
+		if AudioManager:
+			AudioManager.play_click()
 		message_input.text = ""
 		append_player_message(txt)
 		message_submitted.emit(txt)
 
 func _on_leave_pressed() -> void:
-	AudioManager.play_click()
+	if AudioManager:
+		AudioManager.play_click()
 	leave_requested.emit()

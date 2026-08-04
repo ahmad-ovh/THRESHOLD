@@ -1,34 +1,33 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://npho56xvxrc7"]
 
-[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="1_player"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="2_door"]
-[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="3_npc"]
+[ext_resource type="PackedScene" uid="uid://cplayer3d001" path="res://scenes/player/Player3D.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://cdoor3d001" path="res://scenes/rooms/Door3D.tscn" id="2_door"]
+[ext_resource type="PackedScene" uid="uid://cnpc001" path="res://scenes/templates/NPC.tscn" id="3_npc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_office_floor"]
 albedo_color = Color(0.35, 0.28, 0.22, 1)
 
-[node name="Room_Office" type="Node3D"]
+[node name="Room_Office" type="Node3D" unique_id=370601577]
 
-[node name="Floor" type="CSGBox3D" parent="."]
+[node name="Floor" type="CSGBox3D" parent="." unique_id=1350925077]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 use_collision = true
 size = Vector3(16, 0.2, 16)
 material = SubResource("StandardMaterial3D_office_floor")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=547755017]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 10, 0)
 shadow_enabled = true
 
-[node name="Player3D" parent="." instance=ExtResource("1_player")]
+[node name="Player3D" parent="." unique_id=1023910326 instance=ExtResource("1_player")]
 
-[node name="from_start" type="Marker3D" parent="." groups=["spawn_markers"]]
+[node name="from_start" type="Marker3D" parent="." unique_id=104852812 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
 
-[node name="DoorToStart" parent="." instance=ExtResource("2_door")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
+[node name="DoorToStart" parent="." unique_id=1698665696 instance=ExtResource("2_door")]
+transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, 0, 0, 7)
 target_room_scene = "res://scenes/rooms/Room_Start.tscn"
-target_spawn_id = "default"
 
-[node name="NPC_ProfAdler" parent="." instance=ExtResource("3_npc")]
+[node name="NPC_ProfAdler" parent="." unique_id=575454960 instance=ExtResource("3_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -3)
 npc_id = "prof_adler"
