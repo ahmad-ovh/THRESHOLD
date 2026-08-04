@@ -25,28 +25,24 @@ func start_encounter(npc_id: String) -> void:
 			target_npc = npc
 			break
 
-	# Calculate natural conversational standing position (1.8m distance) & face-to-face alignment
+	# Calculate parallel side-by-side standing position relative to dollhouse side camera view
 	if target_npc and player:
-		var diff = player.global_position - target_npc.global_position
-		diff.y = 0.0
-		if diff.length() < 0.1:
-			diff = Vector3(0, 0, 1.8)
-		var target_pos = target_npc.global_position + diff.normalized() * 1.8
+		# Player stands to the left (-1.6m on X axis relative to NPC)
+		var standing_offset = Vector3(-1.6, 0.0, 0.0)
+		var target_pos = target_npc.global_position + standing_offset
 		
-		# Smoothly glide player to standing spot
+		# Smoothly glide player to parallel standing spot
 		var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tween.tween_property(player, "global_position:x", target_pos.x, 0.4)
 		tween.tween_property(player, "global_position:z", target_pos.z, 0.4)
 		
-		# Face characters toward each other
+		# Rotate both characters sideways to face each other across the camera view
 		if player.has_node("CharacterMesh"):
 			var p_mesh = player.get_node("CharacterMesh")
-			var p_angle = atan2(-(target_npc.global_position.x - target_pos.x), -(target_npc.global_position.z - target_pos.z))
-			p_mesh.rotation.y = p_angle
+			p_mesh.rotation_degrees.y = 90.0 # Facing right toward NPC
 		if target_npc.has_node("MeshContainer"):
 			var npc_mesh = target_npc.get_node("MeshContainer")
-			var npc_angle = atan2(-(target_pos.x - target_npc.global_position.x), -(target_pos.z - target_npc.global_position.z))
-			npc_mesh.rotation.y = npc_angle
+			npc_mesh.rotation_degrees.y = -90.0 # Facing left toward Player
 
 	# Instantly show Dialogue UI in Connecting mode
 	_ensure_dialogue_ui()

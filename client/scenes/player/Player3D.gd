@@ -5,20 +5,24 @@ extends CharacterBody3D
 @export var run_speed: float = 6.5
 @export var acceleration: float = 20.0
 @export var friction: float = 25.0
-@export var mouse_sensitivity: float = 0.003
-@export var min_pitch: float = -50.0 # Degrees looking up
-@export var max_pitch: float = 30.0  # Degrees looking down
+
+# Dollhouse Side Camera Parameters
+@export var camera_follow_speed: float = 5.0
+@export var room_min_x: float = -12.0
+@export var room_max_x: float = 12.0
+@export var room_min_z: float = -8.0
+@export var room_max_z: float = 8.0
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
+@onready var camera_3d: Camera3D = $CameraPivot/SpringArm3D/Camera3D
 @onready var character_mesh: Node3D = $CharacterMesh
 @onready var interaction_detector: Area3D = $InteractionDetector
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var current_target: Node3D = null
-var is_orbiting_camera: bool = false
-var default_spring_length: float = 4.0
-var dialogue_spring_length: float = 2.2
+var default_spring_length: float = 5.0
+var dialogue_spring_length: float = 2.6
 
 func _ready() -> void:
 	add_to_group("player")
@@ -26,6 +30,11 @@ func _ready() -> void:
 	interaction_detector.area_exited.connect(_on_area_exited)
 	if spring_arm:
 		default_spring_length = spring_arm.spring_length
+	_setup_dollhouse_camera()
+
+func _setup_dollhouse_camera() -> void:
+	# Fixed dollhouse side view angle (-12 degrees pitch, facing straight into room)
+	camera_pivot.rotation_degrees = Vector3(-12.0, 0.0, 0.0)
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Interaction trigger
@@ -39,21 +48,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			GameController.hud_ref._toggle_journal()
 			return
 
-	# Right-click mouse drag to orbit camera
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_RIGHT:
-			is_orbiting_camera = event.pressed
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if is_orbiting_camera else Input.MOUSE_MODE_VISIBLE
-
-	# Mouse look rotation
-	if is_orbiting_camera and event is InputEventMouseMotion:
-		camera_pivot.rotate_y(-event.relative.x * mouse_sensitivity)
-		var current_pitch = camera_pivot.rotation_degrees.x
-		var new_pitch = clamp(current_pitch - event.relative.y * mouse_sensitivity * 50.0, min_pitch, max_pitch)
-		camera_pivot.rotation_degrees.x = new_pitch
-
 func _physics_process(delta: float) -> void:
-	# Apply gravity (no jumping in this story game)
+	# Apply gravity
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
@@ -64,10 +60,8 @@ func _physics_process(delta: float) -> void:
 	if EncounterManager and EncounterManager.current_state != EncounterManager.State.LOBBY:
 		can_move = false
 
-	# Camera Dialogue Framing Interpolation
-	if spring_arm:
-		var target_len = dialogue_spring_length if not can_move else default_spring_length
-		spring_arm.spring_length = lerp(spring_arm.spring_length, target_len, 6.0 * delta)
+	# Dollhouse Side Camera Tracking & Dialogue Zoom Interpolation
+	_update_dollhouse_camera(delta, can_move)
 
 	if can_move:
 		_handle_ground_movement(delta)
@@ -75,6 +69,27 @@ func _physics_process(delta: float) -> void:
 		_apply_friction(delta)
 
 	move_and_slide()
+
+func _update_dollhouse_camera(delta: float, can_move: bool) -> void:
+	if not spring_arm or not camera_pivot:
+		return
+
+	if can_move:
+		# Smooth follow player with delay, clamped to room boundaries
+		var target_x = clamp(global_position.x, room_min_x, room_max_x)
+		var target_z = clamp(global_position.z, room_min_z, room_max_z)
+		camera_pivot.global_position.x = lerp(camera_pivot.global_position.x, target_x, camera_follow_speed * delta)
+		camera_pivot.global_position.z = lerp(camera_pivot.global_position.z, target_z + 1.2, camera_follow_speed * delta)
+		spring_arm.spring_length = lerp(spring_arm.spring_length, default_spring_length, camera_follow_speed * delta)
+	else:
+		# Dialogue camera tween: Center between player and NPC side-by-side
+		var npcs = get_tree().get_nodes_in_group("npcs")
+		if npcs.size() > 0:
+			var target_npc = npcs[0]
+			var mid_point = (global_position + target_npc.global_position) / 2.0
+			camera_pivot.global_position.x = lerp(camera_pivot.global_position.x, mid_point.x, camera_follow_speed * delta)
+			camera_pivot.global_position.z = lerp(camera_pivot.global_position.z, mid_point.z + 0.8, camera_follow_speed * delta)
+		spring_arm.spring_length = lerp(spring_arm.spring_length, dialogue_spring_length, camera_follow_speed * delta)
 
 func _handle_ground_movement(delta: float) -> void:
 	var raw_input = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
@@ -84,10 +99,8 @@ func _handle_ground_movement(delta: float) -> void:
 	var is_running = Input.is_action_pressed("sprint") or Input.is_key_pressed(KEY_SHIFT)
 	var target_speed = run_speed if is_running else walk_speed
 
-	# Calculate direction relative to camera facing
-	var camera_basis = camera_pivot.global_transform.basis
-	var direction = (camera_basis * Vector3(raw_input.x, 0, raw_input.y)).normalized()
-	direction.y = 0
+	# Move in dollhouse 2.5D space relative to fixed camera facing
+	var direction = Vector3(raw_input.x, 0, raw_input.y).normalized()
 
 	if direction.length_squared() > 0.01:
 		velocity.x = move_toward(velocity.x, direction.x * target_speed, acceleration * delta)
