@@ -1,23 +1,39 @@
-# THRESHOLD: World Lore & Narrative Progression Blueprint
-*The Master Narrative World Bible & Player Journey Framework for Level Design*
+# THRESHOLD: Master World Lore & Relational Intelligence Blueprint
+*Tencent Cloud x UTM Hackathon 2026 "AI CAN DO IT" — Game Track Submission Blueprint*
+
+> **Challenge Track**: Relational Intelligence Engine (AI-Powered Communication & Social Skills Training Game)  
+> **Core Theme**: Gamifying real-life social scenarios, conflict resolution, and emotional intelligence through AI-driven role-play and 2.5D diorama gameplay.
+
+---
+
+## 📋 Hackathon Compliance & Alignment Matrix
+
+| Hackathon Requirement | In-Game Narrative & System Implementation | Hackathon Scoring Focus |
+|---|---|---|
+| **Relational Intelligence Engine** | The core AI engine driving NPC emotional states, state transitions, and real-time sentiment analysis. | **Theme Alignment (30 pts)** |
+| **Progressive Level System (1–100)** | 3-Act Level Bands: Lv. 1–30 (Foundations), Lv. 31–70 (Relational Nuance), Lv. 71–100 (High-Stakes Crisis). | **Game Quality (30 pts)** |
+| **Multi-Dimensional Social Scoring** | 4D Skill Dimensions evaluated per turn: `Clarity`, `Empathy`, `Politeness`, `Expression`. | **Theme Alignment (30 pts)** |
+| **Adaptive AI Response** | Real-time sentiment engine adjusting NPC mood (`warm`, `guarded`, `irritated`) and dialogue branching. | **Use of AI Tools (40 pts)** |
+| **AI Growth Analytics Report** | In-game *Passport & Communication Profile* (`JournalUI`) generating AI-powered growth reports. | **Game Quality (30 pts)** |
+| **AI Creation Module** | Worldbuilding, NPC state machine rules, and dynamic scenario seed generation fully AI-crafted. | **AI Creation Requirement** |
 
 ---
 
 ## 1. The Core Narrative Premise: "The Threshold"
 
-In the world of **THRESHOLD**, human connection has become fragmented under the weight of implicit expectations, unspoken anxieties, and defensive social armor. People live inside self-contained emotional micro-environments — psychological boxes where unwritten rules dictate every interaction.
+In the world of **THRESHOLD**, human connection has become fragmented. People live behind self-contained emotional armor — psychological boxes where unwritten rules, unspoken anxieties, and defensive habits dictate every interaction.
 
 A **Threshold** represents two overlapping realities:
-1. **The Physical Threshold**: The doorframe of a 3-walled diorama room box where a person works, rests, or waits.
-2. **The Emotional Threshold**: The exact moment of hesitation before a person speaks — the split-second choice between defensiveness and honesty, between hollow validation and genuine empathy, or between shutting down and holding a healthy boundary.
+1. **The Physical Threshold**: The doorway of a 3-walled diorama room box where a person works, rests, or waits.
+2. **The Emotional Threshold**: The split-second choice before speaking — between defensiveness and honesty, between hollow validation and genuine empathy, or between shutting down and holding a healthy boundary.
 
-The player enters this world as a **Perceiver** — someone capable of sensing the hidden vectors of communication (`Clarity`, `Empathy`, `Politeness`, `Expression`) and perceiving the hidden "Observer Patterns" that cause people to repeat their worst relational habits.
+The player enters this world as a **Perceiver** — an individual equipped with a *Relational Intelligence Interface* capable of sensing the 4 hidden vectors of human communication (`Clarity`, `Empathy`, `Politeness`, `Expression`) and diagnosing subconscious "Observer Patterns" that cause people to repeat their worst social mistakes.
 
 ---
 
-## 2. Sector Emotional Lore & Physical World Map
+## 2. Sector Emotional Lore & World Map
 
-The physical world of THRESHOLD is divided into **4 Core Sectors**, each representing a fundamental arena of human relationship:
+The world is an **Open World with Sector Progression**, featuring 4 distinct physical sectors that players can explore freely while unlocking deeper relationship tiers (`Stranger` -> `Trusted Partner` / `Close Friend`).
 
 ```
                   ┌─────────────────────────────────────────┐
@@ -38,123 +54,72 @@ The physical world of THRESHOLD is divided into **4 Core Sectors**, each represe
 ### 🏛️ Sector I: School & Campus — "The Assessment Vault"
 *Primary Archetypes: Teachers (Prof. Adler, Ms. Okoro, Mr. Vance)*
 
-- **Atmospheric Lore**: Tall ceilings, slate-blue walls, heavy wooden desks, and shadow-draped bookshelves. The air smells of paper, coffee, and quiet judgment.
-- **The Emotional Theme**: *Validation vs. Integrity*. The fear of being found lacking or incompetent. People here defend themselves with academic jargon, performance of effort, or preemptive defensiveness.
-- **The Core World Question**: *"Can you state your truth without performing for approval?"*
-- **Room Layout Blueprint**:
-  - `Room_Campus_Lobby`: The gateway connector.
-  - `Room_Adler_Office`: High-contrast, narrow desk box. Formal and intimidating.
-  - `Room_Okoro_Classroom`: Open seating, warm lighting, high expectation tension.
+- **Atmospheric Lore**: Tall ceilings, slate-blue walls, heavy wooden desks, shadow-draped bookshelves.
+- **Emotional Theme**: *Validation vs. Integrity*. The fear of being found lacking. People defend themselves with performance of effort or academic jargon.
+- **Boss Encounter / Peak Trial**: **The Grade Defense** (*Prof. Adler*). Contesting an unfair mark with direct, unentitled clarity without getting defensive.
 
 ---
 
 ### ☕ Sector II: Downtown Café & The Commons — "The Echoing Sanctuary"
 *Primary Archetypes: Strangers & Friends (Daria, Felix, Priya, Barista, Recurring Stranger)*
 
-- **Atmospheric Lore**: Warm cream walls, soft ambient light, steaming mugs, and rain against the window. A space where people come to feel less alone without having to admit they are.
-- **The Emotional Theme**: *Belonging vs. Isolation*. The tension between wanting to be truly known and fearing rejection if one stops entertaining or deflecting.
-- **The Core World Question**: *"Can you sit in silence without trying to fix or deflect?"*
-- **Room Layout Blueprint**:
-  - `Room_Cafe_Main`: Open counters, soft couches, window-side booths.
-  - `Room_Park_Bench`: Outdoor diorama box with streetlamp and falling leaves.
+- **Atmospheric Lore**: Warm cream walls, soft ambient light, rain against the window, steaming mugs.
+- **Emotional Theme**: *Belonging vs. Isolation*. The fear of rejection if one stops entertaining or deflecting.
+- **Boss Encounter / Peak Trial**: **The Unbroken Silence** (*Daria*). Staying present with a grieving or distant friend without offering hollow advice or cheap fixes.
 
 ---
 
 ### 🏡 Sector III: The Home & Apartment — "The Hearth of History"
 *Primary Archetypes: Family (Parent, Sibling)*
 
-- **Atmospheric Lore**: Muted wallpaper, worn rugs, childhood artifacts, and nostalgic trinkets. The most emotionally charged space in the game.
-- **The Emotional Theme**: *Identity vs. Memory*. Fighting against outgrown roles assigned years ago versus honoring shared history without absorbing past toxicity.
-- **The Core World Question**: *"Can you meet the people who raised you as the person you are today?"*
-- **Room Layout Blueprint**:
-  - `Room_Apartment_Living`: Family couch, kitchen counter backdrop, old photo frames.
-  - `Room_Shared_Balcony`: Quiet side space for direct 1-on-1 sibling encounters.
+- **Atmospheric Lore**: Muted wallpaper, worn rugs, childhood photo frames.
+- **Emotional Theme**: *Identity vs. Memory*. Fighting outgrown childhood roles while honoring shared history.
+- **Boss Encounter / Peak Trial**: **The Mirror Confrontation** (*Sibling*). Accepting direct personal criticism about your behavioral flaws without deflecting onto past circumstances.
 
 ---
 
 ### 🏢 Sector IV: Corporate High-Rise — "The Apex of Expectations"
 *Primary Archetypes: Colleagues & Clients (Nadia, Tomás, Seren, Ms. Hartwell, Mr. Osei, Ms. Vidal)*
 
-- **Atmospheric Lore**: Glass panels, polished steel, minimalist executive desks, sharp lighting. Imposing, functional, and unforgiving.
-- **The Emotional Theme**: *Boundaries vs. Compromise*. High-pressure accountability, scope creep, and professional survival.
-- **The Core World Question**: *"Can you hold your boundaries without losing your humanity?"*
-- **Room Layout Blueprint**:
-  - `Room_Corporate_Lobby`: Clean glass walls, reception counter.
-  - `Room_Executive_Suite`: Deep mahogany desk, panoramic city backdrop (Ms. Hartwell).
-  - `Room_Conference_Small`: Tight glass room for colleague negotiations (Tomás / Nadia).
+- **Atmospheric Lore**: Glass panels, polished steel, minimalist executive desks, sharp urban lighting.
+- **Emotional Theme**: *Boundaries vs. Compromise*. High-pressure accountability and professional survival.
+- **Boss Encounter / Peak Trial**: **The Scope Showdown** (*Ms. Hartwell*). Delivering bad news on a missed deliverable directly while holding scope boundaries under fire.
 
 ---
 
-## 3. The 3-Act Narrative Arc & Player Journey
-
-The overarching story of THRESHOLD unfolds across **3 Interconnected Acts**, mapping directly to player Level Bands:
+## 3. The 3-Act Narrative Arc (Level 1–100 Progression)
 
 ```mermaid
 timeline
-    title THRESHOLD 3-Act Story Arc
-    Act 1 : Level 1-30 : Breaking the Surface : Learning presence & basic politeness : First authentic connection in the Café
-    Act 2 : Level 31-70 : The Weight of Unspoken Words : Facing recurring flaws & Observer Patterns : Managing scope & family roles
-    Act 3 : Level 71-100 : Crossing the Threshold : High-stakes crisis & boundary mastery : Forging Trusted Partner & Close Friend bonds
+    title THRESHOLD 3-Act Campaign Flow
+    Act 1 : Level 1-30 : Breaking the Surface : Everyday greetings & low-stakes socials : First tier upgrade in the Café
+    Act 2 : Level 31-70 : The Weight of Unspoken Words : Observer Pattern discovery & scope boundaries : Facing unsaid resentment
+    Act 3 : Level 71-100 : Crossing the Threshold : High-stakes crisis & conflict resolution : Forging Trusted Partner & Close Friend bonds
 ```
-
----
 
 ### 🟢 Act I: Breaking the Surface (Levels 1–30)
-- **Narrative Focus**: *Overcoming Social Hesitation & Basic Decency*.
-- **Story Movement**: The player starts as an outsider moving between everyday social encounters — ordering coffee, asking a simple question in office hours, or sitting with a quiet friend.
-- **Key Conflict**: The urge to give hollow validation, deflect with humor, or run away from awkward silences.
-- **Act Climax**: Earning your first relationship tier upgrade (e.g., Barista becoming `Recognizes You` or Daria opening up about her feelings).
-
----
+- **Gameplay Focus**: Everyday greetings, small talk, basic politeness, and active listening.
+- **Player Journey**: Learning to enter a room without anxiety. Small wins like ordering under pressure or asking a genuine office hours question.
 
 ### 🟡 Act II: The Weight of Unspoken Words (Levels 31–70)
-- **Narrative Focus**: *Relational Nuance, Scope Creep & Subconscious Patterns*.
-- **Story Movement**: Interpersonal dynamics become layered. Teachers demand real engagement; colleagues quietly hold grudges over credit; clients push scope boundaries; parents ask heavy questions about the future.
-- **Key Conflict**: The **Observer Pattern** triggers for the first time. The game's underlying Observer system flags your repeated communication flaws (e.g., repeatedly deflecting onto circumstances or absorbing resentment silently).
-- **Act Climax**: Confronting your sibling or a key client (`Ms. Hartwell`) with clear boundaries without losing warmth or getting defensive.
-
----
+- **Gameplay Focus**: Relational nuance, workplace collaboration, handling unsaid resentment, and managing overcommitment.
+- **Player Journey**: The **Observer Pattern** activates — the AI detects your repeating communication flaws (e.g. hedging bad news or deflecting with humor) and challenges you to break the cycle.
 
 ### 🔴 Act III: Crossing the Threshold (Levels 71–100)
-- **Narrative Focus**: *High-Pressure Crisis, Repairing Fractures & Genuine Mastery*.
-- **Story Movement**: High-stakes scenarios dominate. Delivering bad news early on missed deliverables, disputing a grade with Prof. Adler, or addressing deep-seated family arguments.
-- **Key Conflict**: The risk of permanent relationship degradation if bad news is vague or entitled.
-- **Act Climax**: Reaching maximum Relationship Tiers (`Regarded Highly`, `Close Friend`, `Deeply Connected`, `Trusted Partner`) across all 4 Sectors, unlocking complete communication mastery.
+- **Gameplay Focus**: High-stakes conflict resolution, crisis communication, and executive boundary negotiation.
+- **Player Journey**: Navigating complex multi-turn emotional standoffs where a single wrong tone degrades trust. Unlocking maximum relationship tiers across all 4 sectors.
 
 ---
 
-## 4. World Layout & Room Connection Blueprint
+## 4. Reiteration & Improvement Rationale
 
-To implement this lore into your physical scene flow:
+### 💡 What Was Changed & Why:
 
-```
-[ Room_Start (Campus Entry) ] ──Door──> [ Room_Office (Prof. Adler) ]
-            │
-          Door
-            ▼
-[ Room_Cafe (Downtown Sector) ] ──Door──> [ Room_Apartment (Home Sector) ]
-            │
-          Door
-            ▼
-[ Room_Corporate (Suite Sector) ]
-```
+1. **Explicit Hackathon Alignment Matrix Added**
+   - *Why*: Ensures judges immediately see how the narrative design maps 1-to-1 to the **Relational Intelligence Engine** track, 4D scoring, and AI Creation requirements (securing maximum points on Theme Alignment & AI Tools).
 
-### Design Rules for World Construction:
-1. **Diorama Frame Integrity**: Every room box maintains a 16:9 aspect ratio frame.
-2. **Atmospheric Lighting Shifts**: As relationship trust increases with the primary NPC in a room, the room's ambient light smoothly shifts from cool slate blue (`#121b2d`) to warm golden cream (`#fff5e6`).
-3. **Threshold Door Transitions**: Passing through a door locks player controls briefly, fades through a soft neutral transition, and places the player at the target `SpawnMarker3D`.
+2. **Boss Encounters / Peak Trials Introduced for Each Sector**
+   - *Why*: Prevents the story from feeling like a dull e-learning module. Adding climax trials gives each sector a satisfying RPG campaign structure ("Game Quality" requirement).
 
----
-
-## 5. Summary Matrix for Level & Room Designers
-
-| Sector | Primary NPC | Core Metric | Primary Skill | Signature Scenario |
-|---|---|---|---|---|
-| **Campus** | Prof. Adler | Respect | Clarity | *Disputing a Grade* (`grade_dispute_quiet`) |
-| **Campus** | Ms. Okoro | Integrity | Empathy | *Asking for a Reference* (`recommendation_letter_ask`) |
-| **Café** | Daria | Closeness | Expression | *Cancelled Again* (`you_cancelled_again`) |
-| **Café** | Barista | Impression | Politeness | *Rush Order* (`ordering_under_pressure`) |
-| **Home** | Parent | Closeness | Expression | *What's the Plan* (`parent_asking_about_the_plan`) |
-| **Home** | Sibling | Trust | Empathy | *Called Out* (`sibling_pushing_back`) |
-| **Corporate** | Ms. Hartwell | Satisfaction | Clarity | *Telling Them First* (`client_bad_news_early`) |
-| **Corporate** | Tomás | Alignment | Clarity | *Left Off Presentation* (`credit_not_given`) |
+3. **Integrated Gamification Mechanics into Lore**
+   - *Why*: Instead of treating levels (1–100), 4D scores, and AI analytics reports as external UI elements, they are woven into the story as the player's "Perceiver Diagnostic Interface," keeping the experience deeply immersive.
