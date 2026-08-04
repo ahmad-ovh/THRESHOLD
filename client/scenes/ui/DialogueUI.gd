@@ -13,6 +13,9 @@ extends CanvasLayer
 @onready var coach_hint_banner: PanelContainer = $OverlayRoot/CoachHintBanner
 @onready var coach_hint_label: Label = $OverlayRoot/CoachHintBanner/CoachHintLabel
 
+@onready var status_ribbon_panel: PanelContainer = $OverlayRoot/StatusRibbonPanel
+@onready var status_ribbon_label: Label = $OverlayRoot/StatusRibbonPanel/StatusRibbonLabel
+
 @onready var message_input: LineEdit = $OverlayRoot/BottomInputPanel/InputContainer/MessageInput
 @onready var send_button: Button = $OverlayRoot/BottomInputPanel/InputContainer/SendButton
 
@@ -55,6 +58,7 @@ func _ready() -> void:
 	visible = false
 	loading_label.visible = false
 	coach_hint_banner.visible = false
+	status_ribbon_panel.visible = false
 	send_button.pressed.connect(_on_send_pressed)
 	leave_button.pressed.connect(_on_leave_pressed)
 	message_input.text_submitted.connect(_on_text_submitted)
@@ -70,6 +74,18 @@ func _process(delta: float) -> void:
 			loading_label.text = "Thinking" + dots
 			if active_npc_bubble and active_npc_bubble.has_method("update_text_only"):
 				active_npc_bubble.update_text_only("[i]Thinking" + dots + "[/i]")
+
+func show_status_ribbon(text: String) -> void:
+	status_ribbon_label.text = text
+	status_ribbon_panel.visible = true
+	var tween = create_tween()
+	tween.tween_property(status_ribbon_panel, "modulate:a", 1.0, 0.3)
+	await get_tree().create_timer(2.0).timeout
+	var fade_tween = create_tween()
+	fade_tween.tween_property(status_ribbon_panel, "modulate:a", 0.0, 0.4)
+	await fade_tween.finished
+	status_ribbon_panel.visible = false
+	status_ribbon_panel.modulate.a = 1.0
 
 func _reset_encounter_metrics() -> void:
 	turn_history_scores.clear()
@@ -118,6 +134,7 @@ func show_connecting_state(npc_name: String) -> void:
 	loading_label.visible = true
 	loading_label.text = "Connecting..."
 	coach_hint_banner.visible = false
+	status_ribbon_panel.visible = false
 	feedback_text.text = "Awaiting first response..."
 
 func open_dialogue(npc_name: String, opening_line: String) -> void:
@@ -160,7 +177,7 @@ func update_turn_data(data: Dictionary) -> void:
 		turn_history_scores.append(turn_scores)
 		_recalculate_cumulative_performance()
 		
-	# Update Feedback Text
+	# Update Feedback Text & Status Ribbon
 	var fb = data.get("feedback", {})
 	if fb is Dictionary:
 		var str_text = fb.get("strength", "")
@@ -168,6 +185,7 @@ func update_turn_data(data: Dictionary) -> void:
 		var txt = ""
 		if str_text != "":
 			txt += "[color=green][b]Strength:[/b] " + str(str_text) + "[/color]\n"
+			show_status_ribbon(active_npc_name + " appreciated your response!")
 		if imp_text != "":
 			txt += "[color=yellow][b]Improvement:[/b] " + str(imp_text) + "[/color]"
 		feedback_text.text = txt
