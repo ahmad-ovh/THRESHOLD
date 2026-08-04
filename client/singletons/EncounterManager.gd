@@ -24,7 +24,30 @@ func start_encounter(npc_id: String) -> void:
 		if npc.get("npc_id") == npc_id:
 			target_npc = npc
 			break
-			
+
+	# Calculate natural conversational standing position (1.8m distance) & face-to-face alignment
+	if target_npc and player:
+		var diff = player.global_position - target_npc.global_position
+		diff.y = 0.0
+		if diff.length() < 0.1:
+			diff = Vector3(0, 0, 1.8)
+		var target_pos = target_npc.global_position + diff.normalized() * 1.8
+		
+		# Smoothly glide player to standing spot
+		var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(player, "global_position:x", target_pos.x, 0.4)
+		tween.tween_property(player, "global_position:z", target_pos.z, 0.4)
+		
+		# Face characters toward each other
+		if player.has_node("CharacterMesh"):
+			var p_mesh = player.get_node("CharacterMesh")
+			var p_angle = atan2(-(target_npc.global_position.x - target_pos.x), -(target_npc.global_position.z - target_pos.z))
+			p_mesh.rotation.y = p_angle
+		if target_npc.has_node("MeshContainer"):
+			var npc_mesh = target_npc.get_node("MeshContainer")
+			var npc_angle = atan2(-(target_pos.x - target_npc.global_position.x), -(target_pos.z - target_npc.global_position.z))
+			npc_mesh.rotation.y = npc_angle
+
 	# Instantly show Dialogue UI in Connecting mode
 	_ensure_dialogue_ui()
 	if dialogue_ui_ref.has_method("set_spatial_targets"):

@@ -8,9 +8,10 @@ extends Control
 @onready var continue_arrow: Label = $ContinueArrow
 
 var target_3d_node: Node3D = null
-var offset_3d: Vector3 = Vector3(0, 2.2, 0)
+var offset_3d: Vector3 = Vector3(0, 2.3, 0)
 var active_camera: Camera3D = null
 var arrow_bounce_timer: float = 0.0
+var is_player_bubble: bool = false
 
 var speaker_colors: Dictionary = {
 	"teddy": Color(1.0, 0.49, 0.15),       # Vibrant Orange
@@ -27,13 +28,18 @@ func _ready() -> void:
 	continue_arrow.visible = false
 
 func setup(speaker: String, text: String, target_node: Node3D = null, is_player: bool = false) -> void:
+	is_player_bubble = is_player
 	speaker_label.text = speaker
 	var key = speaker.to_lower()
 	var badge_color = Color(1.0, 0.49, 0.15) # Default Orange
 	if is_player or key == "you":
 		badge_color = speaker_colors["you"]
+		offset_3d = Vector3(-0.7, 2.3, 0) # Offset left for Player
 	elif speaker_colors.has(key):
 		badge_color = speaker_colors[key]
+		offset_3d = Vector3(0.7, 2.3, 0) # Offset right for NPC
+	else:
+		offset_3d = Vector3(0.7, 2.3, 0)
 		
 	# Apply speaker badge pill stylebox color
 	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
