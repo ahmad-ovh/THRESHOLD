@@ -67,7 +67,7 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
 theme_override_font_sizes/font_size = 22
-text = "Encounter Summary"
+text = "Conversation Reflection"
 horizontal_alignment = 1
 
 [node name="OutcomeBadge" type="Label" parent="PanelContainer/Margin/VBoxContainer"]
@@ -132,4 +132,4 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Continue"
+text = "Step Away"

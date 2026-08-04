@@ -71,16 +71,16 @@ func _process(delta: float) -> void:
 			thinking_timer = 0.0
 			dot_count = (dot_count % 3) + 1
 			var dots = ".".repeat(dot_count)
-			loading_label.text = "Thinking" + dots
+			loading_label.text = active_npc_name + " pauses" + dots
 			if active_npc_bubble and active_npc_bubble.has_method("update_text_only"):
-				active_npc_bubble.update_text_only("[i]Thinking" + dots + "[/i]")
+				active_npc_bubble.update_text_only("[i]" + active_npc_name + " considers your words" + dots + "[/i]")
 
 func show_status_ribbon(text: String) -> void:
 	status_ribbon_label.text = text
 	status_ribbon_panel.visible = true
 	var tween = create_tween()
 	tween.tween_property(status_ribbon_panel, "modulate:a", 1.0, 0.3)
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.5).timeout
 	var fade_tween = create_tween()
 	fade_tween.tween_property(status_ribbon_panel, "modulate:a", 0.0, 0.4)
 	await fade_tween.finished
@@ -112,7 +112,7 @@ func set_spatial_targets(npc_node: Node3D, player_node: Node3D) -> void:
 
 func set_scenario_context(role: String, goal_text: String) -> void:
 	role_badge.text = "[Role: " + role.capitalize() + "]"
-	scenario_goal_label.text = "Scenario Goal: " + goal_text
+	scenario_goal_label.text = "Conversation Focus: " + goal_text
 
 func show_connecting_state(npc_name: String) -> void:
 	active_npc_name = npc_name.capitalize()
@@ -120,22 +120,22 @@ func show_connecting_state(npc_name: String) -> void:
 	role_badge.text = "[Role: Peer]"
 	tier_label.text = "[Tier: Stranger]"
 	mood_label.text = "[Mood: neutral]"
-	scenario_goal_label.text = "Scenario Goal: Practicing social communication"
+	scenario_goal_label.text = "Conversation Focus: Active listening and sharing"
 	visible = true
 	_clear_bubbles()
 	_reset_encounter_metrics()
 	
-	# Spawn instant in-world connecting bubble above NPC
-	_spawn_npc_bubble("Connecting to " + active_npc_name + "...")
+	# Spawn instant in-world speech bubble above NPC
+	_spawn_npc_bubble("Walking over to " + active_npc_name + "...")
 	
 	message_input.editable = false
 	send_button.disabled = true
 	leave_button.disabled = true
 	loading_label.visible = true
-	loading_label.text = "Connecting..."
+	loading_label.text = "Walking over..."
 	coach_hint_banner.visible = false
 	status_ribbon_panel.visible = false
-	feedback_text.text = "Awaiting first response..."
+	feedback_text.text = "Awaiting response..."
 
 func open_dialogue(npc_name: String, opening_line: String) -> void:
 	active_npc_name = npc_name.capitalize()
@@ -149,7 +149,7 @@ func open_dialogue(npc_name: String, opening_line: String) -> void:
 	message_input.editable = true
 	send_button.disabled = false
 	leave_button.disabled = false
-	message_input.placeholder_text = "Type your response here..."
+	message_input.placeholder_text = "Say something to " + active_npc_name + "..."
 	message_input.grab_focus()
 
 func append_player_message(text: String) -> void:
@@ -157,9 +157,15 @@ func append_player_message(text: String) -> void:
 	start_thinking()
 
 func update_turn_data(data: Dictionary) -> void:
+	var prev_tier = tier_label.text
+	
 	# Update Status Pills
 	if data.has("relationship_tier"):
-		tier_label.text = "[Tier: " + str(data.get("relationship_tier", "Stranger")) + "]"
+		var new_tier = str(data.get("relationship_tier", "Stranger"))
+		tier_label.text = "[Tier: " + new_tier + "]"
+		if prev_tier != "" and prev_tier != "[Tier: " + new_tier + "]":
+			show_status_ribbon("Relationship with " + active_npc_name + " deepened: " + new_tier + "!")
+			
 	if data.has("npc_state"):
 		mood_label.text = "[Mood: " + str(data.get("npc_state", "neutral")) + "]"
 		
@@ -177,7 +183,7 @@ func update_turn_data(data: Dictionary) -> void:
 		turn_history_scores.append(turn_scores)
 		_recalculate_cumulative_performance()
 		
-	# Update Feedback Text & Status Ribbon
+	# Update Feedback Text
 	var fb = data.get("feedback", {})
 	if fb is Dictionary:
 		var str_text = fb.get("strength", "")
@@ -185,7 +191,6 @@ func update_turn_data(data: Dictionary) -> void:
 		var txt = ""
 		if str_text != "":
 			txt += "[color=green][b]Strength:[/b] " + str(str_text) + "[/color]\n"
-			show_status_ribbon(active_npc_name + " appreciated your response!")
 		if imp_text != "":
 			txt += "[color=yellow][b]Improvement:[/b] " + str(imp_text) + "[/color]"
 		feedback_text.text = txt
@@ -256,12 +261,12 @@ func start_thinking() -> void:
 	thinking_timer = 0.0
 	dot_count = 1
 	loading_label.visible = true
-	loading_label.text = "Thinking."
+	loading_label.text = active_npc_name + " pauses."
 	message_input.editable = false
-	message_input.placeholder_text = active_npc_name + " is thinking..."
+	message_input.placeholder_text = active_npc_name + " considers your words..."
 	send_button.disabled = true
 	leave_button.disabled = false
-	_spawn_npc_bubble("[i]Thinking.[/i]")
+	_spawn_npc_bubble("[i]" + active_npc_name + " considers your words.[/i]")
 
 func stop_thinking() -> void:
 	is_thinking = false
@@ -272,14 +277,14 @@ func display_reply(text: String) -> void:
 	_spawn_npc_bubble(text)
 	
 	message_input.editable = true
-	message_input.placeholder_text = "Type your response here..."
+	message_input.placeholder_text = "Say something to " + active_npc_name + "..."
 	send_button.disabled = false
 	leave_button.disabled = false
 	message_input.grab_focus()
 
 func display_error(error_msg: String) -> void:
 	stop_thinking()
-	_spawn_npc_bubble("[color=red][b]Error:[/b] " + error_msg + "[/color]")
+	_spawn_npc_bubble("[color=red]" + error_msg + "[/color]")
 	message_input.editable = true
 	send_button.disabled = false
 	leave_button.disabled = false

@@ -50,11 +50,11 @@ text = "[Mood: neutral]"
 [node name="LoadingLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
 visible = false
 layout_mode = 2
-text = "Thinking..."
+text = "Walking over..."
 
 [node name="LeaveButton" type="Button" parent="OverlayRoot/HeaderContainer"]
 layout_mode = 2
-text = " Leave / End Encounter "
+text = " Say Goodbye "
 
 [node name="ScenarioGoalBanner" type="PanelContainer" parent="OverlayRoot"]
 layout_mode = 1
@@ -69,7 +69,7 @@ grow_horizontal = 2
 
 [node name="ScenarioGoalLabel" type="Label" parent="OverlayRoot/ScenarioGoalBanner"]
 layout_mode = 2
-text = "Scenario Goal: Practice active listening and validate emotions."
+text = "Conversation Focus: Active listening and validating feelings"
 horizontal_alignment = 1
 
 [node name="CoachHintBanner" type="PanelContainer" parent="OverlayRoot"]
@@ -107,7 +107,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_tomodachi_ribbon")
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15, 0.22, 0.3, 1)
 theme_override_font_sizes/font_size = 18
-text = "She liked it!"
+text = "Status update..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -131,7 +131,7 @@ layout_mode = 2
 [node name="MessageInput" type="LineEdit" parent="OverlayRoot/BottomInputPanel/InputContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Type your response here..."
+placeholder_text = "Say something..."
 
 [node name="SendButton" type="Button" parent="OverlayRoot/BottomInputPanel/InputContainer"]
 layout_mode = 2
@@ -154,7 +154,7 @@ grow_vertical = 2
 
 [node name="ScoresHeader" type="Label" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
-text = "Encounter Performance"
+text = "Communication Reflection"
 
 [node name="OverallContainer" type="HBoxContainer" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2

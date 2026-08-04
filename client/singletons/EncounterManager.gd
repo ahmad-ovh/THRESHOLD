@@ -25,10 +25,9 @@ func start_encounter(npc_id: String) -> void:
 			target_npc = npc
 			break
 
-	# Calculate parallel side-by-side standing position relative to dollhouse side camera view
+	# Calculate parallel side-by-side standing position (2.4m natural distance) relative to dollhouse camera
 	if target_npc and player:
-		# Player stands to the left (-1.6m on X axis relative to NPC)
-		var standing_offset = Vector3(-1.6, 0.0, 0.0)
+		var standing_offset = Vector3(-2.4, 0.0, 0.0)
 		var target_pos = target_npc.global_position + standing_offset
 		
 		# Smoothly glide player to parallel standing spot
