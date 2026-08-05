@@ -1,8 +1,8 @@
 # THRESHOLD — Game Design Document & Systems Specification
 
-**Document Version**: 2.1.0  
+**Document Version**: 2.2.0  
 **Status**: Approved Master Specification  
-**Lead Designer**: GameDesigner  
+**Lead Designer / Cinematic Director**: GameDesigner  
 **Target Platform**: Browser (Godot 4 GL Compatibility / WebGL)  
 **Backend Reference**: Relational Intelligence Engine API (Python / FastAPI / SQLite)  
 
@@ -15,7 +15,8 @@
 | 1.0.0 | 2026-08-04 | GameDesigner | Initial High-Level Concept & Sector Outline. |
 | 1.5.0 | 2026-08-05 | GameDesigner | Integrated Hackathon Alignment & Diorama Room Specifications. |
 | 2.0.0 | 2026-08-05 | GameDesigner | Full GDD Overhaul: Detailed Mechanic Specifications, Economy Spreadsheet, Onboarding Flow, Behavioral Economics, and Street Connector Systems. |
-| **2.1.0** | **2026-08-05** | **GameDesigner** | **Added In-Engine Intro Cutscene Mechanic (`IntroSequence.tscn`), Camera Path Pan, and Updated Onboarding Flow.** |
+| 2.1.0 | 2026-08-05 | GameDesigner | Added In-Engine Intro Cutscene Mechanic (`IntroSequence.tscn`), Camera Path Pan, and Updated Onboarding Flow. |
+| **2.2.0** | **2026-08-05** | **GameDesigner** | **Detailed Shot-by-Shot Cinematic Director's Script for Intro Cutscene (Zero Rigging / Camera & Lighting Driven).** |
 
 ---
 
@@ -77,22 +78,55 @@ Every system, mechanic, and UI element in THRESHOLD must pass against these thre
 
 ---
 
-## 🛠️ 3. Comprehensive Mechanic Specifications
+## 🎬 3. Director's Script: In-Engine Intro Cutscene ("Thresholds")
+
+**Duration**: 6.0 Seconds Total (Fully Skippable anytime via `Space` / `E` / `Esc`)  
+**Production Constraint**: Zero character rigging required. Storytelling is driven 100% by camera movement, ambient lighting transitions, and subtitle timing.
+
+```
+ [ SHOT 1: Sidewalk Tracking ] ────► [ SHOT 2: Doorway Push-In ] ────► [ SHOT 3: Diorama Settle ]
+ (Low-angle Streetlamp Pan)         (Front Wall Dissolves)             (Active Gameplay Control)
+ "In a world of unspoken words..."  "...every door is a threshold."     (Ground Ring Illuminates)
+```
+
+### 📹 Shot-by-Shot Directorial Breakdown
+
+#### **Shot 1: The Quiet Street (0.0s – 2.0s)**
+- **Camera Placement**: Low-angle wide tracking shot (`FOV = 60°`, `Position = Vector3(-10, 1.8, 8.5)`, `Rotation = Vector3(-5°, -15°, 0°)`).
+- **Action & Lighting**: The camera slowly glides right along the sidewalk of `StreetConnector.tscn`. A single streetlamp casts a warm pool of light over a mailbox, wooden fence, and low-poly tree. A building with glowing yellow windows sits in the background.
+- **Audio Cue**: Soft synthesized chime + ambient evening street breeze.
+- **Subtitle Overlay**:
+  *“In a world of unspoken words...”*
+
+#### **Shot 2: The Doorway Push-In (2.0s – 4.0s)**
+- **Camera Placement**: Smooth dolly push-in tracking shot (`FOV = 50°`, lerping position toward the front door of `Room_Start` at `Vector3(-1.0, 2.2, 5.0)`).
+- **Action & Lighting**: As the camera reaches the doorway, the front exterior wall dissolves, revealing the 3-walled interior. Cool outdoor street lighting smoothly shifts into warm golden interior lamplight (`Color(1.0, 0.94, 0.85)`). NPC Daria is standing statically near the couch inside.
+- **Subtitle Overlay**:
+  *“...every door is a threshold waiting to be crossed.”*
+
+#### **Shot 3: Settling into Diorama Frame (4.0s – 6.0s)**
+- **Camera Placement**: Camera elevates into fixed diorama angle (`Position = Vector3(0, 3.2, 7.5)`, `Rotation = Vector3(-14°, 0°, 0°)`, `FOV = 55°`).
+- **Action & Lighting**: Camera settles into full-room framing. Floating subtitles fade out (`modulate:a -> 0.0`).
+- **Gameplay Hand-off**: Ground interaction ring under player illuminates (`[E] Talk to Daria`), instantly handing movement control to `Player3D`.
+
+---
+
+## 🛠️ 4. Comprehensive Mechanic Specifications
 
 ### 🎬 Mechanic 0: In-Engine Diorama Intro Cutscene
 - **Purpose**: Establish atmosphere, narrative weight, and core emotional theme immediately after clicking "Start Game" before player movement control begins.
 - **Player Fantasy**: Feeling immersed in a quiet, atmospheric 2.5D world where every doorway holds an unspoken story.
 - **Input**: Player clicks "Start Game" on `MainMenu.tscn`. Can be skipped at any point by pressing `Space` / `E` / `Esc`.
 - **Output**: 
-  - Smooth camera pan along a 3D camera path (`Path3D` / `AnimationPlayer`) from the outdoor street down into the open front wall of `Room_Start`.
-  - Subtle floating subtitle text overlays: *"Every room holds an unwritten story. Every door is a threshold waiting to be crossed."*
-  - Seamlessly settles camera directly into `Player3D`'s default diorama camera position (`Vector3(0, 3.2, 7.5)`).
-- **Success Condition**: Smooth 5-second camera glide into the diorama room with zero hitching, ending directly in active gameplay control.
+  - Smooth 3-shot camera transition from outdoor street into indoor diorama box.
+  - Floating subtitle text overlays: *"In a world of unspoken words... every door is a threshold waiting to be crossed."*
+  - Settles camera directly into `Player3D`'s default diorama camera position (`Vector3(0, 3.2, 7.5)`).
+- **Success Condition**: Smooth 6-second camera glide into the diorama room with zero hitching, ending directly in active gameplay control.
 - **Failure State**: Camera animation stutters or fails to transition; falls back instantly to standard room spawn.
 - **Edge Cases**:
   - *Player skips cutscene*: Animation cancels immediately, fading black for `0.1s` and handing control to `Player3D`.
 - **Tuning Levers**:
-  - `cutscene_duration`: `5.0s` `[PLACEHOLDER]`
+  - `cutscene_duration`: `6.0s` `[PLACEHOLDER]`
   - `fade_transition_speed`: `0.3s` `[PLACEHOLDER]`
 - **Dependencies**: `MainMenu.gd`, `AnimationPlayer`, `Camera3D`, `GameController.gd`.
 
@@ -182,7 +216,7 @@ Every system, mechanic, and UI element in THRESHOLD must pass against these thre
 
 ---
 
-## 📊 4. Economy & Skill Tuning Balance Spreadsheet
+## 📊 5. Economy & Skill Tuning Balance Spreadsheet
 
 All values represent the tuning levers and thresholds governing progression and rendering:
 
@@ -199,7 +233,7 @@ Skill Update Weight (Pri)   | +0.08      | +0.02 | +0.15 | Primary dimension upd
 Skill Update Weight (Sec)   | +0.04      | +0.01 | +0.08 | Secondary dimension updates moderately
 Dialogue Gap Distance       | 2.4m       | 1.8m  | 3.0m  | Parallel standing offset for side-by-side view
 Camera Left Shift           | +1.8m      | 1.0m  | 2.5m  | Unblocks right 300px performance panel
-Cutscene Duration           | 5.0s       | 3.0s  | 8.0s  | Smooth intro camera pan timing before control
+Cutscene Duration           | 6.0s       | 3.0s  | 8.0s  | Smooth intro camera pan timing before control
 Typewriter Text Speed       | 0.7s       | 0.3s  | 1.2s  | Playback duration per dialogue line
 Patience Decay Per Turn     | 0.02       | 0.00  | 0.05  | Gradual time pressure per conversation turn
 Trust Tier: Acquaintance    | 0.25       | 0.20  | 0.30  | Threshold for first tier upgrade
@@ -210,11 +244,12 @@ Trust Tier: Close / Partner | 0.85       | 0.80  | 0.90  | Maximum relationship 
 
 ---
 
-## 🏁 5. Player Onboarding Flow & First Session Checklist
+## 🏁 6. Player Onboarding Flow & First Session Checklist
 
 ```
 ## Onboarding Checklist
-- [x] High-impact intro cutscene sets tone within 5 seconds of clicking Start Game
+- [x] High-impact intro cutscene sets tone within 6 seconds of clicking Start Game
+- [x] Cutscene requires zero character rigging (driven by camera, lighting & subtitles)
 - [x] Cutscene is fully skippable via Space/E/Esc to prevent friction
 - [x] Core verb (Interaction E) introduced within 10 seconds of active player control
 - [x] First success guaranteed — opening line from Daria provides immediate warm dialogue prompt
@@ -223,17 +258,9 @@ Trust Tier: Close / Partner | 0.85       | 0.80  | 0.90  | Maximum relationship 
 - [x] First session ends on a hook — Level Up unlock, streak increment (+1), and street access
 ```
 
-### Detailed Step-by-Step Onboarding Journey:
-1. **Beat 0 (Main Menu -> Start)**: Player clicks "Start Game".
-2. **Beat 1 (0–5s Cutscene)**: In-engine camera pans down the street and glides into `Room_Start` with a subtle subtitle: *"Every room holds an unwritten story. Every door is a threshold waiting to be crossed."*
-3. **Beat 2 (Active Control)**: Camera lands smoothly at `Vector3(0, 3.2, 7.5)`. Ground ring highlights NPC Daria. Prompt reads `[E] Talk to Daria`.
-4. **Beat 3 (Dialogue Encounter)**: Player presses `E`. Character glides side-by-side (`2.4m`), camera frames left (`+1.8m`), and Daria says her opening line in a cream speech bubble.
-5. **Beat 4 (Feedback & XP)**: Player submits response. Scores fill right panel (`+15% ↑`). `OverviewModal` awards `+35 XP` (`Level 1 -> Level 2`).
-6. **Beat 5 (Street Exploration)**: Player steps out through the door onto `StreetConnector.tscn` to explore the open world!
-
 ---
 
-## 🏛️ 6. World Architecture & Street Connector Systems
+## 🏛️ 7. World Architecture & Street Connector Systems
 
 ### 🏙️ 1. Outdoor Street Connector (`StreetConnector.tscn`)
 - **Visual Style**: 2.5D side-scrolling street featuring low-poly buildings (blue house, dark office), mailboxes, fences, streetlamps, trees, and sidewalks.
@@ -247,7 +274,7 @@ Trust Tier: Close / Partner | 0.85       | 0.80  | 0.90  | Maximum relationship 
 
 ---
 
-## 🧠 7. Behavioral Economics & Progression Design
+## 🧠 8. Behavioral Economics & Progression Design
 
 1. **Endowment Effect**:
    - The player builds and personalizes their communication profile in `JournalUI`. Earning custom relationship badges (`Trusted Partner`, `Regarded Highly`) creates personal investment in maintaining high relationship scores.
@@ -260,10 +287,10 @@ Trust Tier: Close / Partner | 0.85       | 0.80  | 0.90  | Maximum relationship 
 
 ---
 
-## 📍 8. Technical Deliverables Summary
+## 📍 9. Technical Deliverables Summary
 
 | File Path | Description |
 |---|---|
-| [docs/world_lore_and_narrative_blueprint.md](file:///c:/Users/User/Documents/THRESHOLD/docs/world_lore_and_narrative_blueprint.md) | **Master Game Design Document (GDD)** containing all pillars, mechanics, economy spreadsheets, onboarding flows, and intro cutscene specs. |
+| [docs/world_lore_and_narrative_blueprint.md](file:///c:/Users/User/Documents/THRESHOLD/docs/world_lore_and_narrative_blueprint.md) | **Master Game Design Document (GDD)** containing Director's Cutscene Script, pillars, mechanics, economy spreadsheets, onboarding flows, and street connector specs. |
 | [diorama_room_system_spec.md](file:///c:/Users/User/Documents/THRESHOLD/docs/diorama_room_system_spec.md) | Non-technical architectural guide for diorama rooms and camera offsets. |
 | [world_progression_story_arc.md](file:///c:/Users/User/Documents/THRESHOLD/docs/world_progression_story_arc.md) | 15 NPC storyline tracks across 4 sectors and 3 Level Bands. |
