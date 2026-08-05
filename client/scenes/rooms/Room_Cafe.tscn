@@ -1,0 +1,180 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.45, 0.32, 0.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.92, 0.88, 0.8, 1)
+
+[node name="Room_Cafe" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="RoomBounds" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+use_collision = true
+size = Vector3(16, 0.4, 10)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="BackWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -5)
+use_collision = true
+size = Vector3(16, 5, 0.4)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 10)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="RightWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 10)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="CameraAnchor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 3.2, 7.5)
+
+[node name="Furniture" type="Node3D" parent="."]
+
+[node name="Counter" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, -3.5)
+use_collision = true
+size = Vector3(3.5, 1.0, 0.7)
+
+[node name="CafeTable1" type="CSGCylinder3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, -1)
+use_collision = true
+radius = 0.4
+height = 0.75
+
+[node name="CafeTable2" type="CSGCylinder3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.375, -2)
+use_collision = true
+radius = 0.4
+height = 0.75
+
+[node name="CafeTable3" type="CSGCylinder3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.375, 2)
+use_collision = true
+radius = 0.4
+height = 0.75
+
+[node name="Chair1" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.25, -1)
+use_collision = true
+size = Vector3(0.4, 0.5, 0.4)
+
+[node name="Chair2" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0.25, -2)
+use_collision = true
+size = Vector3(0.4, 0.5, 0.4)
+
+[node name="Chair3" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2, 0.25, 2)
+use_collision = true
+size = Vector3(0.4, 0.5, 0.4)
+
+[node name="Chair4" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0.25, 2)
+use_collision = true
+size = Vector3(0.4, 0.5, 0.4)
+
+[node name="BenchBooth" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.25, -3)
+use_collision = true
+size = Vector3(2.0, 0.5, 0.6)
+
+[node name="MenuBoard" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2.5, -4.7)
+use_collision = true
+size = Vector3(1.5, 1.0, 0.05)
+
+[node name="Shelf" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.0, -4.7)
+use_collision = true
+size = Vector3(1.0, 1.5, 0.3)
+
+[node name="PendantLamp1" type="CSGCylinder3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0, -1)
+use_collision = true
+radius = 0.2
+height = 0.4
+
+[node name="PendantLamp2" type="CSGCylinder3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4.0, -2)
+use_collision = true
+radius = 0.2
+height = 0.4
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Mug1" type="CSGCylinder3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -1)
+use_collision = true
+radius = 0.05
+height = 0.1
+
+[node name="Mug2" type="CSGCylinder3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 1.05, -3.5)
+use_collision = true
+radius = 0.05
+height = 0.1
+
+[node name="Mug3" type="CSGCylinder3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8, -2)
+use_collision = true
+radius = 0.05
+height = 0.1
+
+[node name="Plant" type="CSGSphere3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.8, -4.7)
+use_collision = true
+radius = 0.2
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="OmniLight3D1" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -1)
+light_color = Color(1.0, 0.88, 0.7, 1)
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3.5, -2)
+light_color = Color(1.0, 0.88, 0.7, 1)
+
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+
+[node name="Spawn_Default" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="from_street" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="DoorToStreet" parent="." instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5)
+target_room_scene = "res://scenes/rooms/Street.tscn"
+target_spawn_id = "from_cafe"
+
+[node name="NPC_Barista" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -4)
+npc_id = "barista"
+
+[node name="NPC_Daria" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -3.5)
+npc_id = "daria"
+
+[node name="NPC_Felix" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+npc_id = "felix"
+
+[node name="NPC_Priya" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+npc_id = "priya"

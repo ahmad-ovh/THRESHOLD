@@ -1,0 +1,158 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.4, 0.42, 0.45, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.2, 0.25, 0.35, 1)
+
+[node name="Room_OfficeLobby" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="RoomBounds" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+use_collision = true
+size = Vector3(16, 0.4, 10)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="BackWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -5)
+use_collision = true
+size = Vector3(16, 5, 0.4)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 10)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="RightWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 10)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="CameraAnchor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 3.2, 7.5)
+
+[node name="Furniture" type="Node3D" parent="."]
+
+[node name="ReceptionDesk" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.39, -3)
+use_collision = true
+size = Vector3(2.0, 0.78, 0.8)
+
+[node name="WaitingChair1Seat" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.25, -1.5)
+use_collision = true
+size = Vector3(0.6, 0.5, 0.6)
+
+[node name="WaitingChair1Back" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.75, -1.75)
+use_collision = true
+size = Vector3(0.6, 0.5, 0.1)
+
+[node name="WaitingChair2Seat" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.25, -1.5)
+use_collision = true
+size = Vector3(0.6, 0.5, 0.6)
+
+[node name="WaitingChair2Back" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.75, -1.75)
+use_collision = true
+size = Vector3(0.6, 0.5, 0.1)
+
+[node name="CoffeeTable" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75, 0.19, -0.5)
+use_collision = true
+size = Vector3(0.8, 0.38, 0.5)
+
+[node name="FloorLamp" type="CSGCylinder3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 1.0, -1.5)
+use_collision = true
+radius = 0.1
+height = 2.0
+
+[node name="CompanyNameFrame" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0, -4.7)
+use_collision = true
+size = Vector3(1.5, 0.6, 0.05)
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Plant" type="CSGSphere3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.9, -3)
+use_collision = true
+radius = 0.15
+
+[node name="PenHolder" type="CSGCylinder3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.85, -3)
+use_collision = true
+radius = 0.05
+height = 0.1
+
+[node name="Newspaper" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 0.4, -0.5)
+use_collision = true
+size = Vector3(0.3, 0.02, 0.2)
+
+[node name="Mug" type="CSGCylinder3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 0.43, -0.5)
+use_collision = true
+radius = 0.05
+height = 0.1
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.8, 0)
+light_color = Color(0.95, 0.95, 1.0, 1)
+
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+
+[node name="Spawn_Default" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="from_street" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="from_conference" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -1)
+
+[node name="from_suite" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -1)
+
+[node name="DoorToStreet" parent="." instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5)
+target_room_scene = "res://scenes/rooms/Street.tscn"
+target_spawn_id = "from_office"
+
+[node name="DoorToConference" parent="." instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -2)
+target_room_scene = "res://scenes/rooms/Room_OfficeConference.tscn"
+target_spawn_id = "from_lobby"
+
+[node name="DoorToSuite" parent="." instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -2)
+target_room_scene = "res://scenes/rooms/Room_OfficeSuite.tscn"
+target_spawn_id = "from_lobby"
+
+[node name="NPC_Nadia" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -3.5)
+npc_id = "nadia"
+
+[node name="NPC_Tomas" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -2.5)
+npc_id = "tomas"
+
+[node name="NPC_Seren" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -1.5)
+npc_id = "seren"

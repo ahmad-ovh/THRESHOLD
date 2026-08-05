@@ -1,0 +1,147 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.7, 0.68, 0.62, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.85, 0.82, 0.75, 1)
+
+[node name="Room_OkoroClassroom" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="RoomBounds" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+use_collision = true
+size = Vector3(16, 0.4, 10)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="BackWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -5)
+use_collision = true
+size = Vector3(16, 5, 0.4)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 10)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="RightWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 10)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="CameraAnchor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 3.2, 7.5)
+
+[node name="Furniture" type="Node3D" parent="."]
+
+[node name="TeacherDesk" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.35, -3.5)
+use_collision = true
+size = Vector3(1.4, 0.78, 0.7)
+
+[node name="StudentDesk1" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -3, 0.35, -0.5)
+use_collision = true
+size = Vector3(0.9, 0.7, 0.6)
+
+[node name="StudentDesk2" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0, 0.35, -0.5)
+use_collision = true
+size = Vector3(0.9, 0.7, 0.6)
+
+[node name="StudentDesk3" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(0.996195, 0, -0.0871557, 0, 1, 0, 0.0871557, 0, 0.996195, 3, 0.35, -0.5)
+use_collision = true
+size = Vector3(0.9, 0.7, 0.6)
+
+[node name="StudentChair1Seat" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.25, 0)
+use_collision = true
+size = Vector3(0.4, 0.5, 0.4)
+
+[node name="StudentChair1Back" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.7, 0.2)
+use_collision = true
+size = Vector3(0.4, 0.4, 0.05)
+
+[node name="StudentChair2Seat" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+use_collision = true
+size = Vector3(0.4, 0.5, 0.4)
+
+[node name="StudentChair2Back" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0.2)
+use_collision = true
+size = Vector3(0.4, 0.4, 0.05)
+
+[node name="StudentChair3Seat" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.25, 0)
+use_collision = true
+size = Vector3(0.4, 0.5, 0.4)
+
+[node name="StudentChair3Back" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.7, 0.2)
+use_collision = true
+size = Vector3(0.4, 0.4, 0.05)
+
+[node name="Whiteboard" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -4.7)
+use_collision = true
+size = Vector3(3.0, 1.5, 0.05)
+
+[node name="Bookshelf" type="CSGBox3D" parent="Furniture"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0.9, -4)
+use_collision = true
+size = Vector3(1.2, 1.8, 0.4)
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Book" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, -0.5)
+use_collision = true
+size = Vector3(0.2, 0.05, 0.25)
+
+[node name="Bag" type="CSGBox3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.2, 0)
+use_collision = true
+size = Vector3(0.3, 0.4, 0.2)
+
+[node name="PenHolder" type="CSGCylinder3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.79, -3.6)
+use_collision = true
+radius = 0.04
+height = 0.1
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(0.5, -0.5, 0.707107, 0, 0.819152, 0.573576, -0.866025, -0.286788, 0.409576, 0, 4, 0)
+light_color = Color(0.95, 0.9, 0.82, 1)
+
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+
+[node name="Spawn_Default" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="from_hallway" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="DoorToHallway" parent="." instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.5)
+target_room_scene = "res://scenes/rooms/Room_CampusHallway.tscn"
+target_spawn_id = "from_okoro"
+
+[node name="NPC_Okoro" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -2.5)
+npc_id = "ms_okoro"

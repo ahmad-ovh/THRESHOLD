@@ -60,7 +60,7 @@ func start_new_game(p_id: String) -> void:
 	set_phase(Phase.EXPLORING)
 	_ensure_hud()
 	hud_ref.visible = true
-	SceneManager.change_room("res://scenes/rooms/Room_Start.tscn")
+	SceneManager.change_room("res://scenes/rooms/Street.tscn")
 
 func return_to_main_menu() -> void:
 	if is_paused:
