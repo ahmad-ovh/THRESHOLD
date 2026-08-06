@@ -22,6 +22,7 @@ from src.services import (
     memory_service,
     npc_service,
     observer_service,
+    perception_service,
     player_service,
     progression_service,
     scenario_service,
@@ -186,6 +187,14 @@ async def start_interaction(
     opening_line = personalized.get("opening_line", seed.context.opening_line_seed)
     npc_expression = personalized.get("npc_expression", "neutral")
 
+    # Build structured Perception Layer projection
+    perception_layer = perception_service.build_perception_layer(
+        template=template,
+        instance=instance,
+        player=player,
+        seed=seed,
+    )
+
     # Append NPC opening to conversation history
     session.conversation_history = [{"role": "npc", "text": opening_line}]
     await db.commit()
@@ -196,6 +205,7 @@ async def start_interaction(
         "opening_line": opening_line,
         "interaction_id": seed.id,
         "encounter_over": False,
+        "perception_layer": perception_layer,
     }
 
 
@@ -485,6 +495,13 @@ async def end_interaction(
     new_tier = resolve_tier(template, final_effective)
     instance.current_state = new_state
     instance.relationship_tier = new_tier
+
+    # Async background perception memory & fact update
+    await perception_service.process_encounter_end_perception(
+        instance=instance,
+        transcript=conversation_history,
+        encounter_result={"performance_outcome": performance_outcome, "narrative_outcome": narrative_outcome},
+    )
 
     # 6. Record encounter history for reporting (saving both performance & narrative outcomes)
     history_record = EncounterHistory(

@@ -63,6 +63,8 @@ class NpcInstance(Base):
     metrics_json: Mapped[str] = mapped_column(Text, default="{}")
     current_state: Mapped[str] = mapped_column(String, default="neutral")
     relationship_tier: Mapped[str] = mapped_column(String, default="")
+    discovered_facts_json: Mapped[str] = mapped_column(Text, default="[]")
+    perception_summary_json: Mapped[str] = mapped_column(Text, default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
@@ -81,6 +83,17 @@ class NpcInstance(Base):
     @metrics.setter
     def metrics(self, value: dict) -> None:
         self.metrics_json = json.dumps(value)
+
+    @property
+    def discovered_facts(self) -> list[str]:
+        try:
+            return json.loads(self.discovered_facts_json)
+        except Exception:
+            return []
+
+    @discovered_facts.setter
+    def discovered_facts(self, value: list[str]) -> None:
+        self.discovered_facts_json = json.dumps(value)
 
 
 class MemoryEntry(Base):

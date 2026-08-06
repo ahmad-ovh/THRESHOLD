@@ -56,8 +56,15 @@ func start_encounter(npc_id: String) -> void:
 		dialogue_ui_ref.display_error(detail)
 		if player:
 			player.set_physics_process(true)
-		return
-		
+	# Check Perception Layer for Social Context Onboarding
+	var perception = res.get("perception_layer", {})
+	if perception is Dictionary and perception.get("show_modal", true):
+		var modal_scene = preload("res://scenes/ui/PerceptionModal.tscn")
+		var perception_modal = modal_scene.instantiate()
+		get_tree().root.add_child(perception_modal)
+		perception_modal.setup_and_show(perception)
+		await perception_modal.acknowledged
+
 	current_state = State.ACTIVE
 	dialogue_ui_ref.open_dialogue(res.get("npc_name", npc_id), res.get("opening_line", ""))
 
