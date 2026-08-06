@@ -25,10 +25,6 @@ shape = SubResource("CapsuleShape3D_player")
 
 [node name="CharacterMesh" type="Node3D" parent="."]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterMesh"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-mesh = SubResource("CapsuleMesh_player")
-
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 

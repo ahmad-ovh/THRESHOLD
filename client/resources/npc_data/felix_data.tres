@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="NPCData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/npc_data/NPCData.gd" id="1_npc_data"]
+
+[resource]
+script = ExtResource("1_npc_data")
+npc_id = "felix"
+display_name = "Felix"
+default_expression = "neutral"
+mood_emojis = {}

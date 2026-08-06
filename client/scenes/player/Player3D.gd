@@ -28,6 +28,14 @@ func _ready() -> void:
 	interaction_detector.area_entered.connect(_on_area_entered)
 	interaction_detector.area_exited.connect(_on_area_exited)
 	_setup_dollhouse_camera()
+	_setup_player_mesh()
+
+func _setup_player_mesh() -> void:
+	if character_mesh:
+		for child in character_mesh.get_children():
+			child.queue_free()
+		var player_model = CharacterFactory.create_character_mesh("player")
+		character_mesh.add_child(player_model)
 
 func _setup_dollhouse_camera() -> void:
 	if spring_arm:
