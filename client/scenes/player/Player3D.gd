@@ -109,7 +109,7 @@ func _handle_ground_movement(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, direction.x * target_speed, acceleration * delta)
 		velocity.z = move_toward(velocity.z, direction.z * target_speed, acceleration * delta)
 
-		var target_angle = atan2(-direction.x, -direction.z)
+		var target_angle = atan2(direction.x, direction.z)
 		character_mesh.rotation.y = lerp_angle(character_mesh.rotation.y, target_angle, 12.0 * delta)
 	else:
 		_apply_friction(delta)

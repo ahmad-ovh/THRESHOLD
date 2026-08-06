@@ -43,6 +43,16 @@ static func _cylinder(radius: float, height: float, pos: Vector3, mat: Material,
 	mi.material_override = mat
 	return mi
 
+static func _torus(outer_r: float, inner_r: float, pos: Vector3, mat: Material) -> MeshInstance3D:
+	var mi = MeshInstance3D.new()
+	var torus = TorusMesh.new()
+	torus.outer_radius = outer_r
+	torus.inner_radius = outer_r - inner_r
+	mi.mesh = torus
+	mi.position = pos
+	mi.material_override = mat
+	return mi
+
 static func create_character_mesh(character_id: String) -> Node3D:
 	var root = Node3D.new()
 	root.name = "Model_" + character_id
@@ -83,7 +93,6 @@ static func create_character_mesh(character_id: String) -> Node3D:
 
 	return root
 
-# --- Helper for standard base body assembly ---
 static func _add_base_humanoid(
 	root: Node3D,
 	skin_mat: Material,
@@ -102,7 +111,7 @@ static func _add_base_humanoid(
 	# Pelvis
 	root.add_child(_box(Vector3(0.40, 0.12, 0.24), Vector3(0.0, 0.76, 0.0), pants_mat))
 
-	# Torso
+	# Torso (depth 0.26 -> front at Z = +0.13, back at Z = -0.13)
 	root.add_child(_box(Vector3(0.44, 0.58, 0.26), Vector3(0.0, 1.11, 0.0), shirt_mat))
 
 	# Arms & Hands
@@ -115,12 +124,10 @@ static func _add_base_humanoid(
 	root.add_child(_cylinder(0.06, 0.10, Vector3(0.0, 1.45, 0.0), skin_mat))
 	root.add_child(_sphere(0.19, Vector3(0.0, 1.61, 0.0), skin_mat))
 
-	# Eyes
+	# Eyes (Placed outside head sphere surface to prevent Z-fighting)
 	var eye_mat = _mat(Color(0.15, 0.15, 0.18), 0.3)
-	root.add_child(_sphere(0.03, Vector3(-0.07, 1.63, 0.17), eye_mat))
-	root.add_child(_sphere(0.03, Vector3(0.07, 1.63, 0.17), eye_mat))
-
-# --- Character Specific Models ---
+	root.add_child(_sphere(0.035, Vector3(-0.07, 1.63, 0.195), eye_mat))
+	root.add_child(_sphere(0.035, Vector3(0.07, 1.63, 0.195), eye_mat))
 
 static func _build_player(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.92, 0.76, 0.65))
@@ -133,18 +140,18 @@ static func _build_player(root: Node3D) -> void:
 
 	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 
-	# Open Teal Jacket
-	root.add_child(_box(Vector3(0.20, 0.58, 0.28), Vector3(-0.14, 1.11, 0.01), jacket_mat))
-	root.add_child(_box(Vector3(0.20, 0.58, 0.28), Vector3(0.14, 1.11, 0.01), jacket_mat))
+	# Open Teal Jacket (depth 0.30 -> front Z=0.15, back Z=-0.15, no Z-fighting with torso)
+	root.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(-0.13, 1.11, 0.0), jacket_mat))
+	root.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(0.13, 1.11, 0.0), jacket_mat))
 
-	# Backpack
-	root.add_child(_box(Vector3(0.34, 0.42, 0.16), Vector3(0.0, 1.14, -0.18), backpack_mat))
-	root.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(-0.14, 1.14, 0.10), backpack_mat))
-	root.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(0.14, 1.14, 0.10), backpack_mat))
+	# Backpack (pos Z=-0.23, depth 0.16 -> Z range [-0.31, -0.15], clear of torso back at -0.13)
+	root.add_child(_box(Vector3(0.34, 0.42, 0.16), Vector3(0.0, 1.14, -0.23), backpack_mat))
+	root.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(-0.14, 1.14, 0.15), backpack_mat))
+	root.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(0.14, 1.14, 0.15), backpack_mat))
 
 	# Hair (Messy stylish swoop)
 	root.add_child(_sphere(0.21, Vector3(0.0, 1.66, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.22, 0.08, 0.14), Vector3(0.04, 1.76, 0.08), hair_mat, Vector3(0, 0, -15)))
+	root.add_child(_box(Vector3(0.22, 0.08, 0.14), Vector3(0.04, 1.77, 0.09), hair_mat, Vector3(0, 0, -15)))
 
 static func _build_prof_adler(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.88, 0.74, 0.64))
@@ -157,17 +164,17 @@ static func _build_prof_adler(root: Node3D) -> void:
 
 	_add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
 
-	# Vest & Tie
-	root.add_child(_box(Vector3(0.24, 0.54, 0.27), Vector3(0.0, 1.11, 0.01), suit_mat))
-	root.add_child(_box(Vector3(0.08, 0.40, 0.28), Vector3(0.0, 1.15, 0.01), tie_mat))
+	# Vest & Tie (Layered depth: vest 0.29, tie 0.32)
+	root.add_child(_box(Vector3(0.26, 0.54, 0.29), Vector3(0.0, 1.11, 0.0), suit_mat))
+	root.add_child(_box(Vector3(0.08, 0.40, 0.32), Vector3(0.0, 1.15, 0.0), tie_mat))
 
 	# Combed Silver Hair
-	root.add_child(_box(Vector3(0.38, 0.14, 0.38), Vector3(0.0, 1.72, -0.02), hair_mat))
+	root.add_child(_box(Vector3(0.38, 0.14, 0.38), Vector3(0.0, 1.73, -0.02), hair_mat))
 
-	# Glasses
-	root.add_child(_box(Vector3(0.12, 0.05, 0.02), Vector3(-0.07, 1.64, 0.19), glass_mat))
-	root.add_child(_box(Vector3(0.12, 0.05, 0.02), Vector3(0.07, 1.64, 0.19), glass_mat))
-	root.add_child(_box(Vector3(0.06, 0.02, 0.02), Vector3(0.0, 1.64, 0.19), glass_mat))
+	# Glasses (Placed at Z = 0.23 outside eyes)
+	root.add_child(_box(Vector3(0.12, 0.05, 0.02), Vector3(-0.07, 1.64, 0.23), glass_mat))
+	root.add_child(_box(Vector3(0.12, 0.05, 0.02), Vector3(0.07, 1.64, 0.23), glass_mat))
+	root.add_child(_box(Vector3(0.06, 0.02, 0.02), Vector3(0.0, 1.64, 0.23), glass_mat))
 
 static func _build_daria(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.94, 0.78, 0.68))
@@ -180,12 +187,12 @@ static func _build_daria(root: Node3D) -> void:
 	_add_base_humanoid(root, skin_mat, sweater_mat, pants_mat, boots_mat)
 
 	# Scarf
-	root.add_child(_torus(0.12, 0.05, Vector3(0.0, 1.42, 0.0), scarf_mat))
+	root.add_child(_torus(0.13, 0.05, Vector3(0.0, 1.42, 0.0), scarf_mat))
 
 	# Auburn Bob Hair
-	root.add_child(_sphere(0.22, Vector3(0.0, 1.65, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(-0.16, 1.56, 0.04), hair_mat))
-	root.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(0.16, 1.56, 0.04), hair_mat))
+	root.add_child(_sphere(0.225, Vector3(0.0, 1.65, -0.02), hair_mat))
+	root.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(-0.18, 1.56, 0.04), hair_mat))
+	root.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(0.18, 1.56, 0.04), hair_mat))
 
 static func _build_ms_hartwell(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.90, 0.75, 0.66))
@@ -196,12 +203,12 @@ static func _build_ms_hartwell(root: Node3D) -> void:
 
 	_add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
 
-	# Emerald Collar / V-neck
-	root.add_child(_box(Vector3(0.14, 0.32, 0.27), Vector3(0.0, 1.20, 0.01), blouse_mat))
+	# Emerald Collar / V-neck (depth 0.29 vs torso 0.26)
+	root.add_child(_box(Vector3(0.16, 0.32, 0.29), Vector3(0.0, 1.20, 0.0), blouse_mat))
 
 	# High Bun Hair
 	root.add_child(_sphere(0.20, Vector3(0.0, 1.64, -0.02), hair_mat))
-	root.add_child(_sphere(0.09, Vector3(0.0, 1.82, -0.08), hair_mat))
+	root.add_child(_sphere(0.09, Vector3(0.0, 1.83, -0.08), hair_mat))
 
 static func _build_barista(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.86, 0.70, 0.58))
@@ -213,13 +220,13 @@ static func _build_barista(root: Node3D) -> void:
 
 	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 
-	# Apron front & bib
-	root.add_child(_box(Vector3(0.36, 0.48, 0.28), Vector3(0.0, 1.05, 0.01), apron_mat))
-	root.add_child(_box(Vector3(0.38, 0.40, 0.26), Vector3(0.0, 0.65, 0.01), apron_mat))
+	# Apron front & bib (depth 0.30 vs torso 0.26)
+	root.add_child(_box(Vector3(0.36, 0.48, 0.30), Vector3(0.0, 1.05, 0.0), apron_mat))
+	root.add_child(_box(Vector3(0.38, 0.40, 0.28), Vector3(0.0, 0.65, 0.0), apron_mat))
 
 	# Barista Cap with visor
 	root.add_child(_sphere(0.21, Vector3(0.0, 1.68, 0.0), cap_mat))
-	root.add_child(_box(Vector3(0.26, 0.03, 0.12), Vector3(0.0, 1.68, 0.20), cap_mat, Vector3(10, 0, 0)))
+	root.add_child(_box(Vector3(0.26, 0.03, 0.12), Vector3(0.0, 1.69, 0.21), cap_mat, Vector3(10, 0, 0)))
 
 static func _build_ms_okoro(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.62, 0.42, 0.28))
@@ -232,15 +239,15 @@ static func _build_ms_okoro(root: Node3D) -> void:
 
 	_add_base_humanoid(root, skin_mat, cardigan_mat, skirt_mat, shoes_mat)
 
-	# Blouse inner
-	root.add_child(_box(Vector3(0.16, 0.44, 0.27), Vector3(0.0, 1.12, 0.01), blouse_mat))
+	# Blouse inner (depth 0.29)
+	root.add_child(_box(Vector3(0.18, 0.44, 0.29), Vector3(0.0, 1.12, 0.0), blouse_mat))
 
 	# Voluminous Curly Hair
-	root.add_child(_sphere(0.25, Vector3(0.0, 1.66, -0.04), hair_mat))
+	root.add_child(_sphere(0.26, Vector3(0.0, 1.66, -0.04), hair_mat))
 
-	# Tortoiseshell Glasses
-	root.add_child(_sphere(0.06, Vector3(-0.07, 1.64, 0.18), glass_mat))
-	root.add_child(_sphere(0.06, Vector3(0.07, 1.64, 0.18), glass_mat))
+	# Tortoiseshell Glasses (Z = 0.22)
+	root.add_child(_sphere(0.06, Vector3(-0.07, 1.64, 0.22), glass_mat))
+	root.add_child(_sphere(0.06, Vector3(0.07, 1.64, 0.22), glass_mat))
 
 static func _build_mr_vance(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.92, 0.77, 0.67))
@@ -253,9 +260,9 @@ static func _build_mr_vance(root: Node3D) -> void:
 
 	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 
-	# Navy Vest & Tie
-	root.add_child(_box(Vector3(0.42, 0.52, 0.27), Vector3(0.0, 1.08, 0.01), vest_mat))
-	root.add_child(_box(Vector3(0.07, 0.42, 0.28), Vector3(0.0, 1.14, 0.01), tie_mat))
+	# Navy Vest & Tie (Vest depth 0.29, tie depth 0.32)
+	root.add_child(_box(Vector3(0.44, 0.52, 0.29), Vector3(0.0, 1.08, 0.0), vest_mat))
+	root.add_child(_box(Vector3(0.07, 0.42, 0.32), Vector3(0.0, 1.14, 0.0), tie_mat))
 
 	# Short neat hair
 	root.add_child(_sphere(0.20, Vector3(0.0, 1.65, -0.02), hair_mat))
@@ -270,8 +277,8 @@ static func _build_felix(root: Node3D) -> void:
 	_add_base_humanoid(root, skin_mat, hoodie_mat, pants_mat, sneakers_mat)
 
 	# Hoodie pocket & hood fold
-	root.add_child(_box(Vector3(0.30, 0.20, 0.28), Vector3(0.0, 0.95, 0.01), hoodie_mat))
-	root.add_child(_torus(0.12, 0.05, Vector3(0.0, 1.40, -0.08), hoodie_mat))
+	root.add_child(_box(Vector3(0.32, 0.20, 0.30), Vector3(0.0, 0.95, 0.0), hoodie_mat))
+	root.add_child(_torus(0.13, 0.05, Vector3(0.0, 1.40, -0.09), hoodie_mat))
 
 	# Beanie
 	root.add_child(_sphere(0.21, Vector3(0.0, 1.68, 0.0), beanie_mat))
@@ -287,8 +294,8 @@ static func _build_priya(root: Node3D) -> void:
 
 	_add_base_humanoid(root, skin_mat, jacket_mat, pants_mat, boots_mat)
 
-	root.add_child(_box(Vector3(0.16, 0.45, 0.27), Vector3(0.0, 1.12, 0.01), top_mat))
-	root.add_child(_torus(0.11, 0.04, Vector3(0.0, 1.42, 0.0), scarf_mat))
+	root.add_child(_box(Vector3(0.18, 0.45, 0.29), Vector3(0.0, 1.12, 0.0), top_mat))
+	root.add_child(_torus(0.12, 0.04, Vector3(0.0, 1.42, 0.0), scarf_mat))
 
 	# Ponytail
 	root.add_child(_sphere(0.20, Vector3(0.0, 1.63, -0.02), hair_mat))
@@ -303,10 +310,10 @@ static func _build_nadia(root: Node3D) -> void:
 
 	_add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
 
-	root.add_child(_box(Vector3(0.16, 0.44, 0.27), Vector3(0.0, 1.12, 0.01), top_mat))
+	root.add_child(_box(Vector3(0.18, 0.44, 0.29), Vector3(0.0, 1.12, 0.0), top_mat))
 	root.add_child(_sphere(0.21, Vector3(0.0, 1.64, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.08, 0.45, 0.16), Vector3(-0.16, 1.45, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.08, 0.45, 0.16), Vector3(0.16, 1.45, -0.02), hair_mat))
+	root.add_child(_box(Vector3(0.08, 0.45, 0.16), Vector3(-0.17, 1.45, -0.02), hair_mat))
+	root.add_child(_box(Vector3(0.08, 0.45, 0.16), Vector3(0.17, 1.45, -0.02), hair_mat))
 
 static func _build_tomas(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.88, 0.72, 0.60))
@@ -319,7 +326,7 @@ static func _build_tomas(root: Node3D) -> void:
 	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 
 	# Belt
-	root.add_child(_box(Vector3(0.42, 0.06, 0.25), Vector3(0.0, 0.81, 0.0), belt_mat))
+	root.add_child(_box(Vector3(0.44, 0.06, 0.28), Vector3(0.0, 0.81, 0.0), belt_mat))
 	root.add_child(_sphere(0.19, Vector3(0.0, 1.64, -0.02), hair_mat))
 
 static func _build_seren(root: Node3D) -> void:
@@ -334,12 +341,12 @@ static func _build_seren(root: Node3D) -> void:
 	_add_base_humanoid(root, skin_mat, coat_mat, pants_mat, boots_mat)
 
 	# Inner turtleneck
-	root.add_child(_box(Vector3(0.18, 0.46, 0.27), Vector3(0.0, 1.14, 0.01), inner_mat))
+	root.add_child(_box(Vector3(0.20, 0.46, 0.29), Vector3(0.0, 1.14, 0.0), inner_mat))
 
 	# Hair & Glasses
 	root.add_child(_sphere(0.21, Vector3(0.0, 1.65, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.10, 0.04, 0.02), Vector3(-0.06, 1.64, 0.19), glass_mat))
-	root.add_child(_box(Vector3(0.10, 0.04, 0.02), Vector3(0.06, 1.64, 0.19), glass_mat))
+	root.add_child(_box(Vector3(0.10, 0.04, 0.02), Vector3(-0.06, 1.64, 0.23), glass_mat))
+	root.add_child(_box(Vector3(0.10, 0.04, 0.02), Vector3(0.06, 1.64, 0.23), glass_mat))
 
 static func _build_sibling(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.94, 0.78, 0.68))
@@ -372,11 +379,11 @@ static func _build_stranger(root: Node3D) -> void:
 	_add_base_humanoid(root, skin_mat, coat_mat, coat_mat, boots_mat)
 
 	# Overcoat length
-	root.add_child(_box(Vector3(0.46, 0.50, 0.28), Vector3(0.0, 0.65, 0.0), coat_mat))
+	root.add_child(_box(Vector3(0.48, 0.50, 0.30), Vector3(0.0, 0.65, 0.0), coat_mat))
 
 	# Fedora Hat
-	root.add_child(_cylinder(0.28, 0.04, Vector3(0.0, 1.70, 0.0), hat_mat))
-	root.add_child(_cylinder(0.18, 0.16, Vector3(0.0, 1.80, 0.0), hat_mat))
+	root.add_child(_cylinder(0.30, 0.04, Vector3(0.0, 1.73, 0.0), hat_mat))
+	root.add_child(_cylinder(0.19, 0.16, Vector3(0.0, 1.83, 0.0), hat_mat))
 
 static func _build_generic(root: Node3D, character_id: String) -> void:
 	var skin_mat = _mat(Color(0.88, 0.74, 0.64))
@@ -387,13 +394,3 @@ static func _build_generic(root: Node3D, character_id: String) -> void:
 
 	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 	root.add_child(_sphere(0.20, Vector3(0.0, 1.64, -0.02), hair_mat))
-
-static func _torus(outer_r: float, inner_r: float, pos: Vector3, mat: Material) -> MeshInstance3D:
-	var mi = MeshInstance3D.new()
-	var torus = TorusMesh.new()
-	torus.outer_radius = outer_r
-	torus.inner_radius = outer_r - inner_r
-	mi.mesh = torus
-	mi.position = pos
-	mi.material_override = mat
-	return mi
