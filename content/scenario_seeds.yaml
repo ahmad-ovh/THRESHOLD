@@ -508,7 +508,7 @@ seeds:
 
   - id: ordering_under_pressure
     title: "Rush Order"
-    compatible_roles: [stranger]
+    compatible_roles: [barista]
     category: everyday_social
     tier: 1
     npc_context:
@@ -534,7 +534,7 @@ seeds:
 
   - id: stranger_spills_something
     title: "Small Collision"
-    compatible_roles: [stranger]
+    compatible_roles: [recurring_stranger]
     category: everyday_social
     tier: 1
     npc_context:
@@ -726,7 +726,7 @@ seeds:
 
   - id: recurring_stranger_remembers_you
     title: "I've Seen You Here Before"
-    compatible_roles: [stranger]
+    compatible_roles: [recurring_stranger]
     category: everyday_social
     tier: 2
     npc_context:

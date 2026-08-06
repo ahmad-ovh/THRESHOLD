@@ -208,7 +208,7 @@ class ContentRegistry:
                 continue
             for role in seed.compatible_roles:
                 templates_for_role = [
-                    t for t in self._templates.values() if t.archetype_role == role
+                    t for t in self._templates.values() if t.archetype_role == role or t.id == role
                 ]
                 for template in templates_for_role:
                     for metric_key in seed.npc_context_metric_overrides:
@@ -236,6 +236,13 @@ class ContentRegistry:
         return list(self._seeds.values())
 
     def seeds_for_role(self, archetype_role: str) -> list[ScenarioSeed]:
+        return [s for s in self._seeds.values() if archetype_role in s.compatible_roles]
+
+    def seeds_for_npc(self, npc_id: str | None, archetype_role: str) -> list[ScenarioSeed]:
+        if npc_id:
+            npc_seeds = [s for s in self._seeds.values() if npc_id in s.compatible_roles]
+            if npc_seeds:
+                return npc_seeds
         return [s for s in self._seeds.values() if archetype_role in s.compatible_roles]
 
     def distribution_bands(self) -> list[DistributionBand]:

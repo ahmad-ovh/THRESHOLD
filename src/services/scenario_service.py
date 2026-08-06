@@ -40,24 +40,25 @@ def select_seed(
     archetype_role: str,
     player_level: int,
     excluded_seed_ids: list[str] | None = None,
+    npc_id: str | None = None,
 ) -> ScenarioSeed:
     """
     Weighted seed selection (Section 6.2 steps 1–6).
 
-    1. Read archetype_role.
+    1. Read archetype_role & optional npc_id.
     2. Determine distribution_band from player level.
     3. Weighted-random pick a category.
-    4. Filter seeds: compatible_roles contains role AND category matches.
+    4. Filter seeds: compatible_roles contains npc_id/role AND category matches.
     5. Fall back to nearest available category if pool is empty.
     6. Exclude already-used seed_ids; pick randomly from what remains.
     """
     excluded = set(excluded_seed_ids or [])
 
     weights = _get_distribution_band(player_level)
-    all_role_seeds = registry.seeds_for_role(archetype_role)
+    all_role_seeds = registry.seeds_for_npc(npc_id=npc_id, archetype_role=archetype_role)
 
     if not all_role_seeds:
-        raise ValueError(f"No seeds found for archetype_role='{archetype_role}'")
+        raise ValueError(f"No seeds found for npc_id='{npc_id}', archetype_role='{archetype_role}'")
 
     # Step 3–4: try weighted category pick
     available_categories = {s.category for s in all_role_seeds}

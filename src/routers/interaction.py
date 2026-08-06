@@ -134,6 +134,7 @@ async def start_interaction(
     seed = scenario_service.select_seed(
         archetype_role=template.archetype_role,
         player_level=player.level,
+        npc_id=body.npc_id,
     )
 
     # Effective starting metrics (Section 6.3)
