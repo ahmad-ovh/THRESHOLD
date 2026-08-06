@@ -77,24 +77,20 @@ def calculate_presentation_mode(
     context = seed_context or {}
     requires_context = context.get("requires_context", False) or is_major_event
 
-    # 1. Base Default by Relationship Tier
+    # 1. Base Default by Relationship Tier (Always show modal by default for clear player context)
     if tier in FIRST_MEETING_TIERS:
         base_mode = "full"
         show_modal = True
-    elif tier in EARLY_RELATIONSHIP_TIERS:
+    else:
+        # Early, Established, or Close Relationships: compact perception card
         base_mode = "compact"
         show_modal = True
-    else:  # Established / Close (Index 2+)
-        base_mode = "minimal"
-        show_modal = False
 
     # 2. Overrides
     if requires_context or is_major_event:
         return "full", True
     if has_relationship_changed:
         return "full", True
-    if has_new_location and base_mode == "minimal":
-        return "compact", True
 
     return base_mode, show_modal
 

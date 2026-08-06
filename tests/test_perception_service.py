@@ -90,8 +90,8 @@ def test_calculate_presentation_mode_acquaintance():
 
 def test_calculate_presentation_mode_friend():
     mode, show_modal = perception_service.calculate_presentation_mode(relationship_tier="Friend")
-    assert mode == "minimal"
-    assert show_modal is False
+    assert mode == "compact"
+    assert show_modal is True
 
 
 def test_calculate_presentation_mode_friend_major_event_override():
