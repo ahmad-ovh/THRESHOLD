@@ -34,299 +34,69 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.85, 0.94, 0.98, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+custom_minimum_size = Vector2(420, 0)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -220.0
+offset_right = 210.0
+offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 24
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 32
-
-[node name="LeftPanel" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(360, 0)
-layout_mode = 2
 theme_override_constants/separation = 12
-alignment = 1
 
-[node name="TitleLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/LeftPanel"]
+[node name="TitleLabel" type="Label" parent="Control/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 36
 text = "THRESHOLD"
 horizontal_alignment = 1
 
-[node name="SubtitleLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/LeftPanel"]
+[node name="SubtitleLabel" type="Label" parent="Control/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.4, 0.35, 0.28, 1)
 theme_override_font_sizes/font_size = 15
 text = "Social Communication Simulation"
 horizontal_alignment = 1
 
-[node name="UsernameInput" type="LineEdit" parent="Control/MarginContainer/HBoxContainer/LeftPanel"]
+[node name="UsernameInput" type="LineEdit" parent="Control/VBoxContainer"]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 placeholder_text = "Enter Player ID..."
 
-[node name="DailyCard" type="PanelContainer" parent="Control/MarginContainer/HBoxContainer/LeftPanel"]
+[node name="DailyCard" type="PanelContainer" parent="Control/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_daily_orange")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/LeftPanel/DailyCard"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/DailyCard"]
 layout_mode = 2
 
-[node name="DailyHeader" type="Label" parent="Control/MarginContainer/HBoxContainer/LeftPanel/DailyCard/VBoxContainer"]
+[node name="DailyHeader" type="Label" parent="Control/VBoxContainer/DailyCard/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.45, 0.1, 1)
 theme_override_font_sizes/font_size = 16
 text = "Daily Featured Scenario"
 
-[node name="DailyDetails" type="RichTextLabel" parent="Control/MarginContainer/HBoxContainer/LeftPanel/DailyCard/VBoxContainer"]
+[node name="DailyDetails" type="RichTextLabel" parent="Control/VBoxContainer/DailyCard/VBoxContainer"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.25, 0.22, 0.18, 1)
 bbcode_enabled = true
 text = "Loading daily scenario..."
 
-[node name="StartButton" type="Button" parent="Control/MarginContainer/HBoxContainer/LeftPanel"]
+[node name="CustomizeButton" type="Button" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Customize Character"
+
+[node name="StartButton" type="Button" parent="Control/VBoxContainer"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Start Game"
-
-[node name="RightPanel" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 24
-
-[node name="ViewportCard" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel"]
-custom_minimum_size = Vector2(320, 0)
-layout_mode = 2
-alignment = 1
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ViewportCard"]
-custom_minimum_size = Vector2(320, 400)
-layout_mode = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="Control/MarginContainer/HBoxContainer/RightPanel/ViewportCard/SubViewportContainer"]
-handle_input_locally = false
-size = Vector2i(320, 400)
-render_target_update_mode = 3
-
-[node name="PreviewWorld" type="Node3D" parent="Control/MarginContainer/HBoxContainer/RightPanel/ViewportCard/SubViewportContainer/SubViewport"]
-
-[node name="PreviewCamera" type="Camera3D" parent="Control/MarginContainer/HBoxContainer/RightPanel/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.52, 1.15)
-current = true
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/MarginContainer/HBoxContainer/RightPanel/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
-transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2, 4, 3)
-
-[node name="ModelPivot" type="Node3D" parent="Control/MarginContainer/HBoxContainer/RightPanel/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
-
-[node name="RotateHint" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ViewportCard"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
-theme_override_font_sizes/font_size = 12
-text = "Character Preview (Auto Turntable)"
-horizontal_alignment = 1
-
-[node name="ControlsCard" type="ScrollContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="ControlsList" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 10
-
-[node name="CustomHeader" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.15, 0.45, 0.2, 1)
-theme_override_font_sizes/font_size = 20
-text = "Character Customization"
-
-[node name="SkinRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/SkinRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Skin Color:"
-
-[node name="SkinPicker" type="ColorPickerButton" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/SkinRow"]
-custom_minimum_size = Vector2(60, 30)
-layout_mode = 2
-color = Color(0.92, 0.76, 0.65, 1)
-
-[node name="HairRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Hair Style:"
-
-[node name="HairPrevBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = "<"
-
-[node name="HairStyleLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-text = "Short (1/8)"
-horizontal_alignment = 1
-
-[node name="HairNextBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = ">"
-
-[node name="HairPicker" type="ColorPickerButton" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(40, 30)
-layout_mode = 2
-color = Color(0.24, 0.16, 0.1, 1)
-
-[node name="EyeRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Eye Style:"
-
-[node name="EyePrevBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = "<"
-
-[node name="EyeStyleLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-text = "Eye 01 (1/60)"
-horizontal_alignment = 1
-
-[node name="EyeNextBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = ">"
-
-[node name="IrisRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/IrisRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Iris Color:"
-
-[node name="IrisPicker" type="ColorPickerButton" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/IrisRow"]
-custom_minimum_size = Vector2(60, 30)
-layout_mode = 2
-color = Color(0.18, 0.55, 0.85, 1)
-
-[node name="PupilRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/PupilRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Pupil Color:"
-
-[node name="PupilPicker" type="ColorPickerButton" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/PupilRow"]
-custom_minimum_size = Vector2(60, 30)
-layout_mode = 2
-color = Color(0.1, 0.1, 0.1, 1)
-
-[node name="ScleraRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/ScleraRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Sclera Color:"
-
-[node name="ScleraPicker" type="ColorPickerButton" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/ScleraRow"]
-custom_minimum_size = Vector2(60, 30)
-layout_mode = 2
-color = Color(1, 1, 1, 1)
-
-[node name="NoseRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Nose Style:"
-
-[node name="NosePrevBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = "<"
-
-[node name="NoseStyleLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-text = "Nose 01 (1/18)"
-horizontal_alignment = 1
-
-[node name="NoseNextBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = ">"
-
-[node name="MouthRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Mouth Style:"
-
-[node name="MouthPrevBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = "<"
-
-[node name="MouthStyleLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-text = "Mouth 01 (1/36)"
-horizontal_alignment = 1
-
-[node name="MouthNextBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = ">"
-
-[node name="AccRow" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Accessory:"
-
-[node name="AccPrevBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = "<"
-
-[node name="AccStyleLabel" type="Label" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-text = "None (1/5)"
-horizontal_alignment = 1
-
-[node name="AccNextBtn" type="Button" parent="Control/MarginContainer/HBoxContainer/RightPanel/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(32, 30)
-layout_mode = 2
-text = ">"
