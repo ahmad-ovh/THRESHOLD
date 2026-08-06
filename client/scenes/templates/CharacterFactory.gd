@@ -533,7 +533,7 @@ static func _build_stranger(root: Node3D) -> void:
 	rig.head_pivot.add_child(_cylinder(0.30, 0.04, Vector3(0.0, 0.28, 0.0), hat_mat))
 	rig.head_pivot.add_child(_cylinder(0.19, 0.16, Vector3(0.0, 0.38, 0.0), hat_mat))
 
-static func _build_generic(root: Node3D, character_id: String) -> void:
+static func _build_generic(root: Node3D, _character_id: String) -> void:
 	var skin_mat = _mat(Color(0.88, 0.74, 0.64))
 	var shirt_mat = _mat(Color(0.45, 0.50, 0.55))
 	var pants_mat = _mat(Color(0.25, 0.28, 0.32))

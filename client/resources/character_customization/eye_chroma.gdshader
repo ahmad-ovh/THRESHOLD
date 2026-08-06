@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_mix, depth_draw_alpha_prepass, cull_disabled, unshaded;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, unshaded;
 
 uniform sampler2D eye_texture : source_color, filter_linear_mipmap;
 uniform vec4 sclera_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
