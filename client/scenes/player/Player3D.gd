@@ -23,6 +23,14 @@ var current_target: Node3D = null
 var default_spring_length: float = 0.0
 var dialogue_spring_length: float = 0.0
 
+var anim_left_leg: Node3D
+var anim_right_leg: Node3D
+var anim_left_arm: Node3D
+var anim_right_arm: Node3D
+var anim_body: Node3D
+var anim_head: Node3D
+var walk_anim_time: float = 0.0
+
 func _ready() -> void:
 	add_to_group("player")
 	interaction_detector.area_entered.connect(_on_area_entered)
@@ -36,6 +44,12 @@ func _setup_player_mesh() -> void:
 			child.queue_free()
 		var player_model = CharacterFactory.create_character_mesh("player")
 		character_mesh.add_child(player_model)
+		anim_left_leg = player_model.find_child("LeftLegPivot", true, false)
+		anim_right_leg = player_model.find_child("RightLegPivot", true, false)
+		anim_left_arm = player_model.find_child("LeftArmPivot", true, false)
+		anim_right_arm = player_model.find_child("RightArmPivot", true, false)
+		anim_body = player_model.find_child("BodyPivot", true, false)
+		anim_head = player_model.find_child("HeadPivot", true, false)
 
 func _setup_dollhouse_camera() -> void:
 	if spring_arm:
@@ -71,7 +85,47 @@ func _physics_process(delta: float) -> void:
 	else:
 		_apply_friction(delta)
 
+	_update_procedural_animations(delta, can_move)
 	move_and_slide()
+
+func _update_procedural_animations(delta: float, can_move: bool) -> void:
+	var horiz_vel = Vector3(velocity.x, 0, velocity.z)
+	var speed = horiz_vel.length()
+
+	if can_move and speed > 0.1:
+		walk_anim_time += delta * speed * 3.2
+		var stride = sin(walk_anim_time)
+		var arm_stride = cos(walk_anim_time)
+
+		if anim_left_leg:
+			anim_left_leg.rotation.x = stride * deg_to_rad(28.0)
+		if anim_right_leg:
+			anim_right_leg.rotation.x = -stride * deg_to_rad(28.0)
+
+		if anim_left_arm:
+			anim_left_arm.rotation.x = -arm_stride * deg_to_rad(22.0)
+		if anim_right_arm:
+			anim_right_arm.rotation.x = arm_stride * deg_to_rad(22.0)
+
+		if anim_body:
+			anim_body.position.y = 0.76 + abs(sin(walk_anim_time * 2.0)) * 0.035
+	else:
+		walk_anim_time += delta * 2.5
+		var breath = sin(walk_anim_time) * 0.015
+
+		if anim_left_leg:
+			anim_left_leg.rotation.x = lerp_angle(anim_left_leg.rotation.x, 0.0, 10.0 * delta)
+		if anim_right_leg:
+			anim_right_leg.rotation.x = lerp_angle(anim_right_leg.rotation.x, 0.0, 10.0 * delta)
+		if anim_left_arm:
+			anim_left_arm.rotation.x = lerp_angle(anim_left_arm.rotation.x, 0.0, 10.0 * delta)
+		if anim_right_arm:
+			anim_right_arm.rotation.x = lerp_angle(anim_right_arm.rotation.x, 0.0, 10.0 * delta)
+
+		if anim_body:
+			anim_body.position.y = lerp(anim_body.position.y, 0.76 + breath, 8.0 * delta)
+		if anim_head:
+			anim_head.rotation.z = lerp_angle(anim_head.rotation.z, sin(walk_anim_time * 0.5) * deg_to_rad(1.5), 5.0 * delta)
 
 func _update_dollhouse_camera(delta: float, can_move: bool) -> void:
 	if not camera_pivot:

@@ -25,6 +25,11 @@ extends CharacterBody3D
 @onready var ground_ring: MeshInstance3D = $GroundRing
 
 var active_data: NPCData
+var anim_body: Node3D
+var anim_head: Node3D
+var anim_left_arm: Node3D
+var anim_right_arm: Node3D
+var idle_anim_time: float = 0.0
 
 func _ready() -> void:
 	add_to_group("npcs")
@@ -38,17 +43,70 @@ func _setup_visuals() -> void:
 	for child in mesh_container.get_children():
 		child.queue_free()
 
+	var model: Node3D
 	if active_data and active_data.mesh_scene:
-		mesh_container.add_child(active_data.mesh_scene.instantiate())
+		model = active_data.mesh_scene.instantiate()
 	else:
-		var model = CharacterFactory.create_character_mesh(npc_id)
-		mesh_container.add_child(model)
+		model = CharacterFactory.create_character_mesh(npc_id)
+	mesh_container.add_child(model)
+
+	anim_body = model.find_child("BodyPivot", true, false)
+	anim_head = model.find_child("HeadPivot", true, false)
+	anim_left_arm = model.find_child("LeftArmPivot", true, false)
+	anim_right_arm = model.find_child("RightArmPivot", true, false)
+	idle_anim_time = float(hash(npc_id) % 100)
 
 	var name_str = active_data.display_name if active_data else npc_id.capitalize()
 	prompt_label.text = "Press [E] to talk to " + name_str
 	prompt_label.visible = false
 	if active_data:
 		set_mood_emoji(active_data.default_expression)
+
+func _process(delta: float) -> void:
+	idle_anim_time += delta * 2.0
+	_update_idle_animation(delta)
+
+func _update_idle_animation(delta: float) -> void:
+	if not anim_body:
+		return
+
+	match npc_id:
+		"prof_adler":
+			var breath = sin(idle_anim_time * 1.2) * 0.008
+			anim_body.position.y = 0.76 + breath
+			if anim_head:
+				anim_head.rotation.x = sin(idle_anim_time * 0.4) * deg_to_rad(2.0)
+				anim_head.rotation.y = cos(idle_anim_time * 0.3) * deg_to_rad(3.0)
+
+		"daria":
+			var breath = sin(idle_anim_time * 1.8) * 0.012
+			anim_body.position.y = 0.76 + breath
+			if anim_head:
+				anim_head.rotation.z = sin(idle_anim_time * 0.8) * deg_to_rad(3.5)
+
+		"barista":
+			var breath = sin(idle_anim_time * 2.4) * 0.015
+			anim_body.position.y = 0.76 + breath
+			if anim_left_arm:
+				anim_left_arm.rotation.x = sin(idle_anim_time * 1.2) * deg_to_rad(5.0)
+
+		"ms_hartwell":
+			var breath = sin(idle_anim_time * 1.0) * 0.006
+			anim_body.position.y = 0.76 + breath
+			if anim_head:
+				anim_head.rotation.y = sin(idle_anim_time * 0.5) * deg_to_rad(4.0)
+
+		"felix":
+			var breath = sin(idle_anim_time * 2.8) * 0.018
+			anim_body.position.y = 0.76 + breath
+			if anim_head:
+				anim_head.rotation.x = sin(idle_anim_time * 1.4) * deg_to_rad(4.0)
+
+		_:
+			var breath = sin(idle_anim_time * 1.5) * 0.010
+			anim_body.position.y = 0.76 + breath
+			if anim_head:
+				anim_head.rotation.z = sin(idle_anim_time * 0.6) * deg_to_rad(2.0)
 
 func set_mood_emoji(expression: String) -> void:
 	if active_data and active_data.mood_emojis.has(expression):

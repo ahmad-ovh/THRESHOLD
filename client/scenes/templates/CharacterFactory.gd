@@ -93,41 +93,79 @@ static func create_character_mesh(character_id: String) -> Node3D:
 
 	return root
 
+# --- Articulated Humanoid Rig Assembly ---
 static func _add_base_humanoid(
 	root: Node3D,
 	skin_mat: Material,
 	shirt_mat: Material,
 	pants_mat: Material,
 	shoes_mat: Material
-) -> void:
-	# Feet / Shoes
-	root.add_child(_box(Vector3(0.14, 0.12, 0.24), Vector3(-0.15, 0.06, 0.03), shoes_mat))
-	root.add_child(_box(Vector3(0.14, 0.12, 0.24), Vector3(0.15, 0.06, 0.03), shoes_mat))
+) -> Dictionary:
+	# 1. Left & Right Leg Pivots (at Hips Y=0.72)
+	var left_leg_pivot = Node3D.new()
+	left_leg_pivot.name = "LeftLegPivot"
+	left_leg_pivot.position = Vector3(-0.15, 0.72, 0.0)
+	root.add_child(left_leg_pivot)
+	left_leg_pivot.add_child(_cylinder(0.08, 0.60, Vector3(0.0, -0.30, 0.0), pants_mat))
+	left_leg_pivot.add_child(_box(Vector3(0.14, 0.12, 0.24), Vector3(0.0, -0.66, 0.03), shoes_mat))
 
-	# Legs
-	root.add_child(_cylinder(0.08, 0.60, Vector3(-0.15, 0.42, 0.0), pants_mat))
-	root.add_child(_cylinder(0.08, 0.60, Vector3(0.15, 0.42, 0.0), pants_mat))
+	var right_leg_pivot = Node3D.new()
+	right_leg_pivot.name = "RightLegPivot"
+	right_leg_pivot.position = Vector3(0.15, 0.72, 0.0)
+	root.add_child(right_leg_pivot)
+	right_leg_pivot.add_child(_cylinder(0.08, 0.60, Vector3(0.0, -0.30, 0.0), pants_mat))
+	right_leg_pivot.add_child(_box(Vector3(0.14, 0.12, 0.24), Vector3(0.0, -0.66, 0.03), shoes_mat))
+
+	# 2. Body Pivot (at Waist Y=0.76)
+	var body_pivot = Node3D.new()
+	body_pivot.name = "BodyPivot"
+	body_pivot.position = Vector3(0.0, 0.76, 0.0)
+	root.add_child(body_pivot)
 
 	# Pelvis
-	root.add_child(_box(Vector3(0.40, 0.12, 0.24), Vector3(0.0, 0.76, 0.0), pants_mat))
+	body_pivot.add_child(_box(Vector3(0.40, 0.12, 0.24), Vector3(0.0, 0.0, 0.0), pants_mat))
+	# Torso
+	body_pivot.add_child(_box(Vector3(0.44, 0.58, 0.26), Vector3(0.0, 0.35, 0.0), shirt_mat))
 
-	# Torso (depth 0.26 -> front at Z = +0.13, back at Z = -0.13)
-	root.add_child(_box(Vector3(0.44, 0.58, 0.26), Vector3(0.0, 1.11, 0.0), shirt_mat))
+	# 3. Arm Pivots (at Shoulders Y=1.30 -> BodyPivot relative Y=0.54)
+	var left_arm_pivot = Node3D.new()
+	left_arm_pivot.name = "LeftArmPivot"
+	left_arm_pivot.position = Vector3(-0.27, 0.54, 0.0)
+	body_pivot.add_child(left_arm_pivot)
+	left_arm_pivot.add_child(_cylinder(0.06, 0.46, Vector3(0.0, -0.25, 0.0), shirt_mat))
+	left_arm_pivot.add_child(_sphere(0.06, Vector3(0.0, -0.54, 0.0), skin_mat))
 
-	# Arms & Hands
-	root.add_child(_cylinder(0.06, 0.46, Vector3(-0.27, 1.05, 0.0), shirt_mat))
-	root.add_child(_cylinder(0.06, 0.46, Vector3(0.27, 1.05, 0.0), shirt_mat))
-	root.add_child(_sphere(0.06, Vector3(-0.27, 0.76, 0.0), skin_mat))
-	root.add_child(_sphere(0.06, Vector3(0.27, 0.76, 0.0), skin_mat))
+	var right_arm_pivot = Node3D.new()
+	right_arm_pivot.name = "RightArmPivot"
+	right_arm_pivot.position = Vector3(0.27, 0.54, 0.0)
+	body_pivot.add_child(right_arm_pivot)
+	right_arm_pivot.add_child(_cylinder(0.06, 0.46, Vector3(0.0, -0.25, 0.0), shirt_mat))
+	right_arm_pivot.add_child(_sphere(0.06, Vector3(0.0, -0.54, 0.0), skin_mat))
 
-	# Neck & Head
-	root.add_child(_cylinder(0.06, 0.10, Vector3(0.0, 1.45, 0.0), skin_mat))
-	root.add_child(_sphere(0.19, Vector3(0.0, 1.61, 0.0), skin_mat))
+	# 4. Head Pivot (at Neck base Y=1.45 -> BodyPivot relative Y=0.69)
+	var head_pivot = Node3D.new()
+	head_pivot.name = "HeadPivot"
+	head_pivot.position = Vector3(0.0, 0.69, 0.0)
+	body_pivot.add_child(head_pivot)
 
-	# Eyes (Placed outside head sphere surface to prevent Z-fighting)
+	head_pivot.add_child(_cylinder(0.06, 0.10, Vector3(0.0, 0.0, 0.0), skin_mat))
+	head_pivot.add_child(_sphere(0.19, Vector3(0.0, 0.16, 0.0), skin_mat))
+
+	# Eyes
 	var eye_mat = _mat(Color(0.15, 0.15, 0.18), 0.3)
-	root.add_child(_sphere(0.035, Vector3(-0.07, 1.63, 0.195), eye_mat))
-	root.add_child(_sphere(0.035, Vector3(0.07, 1.63, 0.195), eye_mat))
+	head_pivot.add_child(_sphere(0.035, Vector3(-0.07, 0.18, 0.195), eye_mat))
+	head_pivot.add_child(_sphere(0.035, Vector3(0.07, 0.18, 0.195), eye_mat))
+
+	return {
+		"body_pivot": body_pivot,
+		"head_pivot": head_pivot,
+		"left_arm_pivot": left_arm_pivot,
+		"right_arm_pivot": right_arm_pivot,
+		"left_leg_pivot": left_leg_pivot,
+		"right_leg_pivot": right_leg_pivot
+	}
+
+# --- Character Specific Models with Rigged Pivots ---
 
 static func _build_player(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.92, 0.76, 0.65))
@@ -138,43 +176,40 @@ static func _build_player(root: Node3D) -> void:
 	var hair_mat = _mat(Color(0.24, 0.16, 0.10))
 	var backpack_mat = _mat(Color(0.80, 0.22, 0.20))
 
-	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 
-	# Open Teal Jacket (depth 0.30 -> front Z=0.15, back Z=-0.15, no Z-fighting with torso)
-	root.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(-0.13, 1.11, 0.0), jacket_mat))
-	root.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(0.13, 1.11, 0.0), jacket_mat))
+	# Open Teal Jacket
+	rig.body_pivot.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(-0.13, 0.35, 0.0), jacket_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(0.13, 0.35, 0.0), jacket_mat))
 
-	# Backpack (pos Z=-0.23, depth 0.16 -> Z range [-0.31, -0.15], clear of torso back at -0.13)
-	root.add_child(_box(Vector3(0.34, 0.42, 0.16), Vector3(0.0, 1.14, -0.23), backpack_mat))
-	root.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(-0.14, 1.14, 0.15), backpack_mat))
-	root.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(0.14, 1.14, 0.15), backpack_mat))
+	# Backpack on body
+	rig.body_pivot.add_child(_box(Vector3(0.34, 0.42, 0.16), Vector3(0.0, 0.38, -0.23), backpack_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(-0.14, 0.38, 0.15), backpack_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(0.14, 0.38, 0.15), backpack_mat))
 
-	# Hair (Messy stylish swoop)
-	root.add_child(_sphere(0.21, Vector3(0.0, 1.66, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.22, 0.08, 0.14), Vector3(0.04, 1.77, 0.09), hair_mat, Vector3(0, 0, -15)))
+	# Hair on head
+	rig.head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.21, -0.02), hair_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.22, 0.08, 0.14), Vector3(0.04, 0.32, 0.09), hair_mat, Vector3(0, 0, -15)))
 
 static func _build_prof_adler(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.88, 0.74, 0.64))
-	var shirt_mat = _mat(Color(0.92, 0.94, 0.96))
 	var suit_mat = _mat(Color(0.22, 0.24, 0.28))
 	var tie_mat = _mat(Color(0.55, 0.12, 0.15))
 	var shoes_mat = _mat(Color(0.12, 0.10, 0.08))
 	var hair_mat = _mat(Color(0.72, 0.74, 0.76))
 	var glass_mat = _mat(Color(0.1, 0.1, 0.1), 0.1, 0.9)
 
-	_add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
 
-	# Vest & Tie (Layered depth: vest 0.29, tie 0.32)
-	root.add_child(_box(Vector3(0.26, 0.54, 0.29), Vector3(0.0, 1.11, 0.0), suit_mat))
-	root.add_child(_box(Vector3(0.08, 0.40, 0.32), Vector3(0.0, 1.15, 0.0), tie_mat))
+	# Vest & Tie
+	rig.body_pivot.add_child(_box(Vector3(0.26, 0.54, 0.29), Vector3(0.0, 0.35, 0.0), suit_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.08, 0.40, 0.32), Vector3(0.0, 0.39, 0.0), tie_mat))
 
-	# Combed Silver Hair
-	root.add_child(_box(Vector3(0.38, 0.14, 0.38), Vector3(0.0, 1.73, -0.02), hair_mat))
-
-	# Glasses (Placed at Z = 0.23 outside eyes)
-	root.add_child(_box(Vector3(0.12, 0.05, 0.02), Vector3(-0.07, 1.64, 0.23), glass_mat))
-	root.add_child(_box(Vector3(0.12, 0.05, 0.02), Vector3(0.07, 1.64, 0.23), glass_mat))
-	root.add_child(_box(Vector3(0.06, 0.02, 0.02), Vector3(0.0, 1.64, 0.23), glass_mat))
+	# Combed Silver Hair & Glasses on head
+	rig.head_pivot.add_child(_box(Vector3(0.38, 0.14, 0.38), Vector3(0.0, 0.28, -0.02), hair_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.12, 0.05, 0.02), Vector3(-0.07, 0.19, 0.23), glass_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.12, 0.05, 0.02), Vector3(0.07, 0.19, 0.23), glass_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.06, 0.02, 0.02), Vector3(0.0, 0.19, 0.23), glass_mat))
 
 static func _build_daria(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.94, 0.78, 0.68))
@@ -184,15 +219,15 @@ static func _build_daria(root: Node3D) -> void:
 	var boots_mat = _mat(Color(0.35, 0.22, 0.15))
 	var hair_mat = _mat(Color(0.48, 0.24, 0.14))
 
-	_add_base_humanoid(root, skin_mat, sweater_mat, pants_mat, boots_mat)
+	var rig = _add_base_humanoid(root, skin_mat, sweater_mat, pants_mat, boots_mat)
 
 	# Scarf
-	root.add_child(_torus(0.13, 0.05, Vector3(0.0, 1.42, 0.0), scarf_mat))
+	rig.head_pivot.add_child(_torus(0.13, 0.05, Vector3(0.0, -0.03, 0.0), scarf_mat))
 
 	# Auburn Bob Hair
-	root.add_child(_sphere(0.225, Vector3(0.0, 1.65, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(-0.18, 1.56, 0.04), hair_mat))
-	root.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(0.18, 1.56, 0.04), hair_mat))
+	rig.head_pivot.add_child(_sphere(0.225, Vector3(0.0, 0.20, -0.02), hair_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(-0.18, 0.11, 0.04), hair_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(0.18, 0.11, 0.04), hair_mat))
 
 static func _build_ms_hartwell(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.90, 0.75, 0.66))
@@ -201,14 +236,12 @@ static func _build_ms_hartwell(root: Node3D) -> void:
 	var shoes_mat = _mat(Color(0.08, 0.08, 0.10))
 	var hair_mat = _mat(Color(0.14, 0.12, 0.12))
 
-	_add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
 
-	# Emerald Collar / V-neck (depth 0.29 vs torso 0.26)
-	root.add_child(_box(Vector3(0.16, 0.32, 0.29), Vector3(0.0, 1.20, 0.0), blouse_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.16, 0.32, 0.29), Vector3(0.0, 0.44, 0.0), blouse_mat))
 
-	# High Bun Hair
-	root.add_child(_sphere(0.20, Vector3(0.0, 1.64, -0.02), hair_mat))
-	root.add_child(_sphere(0.09, Vector3(0.0, 1.83, -0.08), hair_mat))
+	rig.head_pivot.add_child(_sphere(0.20, Vector3(0.0, 0.19, -0.02), hair_mat))
+	rig.head_pivot.add_child(_sphere(0.09, Vector3(0.0, 0.38, -0.08), hair_mat))
 
 static func _build_barista(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.86, 0.70, 0.58))
@@ -218,15 +251,13 @@ static func _build_barista(root: Node3D) -> void:
 	var shoes_mat = _mat(Color(0.25, 0.18, 0.14))
 	var cap_mat = _mat(Color(0.18, 0.32, 0.22))
 
-	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 
-	# Apron front & bib (depth 0.30 vs torso 0.26)
-	root.add_child(_box(Vector3(0.36, 0.48, 0.30), Vector3(0.0, 1.05, 0.0), apron_mat))
-	root.add_child(_box(Vector3(0.38, 0.40, 0.28), Vector3(0.0, 0.65, 0.0), apron_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.36, 0.48, 0.30), Vector3(0.0, 0.29, 0.0), apron_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.38, 0.40, 0.28), Vector3(0.0, -0.11, 0.0), apron_mat))
 
-	# Barista Cap with visor
-	root.add_child(_sphere(0.21, Vector3(0.0, 1.68, 0.0), cap_mat))
-	root.add_child(_box(Vector3(0.26, 0.03, 0.12), Vector3(0.0, 1.69, 0.21), cap_mat, Vector3(10, 0, 0)))
+	rig.head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.23, 0.0), cap_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.26, 0.03, 0.12), Vector3(0.0, 0.24, 0.21), cap_mat, Vector3(10, 0, 0)))
 
 static func _build_ms_okoro(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.62, 0.42, 0.28))
@@ -237,17 +268,13 @@ static func _build_ms_okoro(root: Node3D) -> void:
 	var hair_mat = _mat(Color(0.12, 0.10, 0.10))
 	var glass_mat = _mat(Color(0.70, 0.50, 0.20), 0.2, 0.8)
 
-	_add_base_humanoid(root, skin_mat, cardigan_mat, skirt_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, cardigan_mat, skirt_mat, shoes_mat)
 
-	# Blouse inner (depth 0.29)
-	root.add_child(_box(Vector3(0.18, 0.44, 0.29), Vector3(0.0, 1.12, 0.0), blouse_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.18, 0.44, 0.29), Vector3(0.0, 0.36, 0.0), blouse_mat))
 
-	# Voluminous Curly Hair
-	root.add_child(_sphere(0.26, Vector3(0.0, 1.66, -0.04), hair_mat))
-
-	# Tortoiseshell Glasses (Z = 0.22)
-	root.add_child(_sphere(0.06, Vector3(-0.07, 1.64, 0.22), glass_mat))
-	root.add_child(_sphere(0.06, Vector3(0.07, 1.64, 0.22), glass_mat))
+	rig.head_pivot.add_child(_sphere(0.26, Vector3(0.0, 0.21, -0.04), hair_mat))
+	rig.head_pivot.add_child(_sphere(0.06, Vector3(-0.07, 0.19, 0.22), glass_mat))
+	rig.head_pivot.add_child(_sphere(0.06, Vector3(0.07, 0.19, 0.22), glass_mat))
 
 static func _build_mr_vance(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.92, 0.77, 0.67))
@@ -258,14 +285,12 @@ static func _build_mr_vance(root: Node3D) -> void:
 	var shoes_mat = _mat(Color(0.28, 0.18, 0.12))
 	var hair_mat = _mat(Color(0.35, 0.25, 0.18))
 
-	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 
-	# Navy Vest & Tie (Vest depth 0.29, tie depth 0.32)
-	root.add_child(_box(Vector3(0.44, 0.52, 0.29), Vector3(0.0, 1.08, 0.0), vest_mat))
-	root.add_child(_box(Vector3(0.07, 0.42, 0.32), Vector3(0.0, 1.14, 0.0), tie_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.44, 0.52, 0.29), Vector3(0.0, 0.32, 0.0), vest_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.07, 0.42, 0.32), Vector3(0.0, 0.38, 0.0), tie_mat))
 
-	# Short neat hair
-	root.add_child(_sphere(0.20, Vector3(0.0, 1.65, -0.02), hair_mat))
+	rig.head_pivot.add_child(_sphere(0.20, Vector3(0.0, 0.20, -0.02), hair_mat))
 
 static func _build_felix(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.92, 0.75, 0.63))
@@ -274,14 +299,12 @@ static func _build_felix(root: Node3D) -> void:
 	var sneakers_mat = _mat(Color(0.88, 0.18, 0.22))
 	var beanie_mat = _mat(Color(0.18, 0.18, 0.20))
 
-	_add_base_humanoid(root, skin_mat, hoodie_mat, pants_mat, sneakers_mat)
+	var rig = _add_base_humanoid(root, skin_mat, hoodie_mat, pants_mat, sneakers_mat)
 
-	# Hoodie pocket & hood fold
-	root.add_child(_box(Vector3(0.32, 0.20, 0.30), Vector3(0.0, 0.95, 0.0), hoodie_mat))
-	root.add_child(_torus(0.13, 0.05, Vector3(0.0, 1.40, -0.09), hoodie_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.32, 0.20, 0.30), Vector3(0.0, 0.19, 0.0), hoodie_mat))
+	rig.body_pivot.add_child(_torus(0.13, 0.05, Vector3(0.0, 0.64, -0.09), hoodie_mat))
 
-	# Beanie
-	root.add_child(_sphere(0.21, Vector3(0.0, 1.68, 0.0), beanie_mat))
+	rig.head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.23, 0.0), beanie_mat))
 
 static func _build_priya(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.80, 0.62, 0.48))
@@ -292,14 +315,13 @@ static func _build_priya(root: Node3D) -> void:
 	var boots_mat = _mat(Color(0.15, 0.15, 0.15))
 	var hair_mat = _mat(Color(0.12, 0.10, 0.10))
 
-	_add_base_humanoid(root, skin_mat, jacket_mat, pants_mat, boots_mat)
+	var rig = _add_base_humanoid(root, skin_mat, jacket_mat, pants_mat, boots_mat)
 
-	root.add_child(_box(Vector3(0.18, 0.45, 0.29), Vector3(0.0, 1.12, 0.0), top_mat))
-	root.add_child(_torus(0.12, 0.04, Vector3(0.0, 1.42, 0.0), scarf_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.18, 0.45, 0.29), Vector3(0.0, 0.36, 0.0), top_mat))
+	rig.head_pivot.add_child(_torus(0.12, 0.04, Vector3(0.0, -0.03, 0.0), scarf_mat))
 
-	# Ponytail
-	root.add_child(_sphere(0.20, Vector3(0.0, 1.63, -0.02), hair_mat))
-	root.add_child(_cylinder(0.05, 0.28, Vector3(0.0, 1.55, -0.20), hair_mat, Vector3(-30, 0, 0)))
+	rig.head_pivot.add_child(_sphere(0.20, Vector3(0.0, 0.18, -0.02), hair_mat))
+	rig.head_pivot.add_child(_cylinder(0.05, 0.28, Vector3(0.0, 0.10, -0.20), hair_mat, Vector3(-30, 0, 0)))
 
 static func _build_nadia(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.90, 0.74, 0.65))
@@ -308,12 +330,12 @@ static func _build_nadia(root: Node3D) -> void:
 	var shoes_mat = _mat(Color(0.20, 0.18, 0.22))
 	var hair_mat = _mat(Color(0.16, 0.14, 0.14))
 
-	_add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, suit_mat, suit_mat, shoes_mat)
 
-	root.add_child(_box(Vector3(0.18, 0.44, 0.29), Vector3(0.0, 1.12, 0.0), top_mat))
-	root.add_child(_sphere(0.21, Vector3(0.0, 1.64, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.08, 0.45, 0.16), Vector3(-0.17, 1.45, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.08, 0.45, 0.16), Vector3(0.17, 1.45, -0.02), hair_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.18, 0.44, 0.29), Vector3(0.0, 0.36, 0.0), top_mat))
+	rig.head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.19, -0.02), hair_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.08, 0.45, 0.16), Vector3(-0.17, 0.0, -0.02), hair_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.08, 0.45, 0.16), Vector3(0.17, 0.0, -0.02), hair_mat))
 
 static func _build_tomas(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.88, 0.72, 0.60))
@@ -323,11 +345,10 @@ static func _build_tomas(root: Node3D) -> void:
 	var shoes_mat = _mat(Color(0.20, 0.14, 0.10))
 	var hair_mat = _mat(Color(0.18, 0.14, 0.12))
 
-	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
 
-	# Belt
-	root.add_child(_box(Vector3(0.44, 0.06, 0.28), Vector3(0.0, 0.81, 0.0), belt_mat))
-	root.add_child(_sphere(0.19, Vector3(0.0, 1.64, -0.02), hair_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.44, 0.06, 0.28), Vector3(0.0, 0.05, 0.0), belt_mat))
+	rig.head_pivot.add_child(_sphere(0.19, Vector3(0.0, 0.19, -0.02), hair_mat))
 
 static func _build_seren(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.92, 0.77, 0.68))
@@ -338,15 +359,13 @@ static func _build_seren(root: Node3D) -> void:
 	var hair_mat = _mat(Color(0.55, 0.35, 0.20))
 	var glass_mat = _mat(Color(0.15, 0.15, 0.15), 0.1, 0.9)
 
-	_add_base_humanoid(root, skin_mat, coat_mat, pants_mat, boots_mat)
+	var rig = _add_base_humanoid(root, skin_mat, coat_mat, pants_mat, boots_mat)
 
-	# Inner turtleneck
-	root.add_child(_box(Vector3(0.20, 0.46, 0.29), Vector3(0.0, 1.14, 0.0), inner_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.20, 0.46, 0.29), Vector3(0.0, 0.38, 0.0), inner_mat))
 
-	# Hair & Glasses
-	root.add_child(_sphere(0.21, Vector3(0.0, 1.65, -0.02), hair_mat))
-	root.add_child(_box(Vector3(0.10, 0.04, 0.02), Vector3(-0.06, 1.64, 0.23), glass_mat))
-	root.add_child(_box(Vector3(0.10, 0.04, 0.02), Vector3(0.06, 1.64, 0.23), glass_mat))
+	rig.head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.20, -0.02), hair_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.10, 0.04, 0.02), Vector3(-0.06, 0.19, 0.23), glass_mat))
+	rig.head_pivot.add_child(_box(Vector3(0.10, 0.04, 0.02), Vector3(0.06, 0.19, 0.23), glass_mat))
 
 static func _build_sibling(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.94, 0.78, 0.68))
@@ -355,9 +374,8 @@ static func _build_sibling(root: Node3D) -> void:
 	var shoes_mat = _mat(Color(0.95, 0.80, 0.18))
 	var hair_mat = _mat(Color(0.42, 0.26, 0.16))
 
-	_add_base_humanoid(root, skin_mat, tshirt_mat, pants_mat, shoes_mat)
-
-	root.add_child(_sphere(0.20, Vector3(0.0, 1.64, -0.02), hair_mat))
+	var rig = _add_base_humanoid(root, skin_mat, tshirt_mat, pants_mat, shoes_mat)
+	rig.head_pivot.add_child(_sphere(0.20, Vector3(0.0, 0.19, -0.02), hair_mat))
 
 static func _build_parent(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.90, 0.75, 0.64))
@@ -366,9 +384,8 @@ static func _build_parent(root: Node3D) -> void:
 	var shoes_mat = _mat(Color(0.45, 0.38, 0.32))
 	var hair_mat = _mat(Color(0.60, 0.58, 0.56))
 
-	_add_base_humanoid(root, skin_mat, cardigan_mat, pants_mat, shoes_mat)
-
-	root.add_child(_sphere(0.21, Vector3(0.0, 1.64, -0.02), hair_mat))
+	var rig = _add_base_humanoid(root, skin_mat, cardigan_mat, pants_mat, shoes_mat)
+	rig.head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.19, -0.02), hair_mat))
 
 static func _build_stranger(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.85, 0.70, 0.60))
@@ -376,14 +393,12 @@ static func _build_stranger(root: Node3D) -> void:
 	var boots_mat = _mat(Color(0.08, 0.08, 0.10))
 	var hat_mat = _mat(Color(0.10, 0.10, 0.12))
 
-	_add_base_humanoid(root, skin_mat, coat_mat, coat_mat, boots_mat)
+	var rig = _add_base_humanoid(root, skin_mat, coat_mat, coat_mat, boots_mat)
 
-	# Overcoat length
-	root.add_child(_box(Vector3(0.48, 0.50, 0.30), Vector3(0.0, 0.65, 0.0), coat_mat))
+	rig.body_pivot.add_child(_box(Vector3(0.48, 0.50, 0.30), Vector3(0.0, -0.11, 0.0), coat_mat))
 
-	# Fedora Hat
-	root.add_child(_cylinder(0.30, 0.04, Vector3(0.0, 1.73, 0.0), hat_mat))
-	root.add_child(_cylinder(0.19, 0.16, Vector3(0.0, 1.83, 0.0), hat_mat))
+	rig.head_pivot.add_child(_cylinder(0.30, 0.04, Vector3(0.0, 0.28, 0.0), hat_mat))
+	rig.head_pivot.add_child(_cylinder(0.19, 0.16, Vector3(0.0, 0.38, 0.0), hat_mat))
 
 static func _build_generic(root: Node3D, character_id: String) -> void:
 	var skin_mat = _mat(Color(0.88, 0.74, 0.64))
@@ -392,5 +407,5 @@ static func _build_generic(root: Node3D, character_id: String) -> void:
 	var shoes_mat = _mat(Color(0.20, 0.18, 0.16))
 	var hair_mat = _mat(Color(0.30, 0.20, 0.15))
 
-	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
-	root.add_child(_sphere(0.20, Vector3(0.0, 1.64, -0.02), hair_mat))
+	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
+	rig.head_pivot.add_child(_sphere(0.20, Vector3(0.0, 0.19, -0.02), hair_mat))
