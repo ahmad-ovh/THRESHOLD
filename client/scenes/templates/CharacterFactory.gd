@@ -53,6 +53,17 @@ static func _torus(outer_r: float, inner_r: float, pos: Vector3, mat: Material) 
 	mi.material_override = mat
 	return mi
 
+static func _face_plane(size: Vector2, pos: Vector3, mat: Material, rot: Vector3 = Vector3.ZERO) -> MeshInstance3D:
+	var mi = MeshInstance3D.new()
+	var quad = QuadMesh.new()
+	quad.size = size
+	mi.mesh = quad
+	mi.position = pos
+	if rot != Vector3.ZERO:
+		mi.rotation_degrees = rot
+	mi.material_override = mat
+	return mi
+
 static func create_character_mesh(character_id: String) -> Node3D:
 	var root = Node3D.new()
 	root.name = "Model_" + character_id
@@ -99,7 +110,8 @@ static func _add_base_humanoid(
 	skin_mat: Material,
 	shirt_mat: Material,
 	pants_mat: Material,
-	shoes_mat: Material
+	shoes_mat: Material,
+	add_default_eyes: bool = true
 ) -> Dictionary:
 	# 1. Left & Right Leg Pivots (at Hips Y=0.72)
 	var left_leg_pivot = Node3D.new()
@@ -151,10 +163,10 @@ static func _add_base_humanoid(
 	head_pivot.add_child(_cylinder(0.06, 0.10, Vector3(0.0, 0.0, 0.0), skin_mat))
 	head_pivot.add_child(_sphere(0.19, Vector3(0.0, 0.16, 0.0), skin_mat))
 
-	# Eyes
-	var eye_mat = _mat(Color(0.15, 0.15, 0.18), 0.3)
-	head_pivot.add_child(_sphere(0.035, Vector3(-0.07, 0.18, 0.195), eye_mat))
-	head_pivot.add_child(_sphere(0.035, Vector3(0.07, 0.18, 0.195), eye_mat))
+	if add_default_eyes:
+		var eye_mat = _mat(Color(0.15, 0.15, 0.18), 0.3)
+		head_pivot.add_child(_sphere(0.035, Vector3(-0.07, 0.18, 0.195), eye_mat))
+		head_pivot.add_child(_sphere(0.035, Vector3(0.07, 0.18, 0.195), eye_mat))
 
 	return {
 		"body_pivot": body_pivot,
@@ -168,28 +180,149 @@ static func _add_base_humanoid(
 # --- Character Specific Models with Rigged Pivots ---
 
 static func _build_player(root: Node3D) -> void:
-	var skin_mat = _mat(Color(0.92, 0.76, 0.65))
+	var c = PlayerStore.customization
+	var skin_color: Color = c.get("skin_color", Color(0.92, 0.76, 0.65))
+	var skin_mat = _mat(skin_color)
 	var shirt_mat = _mat(Color(0.95, 0.95, 0.95))
 	var jacket_mat = _mat(Color(0.14, 0.48, 0.55))
 	var pants_mat = _mat(Color(0.18, 0.26, 0.42))
 	var shoes_mat = _mat(Color(0.90, 0.90, 0.92))
-	var hair_mat = _mat(Color(0.24, 0.16, 0.10))
-	var backpack_mat = _mat(Color(0.80, 0.22, 0.20))
+	var hair_color: Color = c.get("hair_color", Color(0.24, 0.16, 0.10))
+	var hair_mat = _mat(hair_color)
 
-	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat)
+	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat, false)
+	var head_pivot = rig.head_pivot
+
+	# --- Eyes with Chroma Key Shader ---
+	var eye_style: int = c.get("eye_style", 1)
+	var sclera_col: Color = c.get("eye_sclera_color", Color(1.0, 1.0, 1.0))
+	var pupil_col: Color = c.get("eye_pupil_color", Color(0.1, 0.1, 0.1))
+	var iris_col: Color = c.get("eye_iris_color", Color(0.18, 0.55, 0.85))
+
+	var eye_l_path = "res://resources/character_customization/eyes/eye_%02d_L.png" % eye_style
+	var eye_r_path = "res://resources/character_customization/eyes/eye_%02d_R.png" % eye_style
+
+	if not ResourceLoader.exists(eye_l_path):
+		eye_l_path = "res://resources/character_customization/eyes/eye_01_L.png"
+	if not ResourceLoader.exists(eye_r_path):
+		eye_r_path = "res://resources/character_customization/eyes/eye_01_R.png"
+
+	var tex_l = load(eye_l_path)
+	var tex_r = load(eye_r_path)
+	var chroma_shader = load("res://resources/character_customization/eye_chroma.gdshader")
+
+	if chroma_shader and tex_l:
+		var mat_l = ShaderMaterial.new()
+		mat_l.shader = chroma_shader
+		mat_l.set_shader_parameter("eye_texture", tex_l)
+		mat_l.set_shader_parameter("sclera_color", sclera_col)
+		mat_l.set_shader_parameter("pupil_color", pupil_col)
+		mat_l.set_shader_parameter("iris_color", iris_col)
+		head_pivot.add_child(_face_plane(Vector2(0.11, 0.11), Vector3(-0.075, 0.18, 0.192), mat_l))
+
+	if chroma_shader and tex_r:
+		var mat_r = ShaderMaterial.new()
+		mat_r.shader = chroma_shader
+		mat_r.set_shader_parameter("eye_texture", tex_r)
+		mat_r.set_shader_parameter("sclera_color", sclera_col)
+		mat_r.set_shader_parameter("pupil_color", pupil_col)
+		mat_r.set_shader_parameter("iris_color", iris_col)
+		head_pivot.add_child(_face_plane(Vector2(0.11, 0.11), Vector3(0.075, 0.18, 0.192), mat_r))
+
+	# --- Nose ---
+	var nose_style: int = c.get("nose_style", 1)
+	var nose_path = "res://resources/character_customization/noses/nose_%02d.png" % nose_style
+	if not ResourceLoader.exists(nose_path):
+		nose_path = "res://resources/character_customization/noses/nose_01.png"
+	var nose_tex = load(nose_path)
+	if nose_tex:
+		var nose_mat = StandardMaterial3D.new()
+		nose_mat.albedo_texture = nose_tex
+		nose_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		nose_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+		nose_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		head_pivot.add_child(_face_plane(Vector2(0.08, 0.08), Vector3(0.0, 0.125, 0.194), nose_mat))
+
+	# --- Mouth ---
+	var mouth_style: int = c.get("mouth_style", 1)
+	var mouth_path = "res://resources/character_customization/mouths/mouth_mask_%02d.png" % mouth_style
+	if not ResourceLoader.exists(mouth_path):
+		mouth_path = "res://resources/character_customization/mouths/mouth_mask_01.png"
+	var mouth_tex = load(mouth_path)
+	if mouth_tex:
+		var mouth_mat = StandardMaterial3D.new()
+		mouth_mat.albedo_texture = mouth_tex
+		mouth_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		mouth_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+		mouth_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		head_pivot.add_child(_face_plane(Vector2(0.10, 0.08), Vector3(0.0, 0.065, 0.193), mouth_mat))
+
+	# --- Hair ---
+	var hair_style: int = c.get("hair_style", 0)
+	_add_hair_style(head_pivot, hair_style, hair_mat)
+
+	# --- Accessories ---
+	var acc_style: int = c.get("accessory_style", 0)
+	_add_accessory(rig.body_pivot, head_pivot, acc_style)
 
 	# Open Teal Jacket
 	rig.body_pivot.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(-0.13, 0.35, 0.0), jacket_mat))
 	rig.body_pivot.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(0.13, 0.35, 0.0), jacket_mat))
 
-	# Backpack on body
-	rig.body_pivot.add_child(_box(Vector3(0.34, 0.42, 0.16), Vector3(0.0, 0.38, -0.23), backpack_mat))
-	rig.body_pivot.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(-0.14, 0.38, 0.15), backpack_mat))
-	rig.body_pivot.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(0.14, 0.38, 0.15), backpack_mat))
+static func _add_hair_style(head_pivot: Node3D, style: int, hair_mat: Material) -> void:
+	match style:
+		0: # Short Classic
+			head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.21, -0.02), hair_mat))
+			head_pivot.add_child(_box(Vector3(0.22, 0.08, 0.14), Vector3(0.04, 0.32, 0.09), hair_mat, Vector3(0, 0, -15)))
+		1: # Bob / Medium Cut
+			head_pivot.add_child(_sphere(0.225, Vector3(0.0, 0.20, -0.02), hair_mat))
+			head_pivot.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(-0.18, 0.11, 0.04), hair_mat))
+			head_pivot.add_child(_box(Vector3(0.10, 0.28, 0.16), Vector3(0.18, 0.11, 0.04), hair_mat))
+		2: # Combed Side Part
+			head_pivot.add_child(_box(Vector3(0.38, 0.14, 0.38), Vector3(0.0, 0.28, -0.02), hair_mat))
+			head_pivot.add_child(_sphere(0.18, Vector3(-0.06, 0.30, 0.02), hair_mat))
+		3: # Spiky
+			head_pivot.add_child(_sphere(0.20, Vector3(0.0, 0.20, -0.02), hair_mat))
+			head_pivot.add_child(_box(Vector3(0.08, 0.16, 0.08), Vector3(0.0, 0.36, 0.02), hair_mat, Vector3(15, 0, 0)))
+			head_pivot.add_child(_box(Vector3(0.07, 0.14, 0.07), Vector3(-0.09, 0.34, 0.05), hair_mat, Vector3(10, 0, -20)))
+			head_pivot.add_child(_box(Vector3(0.07, 0.14, 0.07), Vector3(0.09, 0.34, 0.05), hair_mat, Vector3(10, 0, 20)))
+		4: # Afro
+			head_pivot.add_child(_sphere(0.26, Vector3(0.0, 0.22, -0.03), hair_mat))
+			head_pivot.add_child(_sphere(0.12, Vector3(-0.16, 0.28, 0.0), hair_mat))
+			head_pivot.add_child(_sphere(0.12, Vector3(0.16, 0.28, 0.0), hair_mat))
+		5: # Top Bun
+			head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.20, -0.02), hair_mat))
+			head_pivot.add_child(_sphere(0.09, Vector3(0.0, 0.38, -0.08), hair_mat))
+		6: # Beanie
+			var beanie_mat = _mat(Color(0.2, 0.2, 0.25))
+			head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.23, 0.0), beanie_mat))
+			head_pivot.add_child(_torus(0.21, 0.03, Vector3(0.0, 0.20, 0.0), beanie_mat))
+		7: # Cap
+			var cap_mat = _mat(Color(0.18, 0.32, 0.22))
+			head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.23, 0.0), cap_mat))
+			head_pivot.add_child(_box(Vector3(0.26, 0.03, 0.12), Vector3(0.0, 0.24, 0.21), cap_mat, Vector3(10, 0, 0)))
+		_:
+			head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.21, -0.02), hair_mat))
 
-	# Hair on head
-	rig.head_pivot.add_child(_sphere(0.21, Vector3(0.0, 0.21, -0.02), hair_mat))
-	rig.head_pivot.add_child(_box(Vector3(0.22, 0.08, 0.14), Vector3(0.04, 0.32, 0.09), hair_mat, Vector3(0, 0, -15)))
+static func _add_accessory(body_pivot: Node3D, head_pivot: Node3D, style: int) -> void:
+	match style:
+		1: # Glasses
+			var glass_mat = _mat(Color(0.1, 0.1, 0.1), 0.1, 0.9)
+			head_pivot.add_child(_box(Vector3(0.10, 0.05, 0.02), Vector3(-0.075, 0.18, 0.205), glass_mat))
+			head_pivot.add_child(_box(Vector3(0.10, 0.05, 0.02), Vector3(0.075, 0.18, 0.205), glass_mat))
+			head_pivot.add_child(_box(Vector3(0.06, 0.02, 0.02), Vector3(0.0, 0.18, 0.205), glass_mat))
+		2: # Scarf
+			var scarf_mat = _mat(Color(0.75, 0.22, 0.18))
+			head_pivot.add_child(_torus(0.13, 0.05, Vector3(0.0, -0.03, 0.0), scarf_mat))
+		3: # Backpack
+			var backpack_mat = _mat(Color(0.80, 0.22, 0.20))
+			body_pivot.add_child(_box(Vector3(0.34, 0.42, 0.16), Vector3(0.0, 0.38, -0.23), backpack_mat))
+			body_pivot.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(-0.14, 0.38, 0.15), backpack_mat))
+			body_pivot.add_child(_box(Vector3(0.05, 0.45, 0.08), Vector3(0.14, 0.38, 0.15), backpack_mat))
+		4: # Crown / Band
+			var band_mat = _mat(Color(0.95, 0.80, 0.18), 0.3, 0.7)
+			head_pivot.add_child(_torus(0.20, 0.02, Vector3(0.0, 0.26, 0.0), band_mat))
+
 
 static func _build_prof_adler(root: Node3D) -> void:
 	var skin_mat = _mat(Color(0.88, 0.74, 0.64))
