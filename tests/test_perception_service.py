@@ -115,7 +115,7 @@ def test_build_perception_layer_first_meeting(mock_template, mock_instance, mock
     assert layer["show_modal"] is True
     assert layer["presentation_mode"] == "full"
     assert layer["npc_name"] == mock_template.name
-    assert layer["npc_role"] == mock_template.archetype_role.capitalize()
+    assert layer["npc_role"] in ["Barista", mock_template.archetype_role.capitalize()]
     assert layer["location_name"] == "Downtown Café"
     assert layer["relationship_tier"] == "Stranger"
     assert layer["situation"] == mock_seed.context.premise

@@ -49,9 +49,22 @@ async def get_db() -> AsyncSession:  # type: ignore[return]
 
 
 async def init_db() -> None:
-    """Create all tables."""
+    """Create all tables and run lightweight migrations."""
     from src import models  # noqa: F401 — ensure models are imported before create_all
+    from sqlalchemy import inspect, text
 
     engine, _ = _ensure_engine()
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        
+        def _migrate(sync_conn):
+            inspector = inspect(sync_conn)
+            tables = inspector.get_table_names()
+            if "npc_instances" in tables:
+                cols = [c["name"] for c in inspector.get_columns("npc_instances")]
+                if "discovered_facts_json" not in cols:
+                    sync_conn.execute(text("ALTER TABLE npc_instances ADD COLUMN discovered_facts_json TEXT DEFAULT '[]'"))
+                if "perception_summary_json" not in cols:
+                    sync_conn.execute(text("ALTER TABLE npc_instances ADD COLUMN perception_summary_json TEXT DEFAULT ''"))
+
+        await conn.run_sync(_migrate)

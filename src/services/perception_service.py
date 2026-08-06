@@ -140,12 +140,16 @@ def build_perception_layer(
         if not known_facts:
             known_facts = [f"You have spoken with {template.name} before."]
 
+    npc_role_title = template.archetype_role.capitalize()
+    if template.id == "barista":
+        npc_role_title = "Barista"
+
     return {
         "show_modal": show_modal,
         "presentation_mode": presentation_mode,
         "location_name": location_name,
         "npc_name": template.name,
-        "npc_role": template.archetype_role.capitalize(),
+        "npc_role": npc_role_title,
         "relationship_tier": tier,
         "situation": situation,
         "encounter_focus": encounter_focus,
