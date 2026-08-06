@@ -193,69 +193,19 @@ static func _build_player(root: Node3D) -> void:
 	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat, false)
 	var head_pivot = rig.head_pivot
 
-	# --- Eyes with Chroma Key Shader ---
-	var eye_style: int = c.get("eye_style", 1)
-	var sclera_col: Color = c.get("eye_sclera_color", Color(1.0, 1.0, 1.0))
-	var pupil_col: Color = c.get("eye_pupil_color", Color(0.1, 0.1, 0.1))
-	var iris_col: Color = c.get("eye_iris_color", Color(0.18, 0.55, 0.85))
+	# --- Composite Face Texture on Head Sphere ---
+	var head_mesh: MeshInstance3D = head_pivot.get_node_or_null("HeadMesh")
+	if not head_mesh:
+		head_mesh = _sphere(0.19, Vector3(0.0, 0.16, 0.0), skin_mat)
+		head_mesh.name = "HeadMesh"
+		head_pivot.add_child(head_mesh)
 
-	var eye_l_path = "res://resources/character_customization/eyes/eye_%02d_L.png" % eye_style
-	var eye_r_path = "res://resources/character_customization/eyes/eye_%02d_R.png" % eye_style
-
-	if not ResourceLoader.exists(eye_l_path):
-		eye_l_path = "res://resources/character_customization/eyes/eye_01_L.png"
-	if not ResourceLoader.exists(eye_r_path):
-		eye_r_path = "res://resources/character_customization/eyes/eye_01_R.png"
-
-	var tex_l = load(eye_l_path)
-	var tex_r = load(eye_r_path)
-	var chroma_shader = load("res://resources/character_customization/eye_chroma.gdshader")
-
-	if chroma_shader and tex_l:
-		var mat_l = ShaderMaterial.new()
-		mat_l.shader = chroma_shader
-		mat_l.set_shader_parameter("eye_texture", tex_l)
-		mat_l.set_shader_parameter("sclera_color", sclera_col)
-		mat_l.set_shader_parameter("pupil_color", pupil_col)
-		mat_l.set_shader_parameter("iris_color", iris_col)
-		head_pivot.add_child(_face_plane(Vector2(0.11, 0.11), Vector3(-0.075, 0.18, 0.192), mat_l))
-
-	if chroma_shader and tex_r:
-		var mat_r = ShaderMaterial.new()
-		mat_r.shader = chroma_shader
-		mat_r.set_shader_parameter("eye_texture", tex_r)
-		mat_r.set_shader_parameter("sclera_color", sclera_col)
-		mat_r.set_shader_parameter("pupil_color", pupil_col)
-		mat_r.set_shader_parameter("iris_color", iris_col)
-		head_pivot.add_child(_face_plane(Vector2(0.11, 0.11), Vector3(0.075, 0.18, 0.192), mat_r))
-
-	# --- Nose ---
-	var nose_style: int = c.get("nose_style", 1)
-	var nose_path = "res://resources/character_customization/noses/nose_%02d.png" % nose_style
-	if not ResourceLoader.exists(nose_path):
-		nose_path = "res://resources/character_customization/noses/nose_01.png"
-	var nose_tex = load(nose_path)
-	if nose_tex:
-		var nose_mat = StandardMaterial3D.new()
-		nose_mat.albedo_texture = nose_tex
-		nose_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		nose_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
-		nose_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		head_pivot.add_child(_face_plane(Vector2(0.08, 0.08), Vector3(0.0, 0.125, 0.194), nose_mat))
-
-	# --- Mouth ---
-	var mouth_style: int = c.get("mouth_style", 1)
-	var mouth_path = "res://resources/character_customization/mouths/mouth_mask_%02d.png" % mouth_style
-	if not ResourceLoader.exists(mouth_path):
-		mouth_path = "res://resources/character_customization/mouths/mouth_mask_01.png"
-	var mouth_tex = load(mouth_path)
-	if mouth_tex:
-		var mouth_mat = StandardMaterial3D.new()
-		mouth_mat.albedo_texture = mouth_tex
-		mouth_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		mouth_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
-		mouth_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		head_pivot.add_child(_face_plane(Vector2(0.10, 0.08), Vector3(0.0, 0.065, 0.193), mouth_mat))
+	var face_tex = _create_face_texture(c)
+	var head_mat = StandardMaterial3D.new()
+	head_mat.albedo_color = Color.WHITE
+	head_mat.albedo_texture = face_tex
+	head_mat.roughness = 0.85
+	head_mesh.material_override = head_mat
 
 	# --- Hair ---
 	var hair_style: int = c.get("hair_style", 0)
@@ -268,6 +218,116 @@ static func _build_player(root: Node3D) -> void:
 	# Open Teal Jacket
 	rig.body_pivot.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(-0.13, 0.35, 0.0), jacket_mat))
 	rig.body_pivot.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(0.13, 0.35, 0.0), jacket_mat))
+
+static func _create_face_texture(customization: Dictionary) -> ImageTexture:
+	var skin_color: Color = customization.get("skin_color", Color(0.92, 0.76, 0.65))
+	var eye_style: int = customization.get("eye_style", 1)
+	var sclera_col: Color = customization.get("eye_sclera_color", Color(1.0, 1.0, 1.0))
+	var pupil_col: Color = customization.get("eye_pupil_color", Color(0.1, 0.1, 0.1))
+	var iris_col: Color = customization.get("eye_iris_color", Color(0.18, 0.55, 0.85))
+	var nose_style: int = customization.get("nose_style", 1)
+	var mouth_style: int = customization.get("mouth_style", 1)
+
+	var tex_w = 512
+	var tex_h = 512
+	var face_img = Image.create(tex_w, tex_h, false, Image.FORMAT_RGBA8)
+	face_img.fill(skin_color)
+
+	# Load Eye L & R
+	var eye_l_path = "res://resources/character_customization/eyes/eye_%02d_L.png" % eye_style
+	var eye_r_path = "res://resources/character_customization/eyes/eye_%02d_R.png" % eye_style
+	if not ResourceLoader.exists(eye_l_path):
+		eye_l_path = "res://resources/character_customization/eyes/eye_01_L.png"
+	if not ResourceLoader.exists(eye_r_path):
+		eye_r_path = "res://resources/character_customization/eyes/eye_01_R.png"
+
+	var eye_l_tex = load(eye_l_path) as Texture2D
+	var eye_r_tex = load(eye_r_path) as Texture2D
+
+	if eye_l_tex:
+		var img_l = eye_l_tex.get_image()
+		img_l.resize(80, 80, Image.INTERPOLATE_BILINEAR)
+		_apply_chroma_and_blit(face_img, img_l, Vector2i(170, 190), sclera_col, pupil_col, iris_col)
+
+	if eye_r_tex:
+		var img_r = eye_r_tex.get_image()
+		img_r.resize(80, 80, Image.INTERPOLATE_BILINEAR)
+		_apply_chroma_and_blit(face_img, img_r, Vector2i(262, 190), sclera_col, pupil_col, iris_col)
+
+	# Load Nose
+	var nose_path = "res://resources/character_customization/noses/nose_%02d.png" % nose_style
+	if not ResourceLoader.exists(nose_path):
+		nose_path = "res://resources/character_customization/noses/nose_01.png"
+	var nose_tex = load(nose_path) as Texture2D
+	if nose_tex:
+		var img_n = nose_tex.get_image()
+		img_n.resize(50, 50, Image.INTERPOLATE_BILINEAR)
+		_blit_alpha(face_img, img_n, Vector2i(231, 260))
+
+	# Load Mouth
+	var mouth_path = "res://resources/character_customization/mouths/mouth_mask_%02d.png" % mouth_style
+	if not ResourceLoader.exists(mouth_path):
+		mouth_path = "res://resources/character_customization/mouths/mouth_mask_01.png"
+	var mouth_tex = load(mouth_path) as Texture2D
+	if mouth_tex:
+		var img_m = mouth_tex.get_image()
+		img_m.resize(70, 45, Image.INTERPOLATE_BILINEAR)
+		_blit_alpha(face_img, img_m, Vector2i(221, 310))
+
+	return ImageTexture.create_from_image(face_img)
+
+static func _apply_chroma_and_blit(dest: Image, src: Image, pos: Vector2i, sclera: Color, pupil: Color, iris: Color) -> void:
+	var sw = src.get_width()
+	var sh = src.get_height()
+	for y in range(sh):
+		for x in range(sw):
+			var dx = pos.x + x
+			var dy = pos.y + y
+			if dx < 0 or dx >= dest.get_width() or dy < 0 or dy >= dest.get_height():
+				continue
+			var px = src.get_pixel(x, y)
+			if px.a < 0.05:
+				continue
+
+			var r = px.r
+			var g = px.g
+			var b = px.b
+			var max_c = max(r, max(g, b))
+
+			var final_col: Color
+			if max_c < 0.20:
+				final_col = Color(0.05, 0.05, 0.05, px.a)
+			else:
+				var c_rgb = Vector3(1, 1, 1)
+				if g > r and g > b:
+					c_rgb = lerp(Vector3(sclera.r, sclera.g, sclera.b), Vector3(g, g, g), 0.15)
+				elif r > g and r > b and (r - b) > 0.15:
+					c_rgb = Vector3(pupil.r, pupil.g, pupil.b)
+				elif b > g or (r > 0.35 and b > 0.35):
+					c_rgb = Vector3(iris.r, iris.g, iris.b)
+				else:
+					c_rgb = lerp(Vector3(0.1, 0.1, 0.1), Vector3(sclera.r, sclera.g, sclera.b), max_c)
+				final_col = Color(c_rgb.x, c_rgb.y, c_rgb.z, px.a)
+
+			var bg = dest.get_pixel(dx, dy)
+			var blended = bg.blend(final_col)
+			dest.set_pixel(dx, dy, blended)
+
+static func _blit_alpha(dest: Image, src: Image, pos: Vector2i) -> void:
+	var sw = src.get_width()
+	var sh = src.get_height()
+	for y in range(sh):
+		for x in range(sw):
+			var dx = pos.x + x
+			var dy = pos.y + y
+			if dx < 0 or dx >= dest.get_width() or dy < 0 or dy >= dest.get_height():
+				continue
+			var px = src.get_pixel(x, y)
+			if px.a < 0.05:
+				continue
+			var bg = dest.get_pixel(dx, dy)
+			var blended = bg.blend(px)
+			dest.set_pixel(dx, dy, blended)
 
 static func _add_hair_style(head_pivot: Node3D, style: int, hair_mat: Material) -> void:
 	match style:
