@@ -2,31 +2,37 @@
 
 [ext_resource type="Script" path="res://scenes/ui/JournalUI.gd" id="1_journal_script"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill_blue"]
-bg_color = Color(0.15, 0.55, 0.9, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_book_outer"]
+bg_color = Color(0.28, 0.18, 0.12, 0.95)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.5, 0.35, 0.22, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 14
+shadow_offset = Vector2(0, 8)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill_cyan"]
-bg_color = Color(0.2, 0.72, 0.85, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_page_paper"]
+bg_color = Color(0.98, 0.96, 0.91, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.88, 0.82, 0.72, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.1)
+shadow_size = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cat_pill"]
-bg_color = Color(1, 0.94, 0.88, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.85, 0.72, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spine"]
+bg_color = Color(0.4, 0.28, 0.18, 1)
 
 [node name="JournalUI" type="CanvasLayer"]
 script = ExtResource("1_journal_script")
@@ -37,242 +43,115 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.15, 0.2, 0.25, 0.4)
+color = Color(0.08, 0.06, 0.05, 0.6)
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(720, 520)
+[node name="BookContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(860, 560)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -360.0
-offset_top = -260.0
-offset_right = 360.0
-offset_bottom = 260.0
+offset_left = -430.0
+offset_top = -280.0
+offset_right = 430.0
+offset_bottom = 280.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_book_outer")
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer"]
+[node name="Margin" type="MarginContainer" parent="BookContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 18
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Margin"]
+[node name="VBox" type="VBoxContainer" parent="BookContainer/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 
-[node name="Header" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer"]
+[node name="Header" type="HBoxContainer" parent="BookContainer/Margin/VBox"]
 layout_mode = 2
 
-[node name="ArchetypePill1" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Header"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_pill_blue")
-
-[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill1"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 2
-
-[node name="Label" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill1/Margin"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 13
-text = "Ambitious"
-
-[node name="ArchetypePill2" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Header"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_pill_cyan")
-
-[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill2"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 2
-
-[node name="Label" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill2/Margin"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 13
-text = "Achiever"
-
-[node name="TitleLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header"]
+[node name="TitleLabel" type="Label" parent="BookContainer/Margin/VBox/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
-theme_override_font_sizes/font_size = 20
-text = "Character Profile & Communication Growth"
+theme_override_colors/font_color = Color(0.95, 0.85, 0.7, 1)
+theme_override_font_sizes/font_size = 18
+text = "📖 PEOPLE NOTEBOOK & SOCIAL LOGS"
 
-[node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Header"]
+[node name="CloseButton" type="Button" parent="BookContainer/Margin/VBox/Header"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 text = " ✖ "
 
-[node name="TabContainer" type="TabContainer" parent="PanelContainer/Margin/VBoxContainer"]
+[node name="BookSpread" type="HBoxContainer" parent="BookContainer/Margin/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
-
-[node name="Profile" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-metadata/_tab_index = 0
-
-[node name="HBoxSplit" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="LeftCard" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit"]
-custom_minimum_size = Vector2(280, 0)
-layout_mode = 2
 theme_override_constants/separation = 8
+pivot_offset = Vector2(414, 220)
 
-[node name="LevelHeader" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard"]
-layout_mode = 2
-
-[node name="HappinessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard/LevelHeader"]
+[node name="LeftPage" type="PanelContainer" parent="BookContainer/Margin/VBox/BookSpread"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
-theme_override_font_sizes/font_size = 16
-text = "Growth Level"
+theme_override_styles/panel = SubResource("StyleBoxFlat_page_paper")
 
-[node name="LevelNumLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard/LevelHeader"]
+[node name="Margin" type="MarginContainer" parent="BookContainer/Margin/VBox/BookSpread/LeftPage"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
-theme_override_font_sizes/font_size = 16
-text = "Lv. 1"
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
 
-[node name="OverallProgressBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard"]
-custom_minimum_size = Vector2(0, 16)
-layout_mode = 2
-value = 50.0
-
-[node name="CategoryLoves" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cat_pill")
-
-[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard/CategoryLoves"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 6
-
-[node name="VBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard/CategoryLoves/Margin"]
-layout_mode = 2
-
-[node name="Header" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard/CategoryLoves/Margin/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.45, 0.1, 1)
-theme_override_font_sizes/font_size = 13
-text = "Communication Strengths"
-
-[node name="Detail" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/LeftCard/CategoryLoves/Margin/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
-theme_override_font_sizes/font_size = 14
-text = "Active Listening & Empathy"
-
-[node name="RightBars" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
-[node name="ClarityLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/RightBars"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
-text = "Clarity"
-
-[node name="ClarityBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/RightBars"]
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
-
-[node name="EmpathyLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/RightBars"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
-text = "Empathy"
-
-[node name="EmpathyBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/RightBars"]
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
-
-[node name="PolitenessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/RightBars"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
-text = "Politeness"
-
-[node name="PolitenessBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/RightBars"]
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
-
-[node name="ExpressionLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/RightBars"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.2, 0.16, 1)
-text = "Expression"
-
-[node name="ExpressionBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Profile/HBoxSplit/RightBars"]
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
-
-[node name="People Notebook" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/separation = 12
-metadata/_tab_index = 1
-
-[node name="LeftList" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-
-[node name="HeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook/LeftList"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
-theme_override_font_sizes/font_size = 15
-text = "Met People"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook/LeftList"]
+[node name="LeftText" type="RichTextLabel" parent="BookContainer/Margin/VBox/BookSpread/LeftPage/Margin"]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="NpcButtonVBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook/LeftList/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="RightPage" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NotebookText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook/RightPage"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.23, 0.2, 0.16, 1)
+theme_override_colors/default_color = Color(0.2, 0.18, 0.15, 1)
 bbcode_enabled = true
-text = "Select a person on the left to view your personal notes."
+text = "Left Page NPC"
 
-[node name="Growth Report" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer"]
-visible = false
+[node name="SpineLine" type="Panel" parent="BookContainer/Margin/VBox/BookSpread"]
+custom_minimum_size = Vector2(6, 0)
 layout_mode = 2
-theme_override_constants/separation = 8
-metadata/_tab_index = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spine")
 
-[node name="ReportText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Growth Report"]
+[node name="RightPage" type="PanelContainer" parent="BookContainer/Margin/VBox/BookSpread"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_page_paper")
+
+[node name="Margin" type="MarginContainer" parent="BookContainer/Margin/VBox/BookSpread/RightPage"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="RightText" type="RichTextLabel" parent="BookContainer/Margin/VBox/BookSpread/RightPage/Margin"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.23, 0.2, 0.16, 1)
+theme_override_colors/default_color = Color(0.2, 0.18, 0.15, 1)
 bbcode_enabled = true
-text = "Click 'Generate Report' to analyze your communication patterns."
+text = "Right Page NPC"
 
-[node name="RefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Growth Report"]
-custom_minimum_size = Vector2(0, 42)
+[node name="Footer" type="HBoxContainer" parent="BookContainer/Margin/VBox"]
 layout_mode = 2
-text = "Generate Growth Report"
+alignment = 1
+
+[node name="PrevButton" type="Button" parent="BookContainer/Margin/VBox/Footer"]
+custom_minimum_size = Vector2(120, 36)
+layout_mode = 2
+text = "◄ Prev Page"
+
+[node name="PageIndicator" type="Label" parent="BookContainer/Margin/VBox/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9, 0.82, 0.7, 1)
+text = "Pages 1-2 of 2"
+horizontal_alignment = 1
+
+[node name="NextButton" type="Button" parent="BookContainer/Margin/VBox/Footer"]
+custom_minimum_size = Vector2(120, 36)
+layout_mode = 2
+text = "Next Page ►"

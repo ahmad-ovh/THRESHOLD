@@ -1,0 +1,273 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/IdCardUI.gd" id="1_idcard_script"]
+[ext_resource type="Texture2D" path="res://assets/ui/player_avatar.jpg" id="2_avatar_tex"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_id_panel"]
+bg_color = Color(0.12, 0.14, 0.18, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.3, 0.65, 0.95, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 12
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill_blue"]
+bg_color = Color(0.15, 0.55, 0.9, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill_cyan"]
+bg_color = Color(0.2, 0.72, 0.85, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_report_bg"]
+bg_color = Color(0.08, 0.1, 0.13, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.3, 0.4, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="IdCardUI" type="CanvasLayer"]
+script = ExtResource("1_idcard_script")
+
+[node name="ColorRectBackdrop" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.08, 0.12, 0.6)
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(760, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -250.0
+offset_right = 380.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_id_panel")
+
+[node name="Margin" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Header" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "CITIZEN ID CARD & PROFILE"
+
+[node name="ArchetypePill1" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Header"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill_blue")
+
+[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill1"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill1/Margin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "Ambitious"
+
+[node name="ArchetypePill2" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Header"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill_cyan")
+
+[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill2"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill2/Margin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "Achiever"
+
+[node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Header"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+text = " ✖ "
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/Margin/VBoxContainer"]
+layout_mode = 2
+
+[node name="Body" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="LeftCard" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="AvatarFrame" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="AvatarTexture" type="TextureRect" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame"]
+layout_mode = 2
+texture = ExtResource("2_avatar_tex")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PlayerIdLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "ID: PLAYER_01"
+horizontal_alignment = 1
+
+[node name="LevelHeader" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+layout_mode = 2
+
+[node name="HappinessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/LevelHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Growth Level"
+
+[node name="LevelNumLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/LevelHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Lv. 1"
+
+[node name="OverallProgressBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+value = 50.0
+
+[node name="StreakLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.2, 1)
+theme_override_font_sizes/font_size = 14
+text = "Daily Streak: 0 🔥"
+horizontal_alignment = 1
+
+[node name="RightSection" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="SkillTitle" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.9, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "Communication Skill Vector"
+
+[node name="SkillGrid" type="GridContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 6
+
+[node name="ClarityLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+layout_mode = 2
+text = "Clarity"
+
+[node name="EmpathyLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+layout_mode = 2
+text = "Empathy"
+
+[node name="ClarityBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+custom_minimum_size = Vector2(200, 16)
+layout_mode = 2
+
+[node name="EmpathyBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+custom_minimum_size = Vector2(200, 16)
+layout_mode = 2
+
+[node name="PolitenessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+layout_mode = 2
+text = "Politeness"
+
+[node name="ExpressionLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+layout_mode = 2
+text = "Expression"
+
+[node name="PolitenessBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+custom_minimum_size = Vector2(200, 16)
+layout_mode = 2
+
+[node name="ExpressionBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+custom_minimum_size = Vector2(200, 16)
+layout_mode = 2
+
+[node name="ReportPanel" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_report_bg")
+
+[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ReportHeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.75, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "COMMUNICATION GROWTH REPORT"
+
+[node name="ReportText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.85, 0.88, 0.92, 1)
+bbcode_enabled = true
+text = "Click 'Generate Growth Report' to run AI analysis on your conversation history."
+
+[node name="RefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "Generate Growth Report"

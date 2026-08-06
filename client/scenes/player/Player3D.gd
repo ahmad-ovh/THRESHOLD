@@ -63,6 +63,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			current_target.interact()
 			return
 
+	if event.is_action_pressed("toggle_id_card"):
+		if GameController and GameController.hud_ref:
+			GameController.hud_ref._toggle_id_card()
+			return
+
 	if event.is_action_pressed("toggle_journal"):
 		if GameController and GameController.hud_ref:
 			GameController.hud_ref._toggle_journal()
