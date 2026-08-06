@@ -49,6 +49,11 @@ def get_location_name(npc_id: str, archetype_role: str, category: str = "") -> s
     return "Main Street Neighborhood"
 
 
+# Tier sets mapped from relationship_tiers config
+FIRST_MEETING_TIERS = {"", "Stranger", "Unfamiliar", "Unknown", "Estranged", "Unnoticed"}
+EARLY_RELATIONSHIP_TIERS = {"Acquaintance", "Peer", "Noted", "Coworker", "Skeptical", "Distant", "Noticed"}
+
+
 def calculate_presentation_mode(
     relationship_tier: str,
     seed_context: dict[str, Any] | None = None,
@@ -73,13 +78,13 @@ def calculate_presentation_mode(
     requires_context = context.get("requires_context", False) or is_major_event
 
     # 1. Base Default by Relationship Tier
-    if tier in ("", "Stranger"):
+    if tier in FIRST_MEETING_TIERS:
         base_mode = "full"
         show_modal = True
-    elif tier in ("Acquaintance", "Peer"):
+    elif tier in EARLY_RELATIONSHIP_TIERS:
         base_mode = "compact"
         show_modal = True
-    else:  # Friend, Mentor, Close
+    else:  # Established / Close (Index 2+)
         base_mode = "minimal"
         show_modal = False
 

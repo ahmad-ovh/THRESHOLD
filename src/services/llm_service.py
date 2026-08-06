@@ -346,8 +346,12 @@ Player's recent history with this character (brief):
 Return the personalized opening line as JSON.
 """.strip()
 
-    raw = await _call(_SCENARIO_PERSONALIZATION_SYSTEM, user_prompt, temperature=0.7)
-    result = _parse_json(raw, "Scenario Personalization")
+    try:
+        raw = await _call(_SCENARIO_PERSONALIZATION_SYSTEM, user_prompt, temperature=0.7)
+        result = _parse_json(raw, "Scenario Personalization")
+    except Exception as exc:
+        logger.warning("LLM scenario personalization failed (%s). Falling back to seed opening.", exc)
+        result = {}
 
     result.setdefault("opening_line", seed_data.get("opening_line_seed", ""))
     result.setdefault("npc_expression", "neutral")
