@@ -39,11 +39,15 @@ async def player_status(
     if player is None:
         raise HTTPException(status_code=404, detail="Player not found.")
 
+    from src.services.perception_service import get_player_journal_entries
+    journal_entries = await get_player_journal_entries(db, player_id)
+
     return {
         "player_id": player.player_id,
         "level": player.level,
         "skill_vector": player.skill_vector,
         "xp_progress": player.xp_progress,
         "daily_streak": player.daily_streak,
+        "journal_entries": journal_entries,
         "created_at": player.created_at.isoformat(),
     }

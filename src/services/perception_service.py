@@ -14,6 +14,10 @@ if TYPE_CHECKING:
     from src.content import NpcTemplate, ScenarioSeed
     from src.models import NpcInstance, Player
 
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from src.models import NpcInstance
+
 logger = logging.getLogger(__name__)
 
 # Map of room locations based on role / scenario ID
@@ -95,11 +99,50 @@ def calculate_presentation_mode(
     return base_mode, show_modal
 
 
-def build_perception_layer(
+async def get_player_journal_entries(db: AsyncSession, player_id: str) -> list[dict[str, Any]]:
+    """Assemble Journal notebook pages for met NPCs ONLY (Section 8.1)."""
+    stmt = select(NpcInstance).where(
+        NpcInstance.player_id == player_id,
+        NpcInstance.met_in_person == True,
+    )
+    res = await db.execute(stmt)
+    instances = res.scalars().all()
+
+    journal_entries = []
+    from src.content import registry
+    for inst in instances:
+        tmpl = registry.get_template(inst.template_id)
+        if not tmpl:
+            continue
+
+        r_title = tmpl.archetype_role.capitalize()
+        if tmpl.id == "barista":
+            r_title = "Barista"
+
+        loc = get_location_name(tmpl.id, tmpl.archetype_role, "everyday_social")
+        facts = json.loads(inst.discovered_facts_json) if getattr(inst, "discovered_facts_json", None) else []
+        connections = json.loads(inst.discovered_connections_json) if getattr(inst, "discovered_connections_json", None) else []
+
+        journal_entries.append({
+            "npc_id": tmpl.id,
+            "name": tmpl.name,
+            "role": r_title,
+            "usual_location": loc,
+            "relationship_tier": inst.relationship_tier or "Noticed",
+            "known_through": f"First met at {loc}",
+            "connections": connections,
+            "personality_notes": getattr(tmpl, "base_personality", ""),
+            "discovered_facts": facts,
+        })
+    return journal_entries
+
+
+async def build_perception_layer(
     template: NpcTemplate,
     instance: NpcInstance,
     player: Player,
     seed: ScenarioSeed,
+    db: AsyncSession,
     is_major_event: bool = False,
 ) -> dict[str, Any]:
     """
@@ -145,6 +188,8 @@ def build_perception_layer(
     if template.id == "barista":
         npc_role_title = "Barista"
 
+    journal_entries = await get_player_journal_entries(db, player.player_id)
+
     return {
         "show_modal": show_modal,
         "presentation_mode": presentation_mode,
@@ -155,6 +200,7 @@ def build_perception_layer(
         "situation": situation,
         "encounter_focus": encounter_focus,
         "known_facts": known_facts,
+        "journal_entries": journal_entries,
     }
 
 
@@ -167,7 +213,8 @@ async def process_encounter_end_perception(
     Background pipeline run after POST /interaction/end:
       1. Extract candidate facts from transcript.
       2. Store valid discovered facts in instance.discovered_facts.
-      3. Regenerate perception_summary_json if meaningful changes happened.
+      3. Extract cross-NPC connections mentioned in dialogue.
+      4. Regenerate perception_summary_json if meaningful changes happened.
     """
     if not transcript:
         return
@@ -178,15 +225,36 @@ async def process_encounter_end_perception(
     # Deterministic fact extraction based on outcome and dialogue presence
     turn_count = len([t for t in transcript if t.get("role") == "player"])
     outcome = encounter_result.get("performance_outcome", "neutral")
+    if outcome == "good" and f"Had a productive discussion ({turn_count} turns)" not in existing_facts:
+        new_facts.append(f"Had a productive discussion ({turn_count} turns)")
 
-    # Basic milestone fact logging
-    if outcome == "good" and f"Had a great conversation with {instance.template_id.capitalize()}" not in existing_facts:
-        new_facts.append(f"Built rapport with {instance.template_id.capitalize()} during a recent chat.")
-    elif outcome == "poor" and f"Had a tense conversation with {instance.template_id.capitalize()}" not in existing_facts:
-        new_facts.append(f"Had a difficult interaction with {instance.template_id.capitalize()}.")
+    instance.discovered_facts = new_facts
 
-    # Limit discovered facts list to last 10 relevant items
-    instance.discovered_facts = new_facts[-10:]
+    # Extract cross-NPC mentions into discovered_connections_json
+    full_dialogue = " ".join([t.get("content", "") for t in transcript]).lower()
+    connections = json.loads(instance.discovered_connections_json) if getattr(instance, "discovered_connections_json", None) else []
+    conn_set = set(connections)
+
+    npc_mention_map = {
+        "adler": "→ Prof. Adler (Academic Advisor)",
+        "okoro": "→ Ms. Okoro (Academy Teacher)",
+        "vance": "→ Mr. Vance (Campus Staff)",
+        "daria": "→ Daria (Classmate / Friend)",
+        "felix": "→ Felix (Classmate / Friend)",
+        "priya": "→ Priya (Friend)",
+        "tomas": "→ Tomas (Workplace Colleague)",
+        "nadia": "→ Nadia (Colleague)",
+        "seren": "→ Seren (Colleague)",
+        "hartwell": "→ Ms. Hartwell (Executive Client)",
+        "barista": "→ The Barista (Downtown Café)",
+    }
+
+    for key, conn_label in npc_mention_map.items():
+        if key in full_dialogue and key != instance.template_id:
+            conn_set.add(conn_label)
+
+    instance.discovered_connections_json = json.dumps(list(conn_set))
+
     instance.perception_summary_json = json.dumps({
         "last_outcome": outcome,
         "total_turns": turn_count,

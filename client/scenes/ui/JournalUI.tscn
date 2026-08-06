@@ -223,11 +223,47 @@ text = "Expression"
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 
+[node name="People Notebook" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+metadata/_tab_index = 1
+
+[node name="LeftList" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="HeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook/LeftList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
+theme_override_font_sizes/font_size = 15
+text = "Met People"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook/LeftList"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NpcButtonVBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook/LeftList/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="RightPage" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NotebookText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/TabContainer/People Notebook/RightPage"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.23, 0.2, 0.16, 1)
+bbcode_enabled = true
+text = "Select a person on the left to view your personal notes."
+
 [node name="Growth Report" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
-metadata/_tab_index = 1
+metadata/_tab_index = 2
 
 [node name="ReportText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/TabContainer/Growth Report"]
 layout_mode = 2

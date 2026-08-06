@@ -504,7 +504,33 @@ seeds:
         trigger: "The evasion has read as avoidance — the sibling is closing the conversation with reduced trust."
         closing_seed: "It's fine. I'll sort it out myself."
 
-  # --- stranger seeds ---
+  # --- stranger / barista seeds ---
+
+  - id: first_time_around_here
+    title: "First Time Around Here"
+    compatible_roles: [barista]
+    category: everyday_social
+    tier: 1
+    npc_context:
+      metric_overrides: {}
+    context:
+      premise: "You step up to the counter at the Downtown Café. The barista glances up with a welcoming nod."
+      stakes: "Establishing your grounding in the neighborhood and setting an easygoing first impression."
+      opening_line_seed: "First time around here? What can I get started for you today?"
+      npc_goal: "Wants to welcome a new face in the neighborhood while keeping the counter moving smoothly."
+    scoring_focus: { primary: politeness, secondary: expression }
+    success_signal: "responded_with_warm_authentic_presence"
+    failure_signal: "acted_aloof_or_dismissive"
+    possible_outcomes:
+      good:
+        trigger: "A warm initial exchange has taken place — the barista remembers you as a pleasant regular."
+        closing_seed: "Good to meet you! Feel free to grab a seat over by the window anytime."
+      neutral:
+        trigger: "A polite exchange has concluded — you've established your presence cleanly."
+        closing_seed: "Here you go. Enjoy your time around the neighborhood!"
+      poor:
+        trigger: "The exchange felt brief and guarded — the barista returns to work without much impression."
+        closing_seed: "Right. Here's your order. Have a good day."
 
   - id: ordering_under_pressure
     title: "Rush Order"

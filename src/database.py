@@ -62,8 +62,12 @@ async def init_db() -> None:
             tables = inspector.get_table_names()
             if "npc_instances" in tables:
                 cols = [c["name"] for c in inspector.get_columns("npc_instances")]
+                if "met_in_person" not in cols:
+                    sync_conn.execute(text("ALTER TABLE npc_instances ADD COLUMN met_in_person BOOLEAN DEFAULT 0"))
                 if "discovered_facts_json" not in cols:
                     sync_conn.execute(text("ALTER TABLE npc_instances ADD COLUMN discovered_facts_json TEXT DEFAULT '[]'"))
+                if "discovered_connections_json" not in cols:
+                    sync_conn.execute(text("ALTER TABLE npc_instances ADD COLUMN discovered_connections_json TEXT DEFAULT '[]'"))
                 if "perception_summary_json" not in cols:
                     sync_conn.execute(text("ALTER TABLE npc_instances ADD COLUMN perception_summary_json TEXT DEFAULT ''"))
 

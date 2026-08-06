@@ -41,6 +41,7 @@ def select_seed(
     player_level: int,
     excluded_seed_ids: list[str] | None = None,
     npc_id: str | None = None,
+    is_first_interaction: bool = False,
 ) -> ScenarioSeed:
     """
     Weighted seed selection (Section 6.2 steps 1–6).
@@ -52,6 +53,11 @@ def select_seed(
     5. Fall back to nearest available category if pool is empty.
     6. Exclude already-used seed_ids; pick randomly from what remains.
     """
+    if is_first_interaction and npc_id == "barista":
+        onboarding_seed = registry.get_seed("first_time_around_here")
+        if onboarding_seed:
+            return onboarding_seed
+
     excluded = set(excluded_seed_ids or [])
 
     weights = _get_distribution_band(player_level)

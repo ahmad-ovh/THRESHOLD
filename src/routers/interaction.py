@@ -130,11 +130,25 @@ async def start_interaction(
         await db.delete(stale_session)
         await db.flush()
 
+    stmt = select(NpcInstance).where(
+        NpcInstance.player_id == body.player_id,
+        NpcInstance.met_in_person == True,
+        NpcInstance.template_id != body.npc_id,
+    )
+    res_met = await db.execute(stmt)
+    met_any = len(res_met.scalars().all()) > 0
+    is_first_interaction = not met_any
+
+    # Mark NPC as met in person
+    instance.met_in_person = True
+    await db.flush()
+
     # Scenario selection (Section 6.2)
     seed = scenario_service.select_seed(
         archetype_role=template.archetype_role,
         player_level=player.level,
         npc_id=body.npc_id,
+        is_first_interaction=is_first_interaction,
     )
 
     # Effective starting metrics (Section 6.3)
@@ -189,11 +203,12 @@ async def start_interaction(
     npc_expression = personalized.get("npc_expression", "neutral")
 
     # Build structured Perception Layer projection
-    perception_layer = perception_service.build_perception_layer(
+    perception_layer = await perception_service.build_perception_layer(
         template=template,
         instance=instance,
         player=player,
         seed=seed,
+        db=db,
     )
 
     # Append NPC opening to conversation history

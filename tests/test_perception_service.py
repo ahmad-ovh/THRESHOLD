@@ -105,12 +105,20 @@ def test_calculate_presentation_mode_friend_major_event_override():
     assert show_modal is True
 
 
-def test_build_perception_layer_first_meeting(mock_template, mock_instance, mock_player, mock_seed):
-    layer = perception_service.build_perception_layer(
+@pytest.mark.asyncio
+async def test_build_perception_layer_first_meeting(mock_template, mock_instance, mock_player, mock_seed):
+    from unittest.mock import AsyncMock, MagicMock
+    mock_result = MagicMock()
+    mock_result.scalars.return_value.all.return_value = []
+    mock_db = AsyncMock()
+    mock_db.execute.return_value = mock_result
+
+    layer = await perception_service.build_perception_layer(
         template=mock_template,
         instance=mock_instance,
         player=mock_player,
         seed=mock_seed,
+        db=mock_db,
     )
     assert layer["show_modal"] is True
     assert layer["presentation_mode"] == "full"
@@ -137,4 +145,4 @@ async def test_process_encounter_end_perception(mock_instance):
     )
 
     assert len(mock_instance.discovered_facts) >= 2
-    assert "Built rapport with Barista" in mock_instance.discovered_facts[-1]
+    assert "Had a productive discussion" in mock_instance.discovered_facts[-1]
