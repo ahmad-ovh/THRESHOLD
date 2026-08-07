@@ -360,41 +360,81 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	if not ResourceLoader.exists(eye_r_path):
 		eye_r_path = "res://resources/character_customization/eyes/eye_01_R.png"
 
-	var eye_l_tex = load(eye_l_path) as Texture2D
-	var eye_r_tex = load(eye_r_path) as Texture2D
+	var eye_l_tex: Texture2D = load(eye_l_path) if ResourceLoader.exists(eye_l_path) else null
+	var eye_r_tex: Texture2D = load(eye_r_path) if ResourceLoader.exists(eye_r_path) else null
 
 	if eye_l_tex:
 		var img_l = eye_l_tex.get_image()
 		img_l.resize(80, 80, Image.INTERPOLATE_BILINEAR)
 		_apply_chroma_and_blit(face_img, img_l, Vector2i(170, 190), sclera_col, pupil_col, iris_col)
+	else:
+		_draw_procedural_eye(face_img, Vector2i(210, 230), 28, sclera_col, pupil_col, iris_col)
 
 	if eye_r_tex:
 		var img_r = eye_r_tex.get_image()
 		img_r.resize(80, 80, Image.INTERPOLATE_BILINEAR)
 		_apply_chroma_and_blit(face_img, img_r, Vector2i(262, 190), sclera_col, pupil_col, iris_col)
+	else:
+		_draw_procedural_eye(face_img, Vector2i(302, 230), 28, sclera_col, pupil_col, iris_col)
 
 	# Load Nose
 	var nose_path = "res://resources/character_customization/noses/nose_%02d.png" % nose_style
 	if not ResourceLoader.exists(nose_path):
 		nose_path = "res://resources/character_customization/noses/nose_01.png"
-	var nose_tex = load(nose_path) as Texture2D
+	var nose_tex: Texture2D = load(nose_path) if ResourceLoader.exists(nose_path) else null
 	if nose_tex:
 		var img_n = nose_tex.get_image()
 		img_n.resize(50, 50, Image.INTERPOLATE_BILINEAR)
 		_blit_alpha(face_img, img_n, Vector2i(231, 260))
+	else:
+		_draw_procedural_nose(face_img, Vector2i(256, 280), skin_color.darkened(0.2))
 
 	# Load Mouth
 	var mouth_path = "res://resources/character_customization/mouths/mouth_mask_%02d.png" % mouth_style
 	if not ResourceLoader.exists(mouth_path):
 		mouth_path = "res://resources/character_customization/mouths/mouth_mask_01.png"
-	var mouth_tex = load(mouth_path) as Texture2D
+	var mouth_tex: Texture2D = load(mouth_path) if ResourceLoader.exists(mouth_path) else null
 	if mouth_tex:
 		var img_m = mouth_tex.get_image()
 		img_m.resize(70, 45, Image.INTERPOLATE_BILINEAR)
 		_blit_alpha(face_img, img_m, Vector2i(221, 310))
+	else:
+		_draw_procedural_mouth(face_img, Vector2i(256, 332), Color(0.7, 0.25, 0.25))
 
-	# face_img.flip_y() # Removed so facial features map to the front face
 	return ImageTexture.create_from_image(face_img)
+
+static func _draw_procedural_eye(dest: Image, center: Vector2i, radius: int, sclera: Color, pupil: Color, iris: Color) -> void:
+	for y in range(-radius, radius + 1):
+		for x in range(-radius, radius + 1):
+			var dist_sq = x*x + y*y
+			if dist_sq <= radius * radius:
+				var px = center.x + x
+				var py = center.y + y
+				if px >= 0 and px < dest.get_width() and py >= 0 and py < dest.get_height():
+					if dist_sq <= (radius * 0.35) * (radius * 0.35):
+						dest.set_pixel(px, py, pupil)
+					elif dist_sq <= (radius * 0.65) * (radius * 0.65):
+						dest.set_pixel(px, py, iris)
+					else:
+						dest.set_pixel(px, py, sclera)
+
+static func _draw_procedural_nose(dest: Image, center: Vector2i, color: Color) -> void:
+	for y in range(-15, 16):
+		var w = int(12.0 * (1.0 - (float(y) + 15.0) / 30.0))
+		for x in range(-w, w + 1):
+			var px = center.x + x
+			var py = center.y + y
+			if px >= 0 and px < dest.get_width() and py >= 0 and py < dest.get_height():
+				dest.set_pixel(px, py, color)
+
+static func _draw_procedural_mouth(dest: Image, center: Vector2i, color: Color) -> void:
+	for y in range(0, 10):
+		var w = int(25.0 * (1.0 - (float(y) / 10.0)))
+		for x in range(-w, w + 1):
+			var px = center.x + x
+			var py = center.y + y
+			if px >= 0 and px < dest.get_width() and py >= 0 and py < dest.get_height():
+				dest.set_pixel(px, py, color)
 
 static func _apply_chroma_and_blit(dest: Image, src: Image, pos: Vector2i, sclera: Color, pupil: Color, iris: Color) -> void:
 	var sw = src.get_width()
