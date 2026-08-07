@@ -427,13 +427,18 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 			var glasses_atlas = load(glasses_atlas_path) as Texture2D
 			if glasses_atlas:
 				var atlas_img = glasses_atlas.get_image()
-				var frame_w = 950
-				var frame_h = 500
-				var idx = clamp(glasses_style - 1, 0, 9)
-				var rect = Rect2i(idx * frame_w, 0, frame_w, frame_h)
-				var glass_frame = atlas_img.get_region(rect)
-				glass_frame.resize(glass_w, glass_h, Image.INTERPOLATE_BILINEAR)
-				_blit_alpha(face_img, glass_frame, Vector2i(211 + glass_x_off, 396 + glass_y_off))
+				if atlas_img:
+					if atlas_img.is_compressed():
+						atlas_img.decompress()
+					var frame_w = atlas_img.get_width() / 10
+					var frame_h = atlas_img.get_height()
+					if frame_w > 0 and frame_h > 0:
+						var idx = clamp(glasses_style - 1, 0, 9)
+						var rect = Rect2i(idx * frame_w, 0, frame_w, frame_h)
+						var glass_frame = atlas_img.get_region(rect)
+						if glass_frame and glass_w > 0 and glass_h > 0:
+							glass_frame.resize(glass_w, glass_h, Image.INTERPOLATE_BILINEAR)
+							_blit_alpha(face_img, glass_frame, Vector2i(211 + glass_x_off, 396 + glass_y_off))
 
 	return ImageTexture.create_from_image(face_img)
 
@@ -471,13 +476,31 @@ static func _draw_procedural_mouth(dest: Image, center: Vector2i, color: Color) 
 				dest.set_pixel(px, py, color)
 
 static func _apply_chroma_and_blit(dest: Image, src: Image, pos: Vector2i, sclera: Color, pupil: Color, iris: Color) -> void:
+	if src == null or dest == null:
+		return
+	if src.is_compressed():
+		src.decompress()
+	if src.get_format() != Image.FORMAT_RGBA8:
+		src.convert(Image.FORMAT_RGBA8)
+	if dest.is_compressed():
+		dest.decompress()
+	if dest.get_format() != Image.FORMAT_RGBA8:
+		dest.convert(Image.FORMAT_RGBA8)
+
 	var sw = src.get_width()
 	var sh = src.get_height()
+	var dw = dest.get_width()
+	var dh = dest.get_height()
+	if sw <= 0 or sh <= 0 or dw <= 0 or dh <= 0:
+		return
+
 	for y in range(sh):
+		var dy = pos.y + y
+		if dy < 0 or dy >= dh:
+			continue
 		for x in range(sw):
 			var dx = pos.x + x
-			var dy = pos.y + y
-			if dx < 0 or dx >= dest.get_width() or dy < 0 or dy >= dest.get_height():
+			if dx < 0 or dx >= dw:
 				continue
 			var px = src.get_pixel(x, y)
 			if px.a < 0.05:
@@ -508,13 +531,31 @@ static func _apply_chroma_and_blit(dest: Image, src: Image, pos: Vector2i, scler
 			dest.set_pixel(dx, dy, blended)
 
 static func _blit_alpha(dest: Image, src: Image, pos: Vector2i) -> void:
+	if src == null or dest == null:
+		return
+	if src.is_compressed():
+		src.decompress()
+	if src.get_format() != Image.FORMAT_RGBA8:
+		src.convert(Image.FORMAT_RGBA8)
+	if dest.is_compressed():
+		dest.decompress()
+	if dest.get_format() != Image.FORMAT_RGBA8:
+		dest.convert(Image.FORMAT_RGBA8)
+
 	var sw = src.get_width()
 	var sh = src.get_height()
+	var dw = dest.get_width()
+	var dh = dest.get_height()
+	if sw <= 0 or sh <= 0 or dw <= 0 or dh <= 0:
+		return
+
 	for y in range(sh):
+		var dy = pos.y + y
+		if dy < 0 or dy >= dh:
+			continue
 		for x in range(sw):
 			var dx = pos.x + x
-			var dy = pos.y + y
-			if dx < 0 or dx >= dest.get_width() or dy < 0 or dy >= dest.get_height():
+			if dx < 0 or dx >= dw:
 				continue
 			var px = src.get_pixel(x, y)
 			if px.a < 0.05:

@@ -6,76 +6,76 @@ extends Control
 @onready var preview_world: Node3D = $SubViewportContainer/SubViewport/PreviewWorld
 
 # Control references
-@onready var part_option: OptionButton = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PartHBox/PartOption
-@onready var gizmo_mode_option: OptionButton = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/GizmoModeHBox/GizmoModeOption
-@onready var auto_rotate_check: CheckBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/AutoRotateCheck
+@onready var part_option: OptionButton = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/PartHBox/PartOption
+@onready var gizmo_mode_option: OptionButton = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/GizmoModeHBox/GizmoModeOption
+@onready var auto_rotate_check: CheckBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/AutoRotateCheck
 
 # Position Sliders & Spinboxes
-@onready var slider_px: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowX/SliderPX
-@onready var spin_px: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowX/SpinPX
+@onready var slider_px: HSlider = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/PosRowX/SliderPX
+@onready var spin_px: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/PosRowX/SpinPX
 
-@onready var slider_py: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowY/SliderPY
-@onready var spin_py: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowY/SpinPY
+@onready var slider_py: HSlider = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/PosRowY/SliderPY
+@onready var spin_py: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/PosRowY/SpinPY
 
-@onready var slider_pz: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowZ/SliderPZ
-@onready var spin_pz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowZ/SpinPZ
+@onready var slider_pz: HSlider = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/PosRowZ/SliderPZ
+@onready var spin_pz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/PosRowZ/SpinPZ
 
 # Rotation Sliders & Spinboxes
-@onready var slider_rx: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowX/SliderRX
-@onready var spin_rx: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowX/SpinRX
+@onready var slider_rx: HSlider = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/RotRowX/SliderRX
+@onready var spin_rx: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/RotRowX/SpinRX
 
-@onready var slider_ry: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowY/SliderRY
-@onready var spin_ry: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowY/SpinRY
+@onready var slider_ry: HSlider = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/RotRowY/SliderRY
+@onready var spin_ry: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/RotRowY/SpinRY
 
-@onready var slider_rz: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowZ/SliderRZ
-@onready var spin_rz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowZ/SpinRZ
+@onready var slider_rz: HSlider = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/RotRowZ/SliderRZ
+@onready var spin_rz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/RotRowZ/SpinRZ
 
 # Scale Sliders & Spinboxes
-@onready var slider_sx: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SliderSX
-@onready var spin_sx: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SpinSX
-@onready var spin_sy: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SpinSY
-@onready var spin_sz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SpinSZ
+@onready var slider_sx: HSlider = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/ScaleRow/SliderSX
+@onready var spin_sx: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/ScaleRow/SpinSX
+@onready var spin_sy: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/ScaleRow/SpinSY
+@onready var spin_sz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/ScaleRow/SpinSZ
 
-@onready var undo_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/UndoRedoHBox/UndoBtn
-@onready var redo_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/UndoRedoHBox/RedoBtn
-@onready var copy_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/CopyBtn
-@onready var status_label: Label = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/StatusLabel
-@onready var back_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/BackBtn
+@onready var undo_btn: Button = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/UndoRedoHBox/UndoBtn
+@onready var redo_btn: Button = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/UndoRedoHBox/RedoBtn
+@onready var copy_btn: Button = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/CopyBtn
+@onready var status_label: Label = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/StatusLabel
+@onready var back_btn: Button = $MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer/BackBtn
 
 # Model selector controls & preset buttons
-@onready var head_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/HeadRow/HeadSpin
-@onready var hair_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/HairRow/HairSpin
-@onready var glasses_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassesRow/GlassesSpin
-@onready var body_option: OptionButton = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/BodyRow/BodyOption
+@onready var head_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/HeadRow/HeadSpin
+@onready var hair_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/HairRow/HairSpin
+@onready var glasses_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassesRow/GlassesSpin
+@onready var body_option: OptionButton = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/BodyRow/BodyOption
 
-@onready var save_preset_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/SavePresetBtn
-@onready var save_catalog_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/SaveCatalogBtn
-@onready var preset_status_label: Label = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/PresetStatusLabel
+@onready var save_preset_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/SavePresetBtn
+@onready var save_catalog_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/SaveCatalogBtn
+@onready var preset_status_label: Label = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/PresetStatusLabel
 
 # Visibility Checkboxes & Focus Button
-@onready var check_head: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/CheckHead
-@onready var check_hair: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/CheckHair
-@onready var check_glasses: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/CheckGlasses
-@onready var focus_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/FocusBtn
+@onready var check_head: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/CheckHead
+@onready var check_hair: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/CheckHair
+@onready var check_glasses: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/CheckGlasses
+@onready var focus_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/FocusBtn
 
 # Face Texture UV Sliders
-@onready var slider_eye_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeXRow/SliderEyeX
-@onready var spin_eye_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeXRow/SpinEyeX
-@onready var slider_eye_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeYRow/SliderEyeY
-@onready var spin_eye_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeYRow/SpinEyeY
-@onready var slider_eye_size: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeSizeRow/SliderEyeSize
-@onready var spin_eye_size: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeSizeRow/SpinEyeSize
+@onready var slider_eye_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeXRow/SliderEyeX
+@onready var spin_eye_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeXRow/SpinEyeX
+@onready var slider_eye_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeYRow/SliderEyeY
+@onready var spin_eye_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeYRow/SpinEyeY
+@onready var slider_eye_size: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeSizeRow/SliderEyeSize
+@onready var spin_eye_size: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeSizeRow/SpinEyeSize
 
-@onready var slider_nose_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/NoseYRow/SliderNoseY
-@onready var spin_nose_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/NoseYRow/SpinNoseY
+@onready var slider_nose_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseYRow/SliderNoseY
+@onready var spin_nose_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseYRow/SpinNoseY
 
-@onready var slider_mouth_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/MouthYRow/SliderMouthY
-@onready var spin_mouth_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/MouthYRow/SpinMouthY
+@onready var slider_mouth_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthYRow/SliderMouthY
+@onready var spin_mouth_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthYRow/SpinMouthY
 
-@onready var slider_glass_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassXRow/SliderGlassX
-@onready var spin_glass_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassXRow/SpinGlassX
-@onready var slider_glass_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassYRow/SliderGlassY
-@onready var spin_glass_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassYRow/SpinGlassY
+@onready var slider_glass_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassXRow/SliderGlassX
+@onready var spin_glass_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassXRow/SpinGlassX
+@onready var slider_glass_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassYRow/SliderGlassY
+@onready var spin_glass_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassYRow/SpinGlassY
 
 var auto_rotate: bool = false
 var selected_part: String = "head"
@@ -569,7 +569,6 @@ func _rebuild_avatar() -> void:
 	CharacterFactory.apply_alignment(current_avatar_instance, alignment_data)
 	_update_part_visibilities()
 	_spawn_3d_gizmo()
-	_take_debug_screenshot("authoring_alignment_preview")
 
 func _spawn_3d_gizmo() -> void:
 	if gizmo_node:
