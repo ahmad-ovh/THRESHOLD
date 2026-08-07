@@ -161,7 +161,9 @@ static func _add_base_humanoid(
 	body_pivot.add_child(head_pivot)
 
 	head_pivot.add_child(_cylinder(0.06, 0.10, Vector3(0.0, 0.0, 0.0), skin_mat))
-	head_pivot.add_child(_sphere(0.19, Vector3(0.0, 0.16, 0.0), skin_mat))
+	var base_head_mesh = _sphere(0.19, Vector3(0.0, 0.16, 0.0), skin_mat)
+	base_head_mesh.name = "HeadMesh"
+	head_pivot.add_child(base_head_mesh)
 
 	if add_default_eyes:
 		var eye_mat = _mat(Color(0.15, 0.15, 0.18), 0.3)
@@ -199,6 +201,8 @@ static func _build_player(root: Node3D) -> void:
 		head_mesh = _sphere(0.19, Vector3(0.0, 0.16, 0.0), skin_mat)
 		head_mesh.name = "HeadMesh"
 		head_pivot.add_child(head_mesh)
+
+	head_mesh.rotation_degrees.y = 180.0
 
 	var face_tex = _create_face_texture(c)
 	var head_mat = StandardMaterial3D.new()
