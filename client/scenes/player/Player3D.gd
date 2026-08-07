@@ -55,7 +55,10 @@ func _ready() -> void:
 	_setup_dollhouse_camera()
 	_setup_player_mesh()
 	_ensure_dev_camera_input_action()
-	
+
+	if PlayerStore:
+		PlayerStore.customization_updated.connect(update_customization)
+
 	if GameController:
 		GameController.is_development_mode_changed.connect(func(enabled: bool):
 			_update_dev_mode(enabled)
@@ -227,6 +230,19 @@ func _setup_player_mesh() -> void:
 		anim_right_arm = player_model.find_child("RightArmPivot", true, false)
 		anim_body = player_model.find_child("BodyPivot", true, false)
 		anim_head = player_model.find_child("HeadPivot", true, false)
+
+func set_player_hair(hair_style: int, hair_color: Color = Color.WHITE) -> Node3D:
+	if character_mesh and character_mesh.get_child_count() > 0:
+		var avatar = character_mesh.get_child(0)
+		return CharacterFactory.attach_hair_to_character(avatar, hair_style, hair_color)
+	return null
+
+func update_customization() -> void:
+	if PlayerStore and character_mesh:
+		var c = PlayerStore.customization
+		var hair_style = c.get("hair_style", 0)
+		var hair_color = c.get("hair_color", Color(0.24, 0.16, 0.10))
+		set_player_hair(hair_style, hair_color)
 
 func _setup_dollhouse_camera() -> void:
 	if spring_arm:

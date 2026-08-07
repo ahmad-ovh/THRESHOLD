@@ -232,7 +232,9 @@ func _build_hair_workspace() -> void:
 		var is_sel = (cur_hair == h_idx)
 		var blob = _create_option_blob("Style %d" % (h_idx + 1), is_sel, func():
 			PlayerStore.customization["hair_style"] = h_idx
-			_update_character_preview()
+			if active_avatar_instance:
+				var h_col = PlayerStore.customization.get("hair_color", Color(0.24, 0.16, 0.10))
+				CharacterFactory.attach_hair_to_character(active_avatar_instance, h_idx, h_col)
 			_render_active_workspace()
 		)
 		grid.add_child(blob)
@@ -248,7 +250,9 @@ func _build_hair_workspace() -> void:
 		var is_sel = (cur_h_col.to_html() == col.to_html())
 		var swatch = _create_color_swatch(col, is_sel, func():
 			PlayerStore.customization["hair_color"] = col
-			_update_character_preview()
+			if active_avatar_instance:
+				var h_style = PlayerStore.customization.get("hair_style", 0)
+				CharacterFactory.attach_hair_to_character(active_avatar_instance, h_style, col)
 			_render_active_workspace()
 		)
 		color_row.add_child(swatch)

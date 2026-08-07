@@ -782,6 +782,58 @@ static func _add_accessory(body_pivot: Node3D, head_pivot: Node3D, style: int) -
 			var band_mat = _mat(Color(0.95, 0.80, 0.18), 0.3, 0.7)
 			head_pivot.add_child(_torus(0.20, 0.02, Vector3(0.0, 0.26, 0.0), band_mat))
 
+static func attach_hair_to_character(avatar_root: Node3D, hair_style: int, hair_color: Color = Color.WHITE) -> Node3D:
+	if not avatar_root:
+		return null
+	var mii = avatar_root.get_node_or_null("MiiAvatar") if avatar_root.name != "MiiAvatar" else avatar_root
+	if not mii:
+		mii = avatar_root
+
+	var skeleton = mii.find_child("Armature", true, false) as Skeleton3D
+	if not skeleton:
+		skeleton = mii.find_child("*Skeleton*", true, false) as Skeleton3D
+	if not skeleton:
+		return null
+
+	var head_attach = _get_or_create_head_bone_attachment(skeleton)
+	if not head_attach:
+		return null
+
+	# Remove any existing hair nodes
+	var to_remove = []
+	for child in head_attach.get_children():
+		if child.name.begins_with("GLTFHair") or child.name.to_lower().contains("hair"):
+			to_remove.append(child)
+
+	var old_hairs = mii.find_children("*GLTFHair*", "Node3D", true, false)
+	for h in old_hairs:
+		if h != null and is_instance_valid(h) and not to_remove.has(h):
+			to_remove.append(h)
+
+	for node in to_remove:
+		node.queue_free()
+
+	# Load hair GLTF
+	var hair_path = "res://assets/character_models/hair/hair_%03d.gltf" % hair_style
+	if not ResourceLoader.exists(hair_path):
+		hair_path = "res://assets/character_models/hair/hair_000.gltf"
+
+	var hair_gltf = _load_gltf(hair_path)
+	if not hair_gltf:
+		return null
+
+	hair_gltf.name = "GLTFHair"
+	var hair_key = "hair_%03d" % hair_style
+
+	# Inherit exact anchoring metrics established by Model Aligner from model_presets.json
+	_apply_item_transform(hair_gltf, "hair", hair_key, Vector3(0.0, 0.02, 0.0), Vector3.ZERO, Vector3(1.05, 1.05, 1.05))
+
+	var hair_mat = _mat(hair_color)
+	_set_node_material(hair_gltf, hair_mat)
+
+	head_attach.add_child(hair_gltf)
+	return hair_gltf
+
 static func _build_player(root: Node3D) -> void:
 	_build_character_from_dict(root, PlayerStore.customization)
 
@@ -869,18 +921,9 @@ static func _build_character_from_dict(root: Node3D, c: Dictionary) -> void:
 						_set_node_material(head_gltf, head_mat)
 						head_attach.add_child(head_gltf)
 
-			# 3D Hair Attachment
+			# 3D Hair Attachment via dedicated attach_hair_to_character helper
 			var hair_style: int = c.get("hair_style", 0)
-			var hair_path = "res://assets/character_models/hair/hair_%03d.gltf" % hair_style
-			if not ResourceLoader.exists(hair_path):
-				hair_path = "res://assets/character_models/hair/hair_000.gltf"
-			var hair_gltf = _load_gltf(hair_path)
-			if hair_gltf:
-				hair_gltf.name = "GLTFHair"
-				var hair_key = "hair_%03d" % hair_style
-				_apply_item_transform(hair_gltf, "hair", hair_key, Vector3(0.0, 0.02, 0.0), Vector3.ZERO, Vector3(1.05, 1.05, 1.05))
-				_set_node_material(hair_gltf, hair_mat)
-				head_attach.add_child(hair_gltf)
+			attach_hair_to_character(avatar, hair_style, hair_color)
 
 			# Glasses Attachment
 			var glasses_style: int = c.get("glasses_style", 0)
