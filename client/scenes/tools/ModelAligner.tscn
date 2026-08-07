@@ -236,12 +236,14 @@ size_flags_horizontal = 3
 min_value = -150.0
 max_value = 150.0
 step = 1.0
+value = 26.0
 
 [node name="SpinEyeX" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeXRow"]
 custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = -200.0
 max_value = 200.0
+value = 26.0
 
 [node name="EyeYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
@@ -254,15 +256,17 @@ text = "Eye Y:"
 [node name="SliderEyeY" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeYRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-min_value = -150.0
-max_value = 150.0
+min_value = -200.0
+max_value = 200.0
 step = 1.0
+value = -135.0
 
 [node name="SpinEyeY" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeYRow"]
 custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = -200.0
 max_value = 200.0
+value = -135.0
 
 [node name="EyeSizeRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
@@ -277,14 +281,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 6.0
 max_value = 100.0
-value = 24.0
+value = 43.0
 
 [node name="SpinEyeSize" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeSizeRow"]
 custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = 4.0
 max_value = 150.0
-value = 24.0
+value = 43.0
 
 [node name="EyeRotRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
@@ -300,7 +304,7 @@ size_flags_horizontal = 3
 min_value = 0.0
 max_value = 360.0
 step = 1.0
-value = 0.0
+value = 90.0
 
 [node name="SpinEyeRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow"]
 custom_minimum_size = Vector2(65, 0)
@@ -308,7 +312,7 @@ layout_mode = 2
 min_value = 0.0
 max_value = 360.0
 step = 1.0
-value = 0.0
+value = 90.0
 
 [node name="NoseYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
