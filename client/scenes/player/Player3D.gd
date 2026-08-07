@@ -73,13 +73,19 @@ func _ensure_dev_camera_input_action() -> void:
 
 func _update_dev_mode(enabled: bool) -> void:
 	is_development_mode = enabled
-	if enabled and not camera_dev_layer:
-		_setup_camera_dev_widget()
+	if enabled:
+		if not camera_dev_layer:
+			_setup_camera_dev_widget()
+		else:
+			camera_dev_layer.visible = true
+			var panel = camera_dev_layer.find_child("CameraDevPanel", true, false)
+			if panel:
+				panel.visible = true
 	elif camera_dev_layer:
-		camera_dev_layer.visible = enabled
+		camera_dev_layer.visible = false
 
 func _setup_camera_dev_widget() -> void:
-	if not is_development_mode or camera_dev_layer:
+	if camera_dev_layer:
 		return
 
 	camera_dev_layer = CanvasLayer.new()
@@ -89,8 +95,9 @@ func _setup_camera_dev_widget() -> void:
 
 	var panel = PanelContainer.new()
 	panel.name = "CameraDevPanel"
-	panel.position = Vector2(20, 60)
-	panel.custom_minimum_size = Vector2(300, 360)
+	panel.position = Vector2(20, 20)
+	panel.custom_minimum_size = Vector2(320, 380)
+	panel.visible = true
 
 	var toggle_btn = Button.new()
 	toggle_btn.name = "DevWidgetToggleButton"
