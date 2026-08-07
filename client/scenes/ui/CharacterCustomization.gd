@@ -4,34 +4,34 @@ extends CanvasLayer
 @onready var back_button: Button = $Control/MarginContainer/VBoxContainer/HeaderBox/BackButton
 @onready var save_button: Button = $Control/MarginContainer/VBoxContainer/HeaderBox/SaveButton
 
-@onready var model_pivot: Node3D = $Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
+@onready var model_pivot: Node3D = $Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin/VBox/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
 
-@onready var skin_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/SkinRow/SkinPicker
+@onready var skin_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/SkinRow/SkinPicker
 
-@onready var hair_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow/HairPrevBtn
-@onready var hair_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow/HairNextBtn
-@onready var hair_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow/HairStyleLabel
-@onready var hair_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow/HairPicker
+@onready var hair_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow/HairPrevBtn
+@onready var hair_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow/HairNextBtn
+@onready var hair_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow/HairStyleLabel
+@onready var hair_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow/HairPicker
 
-@onready var eye_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow/EyePrevBtn
-@onready var eye_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow/EyeNextBtn
-@onready var eye_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow/EyeStyleLabel
+@onready var eye_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/EyeRow/EyePrevBtn
+@onready var eye_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/EyeRow/EyeNextBtn
+@onready var eye_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/EyeRow/EyeStyleLabel
 
-@onready var iris_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/IrisRow/IrisPicker
-@onready var pupil_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/PupilRow/PupilPicker
-@onready var sclera_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/ScleraRow/ScleraPicker
+@onready var iris_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/IrisRow/IrisPicker
+@onready var pupil_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/PupilRow/PupilPicker
+@onready var sclera_picker: ColorPickerButton = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/ScleraRow/ScleraPicker
 
-@onready var nose_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow/NosePrevBtn
-@onready var nose_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow/NoseNextBtn
-@onready var nose_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow/NoseStyleLabel
+@onready var nose_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/NoseRow/NosePrevBtn
+@onready var nose_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/NoseRow/NoseNextBtn
+@onready var nose_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/NoseRow/NoseStyleLabel
 
-@onready var mouth_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow/MouthPrevBtn
-@onready var mouth_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow/MouthNextBtn
-@onready var mouth_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow/MouthStyleLabel
+@onready var mouth_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/MouthRow/MouthPrevBtn
+@onready var mouth_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/MouthRow/MouthNextBtn
+@onready var mouth_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/MouthRow/MouthStyleLabel
 
-@onready var acc_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow/AccPrevBtn
-@onready var acc_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow/AccNextBtn
-@onready var acc_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow/AccStyleLabel
+@onready var acc_prev_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/AccRow/AccPrevBtn
+@onready var acc_next_btn: Button = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/AccRow/AccNextBtn
+@onready var acc_style_label: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/AccRow/AccStyleLabel
 
 const ACC_NAMES: Array[String] = ["None", "Glasses", "Scarf", "Backpack", "Crown/Band"]
 

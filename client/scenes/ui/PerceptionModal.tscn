@@ -1,25 +1,51 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/PerceptionModal.gd" id="1_perception_script"]
+[ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
+[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_bg"]
-bg_color = Color(0.98, 0.96, 0.92, 0.98)
+bg_color = Color(0.99, 0.98, 0.94, 0.98)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.14)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill_bg"]
-bg_color = Color(0.92, 0.88, 0.82, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+bg_color = Color(0.92, 0.88, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_normal"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_hover"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(1.15, 1.15, 1.15, 1)
+region_rect = Rect2(0, 0, 1666, 568)
 
 [node name="PerceptionModal" type="CanvasLayer"]
 layer = 110
@@ -40,7 +66,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.4)
+color = Color(0.08, 0.06, 0.05, 0.5)
 
 [node name="CardPanel" type="PanelContainer" parent="OverlayRoot"]
 custom_minimum_size = Vector2(520, 0)
@@ -58,67 +84,85 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card_bg")
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayRoot/CardPanel"]
+[node name="Margin" type="MarginContainer" parent="OverlayRoot/CardPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="OverlayRoot/CardPanel/MarginContainer"]
+[node name="VBox" type="VBoxContainer" parent="OverlayRoot/CardPanel/Margin"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Header" type="HBoxContainer" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer"]
+[node name="Header" type="HBoxContainer" parent="OverlayRoot/CardPanel/Margin/VBox"]
 layout_mode = 2
 
-[node name="LocationLabel" type="Label" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer/Header"]
+[node name="TitleLabel" type="Label" parent="OverlayRoot/CardPanel/Margin/VBox/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.4, 0.35, 0.3, 1)
-theme_override_font_sizes/font_size = 14
-text = "📍 Location"
+theme_override_colors/font_color = Color(0.82, 0.4, 0.08, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 20
+text = "👁️ PERCEPTION & SOCIAL ANALYSIS"
 
-[node name="NpcLabel" type="Label" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer/Header"]
+[node name="CloseButton" type="Button" parent="OverlayRoot/CardPanel/Margin/VBox/Header"]
+custom_minimum_size = Vector2(36, 32)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.14, 0.12, 1)
-theme_override_font_sizes/font_size = 18
-text = "NPC Name (Role)"
+focus_mode = 0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
+text = " ✖ "
 
-[node name="RelationshipPill" type="PanelContainer" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="OverlayRoot/CardPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="NpcInfoRow" type="HBoxContainer" parent="OverlayRoot/CardPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="NpcNameLabel" type="Label" parent="OverlayRoot/CardPanel/Margin/VBox/NpcInfoRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.22, 0.18, 0.12, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 18
+text = "NPC Name"
+
+[node name="PresentationPill" type="PanelContainer" parent="OverlayRoot/CardPanel/Margin/VBox/NpcInfoRow"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pill_bg")
 
-[node name="RelationshipLabel" type="Label" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer/RelationshipPill"]
+[node name="Margin" type="MarginContainer" parent="OverlayRoot/CardPanel/Margin/VBox/NpcInfoRow/PresentationPill"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.35, 0.28, 0.22, 1)
-theme_override_font_sizes/font_size = 13
-text = "Status: Stranger"
-horizontal_alignment = 1
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 2
 
-[node name="SituationLabel" type="Label" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer"]
+[node name="PresentationModeLabel" type="Label" parent="OverlayRoot/CardPanel/Margin/VBox/NpcInfoRow/PresentationPill/Margin"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.2, 0.25, 1)
-theme_override_font_sizes/font_size = 15
-text = "Social Situation Premise..."
-autowrap_mode = 3
+theme_override_colors/font_color = Color(0.35, 0.28, 0.2, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 14
+text = "Mode: Neutral"
 
-[node name="FocusLabel" type="Label" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer"]
+[node name="AnalysisScroll" type="ScrollContainer" parent="OverlayRoot/CardPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.45, 0.35, 0.25, 1)
-theme_override_font_sizes/font_size = 13
-text = "Focus: Getting familiar with the place."
-autowrap_mode = 3
+size_flags_vertical = 3
 
-[node name="FactsText" type="RichTextLabel" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
+[node name="AnalysisText" type="RichTextLabel" parent="OverlayRoot/CardPanel/Margin/VBox/AnalysisScroll"]
 layout_mode = 2
-theme_override_colors/default_color = Color(0.25, 0.22, 0.2, 1)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.22, 0.18, 0.12, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 15
+theme_override_font_sizes/bold_font_size = 15
 bbcode_enabled = true
-text = "[b]What you know:[/b]\n• First time meeting this person."
-
-[node name="EnterButton" type="Button" parent="OverlayRoot/CardPanel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 42)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Enter Conversation [Space]"
+text = "Loading perception data..."

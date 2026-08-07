@@ -1,12 +1,97 @@
-[gd_scene format=3 uid="uid://dtbvo1ag1ljdl"]
+[gd_scene load_steps=12 format=3 uid="uid://dtbvo1ag1ljdl"]
 
 [ext_resource type="Script" uid="uid://taflknabuho8" path="res://scenes/ui/DialogueUI.gd" id="1_dialogue_script"]
+[ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
+[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
+[ext_resource type="Texture2D" uid="uid://bhoisbqagxkwk" path="res://assets/ui/paper_craft/thumbtack_orange.png" id="4_thumbtack"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tomodachi_ribbon"]
-bg_color = Color(1, 0.99, 0.94, 0.92)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_strip"]
+bg_color = Color(0.98, 0.96, 0.91, 0.96)
+border_width_left = 2
 border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.88, 0.82, 0.72, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.12)
+shadow_size = 6
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_goal_card"]
+bg_color = Color(1, 0.98, 0.92, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.95, 0.9, 0.82, 1)
+border_color = Color(0.95, 0.78, 0.45, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.08)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_feedback_card"]
+bg_color = Color(0.99, 0.98, 0.95, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.88, 0.82, 0.72, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.14)
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_paper"]
+bg_color = Color(0.98, 0.96, 0.92, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.78, 0.68, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_normal"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_hover"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(1.15, 1.15, 1.15, 1)
+region_rect = Rect2(0, 0, 1666, 568)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_pressed"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(0.85, 0.85, 0.85, 1)
+region_rect = Rect2(0, 0, 1666, 568)
 
 [node name="DialogueUI" type="CanvasLayer" unique_id=615538034]
 script = ExtResource("1_dialogue_script")
@@ -19,41 +104,77 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HeaderContainer" type="HBoxContainer" parent="OverlayRoot" unique_id=590204611]
+[node name="HeaderPanel" type="PanelContainer" parent="OverlayRoot" unique_id=590204611]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 16.0
-offset_top = 50.0
+offset_top = 16.0
 offset_right = -16.0
-offset_bottom = 85.0
+offset_bottom = 66.0
 grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_strip")
 
-[node name="SpeakerLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=2027361671]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayRoot/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="HeaderContainer" type="HBoxContainer" parent="OverlayRoot/HeaderPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SpeakerLabel" type="Label" parent="OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer" unique_id=2027361671]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.82, 0.4, 0.08, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 22
 text = "NPC Name"
 
-[node name="RoleBadge" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=194291391]
+[node name="RoleBadge" type="Label" parent="OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer" unique_id=194291391]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.48, 0.78, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
 text = "[Role: Peer]"
 
-[node name="TierLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=344393035]
+[node name="TierLabel" type="Label" parent="OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer" unique_id=344393035]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.52, 0.22, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
 text = "[Tier: Stranger]"
 
-[node name="MoodLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=1019082907]
+[node name="MoodLabel" type="Label" parent="OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer" unique_id=1019082907]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.38, 0.28, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
 text = "[Mood: neutral]"
 
-[node name="LoadingLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=1233796803]
+[node name="LoadingLabel" type="Label" parent="OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer" unique_id=1233796803]
 visible = false
 layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.35, 0.1, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
 text = "Walking over..."
 
-[node name="LeaveButton" type="Button" parent="OverlayRoot/HeaderContainer" unique_id=165015605]
+[node name="LeaveButton" type="Button" parent="OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer" unique_id=165015605]
+custom_minimum_size = Vector2(140, 36)
 layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_paper_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = " Say Goodbye "
 
 [node name="ScenarioGoalBanner" type="PanelContainer" parent="OverlayRoot" unique_id=1739124727]
@@ -61,14 +182,26 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -250.0
-offset_top = 90.0
-offset_right = 250.0
-offset_bottom = 125.0
+offset_left = -260.0
+offset_top = 76.0
+offset_right = 260.0
+offset_bottom = 114.0
 grow_horizontal = 2
+rotation = -0.012
+theme_override_styles/panel = SubResource("StyleBoxFlat_goal_card")
 
-[node name="ScenarioGoalLabel" type="Label" parent="OverlayRoot/ScenarioGoalBanner" unique_id=1053769463]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayRoot/ScenarioGoalBanner"]
 layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 6
+
+[node name="ScenarioGoalLabel" type="Label" parent="OverlayRoot/ScenarioGoalBanner/MarginContainer" unique_id=1053769463]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.2, 0.12, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
 text = "Conversation Focus: Active listening and validating feelings"
 horizontal_alignment = 1
 
@@ -78,14 +211,26 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -250.0
-offset_top = 135.0
-offset_right = 250.0
-offset_bottom = 170.0
+offset_left = -260.0
+offset_top = 122.0
+offset_right = 260.0
+offset_bottom = 160.0
 grow_horizontal = 2
+rotation = 0.01
+theme_override_styles/panel = SubResource("StyleBoxFlat_goal_card")
 
-[node name="CoachHintLabel" type="Label" parent="OverlayRoot/CoachHintBanner" unique_id=1915605562]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayRoot/CoachHintBanner"]
 layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 6
+
+[node name="CoachHintLabel" type="Label" parent="OverlayRoot/CoachHintBanner/MarginContainer" unique_id=1915605562]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.38, 0.08, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
 text = "Coach Hint: ..."
 horizontal_alignment = 1
 
@@ -101,11 +246,12 @@ offset_top = -140.0
 offset_bottom = -95.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_tomodachi_ribbon")
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_strip")
 
 [node name="StatusRibbonLabel" type="Label" parent="OverlayRoot/StatusRibbonPanel" unique_id=884648785]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15, 0.22, 0.3, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 18
 text = "Status update..."
 horizontal_alignment = 1
@@ -124,17 +270,40 @@ offset_right = -296.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_strip")
 
-[node name="InputContainer" type="HBoxContainer" parent="OverlayRoot/BottomInputPanel" unique_id=1743740589]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayRoot/BottomInputPanel"]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
 
-[node name="MessageInput" type="LineEdit" parent="OverlayRoot/BottomInputPanel/InputContainer" unique_id=465635476]
+[node name="InputContainer" type="HBoxContainer" parent="OverlayRoot/BottomInputPanel/MarginContainer" unique_id=1743740589]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MessageInput" type="LineEdit" parent="OverlayRoot/BottomInputPanel/MarginContainer/InputContainer" unique_id=465635476]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.16, 0.1, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_input_paper")
 placeholder_text = "Say something..."
 
-[node name="SendButton" type="Button" parent="OverlayRoot/BottomInputPanel/InputContainer" unique_id=441085136]
+[node name="SendButton" type="Button" parent="OverlayRoot/BottomInputPanel/MarginContainer/InputContainer" unique_id=441085136]
+custom_minimum_size = Vector2(110, 42)
 layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_paper_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = " Send "
 
 [node name="FeedbackPanel" type="VBoxContainer" parent="OverlayRoot" unique_id=1797998074]
@@ -151,75 +320,109 @@ offset_right = -16.0
 offset_bottom = 240.0
 grow_horizontal = 0
 grow_vertical = 2
+theme_override_constants/separation = 6
 
-[node name="ScoresHeader" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1086411765]
+[node name="FeedbackCard" type="PanelContainer" parent="OverlayRoot/FeedbackPanel"]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_feedback_card")
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayRoot/FeedbackPanel/FeedbackCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ScoresHeader" type="Label" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1086411765]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.4, 0.08, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 18
 text = "Communication Reflection"
 
-[node name="OverallContainer" type="HBoxContainer" parent="OverlayRoot/FeedbackPanel" unique_id=1118481416]
+[node name="OverallContainer" type="HBoxContainer" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1118481416]
 layout_mode = 2
 
-[node name="OverallLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer" unique_id=1693964229]
+[node name="OverallLabel" type="Label" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/OverallContainer" unique_id=1693964229]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
 text = "Overall: 50%"
 
-[node name="DeltaLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer" unique_id=901833543]
+[node name="DeltaLabel" type="Label" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/OverallContainer" unique_id=901833543]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
 text = "[--]"
 
-[node name="OverallProgressBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1193420288]
+[node name="OverallProgressBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1193420288]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 value = 50.0
 
-[node name="StatusBadgeLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=2016737326]
+[node name="StatusBadgeLabel" type="Label" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=2016737326]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.3, 0.22, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 15
 text = "Status: Baseline"
 
-[node name="HSeparator" type="HSeparator" parent="OverlayRoot/FeedbackPanel" unique_id=57689530]
+[node name="HSeparator" type="HSeparator" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=57689530]
 layout_mode = 2
 
-[node name="ClarityLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1620772102]
+[node name="ClarityLabel" type="Label" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1620772102]
 layout_mode = 2
 tooltip_text = "Clarity: How clearly and directly you state your point."
+theme_override_font_sizes/font_size = 14
 text = "Clarity: 50%"
 
-[node name="ClarityBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1950693667]
+[node name="ClarityBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1950693667]
 layout_mode = 2
 value = 50.0
 
-[node name="EmpathyLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1497877979]
+[node name="EmpathyLabel" type="Label" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1497877979]
 layout_mode = 2
 tooltip_text = "Empathy: Validating feelings and acknowledging emotions."
+theme_override_font_sizes/font_size = 14
 text = "Empathy: 50%"
 
-[node name="EmpathyBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=730519276]
+[node name="EmpathyBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=730519276]
 layout_mode = 2
 value = 50.0
 
-[node name="PolitenessLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=145048484]
+[node name="PolitenessLabel" type="Label" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=145048484]
 layout_mode = 2
 tooltip_text = "Politeness: Maintaining a respectful and considerate tone."
+theme_override_font_sizes/font_size = 14
 text = "Politeness: 50%"
 
-[node name="PolitenessBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1756125853]
+[node name="PolitenessBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1756125853]
 layout_mode = 2
 value = 50.0
 
-[node name="ExpressionLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1508251752]
+[node name="ExpressionLabel" type="Label" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1508251752]
 layout_mode = 2
 tooltip_text = "Expression: Emotional honesty and authentic personal engagement."
+theme_override_font_sizes/font_size = 14
 text = "Expression: 50%"
 
-[node name="ExpressionBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=518400406]
+[node name="ExpressionBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=518400406]
 layout_mode = 2
 value = 50.0
 
-[node name="FeedbackText" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel" unique_id=1032672357]
+[node name="FeedbackText" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox" unique_id=1032672357]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.25, 0.2, 0.14, 1)
+theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/bold_font_size = 14
 bbcode_enabled = true
 text = "Feedback hints..."
 
