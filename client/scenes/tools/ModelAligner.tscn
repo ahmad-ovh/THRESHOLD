@@ -247,6 +247,30 @@ min_value = 4.0
 max_value = 150.0
 value = 24.0
 
+[node name="EyeRotRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Eye Rot:"
+
+[node name="SliderEyeRot" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 360.0
+step = 90.0
+value = 90.0
+
+[node name="SpinEyeRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = 0.0
+max_value = 360.0
+step = 90.0
+value = 90.0
+
 [node name="NoseYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 

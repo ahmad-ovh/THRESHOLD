@@ -65,6 +65,8 @@ extends Control
 @onready var spin_eye_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeYRow/SpinEyeY
 @onready var slider_eye_size: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeSizeRow/SliderEyeSize
 @onready var spin_eye_size: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeSizeRow/SpinEyeSize
+@onready var slider_eye_rot: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow/SliderEyeRot
+@onready var spin_eye_rot: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow/SpinEyeRot
 
 @onready var slider_nose_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseYRow/SliderNoseY
 @onready var spin_nose_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseYRow/SpinNoseY
@@ -401,6 +403,7 @@ func _connect_signals() -> void:
 		PlayerStore.customization["face_offsets"]["eye_x"] = int(spin_eye_x.value)
 		PlayerStore.customization["face_offsets"]["eye_y"] = int(spin_eye_y.value)
 		PlayerStore.customization["face_offsets"]["eye_size"] = int(spin_eye_size.value)
+		PlayerStore.customization["face_offsets"]["eye_rot"] = int(spin_eye_rot.value)
 		PlayerStore.customization["face_offsets"]["nose_y"] = int(spin_nose_y.value)
 		PlayerStore.customization["face_offsets"]["mouth_y"] = int(spin_mouth_y.value)
 		PlayerStore.customization["face_offsets"]["glass_x"] = int(spin_glass_x.value)
@@ -415,6 +418,10 @@ func _connect_signals() -> void:
 
 	slider_eye_size.value_changed.connect(func(v): spin_eye_size.set_value_no_signal(v); update_face_offsets.call())
 	spin_eye_size.value_changed.connect(func(v): slider_eye_size.set_value_no_signal(v); update_face_offsets.call())
+
+	if slider_eye_rot and spin_eye_rot:
+		slider_eye_rot.value_changed.connect(func(v): spin_eye_rot.set_value_no_signal(v); update_face_offsets.call())
+		spin_eye_rot.value_changed.connect(func(v): slider_eye_rot.set_value_no_signal(v); update_face_offsets.call())
 
 	slider_nose_y.value_changed.connect(func(v): spin_nose_y.set_value_no_signal(v); update_face_offsets.call())
 	spin_nose_y.value_changed.connect(func(v): slider_nose_y.set_value_no_signal(v); update_face_offsets.call())

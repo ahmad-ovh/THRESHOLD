@@ -338,6 +338,19 @@ static func apply_alignment(avatar: Node3D, alignment: Dictionary) -> void:
 				if t.has("rotation"): node.rotation_degrees = t["rotation"]
 				if t.has("scale"): node.scale = t["scale"]
 
+static func _rotate_image(img: Image, angle_deg: int) -> void:
+	if img == null:
+		return
+	if img.is_compressed():
+		img.decompress()
+	var norm_angle = posmod(angle_deg, 360)
+	if norm_angle == 90:
+		img.rotate_90(ClockDirection.CLOCKWISE)
+	elif norm_angle == 180:
+		img.rotate_180()
+	elif norm_angle == 270:
+		img.rotate_90(ClockDirection.COUNTERCLOCKWISE)
+
 static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var skin_color: Color = customization.get("skin_color", Color(0.92, 0.76, 0.65))
 	var eye_style: int = customization.get("eye_style", 1)
@@ -352,6 +365,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var eye_x_off: int = int(face_offsets.get("eye_x", 0))
 	var eye_y_off: int = int(face_offsets.get("eye_y", 0))
 	var eye_size: int = int(face_offsets.get("eye_size", 24))
+	var eye_rot: int = int(face_offsets.get("eye_rot", 90))
 	var nose_y_off: int = int(face_offsets.get("nose_y", 0))
 	var mouth_y_off: int = int(face_offsets.get("mouth_y", 0))
 	var glass_x_off: int = int(face_offsets.get("glass_x", 0))
@@ -364,8 +378,10 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var face_img = Image.create(tex_w, tex_h, false, Image.FORMAT_RGBA8)
 	face_img.fill(skin_color)
 
-	var base_eye_l_pos = Vector2i(242 + eye_x_off, 400 + eye_y_off)
-	var base_eye_r_pos = Vector2i(218 - eye_x_off, 400 + eye_y_off)
+	# Front face UV center on head_head_001 is around (256, 210)
+	var half_eye = int(eye_size / 2.0)
+	var base_eye_l_pos = Vector2i(256 + eye_x_off - half_eye, 210 + eye_y_off - half_eye)
+	var base_eye_r_pos = Vector2i(256 - eye_x_off - half_eye, 210 + eye_y_off - half_eye)
 
 	# Load Eye L & R
 	var eye_l_path = "res://resources/character_customization/eyes/eye_%02d_L.png" % eye_style
@@ -380,26 +396,26 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 
 	if eye_l_tex:
 		var img_l = eye_l_tex.get_image()
+		_rotate_image(img_l, eye_rot)
 		img_l.resize(eye_size, eye_size, Image.INTERPOLATE_BILINEAR)
 		_apply_chroma_and_blit(face_img, img_l, base_eye_l_pos, sclera_col, pupil_col, iris_col)
 	else:
-		var half_sz = int(eye_size / 2.0)
-		_draw_procedural_eye(face_img, base_eye_l_pos + Vector2i(half_sz, half_sz), half_sz, sclera_col, pupil_col, iris_col)
+		_draw_procedural_eye(face_img, base_eye_l_pos + Vector2i(half_eye, half_eye), half_eye, sclera_col, pupil_col, iris_col)
 
 	if eye_r_tex:
 		var img_r = eye_r_tex.get_image()
+		_rotate_image(img_r, eye_rot)
 		img_r.resize(eye_size, eye_size, Image.INTERPOLATE_BILINEAR)
 		_apply_chroma_and_blit(face_img, img_r, base_eye_r_pos, sclera_col, pupil_col, iris_col)
 	else:
-		var half_sz2 = int(eye_size / 2.0)
-		_draw_procedural_eye(face_img, base_eye_r_pos + Vector2i(half_sz2, half_sz2), half_sz2, sclera_col, pupil_col, iris_col)
+		_draw_procedural_eye(face_img, base_eye_r_pos + Vector2i(half_eye, half_eye), half_eye, sclera_col, pupil_col, iris_col)
 
 	# Load Nose
 	var nose_path = "res://resources/character_customization/noses/nose_%02d.png" % nose_style
 	if not ResourceLoader.exists(nose_path):
 		nose_path = "res://resources/character_customization/noses/nose_01.png"
 	var nose_tex: Texture2D = load(nose_path) if ResourceLoader.exists(nose_path) else null
-	var nose_pos = Vector2i(233, 424 + nose_y_off)
+	var nose_pos = Vector2i(256 - 8, 240 + nose_y_off)
 	if nose_tex:
 		var img_n = nose_tex.get_image()
 		img_n.resize(16, 16, Image.INTERPOLATE_BILINEAR)
@@ -412,7 +428,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	if not ResourceLoader.exists(mouth_path):
 		mouth_path = "res://resources/character_customization/mouths/mouth_mask_01.png"
 	var mouth_tex: Texture2D = load(mouth_path) if ResourceLoader.exists(mouth_path) else null
-	var mouth_pos = Vector2i(230, 440 + mouth_y_off)
+	var mouth_pos = Vector2i(256 - 11, 260 + mouth_y_off)
 	if mouth_tex:
 		var img_m = mouth_tex.get_image()
 		img_m.resize(22, 14, Image.INTERPOLATE_BILINEAR)
@@ -438,7 +454,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 						var glass_frame = atlas_img.get_region(rect)
 						if glass_frame and glass_w > 0 and glass_h > 0:
 							glass_frame.resize(glass_w, glass_h, Image.INTERPOLATE_BILINEAR)
-							_blit_alpha(face_img, glass_frame, Vector2i(211 + glass_x_off, 396 + glass_y_off))
+							_blit_alpha(face_img, glass_frame, Vector2i(256 + glass_x_off - int(glass_w / 2.0), 210 + glass_y_off - int(glass_h / 2.0)))
 
 	return ImageTexture.create_from_image(face_img)
 
