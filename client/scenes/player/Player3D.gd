@@ -1,16 +1,31 @@
 # res://scenes/player/Player3D.gd
 extends CharacterBody3D
 
+@export_group("Movement Parameters")
 @export var walk_speed: float = 4.0
 @export var run_speed: float = 6.5
 @export var acceleration: float = 20.0
 @export var friction: float = 25.0
+@export var run_speed_threshold: float = 4.5
+@export var mesh_turn_speed: float = 12.0
 
-# Dollhouse Side Camera Parameters
+@export_group("Camera Parameters")
 @export var camera_follow_speed: float = 5.0
 @export var is_fixed_diorama_room: bool = true
 @export var room_camera_pos: Vector3 = Vector3(0.0, 3.2, 7.5)
 @export var room_camera_rot: Vector3 = Vector3(-14.0, 0.0, 0.0)
+@export var spring_arm_length: float = 0.0
+@export var corridor_min_x: float = -12.0
+@export var corridor_max_x: float = 12.0
+@export var dialogue_camera_offset: Vector3 = Vector3(1.8, 2.4, 4.2)
+
+@export_group("Procedural Fallback Animation")
+@export var leg_swing_deg: float = 28.0
+@export var arm_swing_deg: float = 22.0
+@export var body_base_y: float = 0.76
+@export var body_bob_amount: float = 0.035
+@export var breathing_amplitude: float = 0.015
+@export var head_tilt_deg: float = 1.5
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
@@ -20,8 +35,6 @@ extends CharacterBody3D
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var current_target: Node3D = null
-var default_spring_length: float = 0.0
-var dialogue_spring_length: float = 0.0
 
 var anim_left_leg: Node3D
 var anim_right_leg: Node3D
@@ -53,7 +66,7 @@ func _setup_player_mesh() -> void:
 
 func _setup_dollhouse_camera() -> void:
 	if spring_arm:
-		spring_arm.spring_length = 0.0
+		spring_arm.spring_length = spring_arm_length
 	camera_pivot.global_position = room_camera_pos
 	camera_pivot.rotation_degrees = room_camera_rot
 
@@ -103,7 +116,7 @@ func _update_procedural_animations(delta: float, can_move: bool) -> void:
 
 	if anim_player:
 		if can_move and speed > 0.1:
-			var target_anim = "run" if speed > 4.5 else "walk"
+			var target_anim = "run" if speed > run_speed_threshold else "walk"
 			if anim_player.current_animation != target_anim:
 				anim_player.play(target_anim)
 		else:
@@ -117,20 +130,20 @@ func _update_procedural_animations(delta: float, can_move: bool) -> void:
 		var arm_stride = cos(walk_anim_time)
 
 		if anim_left_leg:
-			anim_left_leg.rotation.x = stride * deg_to_rad(28.0)
+			anim_left_leg.rotation.x = stride * deg_to_rad(leg_swing_deg)
 		if anim_right_leg:
-			anim_right_leg.rotation.x = -stride * deg_to_rad(28.0)
+			anim_right_leg.rotation.x = -stride * deg_to_rad(leg_swing_deg)
 
 		if anim_left_arm:
-			anim_left_arm.rotation.x = -arm_stride * deg_to_rad(22.0)
+			anim_left_arm.rotation.x = -arm_stride * deg_to_rad(arm_swing_deg)
 		if anim_right_arm:
-			anim_right_arm.rotation.x = arm_stride * deg_to_rad(22.0)
+			anim_right_arm.rotation.x = arm_stride * deg_to_rad(arm_swing_deg)
 
 		if anim_body:
-			anim_body.position.y = 0.76 + abs(sin(walk_anim_time * 2.0)) * 0.035
+			anim_body.position.y = body_base_y + abs(sin(walk_anim_time * 2.0)) * body_bob_amount
 	else:
 		walk_anim_time += delta * 2.5
-		var breath = sin(walk_anim_time) * 0.015
+		var breath = sin(walk_anim_time) * breathing_amplitude
 
 		if anim_left_leg:
 			anim_left_leg.rotation.x = lerp_angle(anim_left_leg.rotation.x, 0.0, 10.0 * delta)
@@ -142,9 +155,9 @@ func _update_procedural_animations(delta: float, can_move: bool) -> void:
 			anim_right_arm.rotation.x = lerp_angle(anim_right_arm.rotation.x, 0.0, 10.0 * delta)
 
 		if anim_body:
-			anim_body.position.y = lerp(anim_body.position.y, 0.76 + breath, 8.0 * delta)
+			anim_body.position.y = lerp(anim_body.position.y, body_base_y + breath, 8.0 * delta)
 		if anim_head:
-			anim_head.rotation.z = lerp_angle(anim_head.rotation.z, sin(walk_anim_time * 0.5) * deg_to_rad(1.5), 5.0 * delta)
+			anim_head.rotation.z = lerp_angle(anim_head.rotation.z, sin(walk_anim_time * 0.5) * deg_to_rad(head_tilt_deg), 5.0 * delta)
 
 func _update_dollhouse_camera(delta: float, can_move: bool) -> void:
 	if not camera_pivot:
@@ -157,15 +170,15 @@ func _update_dollhouse_camera(delta: float, can_move: bool) -> void:
 			camera_pivot.rotation_degrees = camera_pivot.rotation_degrees.lerp(room_camera_rot, camera_follow_speed * delta)
 		else:
 			# Large corridor follow player mode
-			var target_x = clamp(global_position.x, -12.0, 12.0)
+			var target_x = clamp(global_position.x, corridor_min_x, corridor_max_x)
 			camera_pivot.global_position.x = lerp(camera_pivot.global_position.x, target_x, camera_follow_speed * delta)
 	else:
-		# Dialogue mode: Smooth left-framed camera zoom on characters (+1.8m X offset)
+		# Dialogue mode: Smooth left-framed camera zoom on characters
 		var npcs = get_tree().get_nodes_in_group("npcs")
 		if npcs.size() > 0:
 			var target_npc = npcs[0]
 			var mid_point = (global_position + target_npc.global_position) / 2.0
-			var target_pos = Vector3(mid_point.x + 1.8, 2.4, mid_point.z + 4.2)
+			var target_pos = Vector3(mid_point.x + dialogue_camera_offset.x, dialogue_camera_offset.y, mid_point.z + dialogue_camera_offset.z)
 			camera_pivot.global_position = camera_pivot.global_position.lerp(target_pos, camera_follow_speed * delta)
 
 func _handle_ground_movement(delta: float) -> void:
@@ -183,7 +196,7 @@ func _handle_ground_movement(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, direction.z * target_speed, acceleration * delta)
 
 		var target_angle = atan2(direction.x, direction.z)
-		character_mesh.rotation.y = lerp_angle(character_mesh.rotation.y, target_angle, 12.0 * delta)
+		character_mesh.rotation.y = lerp_angle(character_mesh.rotation.y, target_angle, mesh_turn_speed * delta)
 	else:
 		_apply_friction(delta)
 
