@@ -106,7 +106,7 @@ const MAX_UNDO_STACK: int = 50
 
 var alignment_data: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
-	"head": {"position": Vector3(0.0, 0.0016, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.002, 0.002, 0.002)},
+	"head": {"position": Vector3(0.0, 0.002, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.002, 0.002, 0.002)},
 	"hair": {"position": Vector3(0.0, 0.02, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.05, 1.05, 1.05)},
 	"glasses": {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
@@ -553,9 +553,9 @@ func _update_part_visibilities() -> void:
 	var mii = current_avatar_instance.get_node_or_null("MiiAvatar") if current_avatar_instance.name != "MiiAvatar" else current_avatar_instance
 	if not mii:
 		return
-	var gh = mii.get_node_or_null("GLTFHead")
-	var ghr = mii.get_node_or_null("GLTFHair")
-	var gl = mii.get_node_or_null("GLTFGlasses")
+	var gh = mii.find_child("GLTFHead*", true, false)
+	var ghr = mii.find_child("GLTFHair*", true, false)
+	var gl = mii.find_child("GLTFGlasses*", true, false)
 
 	if gh and check_head: gh.visible = check_head.button_pressed
 	if ghr and check_hair: ghr.visible = check_hair.button_pressed
