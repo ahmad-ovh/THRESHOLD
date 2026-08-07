@@ -433,13 +433,20 @@ static func apply_alignment(avatar: Node3D, alignment: Dictionary) -> void:
 		return
 	var mii = avatar.get_node_or_null("MiiAvatar") if avatar.name != "MiiAvatar" else avatar
 	if not mii:
-		return
+		mii = avatar
+
 	for part in ["body", "head", "hair", "glasses"]:
 		if alignment.has(part):
-			var node_name = "GLTF" + part.capitalize() + "*"
-			var node = mii.find_child(node_name, true, false)
+			var t = alignment[part]
+			var node: Node3D = null
+			if part == "body":
+				node = mii
+			else:
+				node = mii.find_child("GLTF" + part.capitalize() + "*", true, false) as Node3D
+				if not node:
+					node = mii.find_child("*" + part.capitalize() + "*", true, false) as Node3D
+
 			if node:
-				var t = alignment[part]
 				if t.has("position"): node.position = t["position"]
 				if t.has("rotation"): node.rotation_degrees = t["rotation"]
 				if t.has("scale"): node.scale = t["scale"]
