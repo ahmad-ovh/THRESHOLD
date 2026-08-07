@@ -237,7 +237,7 @@ func _gui_input(event: InputEvent) -> void:
 			var t = alignment_data[selected_part]
 
 			if gizmo_mode == "move":
-				var move_speed = 0.0005
+				var move_speed = 0.000125
 				var cur_pos: Vector3 = t["position"]
 				match active_gizmo_axis:
 					"X": cur_pos.x += delta_m.x * move_speed
@@ -246,7 +246,7 @@ func _gui_input(event: InputEvent) -> void:
 				alignment_data[selected_part]["position"] = cur_pos
 
 			elif gizmo_mode == "rotate":
-				var rot_speed = 1.0
+				var rot_speed = 0.25
 				var cur_rot: Vector3 = t["rotation"]
 				match active_gizmo_axis:
 					"X": cur_rot.x -= delta_m.y * rot_speed
@@ -255,7 +255,7 @@ func _gui_input(event: InputEvent) -> void:
 				alignment_data[selected_part]["rotation"] = cur_rot
 
 			elif gizmo_mode == "scale":
-				var scale_speed = 0.001
+				var scale_speed = 0.00025
 				var cur_scale: Vector3 = t["scale"]
 				match active_gizmo_axis:
 					"X": cur_scale.x += delta_m.x * scale_speed
@@ -348,8 +348,8 @@ func _handle_keyboard_nudge(event: InputEventKey) -> void:
 	if not alignment_data.has(selected_part):
 		return
 	_push_undo()
-	var step = 0.005
-	if event.shift_pressed: step = 0.05
+	var step = 0.00125
+	if event.shift_pressed: step = 0.005
 	var cur_pos: Vector3 = alignment_data[selected_part]["position"]
 	var cur_rot: Vector3 = alignment_data[selected_part]["rotation"]
 
