@@ -334,9 +334,8 @@ static func _build_player(root: Node3D) -> void:
 					var head_gltf = _load_gltf(head_path)
 					if head_gltf:
 						head_gltf.name = "GLTFHeadCustom"
-						head_gltf.position = Vector3.ZERO
-						head_gltf.rotation_degrees = Vector3.ZERO
-						head_gltf.scale = Vector3.ONE
+						var head_key = "head_%03d" % head_style
+						_apply_item_transform(head_gltf, "heads", head_key, Vector3.ZERO, Vector3.ZERO, Vector3.ONE)
 						_set_node_material(head_gltf, head_mat)
 						head_attach.add_child(head_gltf)
 
@@ -433,8 +432,8 @@ static func apply_alignment(avatar: Node3D, alignment: Dictionary) -> void:
 		return
 	for part in ["body", "head", "hair", "glasses"]:
 		if alignment.has(part):
-			var node_name = "GLTF" + part.capitalize()
-			var node = mii.get_node_or_null(node_name)
+			var search_term = "*" + part.capitalize() + "*"
+			var node = mii.find_child(search_term, true, false)
 			if node:
 				var t = alignment[part]
 				if t.has("position"): node.position = t["position"]
