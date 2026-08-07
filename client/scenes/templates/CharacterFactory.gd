@@ -503,6 +503,25 @@ static func _rotate_image_exact(src: Image, angle_deg: float) -> Image:
 
 	return dst
 
+static var _cpu_img_cache: Dictionary = {}
+
+static func _load_cpu_image(res_path: String) -> Image:
+	if _cpu_img_cache.has(res_path):
+		return _cpu_img_cache[res_path]
+	if not ResourceLoader.exists(res_path):
+		return null
+	var global_path = ProjectSettings.globalize_path(res_path)
+	var img = Image.load_from_file(global_path)
+	if img:
+		_cpu_img_cache[res_path] = img
+		return img
+	var tex = load(res_path) as Texture2D
+	if tex:
+		var tex_img = tex.get_image()
+		_cpu_img_cache[res_path] = tex_img
+		return tex_img
+	return null
+
 static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var skin_color: Color = customization.get("skin_color", Color(0.92, 0.76, 0.65))
 	var eye_style: int = customization.get("eye_style", 1)
@@ -550,25 +569,22 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	# 1. Load / Chroma-Key Eyes from 'eye sprite_rgb.png'
 	var eye_sheet_path = "res://assets/character_models/textures/eye sprite_rgb.png"
 	var eye_drawn = false
-	if ResourceLoader.exists(eye_sheet_path):
-		var eye_tex = load(eye_sheet_path) as Texture2D
-		if eye_tex:
-			var sheet_img = eye_tex.get_image()
-			if sheet_img:
-				if sheet_img.is_compressed():
-					sheet_img.decompress()
-				var total_frames = 60
-				var frame_w = sheet_img.get_width() / total_frames
-				var frame_h = sheet_img.get_height()
-				var idx = clamp(eye_style - 1, 0, total_frames - 1)
-				var eye_frame = sheet_img.get_region(Rect2i(idx * frame_w, 0, frame_w, frame_h))
-				if eye_frame and hd_eye_size > 0:
-					eye_frame.resize(hd_eye_size, hd_eye_size, Image.INTERPOLATE_BILINEAR)
-					var eye_l_img = _rotate_image_exact(eye_frame.duplicate(), eye_rot)
-					var eye_r_img = _rotate_image_exact(eye_frame.duplicate(), eye_rot)
-					_apply_chroma_and_blit(face_img, eye_l_img, eye_l_pos, sclera_col, pupil_col, iris_col)
-					_apply_chroma_and_blit(face_img, eye_r_img, eye_r_pos, sclera_col, pupil_col, iris_col)
-					eye_drawn = true
+	var sheet_img = _load_cpu_image(eye_sheet_path)
+	if sheet_img:
+		if sheet_img.is_compressed():
+			sheet_img.decompress()
+		var total_frames = 60
+		var frame_w = sheet_img.get_width() / total_frames
+		var frame_h = sheet_img.get_height()
+		var idx = clamp(eye_style - 1, 0, total_frames - 1)
+		var eye_frame = sheet_img.get_region(Rect2i(idx * frame_w, 0, frame_w, frame_h))
+		if eye_frame and hd_eye_size > 0:
+			eye_frame.resize(hd_eye_size, hd_eye_size, Image.INTERPOLATE_BILINEAR)
+			var eye_l_img = _rotate_image_exact(eye_frame.duplicate(), eye_rot)
+			var eye_r_img = _rotate_image_exact(eye_frame.duplicate(), eye_rot)
+			_apply_chroma_and_blit(face_img, eye_l_img, eye_l_pos, sclera_col, pupil_col, iris_col)
+			_apply_chroma_and_blit(face_img, eye_r_img, eye_r_pos, sclera_col, pupil_col, iris_col)
+			eye_drawn = true
 
 	if not eye_drawn:
 		_draw_procedural_eye_style(face_img, eye_l_pos + Vector2i(hd_eye_size / 2, hd_eye_size / 2), hd_eye_size / 2, eye_style, sclera_col, pupil_col, iris_col, eye_rot, true)
@@ -581,23 +597,20 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var nose_top_left = nose_center - nose_size / 2
 	var nose_drawn = false
 
-	if ResourceLoader.exists(nose_sheet_path):
-		var nose_tex = load(nose_sheet_path) as Texture2D
-		if nose_tex:
-			var sheet_img = nose_tex.get_image()
-			if sheet_img:
-				if sheet_img.is_compressed():
-					sheet_img.decompress()
-				var total_frames = 18
-				var frame_w = sheet_img.get_width() / total_frames
-				var frame_h = sheet_img.get_height()
-				var idx = clamp(nose_style - 1, 0, total_frames - 1)
-				var nose_frame = sheet_img.get_region(Rect2i(idx * frame_w, 0, frame_w, frame_h))
-				if nose_frame and nose_size.x > 0 and nose_size.y > 0:
-					nose_frame.resize(nose_size.x, nose_size.y, Image.INTERPOLATE_BILINEAR)
-					nose_frame = _rotate_image_exact(nose_frame, nose_rot)
-					_blit_alpha(face_img, nose_frame, nose_top_left)
-					nose_drawn = true
+	var nose_sheet_img = _load_cpu_image(nose_sheet_path)
+	if nose_sheet_img:
+		if nose_sheet_img.is_compressed():
+			nose_sheet_img.decompress()
+		var total_frames = 18
+		var frame_w = nose_sheet_img.get_width() / total_frames
+		var frame_h = nose_sheet_img.get_height()
+		var idx = clamp(nose_style - 1, 0, total_frames - 1)
+		var nose_frame = nose_sheet_img.get_region(Rect2i(idx * frame_w, 0, frame_w, frame_h))
+		if nose_frame and nose_size.x > 0 and nose_size.y > 0:
+			nose_frame.resize(nose_size.x, nose_size.y, Image.INTERPOLATE_BILINEAR)
+			nose_frame = _rotate_image_exact(nose_frame, nose_rot)
+			_blit_alpha(face_img, nose_frame, nose_top_left)
+			nose_drawn = true
 
 	if not nose_drawn:
 		_draw_procedural_nose_style(face_img, nose_center, nose_style, skin_color.darkened(0.25), nose_rot)
@@ -611,23 +624,20 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var mouth_top_left = mouth_center - mouth_size / 2
 	var mouth_drawn = false
 
-	if ResourceLoader.exists(mouth_sheet_path):
-		var mouth_tex = load(mouth_sheet_path) as Texture2D
-		if mouth_tex:
-			var sheet_img = mouth_tex.get_image()
-			if sheet_img:
-				if sheet_img.is_compressed():
-					sheet_img.decompress()
-				var total_frames = 36
-				var frame_w = sheet_img.get_width() / total_frames
-				var frame_h = sheet_img.get_height()
-				var idx = clamp(mouth_style - 1, 0, total_frames - 1)
-				var mouth_frame = sheet_img.get_region(Rect2i(idx * frame_w, 0, frame_w, frame_h))
-				if mouth_frame and mouth_size.x > 0 and mouth_size.y > 0:
-					mouth_frame.resize(mouth_size.x, mouth_size.y, Image.INTERPOLATE_BILINEAR)
-					mouth_frame = _rotate_image_exact(mouth_frame, mouth_rot)
-					_blit_alpha(face_img, mouth_frame, mouth_top_left)
-					mouth_drawn = true
+	var mouth_sheet_img = _load_cpu_image(mouth_sheet_path)
+	if mouth_sheet_img:
+		if mouth_sheet_img.is_compressed():
+			mouth_sheet_img.decompress()
+		var total_frames = 36
+		var frame_w = mouth_sheet_img.get_width() / total_frames
+		var frame_h = mouth_sheet_img.get_height()
+		var idx = clamp(mouth_style - 1, 0, total_frames - 1)
+		var mouth_frame = mouth_sheet_img.get_region(Rect2i(idx * frame_w, 0, frame_w, frame_h))
+		if mouth_frame and mouth_size.x > 0 and mouth_size.y > 0:
+			mouth_frame.resize(mouth_size.x, mouth_size.y, Image.INTERPOLATE_BILINEAR)
+			mouth_frame = _rotate_image_exact(mouth_frame, mouth_rot)
+			_blit_alpha(face_img, mouth_frame, mouth_top_left)
+			mouth_drawn = true
 
 	if not mouth_drawn:
 		_draw_procedural_mouth_style(face_img, mouth_center, mouth_style, Color(0.7, 0.25, 0.25), mouth_rot)
@@ -635,26 +645,23 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	# Load Glasses directly onto Face Texture Map (Binds and morphs onto 3D face mesh!)
 	if glasses_style > 0:
 		var glasses_atlas_path = "res://assets/character_models/glasses/glasses_sprite.png"
-		if ResourceLoader.exists(glasses_atlas_path):
-			var glasses_atlas = load(glasses_atlas_path) as Texture2D
-			if glasses_atlas:
-				var atlas_img = glasses_atlas.get_image()
-				if atlas_img:
-					if atlas_img.is_compressed():
-						atlas_img.decompress()
-					var frame_w = atlas_img.get_width() / 10
-					var frame_h = atlas_img.get_height()
-					if frame_w > 0 and frame_h > 0:
-						var idx = clamp(glasses_style - 1, 0, 9)
-						var rect = Rect2i(idx * frame_w, 0, frame_w, frame_h)
-						var glass_frame = atlas_img.get_region(rect)
-						var hd_glass_w = int(glass_w * scale_factor)
-						var hd_glass_h = int(glass_h * scale_factor)
-						if glass_frame and hd_glass_w > 0 and hd_glass_h > 0:
-							glass_frame.resize(hd_glass_w, hd_glass_h, Image.INTERPOLATE_BILINEAR)
-							glass_frame = _rotate_image_exact(glass_frame, glass_rot)
-							var glass_center = Vector2i(512 + int(glass_x_off * scale_factor), 420 + int(glass_y_off * scale_factor))
-							_blit_alpha(face_img, glass_frame, glass_center - Vector2i(hd_glass_w / 2, hd_glass_h / 2))
+		var glasses_atlas_img = _load_cpu_image(glasses_atlas_path)
+		if glasses_atlas_img:
+			if glasses_atlas_img.is_compressed():
+				glasses_atlas_img.decompress()
+			var frame_w = glasses_atlas_img.get_width() / 10
+			var frame_h = glasses_atlas_img.get_height()
+			if frame_w > 0 and frame_h > 0:
+				var idx = clamp(glasses_style - 1, 0, 9)
+				var rect = Rect2i(idx * frame_w, 0, frame_w, frame_h)
+				var glass_frame = glasses_atlas_img.get_region(rect)
+				var hd_glass_w = int(glass_w * scale_factor)
+				var hd_glass_h = int(glass_h * scale_factor)
+				if glass_frame and hd_glass_w > 0 and hd_glass_h > 0:
+					glass_frame.resize(hd_glass_w, hd_glass_h, Image.INTERPOLATE_BILINEAR)
+					glass_frame = _rotate_image_exact(glass_frame, glass_rot)
+					var glass_center = Vector2i(512 + int(glass_x_off * scale_factor), 420 + int(glass_y_off * scale_factor))
+					_blit_alpha(face_img, glass_frame, glass_center - Vector2i(hd_glass_w / 2, hd_glass_h / 2))
 
 	return ImageTexture.create_from_image(face_img)
 
