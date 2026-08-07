@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/CharacterCustomization.gd" id="1_customization_script"]
+[ext_resource type="Theme" uid="uid://cyxi2trp6esvr" path="res://resources/theme/main_theme.tres" id="2_main_theme"]
 
 [node name="CharacterCustomization" type="CanvasLayer"]
 script = ExtResource("1_customization_script")
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_main_theme")
 
 [node name="ColorRect" type="ColorRect" parent="Control"]
 layout_mode = 1
@@ -20,7 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.88, 0.94, 0.96, 1)
+color = Color(0.98, 0.96, 0.91, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="Control"]
 layout_mode = 1
@@ -29,62 +31,39 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="HeaderBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="BackButton" type="Button" parent="Control/MarginContainer/VBoxContainer/HeaderBox"]
-custom_minimum_size = Vector2(120, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "< Back"
-
-[node name="TitleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/HeaderBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.15, 0.45, 0.2, 1)
-theme_override_font_sizes/font_size = 26
-text = "Character Customization"
-horizontal_alignment = 1
-
-[node name="SaveButton" type="Button" parent="Control/MarginContainer/VBoxContainer/HeaderBox"]
-custom_minimum_size = Vector2(140, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Save & Apply"
-
 [node name="MainHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 32
+theme_override_constants/separation = 24
 
 [node name="ViewportCard" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 alignment = 1
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard"]
-custom_minimum_size = Vector2(400, 500)
+custom_minimum_size = Vector2(460, 520)
 layout_mode = 2
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(400, 500)
+size = Vector2i(460, 520)
 render_target_update_mode = 3
 
 [node name="PreviewWorld" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport"]
 
 [node name="PreviewCamera" type="Camera3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.52, 1.15)
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.55, 1.1)
 current = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
@@ -94,193 +73,64 @@ transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.43
 
 [node name="RotateHint" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_colors/font_color = Color(0.45, 0.38, 0.28, 1)
 theme_override_font_sizes/font_size = 13
-text = "Character Turntable Preview"
+text = "✨ Interactive Preview (Character tracks your cursor)"
 horizontal_alignment = 1
 
-[node name="ControlsCard" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
+[node name="ControlsCard" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ControlsList" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CategoryHeader" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CategoryTitle" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
+theme_override_font_sizes/font_size = 24
+text = "Skin Tone"
+horizontal_alignment = 1
+
+[node name="TabHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="WorkspaceVBox" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="FooterBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" type="Button" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
+custom_minimum_size = Vector2(130, 44)
+layout_mode = 2
+text = "< Back"
+
+[node name="Spacer" type="Control" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 14
 
-[node name="SkinRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
+[node name="ActionHintsLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.38, 0.28, 1)
+theme_override_font_sizes/font_size = 14
+text = "⌨️ [Q / E] Switch Category  |  🖱️ Click Option"
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/SkinRow"]
-custom_minimum_size = Vector2(120, 0)
+[node name="Spacer2" type="Control" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
 layout_mode = 2
-text = "Skin Color:"
+size_flags_horizontal = 3
 
-[node name="SkinPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/SkinRow"]
-custom_minimum_size = Vector2(80, 36)
+[node name="SaveButton" type="Button" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
+custom_minimum_size = Vector2(160, 44)
 layout_mode = 2
-color = Color(0.92, 0.76, 0.65, 1)
-
-[node name="HairRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Hair Style:"
-
-[node name="HairPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = "<"
-
-[node name="HairStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "Short (1/8)"
-horizontal_alignment = 1
-
-[node name="HairNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = ">"
-
-[node name="HairPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(50, 36)
-layout_mode = 2
-color = Color(0.24, 0.16, 0.1, 1)
-
-[node name="EyeRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Eye Style:"
-
-[node name="EyePrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = "<"
-
-[node name="EyeStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "Eye 01 (1/60)"
-horizontal_alignment = 1
-
-[node name="EyeNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = ">"
-
-[node name="IrisRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/IrisRow"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Iris Color:"
-
-[node name="IrisPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/IrisRow"]
-custom_minimum_size = Vector2(80, 36)
-layout_mode = 2
-color = Color(0.18, 0.55, 0.85, 1)
-
-[node name="PupilRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/PupilRow"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Pupil Color:"
-
-[node name="PupilPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/PupilRow"]
-custom_minimum_size = Vector2(80, 36)
-layout_mode = 2
-color = Color(0.1, 0.1, 0.1, 1)
-
-[node name="ScleraRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/ScleraRow"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Sclera Color:"
-
-[node name="ScleraPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/ScleraRow"]
-custom_minimum_size = Vector2(80, 36)
-layout_mode = 2
-color = Color(1, 1, 1, 1)
-
-[node name="NoseRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Nose Style:"
-
-[node name="NosePrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = "<"
-
-[node name="NoseStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "Nose 01 (1/18)"
-horizontal_alignment = 1
-
-[node name="NoseNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = ">"
-
-[node name="MouthRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Mouth Style:"
-
-[node name="MouthPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = "<"
-
-[node name="MouthStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "Mouth 01 (1/36)"
-horizontal_alignment = 1
-
-[node name="MouthNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = ">"
-
-[node name="AccRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(120, 0)
-layout_mode = 2
-text = "Accessory:"
-
-[node name="AccPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = "<"
-
-[node name="AccStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(140, 0)
-layout_mode = 2
-text = "None (1/5)"
-horizontal_alignment = 1
-
-[node name="AccNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(36, 36)
-layout_mode = 2
-text = ">"
+text = "✓ Save & Apply"
