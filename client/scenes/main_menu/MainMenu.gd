@@ -4,14 +4,20 @@ extends CanvasLayer
 @onready var username_input: LineEdit = $Control/VBoxContainer/UsernameInput
 @onready var daily_details: RichTextLabel = $Control/VBoxContainer/DailyCard/VBoxContainer/DailyDetails
 @onready var customize_button: Button = $Control/VBoxContainer/CustomizeButton
+@onready var aligner_button: Button = $Control/VBoxContainer/AlignerButton
 @onready var start_button: Button = $Control/VBoxContainer/StartButton
 
 func _ready() -> void:
 	start_button.pressed.connect(_on_start_pressed)
 	customize_button.pressed.connect(_on_customize_pressed)
+	if aligner_button:
+		aligner_button.pressed.connect(_on_aligner_pressed)
 	username_input.text_changed.connect(_on_username_changed)
 	username_input.text = PlayerStore.player_id
 	_fetch_daily(PlayerStore.player_id)
+
+func _on_aligner_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/tools/ModelAligner.tscn")
 
 func _on_username_changed(new_text: String) -> void:
 	var trimmed = new_text.strip_edges()
