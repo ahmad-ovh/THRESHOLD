@@ -36,6 +36,8 @@ extends Control
 @onready var spin_sy: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SpinSY
 @onready var spin_sz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SpinSZ
 
+@onready var undo_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/UndoRedoHBox/UndoBtn
+@onready var redo_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/UndoRedoHBox/RedoBtn
 @onready var copy_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/CopyBtn
 @onready var status_label: Label = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/StatusLabel
 @onready var back_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/BackBtn
@@ -57,6 +59,10 @@ var cam_yaw: float = 0.0
 var cam_pitch: float = deg_to_rad(10.0)
 var cam_distance: float = 2.2
 var cam_anchor: Vector3 = Vector3(0.0, 1.0, 0.0)
+
+var undo_stack: Array[Dictionary] = []
+var redo_stack: Array[Dictionary] = []
+const MAX_UNDO_STACK: int = 50
 
 var alignment_data: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
@@ -87,12 +93,39 @@ func _update_camera_orbit() -> void:
 	camera.global_position = cam_anchor + rot_q * Vector3(0.0, 0.0, cam_distance)
 	camera.look_at(cam_anchor, Vector3.UP)
 
+func _push_undo() -> void:
+	undo_stack.append(alignment_data.duplicate(true))
+	if undo_stack.size() > MAX_UNDO_STACK:
+		undo_stack.pop_front()
+	redo_stack.clear()
+
+func undo() -> void:
+	if undo_stack.is_empty():
+		status_label.text = "Nothing to Undo"
+		return
+	redo_stack.append(alignment_data.duplicate(true))
+	alignment_data = undo_stack.pop_back()
+	_update_gizmo_spinboxes()
+	_on_transform_changed()
+	status_label.text = "↩ Undo"
+
+func redo() -> void:
+	if redo_stack.is_empty():
+		status_label.text = "Nothing to Redo"
+		return
+	undo_stack.append(alignment_data.duplicate(true))
+	alignment_data = redo_stack.pop_back()
+	_update_gizmo_spinboxes()
+	_on_transform_changed()
+	status_label.text = "↪ Redo"
+
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				var axis = _hit_test_gizmo(event.position)
 				if axis != "":
+					_push_undo()
 					active_gizmo_axis = axis
 				else:
 					_try_select_3d_part(event.position)
@@ -153,6 +186,17 @@ func _gui_input(event: InputEvent) -> void:
 			_on_transform_changed()
 
 	elif event is InputEventKey and event.pressed:
+		if event.ctrl_pressed and event.keycode == KEY_Z:
+			if event.shift_pressed:
+				redo()
+			else:
+				undo()
+			accept_event()
+			return
+		elif event.ctrl_pressed and event.keycode == KEY_Y:
+			redo()
+			accept_event()
+			return
 		_handle_keyboard_nudge(event)
 
 func _hit_test_gizmo(mouse_pos: Vector2) -> String:
@@ -213,6 +257,7 @@ func _try_select_3d_part(mouse_pos: Vector2) -> void:
 func _handle_keyboard_nudge(event: InputEventKey) -> void:
 	if not alignment_data.has(selected_part):
 		return
+	_push_undo()
 	var step = 0.005
 	if event.shift_pressed: step = 0.05
 	var cur_pos: Vector3 = alignment_data[selected_part]["position"]
@@ -256,31 +301,34 @@ func _connect_signals() -> void:
 			_spawn_3d_gizmo()
 		)
 
+	if undo_btn: undo_btn.pressed.connect(undo)
+	if redo_btn: redo_btn.pressed.connect(redo)
+
 	# Position Sliders & Spinboxes
-	slider_px.value_changed.connect(func(v): spin_px.set_value_no_signal(v); _on_transform_changed())
-	spin_px.value_changed.connect(func(v): slider_px.set_value_no_signal(v); _on_transform_changed())
+	slider_px.value_changed.connect(func(v): _push_undo(); spin_px.set_value_no_signal(v); _on_transform_changed())
+	spin_px.value_changed.connect(func(v): _push_undo(); slider_px.set_value_no_signal(v); _on_transform_changed())
 
-	slider_py.value_changed.connect(func(v): spin_py.set_value_no_signal(v); _on_transform_changed())
-	spin_py.value_changed.connect(func(v): slider_py.set_value_no_signal(v); _on_transform_changed())
+	slider_py.value_changed.connect(func(v): _push_undo(); spin_py.set_value_no_signal(v); _on_transform_changed())
+	spin_py.value_changed.connect(func(v): _push_undo(); slider_py.set_value_no_signal(v); _on_transform_changed())
 
-	slider_pz.value_changed.connect(func(v): spin_pz.set_value_no_signal(v); _on_transform_changed())
-	spin_pz.value_changed.connect(func(v): slider_pz.set_value_no_signal(v); _on_transform_changed())
+	slider_pz.value_changed.connect(func(v): _push_undo(); spin_pz.set_value_no_signal(v); _on_transform_changed())
+	spin_pz.value_changed.connect(func(v): _push_undo(); slider_pz.set_value_no_signal(v); _on_transform_changed())
 
 	# Rotation Sliders & Spinboxes
-	slider_rx.value_changed.connect(func(v): spin_rx.set_value_no_signal(v); _on_transform_changed())
-	spin_rx.value_changed.connect(func(v): slider_rx.set_value_no_signal(v); _on_transform_changed())
+	slider_rx.value_changed.connect(func(v): _push_undo(); spin_rx.set_value_no_signal(v); _on_transform_changed())
+	spin_rx.value_changed.connect(func(v): _push_undo(); slider_rx.set_value_no_signal(v); _on_transform_changed())
 
-	slider_ry.value_changed.connect(func(v): spin_ry.set_value_no_signal(v); _on_transform_changed())
-	spin_ry.value_changed.connect(func(v): slider_ry.set_value_no_signal(v); _on_transform_changed())
+	slider_ry.value_changed.connect(func(v): _push_undo(); spin_ry.set_value_no_signal(v); _on_transform_changed())
+	spin_ry.value_changed.connect(func(v): _push_undo(); slider_ry.set_value_no_signal(v); _on_transform_changed())
 
-	slider_rz.value_changed.connect(func(v): spin_rz.set_value_no_signal(v); _on_transform_changed())
-	spin_rz.value_changed.connect(func(v): slider_rz.set_value_no_signal(v); _on_transform_changed())
+	slider_rz.value_changed.connect(func(v): _push_undo(); spin_rz.set_value_no_signal(v); _on_transform_changed())
+	spin_rz.value_changed.connect(func(v): _push_undo(); slider_rz.set_value_no_signal(v); _on_transform_changed())
 
 	# Scale Sliders & Spinboxes
-	slider_sx.value_changed.connect(func(v): spin_sx.set_value_no_signal(v); spin_sy.set_value_no_signal(v); spin_sz.set_value_no_signal(v); _on_transform_changed())
-	spin_sx.value_changed.connect(func(v): slider_sx.set_value_no_signal(v); _on_transform_changed())
-	spin_sy.value_changed.connect(func(_v): _on_transform_changed())
-	spin_sz.value_changed.connect(func(_v): _on_transform_changed())
+	slider_sx.value_changed.connect(func(v): _push_undo(); spin_sx.set_value_no_signal(v); spin_sy.set_value_no_signal(v); spin_sz.set_value_no_signal(v); _on_transform_changed())
+	spin_sx.value_changed.connect(func(v): _push_undo(); slider_sx.set_value_no_signal(v); _on_transform_changed())
+	spin_sy.value_changed.connect(func(_v): _push_undo(); _on_transform_changed())
+	spin_sz.value_changed.connect(func(_v): _push_undo(); _on_transform_changed())
 
 	copy_btn.pressed.connect(_on_copy_json_pressed)
 	back_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn"))

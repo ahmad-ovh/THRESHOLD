@@ -375,6 +375,19 @@ max_value = 10.0
 step = 0.001
 value = 1.0
 
+[node name="UndoRedoHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="UndoBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/UndoRedoHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "↩ Undo (Ctrl+Z)"
+
+[node name="RedoBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/UndoRedoHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "↪ Redo (Ctrl+Y)"
+
 [node name="CopyBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
