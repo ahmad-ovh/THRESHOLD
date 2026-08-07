@@ -46,6 +46,9 @@ extends Control
 @onready var head_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/HeadRow/HeadSpin
 @onready var hair_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/HairRow/HairSpin
 @onready var glasses_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassesRow/GlassesSpin
+@onready var eye_style_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeStyleRow/EyeStyleSpin
+@onready var nose_style_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseStyleRow/NoseStyleSpin
+@onready var mouth_style_spin: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthStyleRow/MouthStyleSpin
 @onready var body_option: OptionButton = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/BodyRow/BodyOption
 
 @onready var save_preset_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/SavePresetBtn
@@ -455,6 +458,24 @@ func _connect_signals() -> void:
 		PlayerStore.customization["glasses_style"] = int(v)
 		_on_item_changed("glasses", "glasses_%d" % int(v), "glasses")
 	)
+
+	if eye_style_spin:
+		eye_style_spin.value_changed.connect(func(v):
+			PlayerStore.customization["eye_style"] = int(v)
+			_rebuild_avatar()
+		)
+
+	if nose_style_spin:
+		nose_style_spin.value_changed.connect(func(v):
+			PlayerStore.customization["nose_style"] = int(v)
+			_rebuild_avatar()
+		)
+
+	if mouth_style_spin:
+		mouth_style_spin.value_changed.connect(func(v):
+			PlayerStore.customization["mouth_style"] = int(v)
+			_rebuild_avatar()
+		)
 
 	body_option.item_selected.connect(func(idx): PlayerStore.customization["body_style"] = idx; _rebuild_avatar())
 

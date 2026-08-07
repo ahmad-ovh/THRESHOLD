@@ -125,6 +125,45 @@ min_value = 0.0
 max_value = 5.0
 value = 0.0
 
+[node name="EyeStyleRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeStyleRow"]
+layout_mode = 2
+text = "Eye Style (1..60): "
+
+[node name="EyeStyleSpin" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeStyleRow"]
+layout_mode = 2
+min_value = 1.0
+max_value = 60.0
+value = 1.0
+
+[node name="NoseStyleRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseStyleRow"]
+layout_mode = 2
+text = "Nose Style (1..10): "
+
+[node name="NoseStyleSpin" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseStyleRow"]
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+
+[node name="MouthStyleRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthStyleRow"]
+layout_mode = 2
+text = "Mouth Style (1..10): "
+
+[node name="MouthStyleSpin" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthStyleRow"]
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+
 [node name="BodyRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
