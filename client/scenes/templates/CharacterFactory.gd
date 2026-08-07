@@ -781,6 +781,7 @@ static func _add_accessory(body_pivot: Node3D, head_pivot: Node3D, style: int) -
 		4: # Crown / Band
 			var band_mat = _mat(Color(0.95, 0.80, 0.18), 0.3, 0.7)
 			head_pivot.add_child(_torus(0.20, 0.02, Vector3(0.0, 0.26, 0.0), band_mat))
+
 static func _build_player(root: Node3D) -> void:
 	_build_character_from_dict(root, PlayerStore.customization)
 
