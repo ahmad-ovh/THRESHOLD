@@ -1,11 +1,15 @@
 # res://scenes/main_menu/MainMenu.gd
 extends CanvasLayer
 
+@export var enable_dev_tools: bool = true
+
 @onready var username_input: LineEdit = $Control/LeftPanel/PlayerCard/MarginContainer/VBoxContainer/UsernameInput
 @onready var daily_details: RichTextLabel = $Control/RightPanel/DailyCard/MarginContainer/VBoxContainer/DailyDetails
 @onready var start_button: Button = $Control/LeftPanel/ButtonsVBox/StartWrapper/StartButton
 @onready var customize_button: Button = $Control/LeftPanel/ButtonsVBox/CustomizeWrapper/CustomizeButton
 @onready var settings_button: Button = $Control/LeftPanel/ButtonsVBox/SettingsWrapper/SettingsButton
+@onready var aligner_wrapper: Control = $Control/LeftPanel/ButtonsVBox/DevAlignerWrapper
+@onready var aligner_button: Button = $Control/LeftPanel/ButtonsVBox/DevAlignerWrapper/DevAlignerButton
 
 func _ready() -> void:
 	start_button.pressed.connect(_on_start_pressed)
@@ -15,6 +19,11 @@ func _ready() -> void:
 	_setup_button_hover_effects(start_button)
 	_setup_button_hover_effects(customize_button)
 	_setup_button_hover_effects(settings_button)
+
+	aligner_wrapper.visible = enable_dev_tools
+	if enable_dev_tools:
+		aligner_button.pressed.connect(_on_aligner_pressed)
+		_setup_button_hover_effects(aligner_button)
 	
 	username_input.text_changed.connect(_on_username_changed)
 	username_input.text = PlayerStore.player_id
@@ -71,3 +80,8 @@ func _on_settings_pressed() -> void:
 		AudioManager.play_click()
 	if ToastManager:
 		ToastManager.show_info("⚙️ Game Settings coming soon!")
+
+func _on_aligner_pressed() -> void:
+	if AudioManager:
+		AudioManager.play_click()
+	get_tree().change_scene_to_file("res://scenes/tools/ModelAligner.tscn")
