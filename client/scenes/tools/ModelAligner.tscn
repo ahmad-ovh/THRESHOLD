@@ -81,12 +81,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 text = "📦 Model Selectors"
 horizontal_alignment = 1
 
-[node name="HeadRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="HeadRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/HeadRow"]
@@ -99,7 +99,7 @@ min_value = 1.0
 max_value = 12.0
 value = 1.0
 
-[node name="HairRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="HairRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/HairRow"]
@@ -112,7 +112,7 @@ min_value = 0.0
 max_value = 133.0
 value = 0.0
 
-[node name="GlassesRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="GlassesRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassesRow"]
@@ -125,7 +125,7 @@ min_value = 0.0
 max_value = 5.0
 value = 0.0
 
-[node name="BodyRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="BodyRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/BodyRow"]
@@ -140,50 +140,50 @@ popup/item_0/id = 0
 popup/item_1/text = "Female"
 popup/item_1/id = 1
 
-[node name="SavePresetBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="SavePresetBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "💾 SAVE ITEM PRESET"
 
-[node name="SaveCatalogBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="SaveCatalogBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "💾 SAVE CATALOG FILE"
 
-[node name="PresetStatusLabel" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="PresetStatusLabel" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="VisTitle" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="VisTitle" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 text = "👁️ Part Visibility (Solo/Hide)"
 
-[node name="CheckHead" type="CheckBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="CheckHead" type="CheckBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Show Head Mesh"
 
-[node name="CheckHair" type="CheckBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="CheckHair" type="CheckBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Show Hair Mesh"
 
-[node name="CheckGlasses" type="CheckBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="CheckGlasses" type="CheckBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Show Glasses Mesh"
 
-[node name="FocusBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="FocusBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 text = "🔍 Focus Camera on Part"
 
-[node name="FaceTexTitle" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="FaceTexTitle" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 text = "🎨 Face Texture UV Sliders"
 horizontal_alignment = 1
 
-[node name="EyeXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="EyeXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeXRow"]
@@ -204,7 +204,7 @@ layout_mode = 2
 min_value = -200.0
 max_value = 200.0
 
-[node name="EyeYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="EyeYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeYRow"]
@@ -225,7 +225,7 @@ layout_mode = 2
 min_value = -200.0
 max_value = 200.0
 
-[node name="EyeSizeRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="EyeSizeRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeSizeRow"]
@@ -247,7 +247,7 @@ min_value = 4.0
 max_value = 150.0
 value = 24.0
 
-[node name="NoseYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="NoseYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/NoseYRow"]
@@ -268,7 +268,7 @@ layout_mode = 2
 min_value = -200.0
 max_value = 200.0
 
-[node name="MouthYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="MouthYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/MouthYRow"]
@@ -289,7 +289,7 @@ layout_mode = 2
 min_value = -200.0
 max_value = 200.0
 
-[node name="GlassXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="GlassXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassXRow"]
@@ -310,7 +310,7 @@ layout_mode = 2
 min_value = -200.0
 max_value = 200.0
 
-[node name="GlassYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="GlassYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassYRow"]
@@ -349,16 +349,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
-[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 text = "🛠️ 3D Movement Gizmo & Controls"
 horizontal_alignment = 1
 
-[node name="AutoRotateCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="AutoRotateCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 text = "Auto Rotate Viewport"
 
-[node name="GizmoModeHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="GizmoModeHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/GizmoModeHBox"]
@@ -375,7 +375,7 @@ popup/item_1/id = 1
 popup/item_2/text = "Scale"
 popup/item_2/id = 2
 
-[node name="PartHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="PartHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PartHBox"]
@@ -394,11 +394,11 @@ popup/item_2/id = 2
 popup/item_3/text = "glasses"
 popup/item_3/id = 3
 
-[node name="LabelPos" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="LabelPos" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 text = "Position (X, Y, Z):"
 
-[node name="PosRowX" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="PosRowX" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="LabelX" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowX"]
@@ -421,7 +421,7 @@ min_value = -5.0
 max_value = 5.0
 step = 0.001
 
-[node name="PosRowY" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="PosRowY" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="LabelY" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowY"]
@@ -444,7 +444,7 @@ min_value = -5.0
 max_value = 5.0
 step = 0.001
 
-[node name="PosRowZ" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="PosRowZ" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="LabelZ" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowZ"]
@@ -467,11 +467,11 @@ min_value = -5.0
 max_value = 5.0
 step = 0.001
 
-[node name="LabelRot" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="LabelRot" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 text = "Rotation Deg (X, Y, Z):"
 
-[node name="RotRowX" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="RotRowX" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="LabelRX" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowX"]
@@ -493,7 +493,7 @@ min_value = -360.0
 max_value = 360.0
 step = 0.1
 
-[node name="RotRowY" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="RotRowY" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="LabelRY" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowY"]
@@ -515,7 +515,7 @@ min_value = -360.0
 max_value = 360.0
 step = 0.1
 
-[node name="RotRowZ" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="RotRowZ" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="LabelRZ" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowZ"]
@@ -537,11 +537,11 @@ min_value = -360.0
 max_value = 360.0
 step = 0.1
 
-[node name="LabelScale" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="LabelScale" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 text = "Scale (X, Y, Z):"
 
-[node name="ScaleRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="ScaleRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="SliderSX" type="HSlider" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow"]
@@ -576,7 +576,7 @@ max_value = 10.0
 step = 0.001
 value = 1.0
 
-[node name="UndoRedoHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="UndoRedoHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 
 [node name="UndoBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/UndoRedoHBox"]
@@ -589,16 +589,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "↪ Redo (Ctrl+Y)"
 
-[node name="CopyBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="CopyBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "📋 COPY ALIGNMENT JSON"
 
-[node name="StatusLabel" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="StatusLabel" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="BackBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="BackBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer"]
 layout_mode = 2
 text = "< Back to Main Menu"
