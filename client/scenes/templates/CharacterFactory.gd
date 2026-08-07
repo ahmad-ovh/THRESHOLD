@@ -252,6 +252,16 @@ static func _get_or_create_head_bone_attachment(skeleton: Skeleton3D) -> BoneAtt
 	skeleton.add_child(ba)
 	return ba
 
+static func _center_gltf_mesh(node: Node3D) -> void:
+	if not node:
+		return
+	var meshes = node.find_children("*", "MeshInstance3D", true, false)
+	if meshes.size() > 0:
+		var mi = meshes[0] as MeshInstance3D
+		if mi and mi.mesh:
+			var aabb = mi.mesh.get_aabb()
+			mi.position = -aabb.get_center()
+
 static func _build_player(root: Node3D) -> void:
 	var c = PlayerStore.customization
 
@@ -329,7 +339,8 @@ static func _build_player(root: Node3D) -> void:
 					var head_gltf = _load_gltf(head_path)
 					if head_gltf:
 						head_gltf.name = "GLTFHeadCustom"
-						head_gltf.position = Vector3(0.0, -0.48, 0.0)
+						_center_gltf_mesh(head_gltf)
+						head_gltf.position = Vector3(0.0, 0.02, 0.0)
 						_set_node_material(head_gltf, head_mat)
 						head_attach.add_child(head_gltf)
 
