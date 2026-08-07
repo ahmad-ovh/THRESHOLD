@@ -22,15 +22,23 @@ func _ready() -> void:
 	_setup_button_hover_effects(customize_button)
 	_setup_button_hover_effects(settings_button)
 
-	var show_dev = is_development_mode and enable_dev_tools
-	aligner_wrapper.visible = show_dev
-	if show_dev:
-		aligner_button.pressed.connect(_on_aligner_pressed)
-		_setup_button_hover_effects(aligner_button)
-	
+	if GameController:
+		GameController.is_development_mode_changed.connect(func(enabled: bool):
+			_update_dev_ui(enabled)
+		)
+		_update_dev_ui(GameController.is_development_mode)
+	else:
+		_update_dev_ui(is_development_mode)
+
 	username_input.text_changed.connect(_on_username_changed)
 	username_input.text = PlayerStore.player_id
 	_fetch_daily(PlayerStore.player_id)
+
+func _update_dev_ui(dev_enabled: bool) -> void:
+	aligner_wrapper.visible = dev_enabled
+	if dev_enabled and not aligner_button.pressed.is_connected(_on_aligner_pressed):
+		aligner_button.pressed.connect(_on_aligner_pressed)
+		_setup_button_hover_effects(aligner_button)
 
 func _setup_button_hover_effects(btn: Button) -> void:
 	btn.pivot_offset = btn.size / 2.0

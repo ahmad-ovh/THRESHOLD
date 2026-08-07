@@ -54,10 +54,24 @@ func _ready() -> void:
 	interaction_detector.area_exited.connect(_on_area_exited)
 	_setup_dollhouse_camera()
 	_setup_player_mesh()
-	_setup_camera_dev_widget()
+	
+	if GameController:
+		GameController.is_development_mode_changed.connect(func(enabled: bool):
+			_update_dev_mode(enabled)
+		)
+		_update_dev_mode(GameController.is_development_mode)
+	else:
+		_update_dev_mode(is_development_mode)
+
+func _update_dev_mode(enabled: bool) -> void:
+	is_development_mode = enabled
+	if enabled and not camera_dev_layer:
+		_setup_camera_dev_widget()
+	elif camera_dev_layer:
+		camera_dev_layer.visible = enabled
 
 func _setup_camera_dev_widget() -> void:
-	if not is_development_mode:
+	if not is_development_mode or camera_dev_layer:
 		return
 
 	camera_dev_layer = CanvasLayer.new()
