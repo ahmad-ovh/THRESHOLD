@@ -12,7 +12,7 @@ extends CharacterBody3D
 @export_group("Camera Parameters")
 @export var camera_follow_speed: float = 5.0
 @export var is_fixed_diorama_room: bool = true
-@export var room_camera_pos: Vector3 = Vector3(0.0, 3.2, 7.5)
+@export var room_camera_pos: Vector3 = Vector3(0.0, 3.2, 4)
 @export var room_camera_rot: Vector3 = Vector3(-14.0, 0.0, 0.0)
 @export var spring_arm_length: float = 0.0
 @export var corridor_min_x: float = -12.0
@@ -26,6 +26,9 @@ extends CharacterBody3D
 @export var body_bob_amount: float = 0.035
 @export var breathing_amplitude: float = 0.015
 @export var head_tilt_deg: float = 1.5
+
+@export_group("Development Mode")
+@export var is_development_mode: bool = true
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
@@ -43,6 +46,7 @@ var anim_right_arm: Node3D
 var anim_body: Node3D
 var anim_head: Node3D
 var walk_anim_time: float = 0.0
+var camera_dev_layer: CanvasLayer = null
 
 func _ready() -> void:
 	add_to_group("player")
@@ -50,6 +54,105 @@ func _ready() -> void:
 	interaction_detector.area_exited.connect(_on_area_exited)
 	_setup_dollhouse_camera()
 	_setup_player_mesh()
+	_setup_camera_dev_widget()
+
+func _setup_camera_dev_widget() -> void:
+	if not is_development_mode:
+		return
+
+	camera_dev_layer = CanvasLayer.new()
+	camera_dev_layer.name = "CameraDevWidgetLayer"
+	add_child(camera_dev_layer)
+
+	var panel = PanelContainer.new()
+	panel.name = "CameraDevPanel"
+	panel.position = Vector2(20, 20)
+	panel.custom_minimum_size = Vector2(300, 360)
+
+	var margin = MarginContainer.new()
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	margin.add_theme_constant_override("margin_right", 10)
+	panel.add_child(margin)
+
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 4)
+	margin.add_child(vbox)
+
+	var header = Label.new()
+	header.text = "🎥 Runtime Camera Controller (F1)"
+	header.add_theme_font_size_override("font_size", 13)
+	vbox.add_child(header)
+
+	var status_label = Label.new()
+	status_label.text = "Toggle with F1 key"
+	status_label.add_theme_font_size_override("font_size", 10)
+	vbox.add_child(status_label)
+
+	var create_row = func(label_text: String, min_v: float, max_v: float, step_v: float, init_val: float, callback: Callable) -> HBoxContainer:
+		var row = HBoxContainer.new()
+		var lbl = Label.new()
+		lbl.text = label_text
+		lbl.custom_minimum_size = Vector2(75, 0)
+		lbl.add_theme_font_size_override("font_size", 11)
+		row.add_child(lbl)
+
+		var slider = HSlider.new()
+		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		slider.min_value = min_v
+		slider.max_value = max_v
+		slider.step = step_v
+		slider.value = init_val
+		row.add_child(slider)
+
+		var spin = SpinBox.new()
+		spin.custom_minimum_size = Vector2(65, 0)
+		spin.min_value = min_v
+		spin.max_value = max_v
+		spin.step = step_v
+		spin.value = init_val
+		row.add_child(spin)
+
+		slider.value_changed.connect(func(v):
+			spin.set_value_no_signal(v)
+			callback.call(v)
+		)
+		spin.value_changed.connect(func(v):
+			slider.set_value_no_signal(v)
+			callback.call(v)
+		)
+		return row
+
+	vbox.add_child(create_row.call("Cam Pos X:", -20.0, 20.0, 0.1, room_camera_pos.x, func(v): room_camera_pos.x = v))
+	vbox.add_child(create_row.call("Cam Pos Y:", -10.0, 20.0, 0.1, room_camera_pos.y, func(v): room_camera_pos.y = v))
+	vbox.add_child(create_row.call("Cam Pos Z:", -20.0, 30.0, 0.1, room_camera_pos.z, func(v): room_camera_pos.z = v))
+
+	vbox.add_child(create_row.call("Rot Pitch:", -90.0, 90.0, 0.5, room_camera_rot.x, func(v): room_camera_rot.x = v))
+	vbox.add_child(create_row.call("Rot Yaw:", -180.0, 180.0, 0.5, room_camera_rot.y, func(v): room_camera_rot.y = v))
+	vbox.add_child(create_row.call("Rot Roll:", -180.0, 180.0, 0.5, room_camera_rot.z, func(v): room_camera_rot.z = v))
+
+	vbox.add_child(create_row.call("SpringArm:", 0.0, 15.0, 0.1, spring_arm_length, func(v):
+		spring_arm_length = v
+		if spring_arm: spring_arm.spring_length = v
+	))
+
+	var copy_btn = Button.new()
+	copy_btn.text = "📋 COPY CAMERA JSON"
+	vbox.add_child(copy_btn)
+
+	copy_btn.pressed.connect(func():
+		var dict = {
+			"room_camera_pos": [snapped(room_camera_pos.x, 0.01), snapped(room_camera_pos.y, 0.01), snapped(room_camera_pos.z, 0.01)],
+			"room_camera_rot": [snapped(room_camera_rot.x, 0.1), snapped(room_camera_rot.y, 0.1), snapped(room_camera_rot.z, 0.1)],
+			"spring_arm_length": snapped(spring_arm_length, 0.01),
+			"camera_follow_speed": snapped(camera_follow_speed, 0.1)
+		}
+		var json_str = JSON.stringify(dict, "  ")
+		DisplayServer.clipboard_set(json_str)
+		print("CAMERA_JSON_EXPORT:\n", json_str)
+		status_label.text = "✓ Copied JSON to Clipboard!"
+	)
 
 func _setup_player_mesh() -> void:
 	if character_mesh:
@@ -71,6 +174,11 @@ func _setup_dollhouse_camera() -> void:
 	camera_pivot.rotation_degrees = room_camera_rot
 
 func _unhandled_input(event: InputEvent) -> void:
+	if is_development_mode and event is InputEventKey and event.pressed and event.keycode == KEY_F1:
+		if camera_dev_layer:
+			camera_dev_layer.visible = not camera_dev_layer.visible
+			return
+
 	if event.is_action_pressed("interact") and current_target:
 		if current_target.has_method("interact"):
 			current_target.interact()

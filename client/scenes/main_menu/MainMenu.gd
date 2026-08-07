@@ -1,6 +1,8 @@
 # res://scenes/main_menu/MainMenu.gd
 extends CanvasLayer
 
+@export_group("Development Mode")
+@export var is_development_mode: bool = true
 @export var enable_dev_tools: bool = true
 
 @onready var username_input: LineEdit = $Control/LeftPanel/PlayerCard/MarginContainer/VBoxContainer/UsernameInput
@@ -20,8 +22,9 @@ func _ready() -> void:
 	_setup_button_hover_effects(customize_button)
 	_setup_button_hover_effects(settings_button)
 
-	aligner_wrapper.visible = enable_dev_tools
-	if enable_dev_tools:
+	var show_dev = is_development_mode and enable_dev_tools
+	aligner_wrapper.visible = show_dev
+	if show_dev:
 		aligner_button.pressed.connect(_on_aligner_pressed)
 		_setup_button_hover_effects(aligner_button)
 	
