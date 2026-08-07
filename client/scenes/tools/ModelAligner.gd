@@ -111,6 +111,20 @@ var alignment_data: Dictionary = {
 	"glasses": {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
 
+var base_transforms: Dictionary = {
+	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
+	"head": {"position": Vector3(0.0, 0.002, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.002, 0.002, 0.002)},
+	"hair": {"position": Vector3(0.0, 0.02, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.05, 1.05, 1.05)},
+	"glasses": {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
+}
+
+var relative_edits: Dictionary = {
+	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)},
+	"head": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)},
+	"hair": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)},
+	"glasses": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
+}
+
 var catalog_presets: Dictionary = {}
 var current_avatar_instance: Node3D
 var gizmo_node: Node3D
@@ -126,9 +140,9 @@ func _ready() -> void:
 func _configure_slider_ranges() -> void:
 	for s in [slider_px, spin_px, slider_py, spin_py, slider_pz, spin_pz]:
 		if s:
-			s.min_value = -2.0
-			s.max_value = 2.0
-			s.step = 0.001
+			s.min_value = -0.5
+			s.max_value = 0.5
+			s.step = 0.0001
 
 	for s in [slider_rx, spin_rx, slider_ry, spin_ry, slider_rz, spin_rz]:
 		if s:
@@ -138,12 +152,25 @@ func _configure_slider_ranges() -> void:
 
 	for s in [slider_sx, spin_sx, spin_sy, spin_sz]:
 		if s:
-			s.min_value = 0.001
+			s.min_value = 0.01
 			s.max_value = 5.0
 			s.step = 0.001
 
 func _load_catalog() -> void:
 	catalog_presets = CharacterFactory.get_model_presets().duplicate(true)
+	for part_tuple in [["head", "heads", "head_%03d" % int(head_spin.value if head_spin else 1)],
+	                   ["hair", "hair", "hair_%03d" % int(hair_spin.value if hair_spin else 0)],
+	                   ["glasses", "glasses", "glasses_%d" % int(glasses_spin.value if glasses_spin else 0)],
+	                   ["body", "body", "body"]]:
+		var p_name = part_tuple[0]
+		var cat = part_tuple[1]
+		var key = part_tuple[2]
+		if catalog_presets.has(cat) and catalog_presets[cat].has(key):
+			var t = catalog_presets[cat][key]
+			if t.has("position"): base_transforms[p_name]["position"] = Vector3(t["position"][0], t["position"][1], t["position"][2])
+			if t.has("rotation"): base_transforms[p_name]["rotation"] = Vector3(t["rotation"][0], t["rotation"][1], t["rotation"][2])
+			if t.has("scale"): base_transforms[p_name]["scale"] = Vector3(t["scale"][0], t["scale"][1], t["scale"][2])
+		_update_effective_transform(p_name)
 
 func _process(delta: float) -> void:
 	if model_pivot and auto_rotate:
@@ -544,11 +571,27 @@ func _get_current_item_info() -> Dictionary:
 func _on_item_changed(cat: String, item_key: String, part: String) -> void:
 	if catalog_presets.has(cat) and catalog_presets[cat].has(item_key):
 		var t = catalog_presets[cat][item_key]
-		if t.has("position"): alignment_data[part]["position"] = Vector3(t["position"][0], t["position"][1], t["position"][2])
-		if t.has("rotation"): alignment_data[part]["rotation"] = Vector3(t["rotation"][0], t["rotation"][1], t["rotation"][2])
-		if t.has("scale"): alignment_data[part]["scale"] = Vector3(t["scale"][0], t["scale"][1], t["scale"][2])
+		if t.has("position"): base_transforms[part]["position"] = Vector3(t["position"][0], t["position"][1], t["position"][2])
+		if t.has("rotation"): base_transforms[part]["rotation"] = Vector3(t["rotation"][0], t["rotation"][1], t["rotation"][2])
+		if t.has("scale"): base_transforms[part]["scale"] = Vector3(t["scale"][0], t["scale"][1], t["scale"][2])
+
+	relative_edits[part] = {
+		"position": Vector3.ZERO,
+		"rotation": Vector3.ZERO,
+		"scale": Vector3.ONE
+	}
+	_update_effective_transform(part)
 	_rebuild_avatar()
 	_update_gizmo_spinboxes()
+
+func _update_effective_transform(part: String) -> void:
+	var b = base_transforms[part]
+	var r = relative_edits[part]
+	alignment_data[part] = {
+		"position": b["position"] + r["position"],
+		"rotation": b["rotation"] + r["rotation"],
+		"scale": Vector3(b["scale"].x * r["scale"].x, b["scale"].y * r["scale"].y, b["scale"].z * r["scale"].z)
+	}
 
 func _on_save_current_item_preset() -> void:
 	var info = _get_current_item_info()
@@ -558,16 +601,25 @@ func _on_save_current_item_preset() -> void:
 	if not catalog_presets.has(cat):
 		catalog_presets[cat] = {}
 
+	_update_effective_transform(selected_part)
 	var t = alignment_data[selected_part]
 	catalog_presets[cat][item_key] = {
-		"position": [snapped(t["position"].x, 0.001), snapped(t["position"].y, 0.001), snapped(t["position"].z, 0.001)],
+		"position": [snapped(t["position"].x, 0.0001), snapped(t["position"].y, 0.0001), snapped(t["position"].z, 0.0001)],
 		"rotation": [snapped(t["rotation"].x, 0.1), snapped(t["rotation"].y, 0.1), snapped(t["rotation"].z, 0.1)],
-		"scale": [snapped(t["scale"].x, 0.001), snapped(t["scale"].y, 0.001), snapped(t["scale"].z, 0.001)]
+		"scale": [snapped(t["scale"].x, 0.0001), snapped(t["scale"].y, 0.0001), snapped(t["scale"].z, 0.0001)]
+	}
+
+	base_transforms[selected_part] = alignment_data[selected_part].duplicate(true)
+	relative_edits[selected_part] = {
+		"position": Vector3.ZERO,
+		"rotation": Vector3.ZERO,
+		"scale": Vector3.ONE
 	}
 
 	_on_save_catalog_to_file()
+	_update_gizmo_spinboxes()
 	if preset_status_label:
-		preset_status_label.text = "✓ Saved " + item_key
+		preset_status_label.text = "✓ Saved " + item_key + " (Abs Pos: " + str(catalog_presets[cat][item_key]["position"]) + ")"
 
 func _on_save_catalog_to_file() -> void:
 	var json_text = JSON.stringify(catalog_presets, "  ")
@@ -588,12 +640,12 @@ func _on_save_catalog_to_file() -> void:
 		preset_status_label.text = "✓ Presets saved to catalog!"
 
 func _update_gizmo_spinboxes() -> void:
-	if not alignment_data.has(selected_part):
+	if not relative_edits.has(selected_part):
 		return
-	var t = alignment_data[selected_part]
-	var p: Vector3 = t["position"]
-	var r: Vector3 = t["rotation"]
-	var s: Vector3 = t["scale"]
+	var r = relative_edits[selected_part]
+	var p: Vector3 = r["position"]
+	var rot: Vector3 = r["rotation"]
+	var s: Vector3 = r["scale"]
 
 	spin_px.set_value_no_signal(p.x)
 	slider_px.set_value_no_signal(p.x)
@@ -604,14 +656,14 @@ func _update_gizmo_spinboxes() -> void:
 	spin_pz.set_value_no_signal(p.z)
 	slider_pz.set_value_no_signal(p.z)
 
-	spin_rx.set_value_no_signal(r.x)
-	slider_rx.set_value_no_signal(r.x)
+	spin_rx.set_value_no_signal(rot.x)
+	slider_rx.set_value_no_signal(rot.x)
 
-	spin_ry.set_value_no_signal(r.y)
-	slider_ry.set_value_no_signal(r.y)
+	spin_ry.set_value_no_signal(rot.y)
+	slider_ry.set_value_no_signal(rot.y)
 
-	spin_rz.set_value_no_signal(r.z)
-	slider_rz.set_value_no_signal(r.z)
+	spin_rz.set_value_no_signal(rot.z)
+	slider_rz.set_value_no_signal(rot.z)
 
 	spin_sx.set_value_no_signal(s.x)
 	spin_sy.set_value_no_signal(s.y)
@@ -619,11 +671,13 @@ func _update_gizmo_spinboxes() -> void:
 	slider_sx.set_value_no_signal(s.x)
 
 func _on_transform_changed() -> void:
-	if not alignment_data.has(selected_part):
+	if not relative_edits.has(selected_part):
 		return
-	alignment_data[selected_part]["position"] = Vector3(spin_px.value, spin_py.value, spin_pz.value)
-	alignment_data[selected_part]["rotation"] = Vector3(spin_rx.value, spin_ry.value, spin_rz.value)
-	alignment_data[selected_part]["scale"] = Vector3(spin_sx.value, spin_sy.value, spin_sz.value)
+	relative_edits[selected_part]["position"] = Vector3(spin_px.value, spin_py.value, spin_pz.value)
+	relative_edits[selected_part]["rotation"] = Vector3(spin_rx.value, spin_ry.value, spin_rz.value)
+	relative_edits[selected_part]["scale"] = Vector3(spin_sx.value, spin_sy.value, spin_sz.value)
+
+	_update_effective_transform(selected_part)
 
 	if current_avatar_instance:
 		CharacterFactory.apply_alignment(current_avatar_instance, alignment_data)
