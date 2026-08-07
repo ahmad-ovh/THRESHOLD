@@ -443,7 +443,7 @@ static func apply_alignment(avatar: Node3D, alignment: Dictionary) -> void:
 				node = mii
 			else:
 				node = mii.find_child("GLTF" + part.capitalize() + "*", true, false) as Node3D
-				if not node:
+				if not node and part != "head":
 					node = mii.find_child("*" + part.capitalize() + "*", true, false) as Node3D
 
 			if node:
