@@ -312,13 +312,13 @@ static func _build_player(root: Node3D) -> void:
 		elif "body" in node_name or "shirt" in node_name or "torso" in node_name:
 			mi.material_override = shirt_mat
 
-	# 3. Skeleton & Attachments (Head, Hair & Glasses)
+	# 3. Unified Head Attachment (Styles 1..12)
+	# Hide base rigged Head_Mesh on idle.fbx so all head styles use identical pipeline
 	var head_mesh = avatar.find_child("Head_Mesh", true, false) as MeshInstance3D
-	var head_style: int = c.get("head_style", 1)
-
 	if head_mesh:
-		head_mesh.material_override = head_mat
-		head_mesh.visible = (head_style <= 1)
+		head_mesh.visible = false
+
+	var head_style: int = c.get("head_style", 1)
 
 	var skeleton = avatar.find_child("Armature", true, false) as Skeleton3D
 	if not skeleton:
@@ -327,18 +327,18 @@ static func _build_player(root: Node3D) -> void:
 	if skeleton:
 		var head_attach = _get_or_create_head_bone_attachment(skeleton)
 		if head_attach:
-			# Custom 3D Head Shape (Style 2..12)
-			if head_style > 1:
-				var head_path = "res://assets/character_models/heads/head_head_%03d.gltf" % head_style
-				if ResourceLoader.exists(head_path):
-					var head_gltf = _load_gltf(head_path)
-					if head_gltf:
-						head_gltf.name = "GLTFHeadCustom"
-						head_gltf.position = Vector3.ZERO
-						head_gltf.rotation_degrees = Vector3.ZERO
-						head_gltf.scale = Vector3.ONE
-						_set_node_material(head_gltf, head_mat)
-						head_attach.add_child(head_gltf)
+			# Unified 3D Head Shape (Styles 1..12)
+			var head_path = "res://assets/character_models/heads/head_head_%03d.gltf" % head_style
+			if not ResourceLoader.exists(head_path):
+				head_path = "res://assets/character_models/heads/head_head_001.gltf"
+			var head_gltf = _load_gltf(head_path)
+			if head_gltf:
+				head_gltf.name = "GLTFHead"
+				head_gltf.position = Vector3(0.0, -0.48, 0.0)
+				head_gltf.rotation_degrees = Vector3.ZERO
+				head_gltf.scale = Vector3.ONE
+				_set_node_material(head_gltf, head_mat)
+				head_attach.add_child(head_gltf)
 
 			# 3D Hair Attachment
 			var hair_style: int = c.get("hair_style", 0)
