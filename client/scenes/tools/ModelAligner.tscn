@@ -173,6 +173,159 @@ text = "Show Glasses Mesh"
 layout_mode = 2
 text = "🔍 Focus Camera on Part"
 
+[node name="FaceTexTitle" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+text = "🎨 Face Texture UV Sliders"
+horizontal_alignment = 1
+
+[node name="EyeXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeXRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Eye X:"
+
+[node name="SliderEyeX" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeXRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -150.0
+max_value = 150.0
+step = 1.0
+
+[node name="SpinEyeX" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeXRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = -200.0
+max_value = 200.0
+
+[node name="EyeYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeYRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Eye Y:"
+
+[node name="SliderEyeY" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeYRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -150.0
+max_value = 150.0
+step = 1.0
+
+[node name="SpinEyeY" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeYRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = -200.0
+max_value = 200.0
+
+[node name="EyeSizeRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeSizeRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Eye Size:"
+
+[node name="SliderEyeSize" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeSizeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 6.0
+max_value = 100.0
+value = 24.0
+
+[node name="SpinEyeSize" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeSizeRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = 4.0
+max_value = 150.0
+value = 24.0
+
+[node name="NoseYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/NoseYRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Nose Y:"
+
+[node name="SliderNoseY" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/NoseYRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -150.0
+max_value = 150.0
+step = 1.0
+
+[node name="SpinNoseY" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/NoseYRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = -200.0
+max_value = 200.0
+
+[node name="MouthYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/MouthYRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Mouth Y:"
+
+[node name="SliderMouthY" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/MouthYRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -150.0
+max_value = 150.0
+step = 1.0
+
+[node name="SpinMouthY" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/MouthYRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = -200.0
+max_value = 200.0
+
+[node name="GlassXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassXRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Glass X:"
+
+[node name="SliderGlassX" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassXRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -150.0
+max_value = 150.0
+step = 1.0
+
+[node name="SpinGlassX" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassXRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = -200.0
+max_value = 200.0
+
+[node name="GlassYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassYRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Glass Y:"
+
+[node name="SliderGlassY" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassYRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -150.0
+max_value = 150.0
+step = 1.0
+
+[node name="SpinGlassY" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassYRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = -200.0
+max_value = 200.0
+
 [node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3

@@ -58,6 +58,25 @@ extends Control
 @onready var check_glasses: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/CheckGlasses
 @onready var focus_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/FocusBtn
 
+# Face Texture UV Sliders
+@onready var slider_eye_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeXRow/SliderEyeX
+@onready var spin_eye_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeXRow/SpinEyeX
+@onready var slider_eye_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeYRow/SliderEyeY
+@onready var spin_eye_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeYRow/SpinEyeY
+@onready var slider_eye_size: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeSizeRow/SliderEyeSize
+@onready var spin_eye_size: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/EyeSizeRow/SpinEyeSize
+
+@onready var slider_nose_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/NoseYRow/SliderNoseY
+@onready var spin_nose_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/NoseYRow/SpinNoseY
+
+@onready var slider_mouth_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/MouthYRow/SliderMouthY
+@onready var spin_mouth_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/MouthYRow/SpinMouthY
+
+@onready var slider_glass_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassXRow/SliderGlassX
+@onready var spin_glass_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassXRow/SpinGlassX
+@onready var slider_glass_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassYRow/SliderGlassY
+@onready var spin_glass_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/GlassYRow/SpinGlassY
+
 var auto_rotate: bool = false
 var selected_part: String = "head"
 var gizmo_mode: String = "move" # "move", "rotate", "scale"
@@ -373,6 +392,41 @@ func _connect_signals() -> void:
 	spin_sx.value_changed.connect(func(v): _push_undo(); slider_sx.set_value_no_signal(v); _on_transform_changed())
 	spin_sy.value_changed.connect(func(_v): _push_undo(); _on_transform_changed())
 	spin_sz.value_changed.connect(func(_v): _push_undo(); _on_transform_changed())
+
+	# Face Texture UV Sliders & Spinboxes
+	var update_face_offsets = func():
+		_push_undo()
+		if not PlayerStore.customization.has("face_offsets"):
+			PlayerStore.customization["face_offsets"] = {}
+		PlayerStore.customization["face_offsets"]["eye_x"] = int(spin_eye_x.value)
+		PlayerStore.customization["face_offsets"]["eye_y"] = int(spin_eye_y.value)
+		PlayerStore.customization["face_offsets"]["eye_size"] = int(spin_eye_size.value)
+		PlayerStore.customization["face_offsets"]["nose_y"] = int(spin_nose_y.value)
+		PlayerStore.customization["face_offsets"]["mouth_y"] = int(spin_mouth_y.value)
+		PlayerStore.customization["face_offsets"]["glass_x"] = int(spin_glass_x.value)
+		PlayerStore.customization["face_offsets"]["glass_y"] = int(spin_glass_y.value)
+		_rebuild_avatar()
+
+	slider_eye_x.value_changed.connect(func(v): spin_eye_x.set_value_no_signal(v); update_face_offsets.call())
+	spin_eye_x.value_changed.connect(func(v): slider_eye_x.set_value_no_signal(v); update_face_offsets.call())
+
+	slider_eye_y.value_changed.connect(func(v): spin_eye_y.set_value_no_signal(v); update_face_offsets.call())
+	spin_eye_y.value_changed.connect(func(v): slider_eye_y.set_value_no_signal(v); update_face_offsets.call())
+
+	slider_eye_size.value_changed.connect(func(v): spin_eye_size.set_value_no_signal(v); update_face_offsets.call())
+	spin_eye_size.value_changed.connect(func(v): slider_eye_size.set_value_no_signal(v); update_face_offsets.call())
+
+	slider_nose_y.value_changed.connect(func(v): spin_nose_y.set_value_no_signal(v); update_face_offsets.call())
+	spin_nose_y.value_changed.connect(func(v): slider_nose_y.set_value_no_signal(v); update_face_offsets.call())
+
+	slider_mouth_y.value_changed.connect(func(v): spin_mouth_y.set_value_no_signal(v); update_face_offsets.call())
+	spin_mouth_y.value_changed.connect(func(v): slider_mouth_y.set_value_no_signal(v); update_face_offsets.call())
+
+	slider_glass_x.value_changed.connect(func(v): spin_glass_x.set_value_no_signal(v); update_face_offsets.call())
+	spin_glass_x.value_changed.connect(func(v): slider_glass_x.set_value_no_signal(v); update_face_offsets.call())
+
+	slider_glass_y.value_changed.connect(func(v): spin_glass_y.set_value_no_signal(v); update_face_offsets.call())
+	spin_glass_y.value_changed.connect(func(v): slider_glass_y.set_value_no_signal(v); update_face_offsets.call())
 
 	copy_btn.pressed.connect(_on_copy_json_pressed)
 	back_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn"))
