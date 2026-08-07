@@ -312,33 +312,32 @@ static func _build_player(root: Node3D) -> void:
 		elif "body" in node_name or "shirt" in node_name or "torso" in node_name:
 			mi.material_override = shirt_mat
 
-	# 3. Unified Head Attachment (Styles 1..12)
-	# Hide base rigged Head_Mesh on idle.fbx so all head styles use identical pipeline
+	# 3. Skeleton & Attachments (Head, Hair & Glasses)
 	var head_mesh = avatar.find_child("Head_Mesh", true, false) as MeshInstance3D
-	if head_mesh:
-		head_mesh.visible = false
-
 	var head_style: int = c.get("head_style", 1)
-
-	var skeleton = avatar.find_child("Armature", true, false) as Skeleton3D
-	if not skeleton:
-		skeleton = avatar.find_child("*Skeleton*", true, false) as Skeleton3D
 
 	if skeleton:
 		var head_attach = _get_or_create_head_bone_attachment(skeleton)
 		if head_attach:
-			# Unified 3D Head Shape (Styles 1..12)
-			var head_path = "res://assets/character_models/heads/head_head_%03d.gltf" % head_style
-			if not ResourceLoader.exists(head_path):
-				head_path = "res://assets/character_models/heads/head_head_001.gltf"
-			var head_gltf = _load_gltf(head_path)
-			if head_gltf:
-				head_gltf.name = "GLTFHead"
-				head_gltf.position = Vector3(0.0, 0.04, 0.0)
-				head_gltf.rotation_degrees = Vector3.ZERO
-				head_gltf.scale = Vector3.ONE
-				_set_node_material(head_gltf, head_mat)
-				head_attach.add_child(head_gltf)
+			if head_style == 1:
+				# Base Head 1 uses rigged Head_Mesh on idle.fbx
+				if head_mesh:
+					head_mesh.visible = true
+					head_mesh.material_override = head_mat
+			else:
+				# Custom Head styles 2..12
+				if head_mesh:
+					head_mesh.visible = false
+
+				var head_path = "res://assets/character_models/heads/head_head_%03d.gltf" % head_style
+				if ResourceLoader.exists(head_path):
+					var head_gltf = _load_gltf(head_path)
+					if head_gltf:
+						head_gltf.name = "GLTFHead"
+						var head_key = "head_%03d" % head_style
+						_apply_item_transform(head_gltf, "heads", head_key, Vector3.ZERO, Vector3.ZERO, Vector3.ONE)
+						_set_node_material(head_gltf, head_mat)
+						head_attach.add_child(head_gltf)
 
 			# 3D Hair Attachment
 			var hair_style: int = c.get("hair_style", 0)
@@ -433,8 +432,8 @@ static func apply_alignment(avatar: Node3D, alignment: Dictionary) -> void:
 		return
 	for part in ["body", "head", "hair", "glasses"]:
 		if alignment.has(part):
-			var node_name = "GLTF" + part.capitalize()
-			var node = mii.get_node_or_null(node_name)
+			var node_name = "GLTF" + part.capitalize() + "*"
+			var node = mii.find_child(node_name, true, false)
 			if node:
 				var t = alignment[part]
 				if t.has("position"): node.position = t["position"]
