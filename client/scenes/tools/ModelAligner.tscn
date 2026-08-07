@@ -157,6 +157,23 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "Auto Rotate Viewport"
 
+[node name="GizmoModeHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/GizmoModeHBox"]
+layout_mode = 2
+text = "Gizmo Mode: "
+
+[node name="GizmoModeOption" type="OptionButton" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/GizmoModeHBox"]
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "Move (Position)"
+popup/item_0/id = 0
+popup/item_1/text = "Rotate"
+popup/item_1/id = 1
+popup/item_2/text = "Scale"
+popup/item_2/id = 2
+
 [node name="PartHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
 layout_mode = 2
 

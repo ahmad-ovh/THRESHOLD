@@ -7,6 +7,7 @@ extends Control
 
 # Control references
 @onready var part_option: OptionButton = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PartHBox/PartOption
+@onready var gizmo_mode_option: OptionButton = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/GizmoModeHBox/GizmoModeOption
 @onready var auto_rotate_check: CheckBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/AutoRotateCheck
 
 # Position Sliders & Spinboxes
@@ -47,15 +48,16 @@ extends Control
 
 var auto_rotate: bool = false
 var selected_part: String = "head"
+var gizmo_mode: String = "move" # "move", "rotate", "scale"
 var is_orbiting: bool = false
 var active_gizmo_axis: String = "" # "X", "Y", "Z", or ""
 var last_mouse_pos: Vector2 = Vector2.ZERO
 
 var alignment_data: Dictionary = {
-	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(-90.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
-	"head": {"position": Vector3(0.0, 1.15, 0.0), "rotation": Vector3(-90.0, 0.0, 0.0), "scale": Vector3(0.7, 0.7, 0.7)},
-	"hair": {"position": Vector3(0.0, 1.45, 0.0), "rotation": Vector3(-90.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
-	"glasses": {"position": Vector3(0.0, 1.15, 0.05), "rotation": Vector3(-90.0, 0.0, 0.0), "scale": Vector3(0.7, 0.7, 0.7)}
+	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
+	"head": {"position": Vector3(0.0, 0.95, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)},
+	"hair": {"position": Vector3(0.0, 1.00, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(3.8, 3.8, 3.8)},
+	"glasses": {"position": Vector3(0.0, 0.95, 0.05), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
 
 var current_avatar_instance: Node3D
@@ -101,19 +103,35 @@ func _gui_input(event: InputEvent) -> void:
 		elif active_gizmo_axis != "" and current_avatar_instance:
 			var delta_m = event.position - last_mouse_pos
 			last_mouse_pos = event.position
-			var move_speed = 0.005
 			var t = alignment_data[selected_part]
-			var cur_pos: Vector3 = t["position"]
 
-			match active_gizmo_axis:
-				"X":
-					cur_pos.x += delta_m.x * move_speed
-				"Y":
-					cur_pos.y -= delta_m.y * move_speed
-				"Z":
-					cur_pos.z += delta_m.y * move_speed
+			if gizmo_mode == "move":
+				var move_speed = 0.005
+				var cur_pos: Vector3 = t["position"]
+				match active_gizmo_axis:
+					"X": cur_pos.x += delta_m.x * move_speed
+					"Y": cur_pos.y -= delta_m.y * move_speed
+					"Z": cur_pos.z += delta_m.y * move_speed
+				alignment_data[selected_part]["position"] = cur_pos
 
-			alignment_data[selected_part]["position"] = cur_pos
+			elif gizmo_mode == "rotate":
+				var rot_speed = 1.0
+				var cur_rot: Vector3 = t["rotation"]
+				match active_gizmo_axis:
+					"X": cur_rot.x -= delta_m.y * rot_speed
+					"Y": cur_rot.y += delta_m.x * rot_speed
+					"Z": cur_rot.z += delta_m.x * rot_speed
+				alignment_data[selected_part]["rotation"] = cur_rot
+
+			elif gizmo_mode == "scale":
+				var scale_speed = 0.02
+				var cur_scale: Vector3 = t["scale"]
+				match active_gizmo_axis:
+					"X": cur_scale.x += delta_m.x * scale_speed
+					"Y": cur_scale.y -= delta_m.y * scale_speed
+					"Z": cur_scale.z += delta_m.y * scale_speed
+				alignment_data[selected_part]["scale"] = cur_scale
+
 			_update_gizmo_spinboxes()
 			_on_transform_changed()
 
@@ -127,20 +145,18 @@ func _hit_test_gizmo(mouse_pos: Vector2) -> String:
 	var ray_dir = camera.project_ray_normal(mouse_pos)
 
 	var gizmo_pos = gizmo_node.global_position
+	var threshold = 0.20 if gizmo_mode == "rotate" else 0.15
 
-	# Test X axis (Red)
 	var pos_x = gizmo_pos + Vector3(0.2, 0, 0)
-	if (pos_x - ray_origin).cross(ray_dir).length() < 0.15:
+	if (pos_x - ray_origin).cross(ray_dir).length() < threshold:
 		return "X"
 
-	# Test Y axis (Green)
 	var pos_y = gizmo_pos + Vector3(0, 0.2, 0)
-	if (pos_y - ray_origin).cross(ray_dir).length() < 0.15:
+	if (pos_y - ray_origin).cross(ray_dir).length() < threshold:
 		return "Y"
 
-	# Test Z axis (Blue)
 	var pos_z = gizmo_pos + Vector3(0, 0, 0.2)
-	if (pos_z - ray_origin).cross(ray_dir).length() < 0.15:
+	if (pos_z - ray_origin).cross(ray_dir).length() < threshold:
 		return "Z"
 
 	return ""
@@ -175,6 +191,7 @@ func _try_select_3d_part(mouse_pos: Vector2) -> void:
 				part_option.select(i)
 				break
 		_update_gizmo_spinboxes()
+		_spawn_3d_gizmo()
 
 func _handle_keyboard_nudge(event: InputEventKey) -> void:
 	if not alignment_data.has(selected_part):
@@ -185,24 +202,15 @@ func _handle_keyboard_nudge(event: InputEventKey) -> void:
 	var cur_rot: Vector3 = alignment_data[selected_part]["rotation"]
 
 	match event.keycode:
-		KEY_W, KEY_UP:
-			cur_pos.y += step
-		KEY_S, KEY_DOWN:
-			cur_pos.y -= step
-		KEY_A, KEY_LEFT:
-			cur_pos.x -= step
-		KEY_D, KEY_RIGHT:
-			cur_pos.x += step
-		KEY_Q:
-			cur_pos.z -= step
-		KEY_E:
-			cur_pos.z += step
-		KEY_R:
-			cur_rot.y += 15.0
-		KEY_T:
-			cur_rot.x += 15.0
-		_:
-			return
+		KEY_W, KEY_UP: cur_pos.y += step
+		KEY_S, KEY_DOWN: cur_pos.y -= step
+		KEY_A, KEY_LEFT: cur_pos.x -= step
+		KEY_D, KEY_RIGHT: cur_pos.x += step
+		KEY_Q: cur_pos.z -= step
+		KEY_E: cur_pos.z += step
+		KEY_R: cur_rot.y += 15.0
+		KEY_T: cur_rot.x += 15.0
+		_: return
 
 	alignment_data[selected_part]["position"] = cur_pos
 	alignment_data[selected_part]["rotation"] = cur_rot
@@ -219,9 +227,19 @@ func _connect_signals() -> void:
 	part_option.item_selected.connect(func(idx):
 		selected_part = part_option.get_item_text(idx)
 		_update_gizmo_spinboxes()
+		_spawn_3d_gizmo()
 	)
 
-	# Position Sliders & Spinboxes bidirectional sync
+	if gizmo_mode_option:
+		gizmo_mode_option.item_selected.connect(func(idx):
+			match idx:
+				0: gizmo_mode = "move"
+				1: gizmo_mode = "rotate"
+				2: gizmo_mode = "scale"
+			_spawn_3d_gizmo()
+		)
+
+	# Position Sliders & Spinboxes
 	slider_px.value_changed.connect(func(v): spin_px.set_value_no_signal(v); _on_transform_changed())
 	spin_px.value_changed.connect(func(v): slider_px.set_value_no_signal(v); _on_transform_changed())
 
@@ -315,55 +333,109 @@ func _spawn_3d_gizmo() -> void:
 	gizmo_node.name = "TransformGizmo3D"
 	preview_world.add_child(gizmo_node)
 
-	# Red X Axis
 	var mat_x = StandardMaterial3D.new()
-	mat_x.albedo_color = Color(1.0, 0.2, 0.2)
+	mat_x.albedo_color = Color(1.0, 0.25, 0.25)
 	mat_x.no_depth_test = true
 	mat_x.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 
-	var axis_x = MeshInstance3D.new()
-	var cyl_x = CylinderMesh.new()
-	cyl_x.top_radius = 0.015
-	cyl_x.bottom_radius = 0.015
-	cyl_x.height = 0.4
-	axis_x.mesh = cyl_x
-	axis_x.material_override = mat_x
-	axis_x.position = Vector3(0.2, 0.0, 0.0)
-	axis_x.rotation_degrees = Vector3(0, 0, -90)
-	gizmo_node.add_child(axis_x)
-
-	# Green Y Axis
 	var mat_y = StandardMaterial3D.new()
-	mat_y.albedo_color = Color(0.2, 1.0, 0.2)
+	mat_y.albedo_color = Color(0.25, 1.0, 0.25)
 	mat_y.no_depth_test = true
 	mat_y.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 
-	var axis_y = MeshInstance3D.new()
-	var cyl_y = CylinderMesh.new()
-	cyl_y.top_radius = 0.015
-	cyl_y.bottom_radius = 0.015
-	cyl_y.height = 0.4
-	axis_y.mesh = cyl_y
-	axis_y.material_override = mat_y
-	axis_y.position = Vector3(0.0, 0.2, 0.0)
-	gizmo_node.add_child(axis_y)
-
-	# Blue Z Axis
 	var mat_z = StandardMaterial3D.new()
-	mat_z.albedo_color = Color(0.3, 0.5, 1.0)
+	mat_z.albedo_color = Color(0.3, 0.55, 1.0)
 	mat_z.no_depth_test = true
 	mat_z.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 
-	var axis_z = MeshInstance3D.new()
-	var cyl_z = CylinderMesh.new()
-	cyl_z.top_radius = 0.015
-	cyl_z.bottom_radius = 0.015
-	cyl_z.height = 0.4
-	axis_z.mesh = cyl_z
-	axis_z.material_override = mat_z
-	axis_z.position = Vector3(0.0, 0.0, 0.2)
-	axis_z.rotation_degrees = Vector3(90, 0, 0)
-	gizmo_node.add_child(axis_z)
+	if gizmo_mode == "rotate":
+		# Render 3D Rotation Rings
+		var ring_x = MeshInstance3D.new()
+		var torus_x = TorusMesh.new()
+		torus_x.outer_radius = 0.25
+		torus_x.inner_radius = 0.23
+		ring_x.mesh = torus_x
+		ring_x.material_override = mat_x
+		ring_x.rotation_degrees = Vector3(0, 90, 0)
+		gizmo_node.add_child(ring_x)
+
+		var ring_y = MeshInstance3D.new()
+		var torus_y = TorusMesh.new()
+		torus_y.outer_radius = 0.25
+		torus_y.inner_radius = 0.23
+		ring_y.mesh = torus_y
+		ring_y.material_override = mat_y
+		ring_y.rotation_degrees = Vector3(90, 0, 0)
+		gizmo_node.add_child(ring_y)
+
+		var ring_z = MeshInstance3D.new()
+		var torus_z = TorusMesh.new()
+		torus_z.outer_radius = 0.25
+		torus_z.inner_radius = 0.23
+		ring_z.mesh = torus_z
+		ring_z.material_override = mat_z
+		ring_z.rotation_degrees = Vector3(0, 0, 0)
+		gizmo_node.add_child(ring_z)
+
+	elif gizmo_mode == "scale":
+		# Render Scale Cubes
+		var box_x = MeshInstance3D.new()
+		var cube_x = BoxMesh.new()
+		cube_x.size = Vector3(0.05, 0.05, 0.05)
+		box_x.mesh = cube_x
+		box_x.material_override = mat_x
+		box_x.position = Vector3(0.25, 0, 0)
+		gizmo_node.add_child(box_x)
+
+		var box_y = MeshInstance3D.new()
+		var cube_y = BoxMesh.new()
+		cube_y.size = Vector3(0.05, 0.05, 0.05)
+		box_y.mesh = cube_y
+		box_y.material_override = mat_y
+		box_y.position = Vector3(0, 0.25, 0)
+		gizmo_node.add_child(box_y)
+
+		var box_z = MeshInstance3D.new()
+		var cube_z = BoxMesh.new()
+		cube_z.size = Vector3(0.05, 0.05, 0.05)
+		box_z.mesh = cube_z
+		box_z.material_override = mat_z
+		box_z.position = Vector3(0, 0, 0.25)
+		gizmo_node.add_child(box_z)
+
+	else:
+		# Render Linear Movement Arrows
+		var axis_x = MeshInstance3D.new()
+		var cyl_x = CylinderMesh.new()
+		cyl_x.top_radius = 0.015
+		cyl_x.bottom_radius = 0.015
+		cyl_x.height = 0.4
+		axis_x.mesh = cyl_x
+		axis_x.material_override = mat_x
+		axis_x.position = Vector3(0.2, 0.0, 0.0)
+		axis_x.rotation_degrees = Vector3(0, 0, -90)
+		gizmo_node.add_child(axis_x)
+
+		var axis_y = MeshInstance3D.new()
+		var cyl_y = CylinderMesh.new()
+		cyl_y.top_radius = 0.015
+		cyl_y.bottom_radius = 0.015
+		cyl_y.height = 0.4
+		axis_y.mesh = cyl_y
+		axis_y.material_override = mat_y
+		axis_y.position = Vector3(0.0, 0.2, 0.0)
+		gizmo_node.add_child(axis_y)
+
+		var axis_z = MeshInstance3D.new()
+		var cyl_z = CylinderMesh.new()
+		cyl_z.top_radius = 0.015
+		cyl_z.bottom_radius = 0.015
+		cyl_z.height = 0.4
+		axis_z.mesh = cyl_z
+		axis_z.material_override = mat_z
+		axis_z.position = Vector3(0.0, 0.0, 0.2)
+		axis_z.rotation_degrees = Vector3(90, 0, 0)
+		gizmo_node.add_child(axis_z)
 
 func _update_gizmo_3d_position() -> void:
 	if not gizmo_node or not current_avatar_instance:
