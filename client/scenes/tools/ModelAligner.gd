@@ -73,14 +73,20 @@ extends Control
 
 @onready var slider_nose_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseYRow/SliderNoseY
 @onready var spin_nose_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseYRow/SpinNoseY
+@onready var slider_nose_rot: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseRotRow/SliderNoseRot
+@onready var spin_nose_rot: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseRotRow/SpinNoseRot
 
 @onready var slider_mouth_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthYRow/SliderMouthY
 @onready var spin_mouth_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthYRow/SpinMouthY
+@onready var slider_mouth_rot: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthRotRow/SliderMouthRot
+@onready var spin_mouth_rot: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthRotRow/SpinMouthRot
 
 @onready var slider_glass_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassXRow/SliderGlassX
 @onready var spin_glass_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassXRow/SpinGlassX
 @onready var slider_glass_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassYRow/SliderGlassY
 @onready var spin_glass_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassYRow/SpinGlassY
+@onready var slider_glass_rot: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassRotRow/SliderGlassRot
+@onready var spin_glass_rot: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassRotRow/SpinGlassRot
 
 var auto_rotate: bool = false
 var selected_part: String = "head"
@@ -408,9 +414,12 @@ func _connect_signals() -> void:
 		PlayerStore.customization["face_offsets"]["eye_size"] = int(spin_eye_size.value)
 		PlayerStore.customization["face_offsets"]["eye_rot"] = int(spin_eye_rot.value)
 		PlayerStore.customization["face_offsets"]["nose_y"] = int(spin_nose_y.value)
+		PlayerStore.customization["face_offsets"]["nose_rot"] = int(spin_nose_rot.value) if spin_nose_rot else 0
 		PlayerStore.customization["face_offsets"]["mouth_y"] = int(spin_mouth_y.value)
+		PlayerStore.customization["face_offsets"]["mouth_rot"] = int(spin_mouth_rot.value) if spin_mouth_rot else 0
 		PlayerStore.customization["face_offsets"]["glass_x"] = int(spin_glass_x.value)
 		PlayerStore.customization["face_offsets"]["glass_y"] = int(spin_glass_y.value)
+		PlayerStore.customization["face_offsets"]["glass_rot"] = int(spin_glass_rot.value) if spin_glass_rot else 0
 		_rebuild_avatar()
 
 	slider_eye_x.value_changed.connect(func(v): spin_eye_x.set_value_no_signal(v); update_face_offsets.call())
@@ -429,14 +438,26 @@ func _connect_signals() -> void:
 	slider_nose_y.value_changed.connect(func(v): spin_nose_y.set_value_no_signal(v); update_face_offsets.call())
 	spin_nose_y.value_changed.connect(func(v): slider_nose_y.set_value_no_signal(v); update_face_offsets.call())
 
+	if slider_nose_rot and spin_nose_rot:
+		slider_nose_rot.value_changed.connect(func(v): spin_nose_rot.set_value_no_signal(v); update_face_offsets.call())
+		spin_nose_rot.value_changed.connect(func(v): slider_nose_rot.set_value_no_signal(v); update_face_offsets.call())
+
 	slider_mouth_y.value_changed.connect(func(v): spin_mouth_y.set_value_no_signal(v); update_face_offsets.call())
 	spin_mouth_y.value_changed.connect(func(v): slider_mouth_y.set_value_no_signal(v); update_face_offsets.call())
+
+	if slider_mouth_rot and spin_mouth_rot:
+		slider_mouth_rot.value_changed.connect(func(v): spin_mouth_rot.set_value_no_signal(v); update_face_offsets.call())
+		spin_mouth_rot.value_changed.connect(func(v): slider_mouth_rot.set_value_no_signal(v); update_face_offsets.call())
 
 	slider_glass_x.value_changed.connect(func(v): spin_glass_x.set_value_no_signal(v); update_face_offsets.call())
 	spin_glass_x.value_changed.connect(func(v): slider_glass_x.set_value_no_signal(v); update_face_offsets.call())
 
 	slider_glass_y.value_changed.connect(func(v): spin_glass_y.set_value_no_signal(v); update_face_offsets.call())
 	spin_glass_y.value_changed.connect(func(v): slider_glass_y.set_value_no_signal(v); update_face_offsets.call())
+
+	if slider_glass_rot and spin_glass_rot:
+		slider_glass_rot.value_changed.connect(func(v): spin_glass_rot.set_value_no_signal(v); update_face_offsets.call())
+		spin_glass_rot.value_changed.connect(func(v): slider_glass_rot.set_value_no_signal(v); update_face_offsets.call())
 
 	copy_btn.pressed.connect(_on_copy_json_pressed)
 	back_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn"))
@@ -731,6 +752,9 @@ func _on_copy_json_pressed() -> void:
 			"rotation": [snapped(alignment_data[k]["rotation"].x, 0.1), snapped(alignment_data[k]["rotation"].y, 0.1), snapped(alignment_data[k]["rotation"].z, 0.1)],
 			"scale": [snapped(alignment_data[k]["scale"].x, 0.001), snapped(alignment_data[k]["scale"].y, 0.001), snapped(alignment_data[k]["scale"].z, 0.001)]
 		}
+
+	if PlayerStore.customization.has("face_offsets"):
+		export_dict["face_offsets"] = PlayerStore.customization["face_offsets"].duplicate(true)
 	var json_text = JSON.stringify(export_dict, "  ")
 	DisplayServer.clipboard_set(json_text)
 

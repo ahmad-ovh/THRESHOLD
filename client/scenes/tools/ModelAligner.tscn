@@ -331,6 +331,30 @@ layout_mode = 2
 min_value = -200.0
 max_value = 200.0
 
+[node name="NoseRotRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseRotRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Nose Rot:"
+
+[node name="SliderNoseRot" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseRotRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 360.0
+step = 90.0
+value = 0.0
+
+[node name="SpinNoseRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseRotRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = 0.0
+max_value = 360.0
+step = 90.0
+value = 0.0
+
 [node name="MouthYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
 
@@ -351,6 +375,30 @@ custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = -200.0
 max_value = 200.0
+
+[node name="MouthRotRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthRotRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Mouth Rot:"
+
+[node name="SliderMouthRot" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthRotRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 360.0
+step = 90.0
+value = 0.0
+
+[node name="SpinMouthRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthRotRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = 0.0
+max_value = 360.0
+step = 90.0
+value = 0.0
 
 [node name="GlassXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
@@ -393,6 +441,30 @@ custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = -200.0
 max_value = 200.0
+
+[node name="GlassRotRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassRotRow"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Glass Rot:"
+
+[node name="SliderGlassRot" type="HSlider" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassRotRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 360.0
+step = 90.0
+value = 0.0
+
+[node name="SpinGlassRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassRotRow"]
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+min_value = 0.0
+max_value = 360.0
+step = 90.0
+value = 0.0
 
 [node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
