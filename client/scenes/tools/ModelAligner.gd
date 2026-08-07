@@ -116,11 +116,31 @@ var current_avatar_instance: Node3D
 var gizmo_node: Node3D
 
 func _ready() -> void:
+	_configure_slider_ranges()
 	_load_catalog()
 	_connect_signals()
 	_rebuild_avatar()
 	_update_gizmo_spinboxes()
 	_update_camera_orbit()
+
+func _configure_slider_ranges() -> void:
+	for s in [slider_px, spin_px, slider_py, spin_py, slider_pz, spin_pz]:
+		if s:
+			s.min_value = -2.0
+			s.max_value = 2.0
+			s.step = 0.001
+
+	for s in [slider_rx, spin_rx, slider_ry, spin_ry, slider_rz, spin_rz]:
+		if s:
+			s.min_value = -360.0
+			s.max_value = 360.0
+			s.step = 0.1
+
+	for s in [slider_sx, spin_sx, spin_sy, spin_sz]:
+		if s:
+			s.min_value = 0.001
+			s.max_value = 5.0
+			s.step = 0.001
 
 func _load_catalog() -> void:
 	catalog_presets = CharacterFactory.get_model_presets().duplicate(true)
