@@ -54,6 +54,7 @@ func _ready() -> void:
 	interaction_detector.area_exited.connect(_on_area_exited)
 	_setup_dollhouse_camera()
 	_setup_player_mesh()
+	_ensure_dev_camera_input_action()
 	
 	if GameController:
 		GameController.is_development_mode_changed.connect(func(enabled: bool):
@@ -62,6 +63,13 @@ func _ready() -> void:
 		_update_dev_mode(GameController.is_development_mode)
 	else:
 		_update_dev_mode(is_development_mode)
+
+func _ensure_dev_camera_input_action() -> void:
+	if not InputMap.has_action("toggle_dev_camera"):
+		InputMap.add_action("toggle_dev_camera")
+		var ev = InputEventKey.new()
+		ev.physical_keycode = KEY_F1
+		InputMap.action_add_event("toggle_dev_camera", ev)
 
 func _update_dev_mode(enabled: bool) -> void:
 	is_development_mode = enabled
@@ -76,12 +84,24 @@ func _setup_camera_dev_widget() -> void:
 
 	camera_dev_layer = CanvasLayer.new()
 	camera_dev_layer.name = "CameraDevWidgetLayer"
+	camera_dev_layer.layer = 100
 	add_child(camera_dev_layer)
 
 	var panel = PanelContainer.new()
 	panel.name = "CameraDevPanel"
-	panel.position = Vector2(20, 20)
+	panel.position = Vector2(20, 60)
 	panel.custom_minimum_size = Vector2(300, 360)
+
+	var toggle_btn = Button.new()
+	toggle_btn.name = "DevWidgetToggleButton"
+	toggle_btn.text = "🎥 Cam Dev (F1)"
+	toggle_btn.position = Vector2(20, 20)
+	toggle_btn.custom_minimum_size = Vector2(120, 32)
+	camera_dev_layer.add_child(toggle_btn)
+
+	toggle_btn.pressed.connect(func():
+		panel.visible = not panel.visible
+	)
 
 	var margin = MarginContainer.new()
 	margin.add_theme_constant_override("margin_top", 10)
@@ -100,7 +120,7 @@ func _setup_camera_dev_widget() -> void:
 	vbox.add_child(header)
 
 	var status_label = Label.new()
-	status_label.text = "Toggle with F1 key"
+	status_label.text = "Press F1 or Click Button"
 	status_label.add_theme_font_size_override("font_size", 10)
 	vbox.add_child(status_label)
 
@@ -168,6 +188,8 @@ func _setup_camera_dev_widget() -> void:
 		status_label.text = "✓ Copied JSON to Clipboard!"
 	)
 
+	camera_dev_layer.add_child(panel)
+
 func _setup_player_mesh() -> void:
 	if character_mesh:
 		for child in character_mesh.get_children():
@@ -188,10 +210,14 @@ func _setup_dollhouse_camera() -> void:
 	camera_pivot.rotation_degrees = room_camera_rot
 
 func _input(event: InputEvent) -> void:
-	if is_development_mode and event is InputEventKey and event.is_pressed() and not event.is_echo():
-		if event.keycode == KEY_F1 or event.physical_keycode == KEY_F1:
+	if is_development_mode:
+		if event.is_action_pressed("toggle_dev_camera") or (event is InputEventKey and event.is_pressed() and not event.is_echo() and (event.keycode == KEY_F1 or event.physical_keycode == KEY_F1)):
 			if camera_dev_layer:
-				camera_dev_layer.visible = not camera_dev_layer.visible
+				var panel = camera_dev_layer.find_child("CameraDevPanel", true, false)
+				if panel:
+					panel.visible = not panel.visible
+				else:
+					camera_dev_layer.visible = not camera_dev_layer.visible
 				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
