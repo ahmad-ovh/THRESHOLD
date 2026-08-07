@@ -237,7 +237,7 @@ func _gui_input(event: InputEvent) -> void:
 			var t = alignment_data[selected_part]
 
 			if gizmo_mode == "move":
-				var move_speed = 0.005
+				var move_speed = 0.0005
 				var cur_pos: Vector3 = t["position"]
 				match active_gizmo_axis:
 					"X": cur_pos.x += delta_m.x * move_speed
@@ -255,7 +255,7 @@ func _gui_input(event: InputEvent) -> void:
 				alignment_data[selected_part]["rotation"] = cur_rot
 
 			elif gizmo_mode == "scale":
-				var scale_speed = 0.02
+				var scale_speed = 0.001
 				var cur_scale: Vector3 = t["scale"]
 				match active_gizmo_axis:
 					"X": cur_scale.x += delta_m.x * scale_speed
