@@ -240,9 +240,8 @@ static func _build_player(root: Node3D) -> void:
 	var head_gltf = _load_gltf(head_path)
 	if head_gltf:
 		head_gltf.name = "GLTFHead"
-		head_gltf.position = Vector3(0.0, 1.155, 0.0)
-		head_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
-		head_gltf.scale = Vector3(1.0, 1.0, 1.0)
+		var head_key = "head_%03d" % head_style
+		_apply_item_transform(head_gltf, "heads", head_key, Vector3(0.0, 1.155, 0.0), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
 		var face_tex = _create_face_texture(c)
 		var head_mat = StandardMaterial3D.new()
 		head_mat.albedo_color = Color.WHITE
@@ -260,9 +259,8 @@ static func _build_player(root: Node3D) -> void:
 	var hair_gltf = _load_gltf(hair_path)
 	if hair_gltf:
 		hair_gltf.name = "GLTFHair"
-		hair_gltf.position = Vector3(0.0, 1.605, 0.0)
-		hair_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
-		hair_gltf.scale = Vector3(6.6, 6.6, 6.6)
+		var hair_key = "hair_%03d" % hair_style
+		_apply_item_transform(hair_gltf, "hair", hair_key, Vector3(0.0, 1.605, 0.0), Vector3.ZERO, Vector3(6.6, 6.6, 6.6))
 		_set_node_material(hair_gltf, hair_mat)
 		avatar.add_child(hair_gltf)
 
@@ -273,15 +271,48 @@ static func _build_player(root: Node3D) -> void:
 		var glasses_gltf = _load_gltf(glasses_path)
 		if glasses_gltf:
 			glasses_gltf.name = "GLTFGlasses"
-			glasses_gltf.position = Vector3(0.0, 0.95, 0.05)
-			glasses_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
-			glasses_gltf.scale = Vector3(1.0, 1.0, 1.0)
+			var glasses_key = "glasses_%d" % glasses_style
+			_apply_item_transform(glasses_gltf, "glasses", glasses_key, Vector3(0.0, 0.95, 0.05), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
 			var glass_mat = _mat(Color(0.1, 0.1, 0.1), 0.1, 0.9)
 			_set_node_material(glasses_gltf, glass_mat)
 			avatar.add_child(glasses_gltf)
 
 	var acc_style: int = c.get("accessory_style", 0)
 	_add_accessory(avatar, avatar, acc_style)
+
+static var model_presets: Dictionary = {}
+static var _presets_loaded: bool = false
+
+static func get_model_presets() -> Dictionary:
+	if not _presets_loaded:
+		_load_model_presets()
+	return model_presets
+
+static func _load_model_presets() -> void:
+	_presets_loaded = true
+	var preset_path = "res://assets/character_models/model_presets.json"
+	if FileAccess.file_exists(preset_path):
+		var f = FileAccess.open(preset_path, FileAccess.READ)
+		if f:
+			var txt = f.get_as_text()
+			f.close()
+			var json = JSON.new()
+			if json.parse(txt) == OK and json.data is Dictionary:
+				model_presets = json.data
+
+static func _apply_item_transform(node: Node3D, cat: String, item_key: String, def_pos: Vector3, def_rot: Vector3, def_scale: Vector3) -> void:
+	if not node:
+		return
+	var presets = get_model_presets()
+	if presets.has(cat) and presets[cat].has(item_key):
+		var t = presets[cat][item_key]
+		if t.has("position"): node.position = Vector3(t["position"][0], t["position"][1], t["position"][2])
+		if t.has("rotation"): node.rotation_degrees = Vector3(t["rotation"][0], t["rotation"][1], t["rotation"][2])
+		if t.has("scale"): node.scale = Vector3(t["scale"][0], t["scale"][1], t["scale"][2])
+	else:
+		node.position = def_pos
+		node.rotation_degrees = def_rot
+		node.scale = def_scale
 
 static func apply_alignment(avatar: Node3D, alignment: Dictionary) -> void:
 	if not avatar:
