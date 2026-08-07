@@ -97,6 +97,20 @@ func _update_procedural_animations(delta: float, can_move: bool) -> void:
 	var horiz_vel = Vector3(velocity.x, 0, velocity.z)
 	var speed = horiz_vel.length()
 
+	var anim_player: AnimationPlayer = null
+	if character_mesh:
+		anim_player = character_mesh.find_child("AnimationPlayer", true, false) as AnimationPlayer
+
+	if anim_player:
+		if can_move and speed > 0.1:
+			var target_anim = "run" if speed > 4.5 else "walk"
+			if anim_player.current_animation != target_anim:
+				anim_player.play(target_anim)
+		else:
+			if anim_player.current_animation != "idle":
+				anim_player.play("idle")
+		return
+
 	if can_move and speed > 0.1:
 		walk_anim_time += delta * speed * 3.2
 		var stride = sin(walk_anim_time)

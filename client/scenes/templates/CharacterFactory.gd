@@ -205,13 +205,143 @@ static func _set_node_material(node: Node, mat: Material) -> void:
 	for child in node.get_children():
 		_set_node_material(child, mat)
 
+static func _setup_mixamo_animations(anim_player: AnimationPlayer) -> void:
+	if not anim_player:
+		return
+		
+	var anim_files = {
+		"idle": "res://assets/character_models/animations/idle.fbx",
+		"walk": "res://assets/character_models/animations/walk.fbx",
+		"run": "res://assets/character_models/animations/run.fbx",
+		"talk": "res://assets/character_models/animations/talk.fbx"
+	}
+	
+	var lib = AnimationLibrary.new()
+	for anim_name in anim_files:
+		var path = anim_files[anim_name]
+		if ResourceLoader.exists(path):
+			var scene = load(path) as PackedScene
+			if scene:
+				var inst = scene.instantiate()
+				var sub_ap = inst.find_child("AnimationPlayer", true, false) as AnimationPlayer
+				if sub_ap:
+					var anim_list = sub_ap.get_animation_list()
+					if anim_list.size() > 0:
+						var anim = sub_ap.get_animation(anim_list[0]).duplicate()
+						lib.add_animation(anim_name, anim)
+				inst.queue_free()
+				
+	if lib.get_animation_list().size() > 0:
+		if anim_player.has_animation_library(""):
+			var existing_lib = anim_player.get_animation_library("")
+			for anim_n in lib.get_animation_list():
+				if not existing_lib.has_animation(anim_n):
+					existing_lib.add_animation(anim_n, lib.get_animation(anim_n))
+		else:
+			anim_player.add_animation_library("", lib)
+
+static func _get_or_create_head_bone_attachment(skeleton: Skeleton3D) -> BoneAttachment3D:
+	if not skeleton:
+		return null
+	for child in skeleton.get_children():
+		if child is BoneAttachment3D and (child.bone_name == "mixamorig:Head" or child.bone_name == "mixamorig:HeadTop_End"):
+			return child
+	var ba = BoneAttachment3D.new()
+	ba.name = "HeadBoneAttachment"
+	ba.bone_name = "mixamorig:Head"
+	skeleton.add_child(ba)
+	return ba
+
 static func _build_player(root: Node3D) -> void:
 	var c = PlayerStore.customization
 
+	var idle_path = "res://assets/character_models/animations/idle.fbx"
+	if not ResourceLoader.exists(idle_path):
+		_build_fallback_player(root)
+		return
+
+	var idle_scene = load(idle_path) as PackedScene
+	if not idle_scene:
+		_build_fallback_player(root)
+		return
+
+	var avatar = idle_scene.instantiate() as Node3D
+	avatar.name = "MiiAvatar"
+	root.add_child(avatar)
+
+	# Scale Mixamo rig if needed
+	avatar.scale = Vector3(2.5, 2.5, 2.5)
+
+	# 1. Setup AnimationPlayer and load animation tracks
+	var anim_player = avatar.find_child("AnimationPlayer", true, false) as AnimationPlayer
+	_setup_mixamo_animations(anim_player)
+	if anim_player and anim_player.has_animation("idle"):
+		anim_player.play("idle")
+
+	# 2. Material & Customization Mapping
+	var skin_color: Color = c.get("skin_color", Color(0.92, 0.76, 0.65))
+	var hair_color: Color = c.get("hair_color", Color(0.24, 0.16, 0.10))
+	var shirt_color: Color = c.get("shirt_color", Color(0.95, 0.95, 0.95))
+	var pants_color: Color = c.get("pants_color", Color(0.2, 0.2, 0.25))
+
+	var face_tex = _create_face_texture(c)
+	var head_mat = StandardMaterial3D.new()
+	head_mat.albedo_color = Color.WHITE
+	head_mat.albedo_texture = face_tex
+	head_mat.roughness = 0.85
+	head_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+
+	var shirt_mat = _mat(shirt_color)
+	var pants_mat = _mat(pants_color)
+	var hair_mat = _mat(hair_color)
+
+	var head_mesh = avatar.find_child("Head_Mesh", true, false) as MeshInstance3D
+	if head_mesh:
+		head_mesh.material_override = head_mat
+
+	var body_mesh = avatar.find_child("Body_Mesh", true, false) as MeshInstance3D
+	if body_mesh:
+		body_mesh.material_override = shirt_mat
+
+	var pants_mesh = avatar.find_child("Body_Mesh.001", true, false) as MeshInstance3D
+	if pants_mesh:
+		pants_mesh.material_override = pants_mat
+
+	# 3. Skeleton & Attachments (Hair & Glasses)
+	var skeleton = avatar.find_child("Armature", true, false) as Skeleton3D
+	if not skeleton:
+		skeleton = avatar.find_child("*Skeleton*", true, false) as Skeleton3D
+
+	if skeleton:
+		var head_attach = _get_or_create_head_bone_attachment(skeleton)
+		if head_attach:
+			# 3D Hair Attachment
+			var hair_style: int = c.get("hair_style", 0)
+			var hair_path = "res://assets/character_models/hair/hair_%03d.gltf" % hair_style
+			if not ResourceLoader.exists(hair_path):
+				hair_path = "res://assets/character_models/hair/hair_000.gltf"
+			var hair_gltf = _load_gltf(hair_path)
+			if hair_gltf:
+				hair_gltf.name = "GLTFHair"
+				hair_gltf.position = Vector3(0.0, 0.0, 0.0)
+				_set_node_material(hair_gltf, hair_mat)
+				head_attach.add_child(hair_gltf)
+
+			# Glasses Attachment
+			var glasses_style: int = c.get("glasses_style", 0)
+			if glasses_style > 0:
+				var glasses_path = "res://assets/character_models/glasses/glasses_glasses%d.gltf" % glasses_style
+				if ResourceLoader.exists(glasses_path):
+					var glasses_gltf = _load_gltf(glasses_path)
+					if glasses_gltf:
+						glasses_gltf.name = "GLTFGlasses"
+						head_attach.add_child(glasses_gltf)
+
+static func _build_fallback_player(root: Node3D) -> void:
+	var c = PlayerStore.customization
 	var skin_color: Color = c.get("skin_color", Color(0.92, 0.76, 0.65))
 	var hair_color: Color = c.get("hair_color", Color(0.24, 0.16, 0.10))
 
-	var skin_mat = _mat(skin_color)
 	var hair_mat = _mat(hair_color)
 	var shirt_mat = _mat(Color(0.95, 0.95, 0.95))
 
@@ -219,72 +349,14 @@ static func _build_player(root: Node3D) -> void:
 	avatar.name = "MiiAvatar"
 	root.add_child(avatar)
 
-	# 1. Base Body GLTF
-	var body_style: int = c.get("body_style", 0) # 0: Male, 1: Female
+	var body_style: int = c.get("body_style", 0)
 	var body_path = "res://assets/character_models/body/body_torso_m.gltf" if body_style == 0 else "res://assets/character_models/body/body_torso_f.gltf"
 	var body_gltf = _load_gltf(body_path)
 	if body_gltf:
 		body_gltf.name = "GLTFBody"
-		body_gltf.position = Vector3(0.0, 0.0, 0.0)
-		body_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
 		body_gltf.scale = Vector3(2.5, 2.5, 2.5)
 		_set_node_material(body_gltf, shirt_mat)
 		avatar.add_child(body_gltf)
-
-	# 2. 3D GLTF Head Mesh
-	var head_style: int = c.get("head_style", 1) # 1..12
-	var head_path = "res://assets/character_models/heads/head_head_%03d.gltf" % head_style
-	if not ResourceLoader.exists(head_path):
-		head_path = "res://assets/character_models/heads/head_head_001.gltf"
-
-	var head_gltf = _load_gltf(head_path)
-	if head_gltf:
-		head_gltf.name = "GLTFHead"
-		var head_key = "head_%03d" % head_style
-		_apply_item_transform(head_gltf, "heads", head_key, Vector3(0.0, 1.155, 0.0), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
-		var face_tex = _create_face_texture(c)
-		var head_mat = StandardMaterial3D.new()
-		head_mat.albedo_color = Color.WHITE
-		head_mat.albedo_texture = face_tex
-		head_mat.roughness = 0.85
-		head_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-		_set_node_material(head_gltf, head_mat)
-		avatar.add_child(head_gltf)
-
-	# 3. 3D GLTF Hair
-	var hair_style: int = c.get("hair_style", 0) # 0..133
-	var hair_path = "res://assets/character_models/hair/hair_%03d.gltf" % hair_style
-	if not ResourceLoader.exists(hair_path):
-		hair_path = "res://assets/character_models/hair/hair_000.gltf"
-
-	var hair_gltf = _load_gltf(hair_path)
-	if hair_gltf:
-		hair_gltf.name = "GLTFHair"
-		var hair_key = "hair_%03d" % hair_style
-		_apply_item_transform(hair_gltf, "hair", hair_key, Vector3(0.0, 1.605, 0.0), Vector3.ZERO, Vector3(6.6, 6.6, 6.6))
-		_set_node_material(hair_gltf, hair_mat)
-		avatar.add_child(hair_gltf)
-
-	# 4. Accessories & Glasses
-	var glasses_style: int = c.get("glasses_style", 0) # 0..5
-	if glasses_style > 0:
-		var glasses_path = "res://assets/character_models/glasses/glasses_glasses%d.gltf" % glasses_style
-		if not ResourceLoader.exists(glasses_path):
-			glasses_path = "res://assets/character_models/glasses/glasses_0glasses.gltf"
-		var glasses_gltf = _load_gltf(glasses_path)
-		if glasses_gltf:
-			glasses_gltf.name = "GLTFGlasses"
-			var glasses_key = "glasses_%d" % glasses_style
-			_apply_item_transform(glasses_gltf, "glasses", glasses_key, Vector3(0.0, 1.12, 0.31), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
-			var glass_tex = load("res://assets/character_models/glasses/glasses_sprite.png") as Texture2D
-			if glass_tex:
-				var glass_mat = StandardMaterial3D.new()
-				glass_mat.albedo_texture = glass_tex
-				glass_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-				glass_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
-				glass_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-				_set_node_material(glasses_gltf, glass_mat)
-			avatar.add_child(glasses_gltf)
 
 	var acc_style: int = c.get("accessory_style", 0)
 	_add_accessory(avatar, avatar, acc_style)

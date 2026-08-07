@@ -67,6 +67,14 @@ func _process(delta: float) -> void:
 	_update_idle_animation(delta)
 
 func _update_idle_animation(delta: float) -> void:
+	var anim_player: AnimationPlayer = null
+	if mesh_container:
+		anim_player = mesh_container.find_child("AnimationPlayer", true, false) as AnimationPlayer
+	if anim_player:
+		if anim_player.has_animation("idle") and anim_player.current_animation != "idle":
+			anim_player.play("idle")
+		return
+
 	if not anim_body:
 		return
 
