@@ -367,11 +367,14 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var eye_size: int = int(face_offsets.get("eye_size", 24))
 	var eye_rot: int = int(face_offsets.get("eye_rot", 90))
 	var nose_y_off: int = int(face_offsets.get("nose_y", 0))
+	var nose_rot: int = int(face_offsets.get("nose_rot", 0))
 	var mouth_y_off: int = int(face_offsets.get("mouth_y", 0))
+	var mouth_rot: int = int(face_offsets.get("mouth_rot", 0))
 	var glass_x_off: int = int(face_offsets.get("glass_x", 0))
 	var glass_y_off: int = int(face_offsets.get("glass_y", 0))
 	var glass_w: int = int(face_offsets.get("glass_w", 60))
 	var glass_h: int = int(face_offsets.get("glass_h", 30))
+	var glass_rot: int = int(face_offsets.get("glass_rot", 0))
 
 	var tex_w = 512
 	var tex_h = 512
@@ -418,6 +421,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var nose_pos = Vector2i(256 - 8, 240 + nose_y_off)
 	if nose_tex:
 		var img_n = nose_tex.get_image()
+		_rotate_image(img_n, nose_rot)
 		img_n.resize(16, 16, Image.INTERPOLATE_BILINEAR)
 		_blit_alpha(face_img, img_n, nose_pos)
 	else:
@@ -431,6 +435,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var mouth_pos = Vector2i(256 - 11, 260 + mouth_y_off)
 	if mouth_tex:
 		var img_m = mouth_tex.get_image()
+		_rotate_image(img_m, mouth_rot)
 		img_m.resize(22, 14, Image.INTERPOLATE_BILINEAR)
 		_blit_alpha(face_img, img_m, mouth_pos)
 	else:
@@ -453,6 +458,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 						var rect = Rect2i(idx * frame_w, 0, frame_w, frame_h)
 						var glass_frame = atlas_img.get_region(rect)
 						if glass_frame and glass_w > 0 and glass_h > 0:
+							_rotate_image(glass_frame, glass_rot)
 							glass_frame.resize(glass_w, glass_h, Image.INTERPOLATE_BILINEAR)
 							_blit_alpha(face_img, glass_frame, Vector2i(256 + glass_x_off - int(glass_w / 2.0), 210 + glass_y_off - int(glass_h / 2.0)))
 
