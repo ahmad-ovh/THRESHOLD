@@ -52,6 +52,12 @@ extends Control
 @onready var save_catalog_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/SaveCatalogBtn
 @onready var preset_status_label: Label = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/PresetStatusLabel
 
+# Visibility Checkboxes & Focus Button
+@onready var check_head: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/CheckHead
+@onready var check_hair: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/CheckHair
+@onready var check_glasses: CheckBox = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/CheckGlasses
+@onready var focus_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/VBoxContainer/FocusBtn
+
 var auto_rotate: bool = false
 var selected_part: String = "head"
 var gizmo_mode: String = "move" # "move", "rotate", "scale"
@@ -102,6 +108,22 @@ func _update_camera_orbit() -> void:
 	camera.global_position = cam_anchor + rot_q * Vector3(0.0, 0.0, cam_distance)
 	camera.look_at(cam_anchor, Vector3.UP)
 
+func _focus_camera_on_selected_part() -> void:
+	match selected_part:
+		"head":
+			cam_anchor = Vector3(0.0, 1.155, 0.0)
+			cam_distance = 1.0
+		"hair":
+			cam_anchor = Vector3(0.0, 1.400, 0.0)
+			cam_distance = 1.2
+		"glasses":
+			cam_anchor = Vector3(0.0, 1.155, 0.05)
+			cam_distance = 0.75
+		"body":
+			cam_anchor = Vector3(0.0, 0.600, 0.0)
+			cam_distance = 2.2
+	_update_camera_orbit()
+
 func _push_undo() -> void:
 	undo_stack.append(alignment_data.duplicate(true))
 	if undo_stack.size() > MAX_UNDO_STACK:
@@ -146,7 +168,7 @@ func _gui_input(event: InputEvent) -> void:
 			is_orbiting = event.pressed
 			last_mouse_pos = event.position
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP and camera:
-			cam_distance = max(0.6, cam_distance - 0.15)
+			cam_distance = max(0.4, cam_distance - 0.15)
 			_update_camera_orbit()
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and camera:
 			cam_distance = min(6.0, cam_distance + 0.15)
@@ -247,7 +269,7 @@ func _try_select_3d_part(mouse_pos: Vector2) -> void:
 	for part in ["head", "body", "hair", "glasses"]:
 		var node_name = "GLTF" + part.capitalize()
 		var node = mii.get_node_or_null(node_name)
-		if node and node is Node3D:
+		if node and node is Node3D and node.visible:
 			var pos_3d = node.global_position
 			var dist_to_ray = (pos_3d - ray_origin).cross(ray_dir).length()
 			if dist_to_ray < min_dist:
@@ -255,13 +277,22 @@ func _try_select_3d_part(mouse_pos: Vector2) -> void:
 				best_part = part
 
 	if min_dist < 0.6:
-		selected_part = best_part
-		for i in range(part_option.item_count):
-			if part_option.get_item_text(i) == selected_part:
-				part_option.select(i)
-				break
-		_update_gizmo_spinboxes()
-		_spawn_3d_gizmo()
+		_set_selected_part(best_part)
+
+func _set_selected_part(part: String) -> void:
+	selected_part = part
+	for i in range(part_option.item_count):
+		if part_option.get_item_text(i) == selected_part:
+			part_option.select(i)
+			break
+
+	if selected_part == "glasses" and glasses_spin.value == 0:
+		glasses_spin.value = 1
+		PlayerStore.customization["glasses_style"] = 1
+		_rebuild_avatar()
+
+	_update_gizmo_spinboxes()
+	_spawn_3d_gizmo()
 
 func _handle_keyboard_nudge(event: InputEventKey) -> void:
 	if not alignment_data.has(selected_part):
@@ -296,9 +327,8 @@ func _connect_signals() -> void:
 	)
 
 	part_option.item_selected.connect(func(idx):
-		selected_part = part_option.get_item_text(idx)
-		_update_gizmo_spinboxes()
-		_spawn_3d_gizmo()
+		var p_name = part_option.get_item_text(idx)
+		_set_selected_part(p_name)
 	)
 
 	if gizmo_mode_option:
@@ -312,6 +342,11 @@ func _connect_signals() -> void:
 
 	if undo_btn: undo_btn.pressed.connect(undo)
 	if redo_btn: redo_btn.pressed.connect(redo)
+	if focus_btn: focus_btn.pressed.connect(_focus_camera_on_selected_part)
+
+	if check_head: check_head.toggled.connect(func(_t): _update_part_visibilities())
+	if check_hair: check_hair.toggled.connect(func(_t): _update_part_visibilities())
+	if check_glasses: check_glasses.toggled.connect(func(_t): _update_part_visibilities())
 
 	# Position Sliders & Spinboxes
 	slider_px.value_changed.connect(func(v): _push_undo(); spin_px.set_value_no_signal(v); _on_transform_changed())
@@ -361,6 +396,20 @@ func _connect_signals() -> void:
 	)
 
 	body_option.item_selected.connect(func(idx): PlayerStore.customization["body_style"] = idx; _rebuild_avatar())
+
+func _update_part_visibilities() -> void:
+	if not current_avatar_instance:
+		return
+	var mii = current_avatar_instance.get_node_or_null("MiiAvatar") if current_avatar_instance.name != "MiiAvatar" else current_avatar_instance
+	if not mii:
+		return
+	var gh = mii.get_node_or_null("GLTFHead")
+	var ghr = mii.get_node_or_null("GLTFHair")
+	var gl = mii.get_node_or_null("GLTFGlasses")
+
+	if gh and check_head: gh.visible = check_head.button_pressed
+	if ghr and check_hair: ghr.visible = check_hair.button_pressed
+	if gl and check_glasses: gl.visible = check_glasses.button_pressed
 
 func _get_current_item_info() -> Dictionary:
 	match selected_part:
@@ -464,6 +513,7 @@ func _rebuild_avatar() -> void:
 	current_avatar_instance = CharacterFactory.create_character_mesh("player")
 	model_pivot.add_child(current_avatar_instance)
 	CharacterFactory.apply_alignment(current_avatar_instance, alignment_data)
+	_update_part_visibilities()
 	_spawn_3d_gizmo()
 	_take_debug_screenshot("authoring_alignment_preview")
 
@@ -589,6 +639,8 @@ func _update_gizmo_3d_position() -> void:
 	var part_node = mii.get_node_or_null(node_name)
 	if part_node and part_node is Node3D:
 		gizmo_node.global_position = part_node.global_position
+	elif selected_part == "glasses":
+		gizmo_node.global_position = Vector3(0.0, 1.155, 0.05) + alignment_data["glasses"]["position"]
 
 func _on_copy_json_pressed() -> void:
 	var export_dict = {}

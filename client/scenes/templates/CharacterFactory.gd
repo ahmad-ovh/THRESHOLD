@@ -268,13 +268,20 @@ static func _build_player(root: Node3D) -> void:
 	var glasses_style: int = c.get("glasses_style", 0) # 0..5
 	if glasses_style > 0:
 		var glasses_path = "res://assets/character_models/glasses/glasses_glasses%d.gltf" % glasses_style
+		if not ResourceLoader.exists(glasses_path):
+			glasses_path = "res://assets/character_models/glasses/glasses_0glasses.gltf"
 		var glasses_gltf = _load_gltf(glasses_path)
 		if glasses_gltf:
 			glasses_gltf.name = "GLTFGlasses"
 			var glasses_key = "glasses_%d" % glasses_style
 			_apply_item_transform(glasses_gltf, "glasses", glasses_key, Vector3(0.0, 0.95, 0.05), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
-			var glass_mat = _mat(Color(0.1, 0.1, 0.1), 0.1, 0.9)
-			_set_node_material(glasses_gltf, glass_mat)
+			var glass_tex = load("res://assets/character_models/glasses/glasses_sprite.png") as Texture2D
+			if glass_tex:
+				var glass_mat = StandardMaterial3D.new()
+				glass_mat.albedo_texture = glass_tex
+				glass_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+				glass_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+				_set_node_material(glasses_gltf, glass_mat)
 			avatar.add_child(glasses_gltf)
 
 	var acc_style: int = c.get("accessory_style", 0)
