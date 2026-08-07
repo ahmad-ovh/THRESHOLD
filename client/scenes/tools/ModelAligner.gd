@@ -106,7 +106,7 @@ const MAX_UNDO_STACK: int = 50
 
 var alignment_data: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
-	"head": {"position": Vector3(0.0, 0.002, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.002, 0.002, 0.002)},
+	"head": {"position": Vector3(0.0, 0.0016, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.002, 0.002, 0.002)},
 	"hair": {"position": Vector3(0.0, 0.02, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.05, 1.05, 1.05)},
 	"glasses": {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
@@ -159,9 +159,9 @@ func _configure_slider_ranges() -> void:
 func _load_catalog() -> void:
 	catalog_presets = CharacterFactory.get_model_presets().duplicate(true)
 	for part_tuple in [["head", "heads", "head_%03d" % int(head_spin.value if head_spin else 1)],
-	                   ["hair", "hair", "hair_%03d" % int(hair_spin.value if hair_spin else 0)],
-	                   ["glasses", "glasses", "glasses_%d" % int(glasses_spin.value if glasses_spin else 0)],
-	                   ["body", "body", "body"]]:
+					   ["hair", "hair", "hair_%03d" % int(hair_spin.value if hair_spin else 0)],
+					   ["glasses", "glasses", "glasses_%d" % int(glasses_spin.value if glasses_spin else 0)],
+					   ["body", "body", "body"]]:
 		var p_name = part_tuple[0]
 		var cat = part_tuple[1]
 		var key = part_tuple[2]
