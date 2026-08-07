@@ -1,44 +1,6 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/CharacterCustomization.gd" id="1_customization_script"]
-[ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper_card"]
-bg_color = Color(0.99, 0.98, 0.94, 0.98)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-shadow_color = Color(0, 0, 0, 0.12)
-shadow_size = 8
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_normal"]
-texture = ExtResource("3_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-region_rect = Rect2(0, 0, 1666, 568)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_hover"]
-texture = ExtResource("3_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(1.15, 1.15, 1.15, 1)
-region_rect = Rect2(0, 0, 1666, 568)
 
 [node name="CharacterCustomization" type="CanvasLayer"]
 script = ExtResource("1_customization_script")
@@ -58,7 +20,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.96, 0.94, 0.88, 1)
+color = Color(0.88, 0.94, 0.96, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="Control"]
 layout_mode = 1
@@ -80,372 +42,245 @@ theme_override_constants/separation = 16
 layout_mode = 2
 
 [node name="BackButton" type="Button" parent="Control/MarginContainer/VBoxContainer/HeaderBox"]
-custom_minimum_size = Vector2(130, 42)
+custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
-theme_override_constants/outline_size = 6
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
+theme_override_font_sizes/font_size = 16
 text = "< Back"
 
 [node name="TitleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/HeaderBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.82, 0.4, 0.08, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 28
-text = "Character Customization Studio"
+theme_override_colors/font_color = Color(0.15, 0.45, 0.2, 1)
+theme_override_font_sizes/font_size = 26
+text = "Character Customization"
 horizontal_alignment = 1
 
 [node name="SaveButton" type="Button" parent="Control/MarginContainer/VBoxContainer/HeaderBox"]
-custom_minimum_size = Vector2(150, 42)
+custom_minimum_size = Vector2(140, 40)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
-theme_override_constants/outline_size = 6
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
+theme_override_font_sizes/font_size = 16
 text = "Save & Apply"
 
 [node name="MainHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 24
+theme_override_constants/separation = 32
 
-[node name="ViewportCard" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
-custom_minimum_size = Vector2(420, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_paper_card")
-
-[node name="Margin" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="VBox" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin"]
+[node name="ViewportCard" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin/VBox"]
-custom_minimum_size = Vector2(396, 470)
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard"]
+custom_minimum_size = Vector2(400, 500)
 layout_mode = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin/VBox/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer"]
 handle_input_locally = false
-size = Vector2i(396, 470)
+size = Vector2i(400, 500)
 render_target_update_mode = 3
 
-[node name="PreviewWorld" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin/VBox/SubViewportContainer/SubViewport"]
+[node name="PreviewWorld" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport"]
 
-[node name="PreviewCamera" type="Camera3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin/VBox/SubViewportContainer/SubViewport/PreviewWorld"]
+[node name="PreviewCamera" type="Camera3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
 transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.52, 1.15)
 current = true
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin/VBox/SubViewportContainer/SubViewport/PreviewWorld"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
 transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2, 4, 3)
 
-[node name="ModelPivot" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin/VBox/SubViewportContainer/SubViewport/PreviewWorld"]
+[node name="ModelPivot" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
 
-[node name="RotateHint" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/Margin/VBox"]
+[node name="RotateHint" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.48, 0.38, 0.28, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 13
 text = "Character Turntable Preview"
 horizontal_alignment = 1
 
-[node name="ControlsPanel" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_paper_card")
-
-[node name="Margin" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="ControlsCard" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin"]
+[node name="ControlsCard" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ControlsList" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard"]
+[node name="ControlsList" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
-[node name="SkinRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="SkinRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/SkinRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/SkinRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Skin Color:"
 
-[node name="SkinPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/SkinRow"]
+[node name="SkinPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/SkinRow"]
 custom_minimum_size = Vector2(80, 36)
 layout_mode = 2
 color = Color(0.92, 0.76, 0.65, 1)
 
-[node name="HairRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="HairRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Hair Style:"
 
-[node name="HairPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow"]
+[node name="HairPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = "<"
 
-[node name="HairStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow"]
+[node name="HairStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Short (1/8)"
 horizontal_alignment = 1
 
-[node name="HairNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow"]
+[node name="HairNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = ">"
 
-[node name="HairPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/HairRow"]
+[node name="HairPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/HairRow"]
 custom_minimum_size = Vector2(50, 36)
 layout_mode = 2
 color = Color(0.24, 0.16, 0.1, 1)
 
-[node name="EyeRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="EyeRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/EyeRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Eye Style:"
 
-[node name="EyePrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/EyeRow"]
+[node name="EyePrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = "<"
 
-[node name="EyeStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/EyeRow"]
+[node name="EyeStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Eye 01 (1/60)"
 horizontal_alignment = 1
 
-[node name="EyeNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/EyeRow"]
+[node name="EyeNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/EyeRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = ">"
 
-[node name="IrisRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="IrisRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/IrisRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/IrisRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Iris Color:"
 
-[node name="IrisPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/IrisRow"]
+[node name="IrisPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/IrisRow"]
 custom_minimum_size = Vector2(80, 36)
 layout_mode = 2
 color = Color(0.18, 0.55, 0.85, 1)
 
-[node name="PupilRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="PupilRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/PupilRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/PupilRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Pupil Color:"
 
-[node name="PupilPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/PupilRow"]
+[node name="PupilPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/PupilRow"]
 custom_minimum_size = Vector2(80, 36)
 layout_mode = 2
 color = Color(0.1, 0.1, 0.1, 1)
 
-[node name="ScleraRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="ScleraRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/ScleraRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/ScleraRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Sclera Color:"
 
-[node name="ScleraPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/ScleraRow"]
+[node name="ScleraPicker" type="ColorPickerButton" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/ScleraRow"]
 custom_minimum_size = Vector2(80, 36)
 layout_mode = 2
 color = Color(1, 1, 1, 1)
 
-[node name="NoseRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="NoseRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/NoseRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Nose Style:"
 
-[node name="NosePrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/NoseRow"]
+[node name="NosePrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = "<"
 
-[node name="NoseStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/NoseRow"]
+[node name="NoseStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Nose 01 (1/18)"
 horizontal_alignment = 1
 
-[node name="NoseNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/NoseRow"]
+[node name="NoseNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/NoseRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = ">"
 
-[node name="MouthRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="MouthRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/MouthRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Mouth Style:"
 
-[node name="MouthPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/MouthRow"]
+[node name="MouthPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = "<"
 
-[node name="MouthStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/MouthRow"]
+[node name="MouthStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Mouth 01 (1/36)"
 horizontal_alignment = 1
 
-[node name="MouthNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/MouthRow"]
+[node name="MouthNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/MouthRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = ">"
 
-[node name="AccRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList"]
+[node name="AccRow" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/AccRow"]
-custom_minimum_size = Vector2(130, 0)
+[node name="Label" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow"]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "Accessory:"
 
-[node name="AccPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/AccRow"]
+[node name="AccPrevBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = "<"
 
-[node name="AccStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/AccRow"]
+[node name="AccStyleLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow"]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
 text = "None (1/5)"
 horizontal_alignment = 1
 
-[node name="AccNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsPanel/Margin/ControlsCard/ControlsList/AccRow"]
+[node name="AccNextBtn" type="Button" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/ControlsList/AccRow"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-focus_mode = 0
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
 text = ">"

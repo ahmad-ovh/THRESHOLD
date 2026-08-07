@@ -1,38 +1,38 @@
 # res://scenes/ui/DialogueUI.gd
 extends CanvasLayer
 
-@onready var speaker_label: Label = $OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer/SpeakerLabel
-@onready var role_badge: Label = $OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer/RoleBadge
-@onready var tier_label: Label = $OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer/TierLabel
-@onready var mood_label: Label = $OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer/MoodLabel
-@onready var loading_label: Label = $OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer/LoadingLabel
-@onready var leave_button: Button = $OverlayRoot/HeaderPanel/MarginContainer/HeaderContainer/LeaveButton
+@onready var speaker_label: Label = $OverlayRoot/HeaderContainer/SpeakerLabel
+@onready var role_badge: Label = $OverlayRoot/HeaderContainer/RoleBadge
+@onready var tier_label: Label = $OverlayRoot/HeaderContainer/TierLabel
+@onready var mood_label: Label = $OverlayRoot/HeaderContainer/MoodLabel
+@onready var loading_label: Label = $OverlayRoot/HeaderContainer/LoadingLabel
+@onready var leave_button: Button = $OverlayRoot/HeaderContainer/LeaveButton
 
 @onready var scenario_goal_banner: PanelContainer = $OverlayRoot/ScenarioGoalBanner
-@onready var scenario_goal_label: Label = $OverlayRoot/ScenarioGoalBanner/MarginContainer/ScenarioGoalLabel
+@onready var scenario_goal_label: Label = $OverlayRoot/ScenarioGoalBanner/ScenarioGoalLabel
 @onready var coach_hint_banner: PanelContainer = $OverlayRoot/CoachHintBanner
-@onready var coach_hint_label: Label = $OverlayRoot/CoachHintBanner/MarginContainer/CoachHintLabel
+@onready var coach_hint_label: Label = $OverlayRoot/CoachHintBanner/CoachHintLabel
 
 @onready var status_ribbon_panel: PanelContainer = $OverlayRoot/StatusRibbonPanel
 @onready var status_ribbon_label: Label = $OverlayRoot/StatusRibbonPanel/StatusRibbonLabel
 
-@onready var message_input: LineEdit = $OverlayRoot/BottomInputPanel/MarginContainer/InputContainer/MessageInput
-@onready var send_button: Button = $OverlayRoot/BottomInputPanel/MarginContainer/InputContainer/SendButton
+@onready var message_input: LineEdit = $OverlayRoot/BottomInputPanel/InputContainer/MessageInput
+@onready var send_button: Button = $OverlayRoot/BottomInputPanel/InputContainer/SendButton
 
-@onready var overall_label: Label = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/OverallContainer/OverallLabel
-@onready var delta_label: Label = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/OverallContainer/DeltaLabel
-@onready var overall_bar: ProgressBar = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/OverallProgressBar
-@onready var status_badge_label: Label = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/StatusBadgeLabel
+@onready var overall_label: Label = $OverlayRoot/FeedbackPanel/OverallContainer/OverallLabel
+@onready var delta_label: Label = $OverlayRoot/FeedbackPanel/OverallContainer/DeltaLabel
+@onready var overall_bar: ProgressBar = $OverlayRoot/FeedbackPanel/OverallProgressBar
+@onready var status_badge_label: Label = $OverlayRoot/FeedbackPanel/StatusBadgeLabel
 
-@onready var clarity_label: Label = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/ClarityLabel
-@onready var clarity_bar: ProgressBar = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/ClarityBar
-@onready var empathy_label: Label = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/EmpathyLabel
-@onready var empathy_bar: ProgressBar = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/EmpathyBar
-@onready var politeness_label: Label = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/PolitenessLabel
-@onready var politeness_bar: ProgressBar = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/PolitenessBar
-@onready var expression_label: Label = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/ExpressionLabel
-@onready var expression_bar: ProgressBar = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/ExpressionBar
-@onready var feedback_text: RichTextLabel = $OverlayRoot/FeedbackPanel/FeedbackCard/MarginContainer/VBox/FeedbackText
+@onready var clarity_label: Label = $OverlayRoot/FeedbackPanel/ClarityLabel
+@onready var clarity_bar: ProgressBar = $OverlayRoot/FeedbackPanel/ClarityBar
+@onready var empathy_label: Label = $OverlayRoot/FeedbackPanel/EmpathyLabel
+@onready var empathy_bar: ProgressBar = $OverlayRoot/FeedbackPanel/EmpathyBar
+@onready var politeness_label: Label = $OverlayRoot/FeedbackPanel/PolitenessLabel
+@onready var politeness_bar: ProgressBar = $OverlayRoot/FeedbackPanel/PolitenessBar
+@onready var expression_label: Label = $OverlayRoot/FeedbackPanel/ExpressionLabel
+@onready var expression_bar: ProgressBar = $OverlayRoot/FeedbackPanel/ExpressionBar
+@onready var feedback_text: RichTextLabel = $OverlayRoot/FeedbackPanel/FeedbackText
 
 @onready var bubbles_container: Control = $OverlayRoot/BubblesContainer
 
