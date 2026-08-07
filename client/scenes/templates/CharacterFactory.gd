@@ -347,10 +347,24 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var nose_style: int = customization.get("nose_style", 1)
 	var mouth_style: int = customization.get("mouth_style", 1)
 
+	var face_offsets: Dictionary = customization.get("face_offsets", {})
+	var eye_x_off: int = int(face_offsets.get("eye_x", 0))
+	var eye_y_off: int = int(face_offsets.get("eye_y", 0))
+	var eye_size: int = int(face_offsets.get("eye_size", 24))
+	var nose_y_off: int = int(face_offsets.get("nose_y", 0))
+	var mouth_y_off: int = int(face_offsets.get("mouth_y", 0))
+	var glass_x_off: int = int(face_offsets.get("glass_x", 0))
+	var glass_y_off: int = int(face_offsets.get("glass_y", 0))
+	var glass_w: int = int(face_offsets.get("glass_w", 60))
+	var glass_h: int = int(face_offsets.get("glass_h", 30))
+
 	var tex_w = 512
 	var tex_h = 512
 	var face_img = Image.create(tex_w, tex_h, false, Image.FORMAT_RGBA8)
 	face_img.fill(skin_color)
+
+	var base_eye_l_pos = Vector2i(242 + eye_x_off, 400 + eye_y_off)
+	var base_eye_r_pos = Vector2i(218 - eye_x_off, 400 + eye_y_off)
 
 	# Load Eye L & R
 	var eye_l_path = "res://resources/character_customization/eyes/eye_%02d_L.png" % eye_style
@@ -365,41 +379,61 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 
 	if eye_l_tex:
 		var img_l = eye_l_tex.get_image()
-		img_l.resize(80, 80, Image.INTERPOLATE_BILINEAR)
-		_apply_chroma_and_blit(face_img, img_l, Vector2i(170, 190), sclera_col, pupil_col, iris_col)
+		img_l.resize(eye_size, eye_size, Image.INTERPOLATE_BILINEAR)
+		_apply_chroma_and_blit(face_img, img_l, base_eye_l_pos, sclera_col, pupil_col, iris_col)
 	else:
-		_draw_procedural_eye(face_img, Vector2i(210, 230), 28, sclera_col, pupil_col, iris_col)
+		var half_sz = int(eye_size / 2.0)
+		_draw_procedural_eye(face_img, base_eye_l_pos + Vector2i(half_sz, half_sz), half_sz, sclera_col, pupil_col, iris_col)
 
 	if eye_r_tex:
 		var img_r = eye_r_tex.get_image()
-		img_r.resize(80, 80, Image.INTERPOLATE_BILINEAR)
-		_apply_chroma_and_blit(face_img, img_r, Vector2i(262, 190), sclera_col, pupil_col, iris_col)
+		img_r.resize(eye_size, eye_size, Image.INTERPOLATE_BILINEAR)
+		_apply_chroma_and_blit(face_img, img_r, base_eye_r_pos, sclera_col, pupil_col, iris_col)
 	else:
-		_draw_procedural_eye(face_img, Vector2i(302, 230), 28, sclera_col, pupil_col, iris_col)
+		var half_sz2 = int(eye_size / 2.0)
+		_draw_procedural_eye(face_img, base_eye_r_pos + Vector2i(half_sz2, half_sz2), half_sz2, sclera_col, pupil_col, iris_col)
 
 	# Load Nose
 	var nose_path = "res://resources/character_customization/noses/nose_%02d.png" % nose_style
 	if not ResourceLoader.exists(nose_path):
 		nose_path = "res://resources/character_customization/noses/nose_01.png"
 	var nose_tex: Texture2D = load(nose_path) if ResourceLoader.exists(nose_path) else null
+	var nose_pos = Vector2i(233, 424 + nose_y_off)
 	if nose_tex:
 		var img_n = nose_tex.get_image()
-		img_n.resize(50, 50, Image.INTERPOLATE_BILINEAR)
-		_blit_alpha(face_img, img_n, Vector2i(231, 260))
+		img_n.resize(16, 16, Image.INTERPOLATE_BILINEAR)
+		_blit_alpha(face_img, img_n, nose_pos)
 	else:
-		_draw_procedural_nose(face_img, Vector2i(256, 280), skin_color.darkened(0.2))
+		_draw_procedural_nose(face_img, nose_pos + Vector2i(8, 8), skin_color.darkened(0.2))
 
 	# Load Mouth
 	var mouth_path = "res://resources/character_customization/mouths/mouth_mask_%02d.png" % mouth_style
 	if not ResourceLoader.exists(mouth_path):
 		mouth_path = "res://resources/character_customization/mouths/mouth_mask_01.png"
 	var mouth_tex: Texture2D = load(mouth_path) if ResourceLoader.exists(mouth_path) else null
+	var mouth_pos = Vector2i(230, 440 + mouth_y_off)
 	if mouth_tex:
 		var img_m = mouth_tex.get_image()
-		img_m.resize(70, 45, Image.INTERPOLATE_BILINEAR)
-		_blit_alpha(face_img, img_m, Vector2i(221, 310))
+		img_m.resize(22, 14, Image.INTERPOLATE_BILINEAR)
+		_blit_alpha(face_img, img_m, mouth_pos)
 	else:
-		_draw_procedural_mouth(face_img, Vector2i(256, 332), Color(0.7, 0.25, 0.25))
+		_draw_procedural_mouth(face_img, mouth_pos + Vector2i(11, 7), Color(0.7, 0.25, 0.25))
+
+	# Load Glasses directly onto Face Texture Map (Binds and morphs onto 3D face mesh!)
+	if glasses_style > 0:
+		var glasses_atlas_path = "res://assets/character_models/glasses/glasses_sprite.png"
+		if ResourceLoader.exists(glasses_atlas_path):
+			var glasses_atlas = load(glasses_atlas_path) as Texture2D
+			if glasses_atlas:
+				var atlas_img = glasses_atlas.get_image()
+				var frame_w = 950
+				var frame_h = 500
+				var idx = clamp(glasses_style - 1, 0, 9)
+				var rect = Rect2i(idx * frame_w, 0, frame_w, frame_h)
+				var glass_frame = atlas_img.get_region(rect)
+				glass_frame.resize(glass_w, glass_h, Image.INTERPOLATE_BILINEAR)
+				_blit_alpha(face_img, glass_frame, Vector2i(211 + glass_x_off, 396 + glass_y_off))
+>>>>>>> 1c021a2 (feat(customization): add face offsets for dynamic eye, nose, mouth and glasses customization)
 
 	return ImageTexture.create_from_image(face_img)
 
