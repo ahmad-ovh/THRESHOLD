@@ -192,11 +192,6 @@ static func _load_gltf(path: String) -> Node3D:
 		inst.position = Vector3.ZERO
 		inst.rotation_degrees = Vector3.ZERO
 		inst.scale = Vector3.ONE
-		for child in inst.get_children():
-			if child is Node3D:
-				child.position = Vector3.ZERO
-				child.rotation_degrees = Vector3.ZERO
-				child.scale = Vector3.ONE
 	return inst
 
 static func _set_node_material(node: Node, mat: Material) -> void:
@@ -339,8 +334,9 @@ static func _build_player(root: Node3D) -> void:
 					var head_gltf = _load_gltf(head_path)
 					if head_gltf:
 						head_gltf.name = "GLTFHeadCustom"
-						_center_gltf_mesh(head_gltf)
-						head_gltf.position = Vector3(0.0, 0.02, 0.0)
+						head_gltf.position = Vector3.ZERO
+						head_gltf.rotation_degrees = Vector3.ZERO
+						head_gltf.scale = Vector3.ONE
 						_set_node_material(head_gltf, head_mat)
 						head_attach.add_child(head_gltf)
 
