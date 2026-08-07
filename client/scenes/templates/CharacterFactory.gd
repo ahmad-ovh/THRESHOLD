@@ -894,19 +894,7 @@ static func _build_character_from_dict(root: Node3D, c: Dictionary) -> void:
 						_apply_item_transform(glasses_gltf, "glasses", glasses_key, Vector3(0.0, -0.02, 0.08), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
 						head_attach.add_child(glasses_gltf)
 
-static func _build_fallback_player(root: Node3D) -> void:
-	var c = PlayerStore.customization
-	var skin_color: Color = c.get("skin_color", Color(0.92, 0.76, 0.65))
-	var hair_color: Color = c.get("hair_color", Color(0.24, 0.16, 0.10))
-	var shirt_color: Color = c.get("shirt_color", Color(0.95, 0.95, 0.95))
-	var pants_color: Color = c.get("pants_color", Color(0.2, 0.2, 0.25))
 
-	var skin_mat = _mat(skin_color)
-	var shirt_mat = _mat(shirt_color)
-	var pants_mat = _mat(pants_color)
-	var hair_mat = _mat(hair_color)
-
-	_add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shirt_mat)
 
 static func _build_prof_adler(root: Node3D) -> void:
 	_build_character_from_dict(root, {
