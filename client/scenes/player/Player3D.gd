@@ -11,12 +11,12 @@ extends CharacterBody3D
 
 @export_group("Camera Parameters")
 @export var camera_follow_speed: float = 5.0
-@export var is_fixed_diorama_room: bool = true
+@export var is_fixed_diorama_room: bool = false
 @export var room_camera_pos: Vector3 = Vector3(0.0, 2.2, 4.5)
 @export var room_camera_rot: Vector3 = Vector3(-15.0, 0.0, 0.0)
 @export var spring_arm_length: float = 0.0
-@export var corridor_min_x: float = -12.0
-@export var corridor_max_x: float = 12.0
+@export var corridor_min_x: float = -38.0
+@export var corridor_max_x: float = 38.0
 @export var dialogue_camera_offset: Vector3 = Vector3(1.8, 2.4, 4.2)
 
 @export_group("Procedural Fallback Animation")
