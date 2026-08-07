@@ -295,17 +295,17 @@ static func _build_player(root: Node3D) -> void:
 	var pants_mat = _mat(pants_color)
 	var hair_mat = _mat(hair_color)
 
-	var head_mesh = avatar.find_child("Head_Mesh", true, false) as MeshInstance3D
-	if head_mesh:
-		head_mesh.material_override = head_mat
-
-	var body_mesh = avatar.find_child("Body_Mesh", true, false) as MeshInstance3D
-	if body_mesh:
-		body_mesh.material_override = shirt_mat
-
-	var pants_mesh = avatar.find_child("Body_Mesh.001", true, false) as MeshInstance3D
-	if pants_mesh:
-		pants_mesh.material_override = pants_mat
+	# Flexible MeshInstance3D lookup matching Godot imported FBX node names
+	var all_meshes = avatar.find_children("*", "MeshInstance3D", true, false)
+	for child in all_meshes:
+		var mi = child as MeshInstance3D
+		var node_name = mi.name.to_lower()
+		if "head" in node_name:
+			mi.material_override = head_mat
+		elif "001" in node_name or "pants" in node_name or "legs" in node_name:
+			mi.material_override = pants_mat
+		elif "body" in node_name or "shirt" in node_name or "torso" in node_name:
+			mi.material_override = shirt_mat
 
 	# 3. Skeleton & Attachments (Hair & Glasses)
 	var skeleton = avatar.find_child("Armature", true, false) as Skeleton3D
@@ -323,7 +323,8 @@ static func _build_player(root: Node3D) -> void:
 			var hair_gltf = _load_gltf(hair_path)
 			if hair_gltf:
 				hair_gltf.name = "GLTFHair"
-				hair_gltf.position = Vector3(0.0, 0.0, 0.0)
+				var hair_key = "hair_%03d" % hair_style
+				_apply_item_transform(hair_gltf, "hair", hair_key, Vector3(0.0, 0.05, 0.0), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
 				_set_node_material(hair_gltf, hair_mat)
 				head_attach.add_child(hair_gltf)
 
@@ -335,6 +336,8 @@ static func _build_player(root: Node3D) -> void:
 					var glasses_gltf = _load_gltf(glasses_path)
 					if glasses_gltf:
 						glasses_gltf.name = "GLTFGlasses"
+						var glasses_key = "glasses_%d" % glasses_style
+						_apply_item_transform(glasses_gltf, "glasses", glasses_key, Vector3(0.0, 0.0, 0.05), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
 						head_attach.add_child(glasses_gltf)
 
 static func _build_fallback_player(root: Node3D) -> void:
