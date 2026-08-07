@@ -165,15 +165,33 @@ func _setup_camera_dev_widget() -> void:
 		)
 		return row
 
-	vbox.add_child(create_row.call("Cam Pos X:", -20.0, 20.0, 0.1, room_camera_pos.x, func(v): room_camera_pos.x = v))
-	vbox.add_child(create_row.call("Cam Pos Y:", -10.0, 20.0, 0.1, room_camera_pos.y, func(v): room_camera_pos.y = v))
-	vbox.add_child(create_row.call("Cam Pos Z:", -20.0, 30.0, 0.1, room_camera_pos.z, func(v): room_camera_pos.z = v))
+	vbox.add_child(create_row.call("Cam Pos X:", -20.0, 20.0, 0.1, room_camera_pos.x, func(v):
+		room_camera_pos.x = v
+		if camera_pivot and is_fixed_diorama_room: camera_pivot.global_position.x = v
+	))
+	vbox.add_child(create_row.call("Cam Pos Y:", -10.0, 20.0, 0.1, room_camera_pos.y, func(v):
+		room_camera_pos.y = v
+		if camera_pivot: camera_pivot.global_position.y = v
+	))
+	vbox.add_child(create_row.call("Cam Pos Z:", -20.0, 30.0, 0.1, room_camera_pos.z, func(v):
+		room_camera_pos.z = v
+		if camera_pivot: camera_pivot.global_position.z = v
+	))
 
-	vbox.add_child(create_row.call("Rot Pitch:", -90.0, 90.0, 0.5, room_camera_rot.x, func(v): room_camera_rot.x = v))
-	vbox.add_child(create_row.call("Rot Yaw:", -180.0, 180.0, 0.5, room_camera_rot.y, func(v): room_camera_rot.y = v))
-	vbox.add_child(create_row.call("Rot Roll:", -180.0, 180.0, 0.5, room_camera_rot.z, func(v): room_camera_rot.z = v))
+	vbox.add_child(create_row.call("Rot Pitch:", -90.0, 90.0, 0.5, room_camera_rot.x, func(v):
+		room_camera_rot.x = v
+		if camera_pivot: camera_pivot.rotation_degrees.x = v
+	))
+	vbox.add_child(create_row.call("Rot Yaw:", -180.0, 180.0, 0.5, room_camera_rot.y, func(v):
+		room_camera_rot.y = v
+		if camera_pivot: camera_pivot.rotation_degrees.y = v
+	))
+	vbox.add_child(create_row.call("Rot Roll:", -180.0, 180.0, 0.5, room_camera_rot.z, func(v):
+		room_camera_rot.z = v
+		if camera_pivot: camera_pivot.rotation_degrees.z = v
+	))
 
-	vbox.add_child(create_row.call("SpringArm:", 0.0, 15.0, 0.1, spring_arm_length, func(v):
+	vbox.add_child(create_row.call("SpringArm:", 0.0, 20.0, 0.1, spring_arm_length, func(v):
 		spring_arm_length = v
 		if spring_arm: spring_arm.spring_length = v
 	))
@@ -328,7 +346,9 @@ func _update_dollhouse_camera(delta: float, can_move: bool) -> void:
 		else:
 			# Large corridor follow player mode
 			var target_x = clamp(global_position.x, corridor_min_x, corridor_max_x)
-			camera_pivot.global_position.x = lerp(camera_pivot.global_position.x, target_x, camera_follow_speed * delta)
+			var target_pos = Vector3(target_x, room_camera_pos.y, room_camera_pos.z)
+			camera_pivot.global_position = camera_pivot.global_position.lerp(target_pos, camera_follow_speed * delta)
+			camera_pivot.rotation_degrees = camera_pivot.rotation_degrees.lerp(room_camera_rot, camera_follow_speed * delta)
 	else:
 		# Dialogue mode: Smooth left-framed camera zoom on characters
 		var npcs = get_tree().get_nodes_in_group("npcs")
