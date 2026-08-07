@@ -247,6 +247,7 @@ static func _build_player(root: Node3D) -> void:
 		head_mat.albedo_color = Color.WHITE
 		head_mat.albedo_texture = face_tex
 		head_mat.roughness = 0.85
+		head_mat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 		_set_node_material(head_gltf, head_mat)
 		avatar.add_child(head_gltf)
 
@@ -338,18 +339,67 @@ static func apply_alignment(avatar: Node3D, alignment: Dictionary) -> void:
 				if t.has("rotation"): node.rotation_degrees = t["rotation"]
 				if t.has("scale"): node.scale = t["scale"]
 
-static func _rotate_image(img: Image, angle_deg: int) -> void:
-	if img == null:
-		return
-	if img.is_compressed():
-		img.decompress()
-	var norm_angle = posmod(angle_deg, 360)
-	if norm_angle == 90:
-		img.rotate_90(ClockDirection.CLOCKWISE)
-	elif norm_angle == 180:
-		img.rotate_180()
-	elif norm_angle == 270:
-		img.rotate_90(ClockDirection.COUNTERCLOCKWISE)
+static func _rotate_image_exact(src: Image, angle_deg: float) -> Image:
+	if src == null:
+		return null
+	if angle_deg == 0.0 or angle_deg == 360.0:
+		return src
+	if src.is_compressed():
+		src.decompress()
+	if src.get_format() != Image.FORMAT_RGBA8:
+		src.convert(Image.FORMAT_RGBA8)
+
+	var norm_angle = posmod(angle_deg, 360.0)
+	if norm_angle == 90.0:
+		var copy = src.duplicate()
+		copy.rotate_90(ClockDirection.CLOCKWISE)
+		return copy
+	elif norm_angle == 180.0:
+		var copy = src.duplicate()
+		copy.rotate_180()
+		return copy
+	elif norm_angle == 270.0:
+		var copy = src.duplicate()
+		copy.rotate_90(ClockDirection.COUNTERCLOCKWISE)
+		return copy
+
+	var rad = deg_to_rad(norm_angle)
+	var cos_a = cos(rad)
+	var sin_a = sin(rad)
+
+	var sw = src.get_width()
+	var sh = src.get_height()
+	var cx = sw / 2.0
+	var cy = sh / 2.0
+
+	var dst = Image.create(sw, sh, false, Image.FORMAT_RGBA8)
+
+	for y in range(sh):
+		for x in range(sw):
+			var dx = x - cx
+			var dy = y - cy
+
+			var sx = dx * cos_a + dy * sin_a + cx
+			var sy = -dx * sin_a + dy * cos_a + cy
+
+			if sx >= 0 and sx < sw - 1 and sy >= 0 and sy < sh - 1:
+				var x0 = int(sx)
+				var y0 = int(sy)
+				var fx = sx - x0
+				var fy = sy - y0
+
+				var c00 = src.get_pixel(x0, y0)
+				var c10 = src.get_pixel(x0 + 1, y0)
+				var c01 = src.get_pixel(x0, y0 + 1)
+				var c11 = src.get_pixel(x0 + 1, y0 + 1)
+
+				var top = c00.lerp(c10, fx)
+				var bot = c01.lerp(c11, fx)
+				var final_c = top.lerp(bot, fy)
+
+				dst.set_pixel(x, y, final_c)
+
+	return dst
 
 static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var skin_color: Color = customization.get("skin_color", Color(0.92, 0.76, 0.65))
@@ -365,81 +415,89 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var eye_x_off: int = int(face_offsets.get("eye_x", 0))
 	var eye_y_off: int = int(face_offsets.get("eye_y", 0))
 	var eye_size: int = int(face_offsets.get("eye_size", 24))
-	var eye_rot: int = int(face_offsets.get("eye_rot", 90))
+	var eye_rot: float = float(face_offsets.get("eye_rot", 0))
 	var nose_y_off: int = int(face_offsets.get("nose_y", 0))
-	var nose_rot: int = int(face_offsets.get("nose_rot", 0))
+	var nose_rot: float = float(face_offsets.get("nose_rot", 0))
 	var mouth_y_off: int = int(face_offsets.get("mouth_y", 0))
-	var mouth_rot: int = int(face_offsets.get("mouth_rot", 0))
+	var mouth_rot: float = float(face_offsets.get("mouth_rot", 0))
 	var glass_x_off: int = int(face_offsets.get("glass_x", 0))
 	var glass_y_off: int = int(face_offsets.get("glass_y", 0))
 	var glass_w: int = int(face_offsets.get("glass_w", 60))
 	var glass_h: int = int(face_offsets.get("glass_h", 30))
-	var glass_rot: int = int(face_offsets.get("glass_rot", 0))
+	var glass_rot: float = float(face_offsets.get("glass_rot", 0))
 
-	var tex_w = 512
-	var tex_h = 512
+	# High-Resolution 1024x1024 Crisp Texture Map
+	var tex_w = 1024
+	var tex_h = 1024
 	var face_img = Image.create(tex_w, tex_h, false, Image.FORMAT_RGBA8)
 	face_img.fill(skin_color)
 
-	# Front face UV center on head_head_001 is around (256, 210)
-	var half_eye = int(eye_size / 2.0)
-	var base_eye_l_pos = Vector2i(256 + eye_x_off - half_eye, 210 + eye_y_off - half_eye)
-	var base_eye_r_pos = Vector2i(256 - eye_x_off - half_eye, 210 + eye_y_off - half_eye)
+	# 1024x1024 UV Scaling
+	var scale_factor = 2.0
+	var hd_eye_size = max(16, int(eye_size * scale_factor))
 
-	# Load Eye L & R
+	# Shared Eye Pivot Center (Between Eyes)
+	var eye_center = Vector2(512.0, 420.0 + (eye_y_off * scale_factor))
+	var rad_eye = deg_to_rad(eye_rot)
+	var rel_left = Vector2(eye_x_off * scale_factor, 0.0).rotated(rad_eye)
+	var rel_right = Vector2(-eye_x_off * scale_factor, 0.0).rotated(rad_eye)
+
+	var eye_l_pos = Vector2i(eye_center + rel_left - Vector2(hd_eye_size / 2.0, hd_eye_size / 2.0))
+	var eye_r_pos = Vector2i(eye_center + rel_right - Vector2(hd_eye_size / 2.0, hd_eye_size / 2.0))
+
+	# Load / Generate Eye L & R
 	var eye_l_path = "res://resources/character_customization/eyes/eye_%02d_L.png" % eye_style
 	var eye_r_path = "res://resources/character_customization/eyes/eye_%02d_R.png" % eye_style
-	if not ResourceLoader.exists(eye_l_path):
-		eye_l_path = "res://resources/character_customization/eyes/eye_01_L.png"
-	if not ResourceLoader.exists(eye_r_path):
-		eye_r_path = "res://resources/character_customization/eyes/eye_01_R.png"
 
-	var eye_l_tex: Texture2D = load(eye_l_path) if ResourceLoader.exists(eye_l_path) else null
-	var eye_r_tex: Texture2D = load(eye_r_path) if ResourceLoader.exists(eye_r_path) else null
+	var eye_l_img: Image = null
+	var eye_r_img: Image = null
 
-	if eye_l_tex:
-		var img_l = eye_l_tex.get_image()
-		_rotate_image(img_l, eye_rot)
-		img_l.resize(eye_size, eye_size, Image.INTERPOLATE_BILINEAR)
-		_apply_chroma_and_blit(face_img, img_l, base_eye_l_pos, sclera_col, pupil_col, iris_col)
+	if ResourceLoader.exists(eye_l_path):
+		eye_l_img = (load(eye_l_path) as Texture2D).get_image()
+	if ResourceLoader.exists(eye_r_path):
+		eye_r_img = (load(eye_r_path) as Texture2D).get_image()
+
+	if eye_l_img:
+		eye_l_img.resize(hd_eye_size, hd_eye_size, Image.INTERPOLATE_BILINEAR)
+		eye_l_img = _rotate_image_exact(eye_l_img, eye_rot)
+		_apply_chroma_and_blit(face_img, eye_l_img, eye_l_pos, sclera_col, pupil_col, iris_col)
 	else:
-		_draw_procedural_eye(face_img, base_eye_l_pos + Vector2i(half_eye, half_eye), half_eye, sclera_col, pupil_col, iris_col)
+		_draw_procedural_eye_style(face_img, eye_l_pos + Vector2i(hd_eye_size / 2, hd_eye_size / 2), hd_eye_size / 2, eye_style, sclera_col, pupil_col, iris_col, eye_rot, true)
 
-	if eye_r_tex:
-		var img_r = eye_r_tex.get_image()
-		_rotate_image(img_r, eye_rot)
-		img_r.resize(eye_size, eye_size, Image.INTERPOLATE_BILINEAR)
-		_apply_chroma_and_blit(face_img, img_r, base_eye_r_pos, sclera_col, pupil_col, iris_col)
+	if eye_r_img:
+		eye_r_img.resize(hd_eye_size, hd_eye_size, Image.INTERPOLATE_BILINEAR)
+		eye_r_img = _rotate_image_exact(eye_r_img, eye_rot)
+		_apply_chroma_and_blit(face_img, eye_r_img, eye_r_pos, sclera_col, pupil_col, iris_col)
 	else:
-		_draw_procedural_eye(face_img, base_eye_r_pos + Vector2i(half_eye, half_eye), half_eye, sclera_col, pupil_col, iris_col)
+		_draw_procedural_eye_style(face_img, eye_r_pos + Vector2i(hd_eye_size / 2, hd_eye_size / 2), hd_eye_size / 2, eye_style, sclera_col, pupil_col, iris_col, eye_rot, false)
 
-	# Load Nose
+	# Load / Generate Nose (Rotated around its center)
 	var nose_path = "res://resources/character_customization/noses/nose_%02d.png" % nose_style
-	if not ResourceLoader.exists(nose_path):
-		nose_path = "res://resources/character_customization/noses/nose_01.png"
-	var nose_tex: Texture2D = load(nose_path) if ResourceLoader.exists(nose_path) else null
-	var nose_pos = Vector2i(256 - 8, 240 + nose_y_off)
-	if nose_tex:
-		var img_n = nose_tex.get_image()
-		_rotate_image(img_n, nose_rot)
-		img_n.resize(16, 16, Image.INTERPOLATE_BILINEAR)
-		_blit_alpha(face_img, img_n, nose_pos)
-	else:
-		_draw_procedural_nose(face_img, nose_pos + Vector2i(8, 8), skin_color.darkened(0.2))
+	var nose_size = Vector2i(int(32 * scale_factor), int(32 * scale_factor))
+	var nose_center = Vector2i(512, 480 + int(nose_y_off * scale_factor))
+	var nose_top_left = nose_center - nose_size / 2
 
-	# Load Mouth
-	var mouth_path = "res://resources/character_customization/mouths/mouth_mask_%02d.png" % mouth_style
-	if not ResourceLoader.exists(mouth_path):
-		mouth_path = "res://resources/character_customization/mouths/mouth_mask_01.png"
-	var mouth_tex: Texture2D = load(mouth_path) if ResourceLoader.exists(mouth_path) else null
-	var mouth_pos = Vector2i(256 - 11, 260 + mouth_y_off)
-	if mouth_tex:
-		var img_m = mouth_tex.get_image()
-		_rotate_image(img_m, mouth_rot)
-		img_m.resize(22, 14, Image.INTERPOLATE_BILINEAR)
-		_blit_alpha(face_img, img_m, mouth_pos)
+	if ResourceLoader.exists(nose_path):
+		var img_n = (load(nose_path) as Texture2D).get_image()
+		img_n.resize(nose_size.x, nose_size.y, Image.INTERPOLATE_BILINEAR)
+		img_n = _rotate_image_exact(img_n, nose_rot)
+		_blit_alpha(face_img, img_n, nose_top_left)
 	else:
-		_draw_procedural_mouth(face_img, mouth_pos + Vector2i(11, 7), Color(0.7, 0.25, 0.25))
+		_draw_procedural_nose_style(face_img, nose_center, nose_style, skin_color.darkened(0.25), nose_rot)
+
+	# Load / Generate Mouth (Rotated around its center)
+	var mouth_path = "res://resources/character_customization/mouths/mouth_mask_%02d.png" % mouth_style
+	var mouth_size = Vector2i(int(44 * scale_factor), int(28 * scale_factor))
+	var mouth_center = Vector2i(512, 520 + int(mouth_y_off * scale_factor))
+	var mouth_top_left = mouth_center - mouth_size / 2
+
+	if ResourceLoader.exists(mouth_path):
+		var img_m = (load(mouth_path) as Texture2D).get_image()
+		img_m.resize(mouth_size.x, mouth_size.y, Image.INTERPOLATE_BILINEAR)
+		img_m = _rotate_image_exact(img_m, mouth_rot)
+		_blit_alpha(face_img, img_m, mouth_top_left)
+	else:
+		_draw_procedural_mouth_style(face_img, mouth_center, mouth_style, Color(0.7, 0.25, 0.25), mouth_rot)
 
 	# Load Glasses directly onto Face Texture Map (Binds and morphs onto 3D face mesh!)
 	if glasses_style > 0:
@@ -457,43 +515,82 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 						var idx = clamp(glasses_style - 1, 0, 9)
 						var rect = Rect2i(idx * frame_w, 0, frame_w, frame_h)
 						var glass_frame = atlas_img.get_region(rect)
-						if glass_frame and glass_w > 0 and glass_h > 0:
-							_rotate_image(glass_frame, glass_rot)
-							glass_frame.resize(glass_w, glass_h, Image.INTERPOLATE_BILINEAR)
-							_blit_alpha(face_img, glass_frame, Vector2i(256 + glass_x_off - int(glass_w / 2.0), 210 + glass_y_off - int(glass_h / 2.0)))
+						var hd_glass_w = int(glass_w * scale_factor)
+						var hd_glass_h = int(glass_h * scale_factor)
+						if glass_frame and hd_glass_w > 0 and hd_glass_h > 0:
+							glass_frame.resize(hd_glass_w, hd_glass_h, Image.INTERPOLATE_BILINEAR)
+							glass_frame = _rotate_image_exact(glass_frame, glass_rot)
+							var glass_center = Vector2i(512 + int(glass_x_off * scale_factor), 420 + int(glass_y_off * scale_factor))
+							_blit_alpha(face_img, glass_frame, glass_center - Vector2i(hd_glass_w / 2, hd_glass_h / 2))
 
 	return ImageTexture.create_from_image(face_img)
 
-static func _draw_procedural_eye(dest: Image, center: Vector2i, radius: int, sclera: Color, pupil: Color, iris: Color) -> void:
+static func _draw_procedural_eye_style(dest: Image, center: Vector2i, radius: int, style: int, sclera: Color, pupil: Color, iris: Color, rot_deg: float, _is_left: bool) -> void:
+	var rad = deg_to_rad(rot_deg)
+	var cos_a = cos(rad)
+	var sin_a = sin(rad)
+
+	# Procedural style variations based on style index (1..60)
+	var iris_ratio = clamp(0.40 + float(style % 5) * 0.08, 0.35, 0.75)
+	var pupil_ratio = clamp(0.20 + float((style / 5) % 4) * 0.05, 0.15, 0.45)
+	var pupil_shape_sq = (style % 3 == 0)
+
 	for y in range(-radius, radius + 1):
 		for x in range(-radius, radius + 1):
-			var dist_sq = x*x + y*y
+			var rx = x * cos_a + y * sin_a
+			var ry = -x * sin_a + y * cos_a
+
+			var dist_sq = rx * rx + ry * ry
 			if dist_sq <= radius * radius:
 				var px = center.x + x
 				var py = center.y + y
 				if px >= 0 and px < dest.get_width() and py >= 0 and py < dest.get_height():
-					if dist_sq <= (radius * 0.35) * (radius * 0.35):
+					var is_pupil = false
+					if pupil_shape_sq:
+						is_pupil = abs(rx) <= radius * pupil_ratio and abs(ry) <= radius * pupil_ratio
+					else:
+						is_pupil = dist_sq <= (radius * pupil_ratio) * (radius * pupil_ratio)
+
+					if is_pupil:
 						dest.set_pixel(px, py, pupil)
-					elif dist_sq <= (radius * 0.65) * (radius * 0.65):
+					elif dist_sq <= (radius * iris_ratio) * (radius * iris_ratio):
 						dest.set_pixel(px, py, iris)
 					else:
 						dest.set_pixel(px, py, sclera)
 
-static func _draw_procedural_nose(dest: Image, center: Vector2i, color: Color) -> void:
-	for y in range(-15, 16):
-		var w = int(12.0 * (1.0 - (float(y) + 15.0) / 30.0))
+static func _draw_procedural_nose_style(dest: Image, center: Vector2i, style: int, color: Color, rot_deg: float) -> void:
+	var rad = deg_to_rad(rot_deg)
+	var cos_a = cos(rad)
+	var sin_a = sin(rad)
+	var half_h = 16 + (style % 4) * 4
+
+	for y in range(-half_h, half_h + 1):
+		var progress = (float(y) + half_h) / (half_h * 2.0)
+		var w = int((16.0 + float(style % 3) * 4.0) * (1.0 - progress * 0.6))
 		for x in range(-w, w + 1):
-			var px = center.x + x
-			var py = center.y + y
+			var rx = x * cos_a - y * sin_a
+			var ry = x * sin_a + y * cos_a
+
+			var px = center.x + int(rx)
+			var py = center.y + int(ry)
 			if px >= 0 and px < dest.get_width() and py >= 0 and py < dest.get_height():
 				dest.set_pixel(px, py, color)
 
-static func _draw_procedural_mouth(dest: Image, center: Vector2i, color: Color) -> void:
-	for y in range(0, 10):
-		var w = int(25.0 * (1.0 - (float(y) / 10.0)))
+static func _draw_procedural_mouth_style(dest: Image, center: Vector2i, style: int, color: Color, rot_deg: float) -> void:
+	var rad = deg_to_rad(rot_deg)
+	var cos_a = cos(rad)
+	var sin_a = sin(rad)
+	var half_w = 20 + (style % 5) * 4
+
+	for y in range(-6, 8):
+		var progress = float(y + 6) / 14.0
+		var w = int(float(half_w) * (1.0 - progress * 0.4))
 		for x in range(-w, w + 1):
-			var px = center.x + x
-			var py = center.y + y
+			var rx = x * cos_a - y * sin_a
+			var ry = x * sin_a + y * cos_a
+
+			var px = center.x + int(rx)
+			var py = center.y + int(ry)
 			if px >= 0 and px < dest.get_width() and py >= 0 and py < dest.get_height():
 				dest.set_pixel(px, py, color)
 

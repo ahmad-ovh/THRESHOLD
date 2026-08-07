@@ -299,16 +299,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 0.0
 max_value = 360.0
-step = 90.0
-value = 90.0
+step = 1.0
+value = 0.0
 
 [node name="SpinEyeRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow"]
 custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = 0.0
 max_value = 360.0
-step = 90.0
-value = 90.0
+step = 1.0
+value = 0.0
 
 [node name="NoseYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
 layout_mode = 2
@@ -344,7 +344,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 0.0
 max_value = 360.0
-step = 90.0
+step = 1.0
 value = 0.0
 
 [node name="SpinNoseRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseRotRow"]
@@ -352,7 +352,7 @@ custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = 0.0
 max_value = 360.0
-step = 90.0
+step = 1.0
 value = 0.0
 
 [node name="MouthYRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
@@ -389,7 +389,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 0.0
 max_value = 360.0
-step = 90.0
+step = 1.0
 value = 0.0
 
 [node name="SpinMouthRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthRotRow"]
@@ -397,7 +397,7 @@ custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = 0.0
 max_value = 360.0
-step = 90.0
+step = 1.0
 value = 0.0
 
 [node name="GlassXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
@@ -455,7 +455,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 0.0
 max_value = 360.0
-step = 90.0
+step = 1.0
 value = 0.0
 
 [node name="SpinGlassRot" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassRotRow"]
@@ -463,7 +463,7 @@ custom_minimum_size = Vector2(65, 0)
 layout_mode = 2
 min_value = 0.0
 max_value = 360.0
-step = 90.0
+step = 1.0
 value = 0.0
 
 [node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer"]
