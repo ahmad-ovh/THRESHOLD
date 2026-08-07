@@ -106,9 +106,9 @@ const MAX_UNDO_STACK: int = 50
 
 var alignment_data: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
-	"head": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)},
-	"hair": {"position": Vector3(0.0, 0.05, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.05, 1.05, 1.05)},
-	"glasses": {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
+	"head": {"position": Vector3(0.0, 1.155, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)},
+	"hair": {"position": Vector3(0.0, 1.605, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(6.6, 6.6, 6.6)},
+	"glasses": {"position": Vector3(0.0, 1.12, 0.31), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
 
 var catalog_presets: Dictionary = {}
@@ -736,13 +736,18 @@ func _update_gizmo_3d_position() -> void:
 		return
 	var mii = current_avatar_instance.get_node_or_null("MiiAvatar") if current_avatar_instance.name != "MiiAvatar" else current_avatar_instance
 	if not mii:
+		mii = current_avatar_instance
+
+	if selected_part == "body":
+		gizmo_node.global_position = mii.global_position
 		return
-	var node_name = "GLTF" + selected_part.capitalize()
-	var part_node = mii.get_node_or_null(node_name)
-	if part_node and part_node is Node3D:
+
+	var part_node: Node3D = mii.find_child("GLTF" + selected_part.capitalize() + "*", true, false) as Node3D
+	if not part_node:
+		part_node = mii.find_child("*" + selected_part.capitalize() + "*", true, false) as Node3D
+
+	if part_node:
 		gizmo_node.global_position = part_node.global_position
-	elif selected_part == "glasses":
-		gizmo_node.global_position = Vector3(0.0, 1.155, 0.05) + alignment_data["glasses"]["position"]
 
 func _on_copy_json_pressed() -> void:
 	var export_dict = {}
