@@ -12,8 +12,8 @@ extends CharacterBody3D
 @export_group("Camera Parameters")
 @export var camera_follow_speed: float = 5.0
 @export var is_fixed_diorama_room: bool = true
-@export var room_camera_pos: Vector3 = Vector3(0.0, 3.2, 4)
-@export var room_camera_rot: Vector3 = Vector3(-14.0, 0.0, 0.0)
+@export var room_camera_pos: Vector3 = Vector3(0.0, 2.2, 4.5)
+@export var room_camera_rot: Vector3 = Vector3(-15.0, 0.0, 0.0)
 @export var spring_arm_length: float = 0.0
 @export var corridor_min_x: float = -12.0
 @export var corridor_max_x: float = 12.0
