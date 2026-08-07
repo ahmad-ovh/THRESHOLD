@@ -334,7 +334,7 @@ static func _build_player(root: Node3D) -> void:
 			var head_gltf = _load_gltf(head_path)
 			if head_gltf:
 				head_gltf.name = "GLTFHead"
-				head_gltf.position = Vector3(0.0, -0.48, 0.0)
+				head_gltf.position = Vector3(0.0, 0.04, 0.0)
 				head_gltf.rotation_degrees = Vector3.ZERO
 				head_gltf.scale = Vector3.ONE
 				_set_node_material(head_gltf, head_mat)
