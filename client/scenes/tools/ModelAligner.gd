@@ -574,6 +574,12 @@ func _on_item_changed(cat: String, item_key: String, part: String) -> void:
 		if t.has("position"): base_transforms[part]["position"] = Vector3(t["position"][0], t["position"][1], t["position"][2])
 		if t.has("rotation"): base_transforms[part]["rotation"] = Vector3(t["rotation"][0], t["rotation"][1], t["rotation"][2])
 		if t.has("scale"): base_transforms[part]["scale"] = Vector3(t["scale"][0], t["scale"][1], t["scale"][2])
+	else:
+		match part:
+			"hair": base_transforms[part] = {"position": Vector3(0.0, 0.02, 0.0), "rotation": Vector3.ZERO, "scale": Vector3(1.05, 1.05, 1.05)}
+			"glasses": base_transforms[part] = {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3.ZERO, "scale": Vector3(1.0, 1.0, 1.0)}
+			"head": base_transforms[part] = {"position": Vector3(0.0, 0.002, 0.0), "rotation": Vector3.ZERO, "scale": Vector3(0.002, 0.002, 0.002)}
+			_: base_transforms[part] = {"position": Vector3.ZERO, "rotation": Vector3.ZERO, "scale": Vector3.ONE}
 
 	relative_edits[part] = {
 		"position": Vector3.ZERO,
