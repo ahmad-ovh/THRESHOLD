@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://dtbvo1ag1ljdl"]
 
-[ext_resource type="Script" path="res://scenes/ui/DialogueUI.gd" id="1_dialogue_script"]
+[ext_resource type="Script" uid="uid://taflknabuho8" path="res://scenes/ui/DialogueUI.gd" id="1_dialogue_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tomodachi_ribbon"]
 bg_color = Color(1, 0.99, 0.94, 0.92)
@@ -8,10 +8,10 @@ border_width_top = 2
 border_width_bottom = 2
 border_color = Color(0.95, 0.9, 0.82, 1)
 
-[node name="DialogueUI" type="CanvasLayer"]
+[node name="DialogueUI" type="CanvasLayer" unique_id=615538034]
 script = ExtResource("1_dialogue_script")
 
-[node name="OverlayRoot" type="Control" parent="."]
+[node name="OverlayRoot" type="Control" parent="." unique_id=1828911125]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +19,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HeaderContainer" type="HBoxContainer" parent="OverlayRoot"]
+[node name="HeaderContainer" type="HBoxContainer" parent="OverlayRoot" unique_id=590204611]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -29,34 +29,34 @@ offset_right = -16.0
 offset_bottom = 85.0
 grow_horizontal = 2
 
-[node name="SpeakerLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
+[node name="SpeakerLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=2027361671]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "NPC Name"
 
-[node name="RoleBadge" type="Label" parent="OverlayRoot/HeaderContainer"]
+[node name="RoleBadge" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=194291391]
 layout_mode = 2
 text = "[Role: Peer]"
 
-[node name="TierLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
+[node name="TierLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=344393035]
 layout_mode = 2
 text = "[Tier: Stranger]"
 
-[node name="MoodLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
+[node name="MoodLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=1019082907]
 layout_mode = 2
 text = "[Mood: neutral]"
 
-[node name="LoadingLabel" type="Label" parent="OverlayRoot/HeaderContainer"]
+[node name="LoadingLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=1233796803]
 visible = false
 layout_mode = 2
 text = "Walking over..."
 
-[node name="LeaveButton" type="Button" parent="OverlayRoot/HeaderContainer"]
+[node name="LeaveButton" type="Button" parent="OverlayRoot/HeaderContainer" unique_id=165015605]
 layout_mode = 2
 text = " Say Goodbye "
 
-[node name="ScenarioGoalBanner" type="PanelContainer" parent="OverlayRoot"]
+[node name="ScenarioGoalBanner" type="PanelContainer" parent="OverlayRoot" unique_id=1739124727]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -67,12 +67,12 @@ offset_right = 250.0
 offset_bottom = 125.0
 grow_horizontal = 2
 
-[node name="ScenarioGoalLabel" type="Label" parent="OverlayRoot/ScenarioGoalBanner"]
+[node name="ScenarioGoalLabel" type="Label" parent="OverlayRoot/ScenarioGoalBanner" unique_id=1053769463]
 layout_mode = 2
 text = "Conversation Focus: Active listening and validating feelings"
 horizontal_alignment = 1
 
-[node name="CoachHintBanner" type="PanelContainer" parent="OverlayRoot"]
+[node name="CoachHintBanner" type="PanelContainer" parent="OverlayRoot" unique_id=469672926]
 visible = false
 layout_mode = 1
 anchors_preset = 5
@@ -84,12 +84,12 @@ offset_right = 250.0
 offset_bottom = 170.0
 grow_horizontal = 2
 
-[node name="CoachHintLabel" type="Label" parent="OverlayRoot/CoachHintBanner"]
+[node name="CoachHintLabel" type="Label" parent="OverlayRoot/CoachHintBanner" unique_id=1915605562]
 layout_mode = 2
 text = "Coach Hint: ..."
 horizontal_alignment = 1
 
-[node name="StatusRibbonPanel" type="PanelContainer" parent="OverlayRoot"]
+[node name="StatusRibbonPanel" type="PanelContainer" parent="OverlayRoot" unique_id=1806916483]
 visible = false
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 1
@@ -103,7 +103,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_tomodachi_ribbon")
 
-[node name="StatusRibbonLabel" type="Label" parent="OverlayRoot/StatusRibbonPanel"]
+[node name="StatusRibbonLabel" type="Label" parent="OverlayRoot/StatusRibbonPanel" unique_id=884648785]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15, 0.22, 0.3, 1)
 theme_override_font_sizes/font_size = 18
@@ -111,7 +111,7 @@ text = "Status update..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BottomInputPanel" type="PanelContainer" parent="OverlayRoot"]
+[node name="BottomInputPanel" type="PanelContainer" parent="OverlayRoot" unique_id=1154566613]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 1
 anchors_preset = 12
@@ -125,22 +125,22 @@ offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="InputContainer" type="HBoxContainer" parent="OverlayRoot/BottomInputPanel"]
+[node name="InputContainer" type="HBoxContainer" parent="OverlayRoot/BottomInputPanel" unique_id=1743740589]
 layout_mode = 2
 
-[node name="MessageInput" type="LineEdit" parent="OverlayRoot/BottomInputPanel/InputContainer"]
+[node name="MessageInput" type="LineEdit" parent="OverlayRoot/BottomInputPanel/InputContainer" unique_id=465635476]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Say something..."
 
-[node name="SendButton" type="Button" parent="OverlayRoot/BottomInputPanel/InputContainer"]
+[node name="SendButton" type="Button" parent="OverlayRoot/BottomInputPanel/InputContainer" unique_id=441085136]
 layout_mode = 2
 text = " Send "
 
-[node name="FeedbackPanel" type="VBoxContainer" parent="OverlayRoot"]
+[node name="FeedbackPanel" type="VBoxContainer" parent="OverlayRoot" unique_id=1797998074]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 1
-anchors_preset = 11
+anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -152,78 +152,78 @@ offset_bottom = 240.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="ScoresHeader" type="Label" parent="OverlayRoot/FeedbackPanel"]
+[node name="ScoresHeader" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1086411765]
 layout_mode = 2
 text = "Communication Reflection"
 
-[node name="OverallContainer" type="HBoxContainer" parent="OverlayRoot/FeedbackPanel"]
+[node name="OverallContainer" type="HBoxContainer" parent="OverlayRoot/FeedbackPanel" unique_id=1118481416]
 layout_mode = 2
 
-[node name="OverallLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer"]
+[node name="OverallLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer" unique_id=1693964229]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Overall: 50%"
 
-[node name="DeltaLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer"]
+[node name="DeltaLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer" unique_id=901833543]
 layout_mode = 2
 text = "[--]"
 
-[node name="OverallProgressBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
+[node name="OverallProgressBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1193420288]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 value = 50.0
 
-[node name="StatusBadgeLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
+[node name="StatusBadgeLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=2016737326]
 layout_mode = 2
 text = "Status: Baseline"
 
-[node name="HSeparator" type="HSeparator" parent="OverlayRoot/FeedbackPanel"]
+[node name="HSeparator" type="HSeparator" parent="OverlayRoot/FeedbackPanel" unique_id=57689530]
 layout_mode = 2
 
-[node name="ClarityLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
+[node name="ClarityLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1620772102]
 layout_mode = 2
-text = "Clarity: 50%"
 tooltip_text = "Clarity: How clearly and directly you state your point."
+text = "Clarity: 50%"
 
-[node name="ClarityBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
+[node name="ClarityBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1950693667]
 layout_mode = 2
 value = 50.0
 
-[node name="EmpathyLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
+[node name="EmpathyLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1497877979]
 layout_mode = 2
-text = "Empathy: 50%"
 tooltip_text = "Empathy: Validating feelings and acknowledging emotions."
+text = "Empathy: 50%"
 
-[node name="EmpathyBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
+[node name="EmpathyBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=730519276]
 layout_mode = 2
 value = 50.0
 
-[node name="PolitenessLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
+[node name="PolitenessLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=145048484]
 layout_mode = 2
-text = "Politeness: 50%"
 tooltip_text = "Politeness: Maintaining a respectful and considerate tone."
+text = "Politeness: 50%"
 
-[node name="PolitenessBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
+[node name="PolitenessBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1756125853]
 layout_mode = 2
 value = 50.0
 
-[node name="ExpressionLabel" type="Label" parent="OverlayRoot/FeedbackPanel"]
+[node name="ExpressionLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1508251752]
 layout_mode = 2
-text = "Expression: 50%"
 tooltip_text = "Expression: Emotional honesty and authentic personal engagement."
+text = "Expression: 50%"
 
-[node name="ExpressionBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel"]
+[node name="ExpressionBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=518400406]
 layout_mode = 2
 value = 50.0
 
-[node name="FeedbackText" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel"]
+[node name="FeedbackText" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel" unique_id=1032672357]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "Feedback hints..."
 
-[node name="BubblesContainer" type="Control" parent="OverlayRoot"]
+[node name="BubblesContainer" type="Control" parent="OverlayRoot" unique_id=835385409]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

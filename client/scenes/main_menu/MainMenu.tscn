@@ -1,23 +1,62 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://boy37nxl6ellh"]
 
-[ext_resource type="Script" path="res://scenes/main_menu/MainMenu.gd" id="1_main_menu_script"]
+[ext_resource type="Script" uid="uid://bsyvx46nrl0yn" path="res://scenes/main_menu/MainMenu.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
+[ext_resource type="Texture2D" uid="uid://bqmcjlut6amfq" path="res://assets/ui/paper_craft/bg_paper.png" id="3_bg_paper"]
+[ext_resource type="Texture2D" uid="uid://bhoisbqagxkwk" path="res://assets/ui/paper_craft/thumbtack_orange.png" id="4_thumbtack"]
+[ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="5_bg_button"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_daily_orange"]
-bg_color = Color(1, 0.96, 0.88, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper_card"]
+bg_color = Color(0.96, 0.93, 0.85, 0.96)
 border_width_left = 3
 border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(1, 0.6, 0.2, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.82, 0.75, 0.6, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 18
+corner_radius_bottom_right = 8
 corner_radius_bottom_left = 16
+shadow_color = Color(0.1, 0.08, 0.04, 0.16)
+shadow_size = 8
+shadow_offset = Vector2(3, 5)
 
-[node name="MainMenu" type="CanvasLayer"]
-script = ExtResource("1_main_menu_script")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_paper"]
+bg_color = Color(1, 1, 0.96, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.75, 0.69, 0.55, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
-[node name="Control" type="Control" parent="."]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_normal"]
+texture = ExtResource("5_bg_button")
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_hover"]
+texture = ExtResource("5_bg_button")
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(1.15, 1.15, 1.15, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_pressed"]
+texture = ExtResource("5_bg_button")
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(0.85, 0.85, 0.85, 1)
+
+[node name="MainMenu" type="CanvasLayer" unique_id=1876854707]
+script = ExtResource("1_script")
+
+[node name="Control" type="Control" parent="." unique_id=870619479]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,84 +64,239 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Control"]
+[node name="BgPaper" type="TextureRect" parent="Control" unique_id=104532179]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.85, 0.94, 0.98, 1)
+texture = ExtResource("3_bg_paper")
+expand_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-custom_minimum_size = Vector2(420, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -210.0
-offset_top = -220.0
-offset_right = 210.0
-offset_bottom = 220.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 12
+[node name="TriangleChipTop" type="Polygon2D" parent="Control" unique_id=1171791441]
+position = Vector2(236, 112)
+rotation = 0.3
+color = Color(0.18, 0.48, 0.85, 1)
+polygon = PackedVector2Array(0, -14, 12, 10, -12, 10)
 
-[node name="TitleLabel" type="Label" parent="Control/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.55, 0.25, 1)
+[node name="TriangleChipBottom" type="Polygon2D" parent="Control" unique_id=1690149050]
+position = Vector2(280, 665)
+rotation = -0.4
+color = Color(0.18, 0.48, 0.85, 1)
+polygon = PackedVector2Array(0, -16, 14, 12, -14, 12)
+
+[node name="DoodleStarGreen" type="Label" parent="Control" unique_id=136597020]
+layout_mode = 0
+offset_left = 760.0
+offset_top = 405.0
+offset_right = 810.0
+offset_bottom = 455.0
+rotation = 0.15
+theme_override_colors/font_color = Color(0.42, 0.68, 0.18, 1)
 theme_override_font_sizes/font_size = 36
-text = "THRESHOLD"
-horizontal_alignment = 1
+text = "★"
 
-[node name="SubtitleLabel" type="Label" parent="Control/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.35, 0.28, 1)
-theme_override_font_sizes/font_size = 15
-text = "Social Communication Simulation"
-horizontal_alignment = 1
+[node name="DoodleStarBlue" type="Label" parent="Control" unique_id=427683942]
+layout_mode = 0
+offset_left = 855.0
+offset_top = 618.0
+offset_right = 905.0
+offset_bottom = 668.0
+theme_override_colors/font_color = Color(0.18, 0.48, 0.85, 1)
+theme_override_font_sizes/font_size = 42
+text = "★"
 
-[node name="UsernameInput" type="LineEdit" parent="Control/VBoxContainer"]
-custom_minimum_size = Vector2(0, 42)
-layout_mode = 2
-placeholder_text = "Enter Player ID..."
+[node name="DoodleArrow" type="Label" parent="Control" unique_id=2123888860]
+layout_mode = 0
+offset_left = 985.0
+offset_top = 620.0
+offset_right = 1045.0
+offset_bottom = 670.0
+rotation = -0.3
+theme_override_colors/font_color = Color(0.18, 0.48, 0.85, 1)
+theme_override_font_sizes/font_size = 36
+text = "⤴"
 
-[node name="DailyCard" type="PanelContainer" parent="Control/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_daily_orange")
+[node name="RightPanel" type="Control" parent="Control" unique_id=1387456895]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1091.0
+offset_top = 325.0
+offset_right = -603.0
+offset_bottom = 301.0
+grow_horizontal = 0
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/VBoxContainer/DailyCard"]
+[node name="TitleThumbtack" type="TextureRect" parent="Control/RightPanel" unique_id=1473694307]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 36.0
+offset_right = 72.0
+offset_bottom = 86.0
+rotation = -0.15
+texture = ExtResource("4_thumbtack")
+expand_mode = 1
+
+[node name="DailyCard" type="PanelContainer" parent="Control/RightPanel" unique_id=129295606]
+layout_mode = 0
+offset_left = 32.26582
+offset_top = 228.84517
+offset_right = 441.2658
+offset_bottom = 445.84515
+rotation = 0.02
+theme_override_styles/panel = SubResource("StyleBoxFlat_paper_card")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/RightPanel/DailyCard" unique_id=284966339]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 18
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/RightPanel/DailyCard/MarginContainer" unique_id=1526301672]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DailyHeader" type="Label" parent="Control/RightPanel/DailyCard/MarginContainer/VBoxContainer" unique_id=1231423795]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.4, 0.08, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 24
+text = "📋 DAILY MISSION BRIEFING"
+
+[node name="HSeparator" type="HSeparator" parent="Control/RightPanel/DailyCard/MarginContainer/VBoxContainer" unique_id=2128504264]
 layout_mode = 2
 
-[node name="DailyHeader" type="Label" parent="Control/VBoxContainer/DailyCard/VBoxContainer"]
+[node name="DailyDetails" type="RichTextLabel" parent="Control/RightPanel/DailyCard/MarginContainer/VBoxContainer" unique_id=109256861]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.45, 0.1, 1)
-theme_override_font_sizes/font_size = 16
-text = "Daily Featured Scenario"
-
-[node name="DailyDetails" type="RichTextLabel" parent="Control/VBoxContainer/DailyCard/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
-layout_mode = 2
-theme_override_colors/default_color = Color(0.25, 0.22, 0.18, 1)
+theme_override_colors/default_color = Color(0.22, 0.18, 0.12, 1)
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
 bbcode_enabled = true
 text = "Loading daily scenario..."
 
-[node name="CustomizeButton" type="Button" parent="Control/VBoxContainer"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 44)
-theme_override_font_sizes/font_size = 16
-text = "Customize Character"
+[node name="LeftPanel" type="Control" parent="Control" unique_id=21544097]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 520.0
+grow_vertical = 2
 
-[node name="AlignerButton" type="Button" parent="Control/VBoxContainer"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 38)
-theme_override_font_sizes/font_size = 14
-text = "🛠️ Model Alignment Tool"
+[node name="PlayerCard" type="PanelContainer" parent="Control/LeftPanel" unique_id=1485316441]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 95.0
+offset_right = 445.0
+offset_bottom = 185.0
+rotation = -0.015
+theme_override_styles/panel = SubResource("StyleBoxFlat_paper_card")
 
-[node name="StartButton" type="Button" parent="Control/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Control/LeftPanel/PlayerCard" unique_id=1668995323]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 48)
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/LeftPanel/PlayerCard/MarginContainer" unique_id=1093165724]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PlayerLabel" type="Label" parent="Control/LeftPanel/PlayerCard/MarginContainer/VBoxContainer" unique_id=1372457084]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.3, 0.22, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 18
-text = "Start Game"
+text = "PLAYER NAME / ID"
+
+[node name="UsernameInput" type="LineEdit" parent="Control/LeftPanel/PlayerCard/MarginContainer/VBoxContainer" unique_id=1788066106]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_input_paper")
+placeholder_text = "Enter Player ID..."
+
+[node name="ButtonsVBox" type="VBoxContainer" parent="Control/LeftPanel" unique_id=730828750]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 249.0
+offset_right = 450.0
+offset_bottom = 659.0
+theme_override_constants/separation = 18
+
+[node name="StartWrapper" type="Control" parent="Control/LeftPanel/ButtonsVBox" unique_id=1412765501]
+custom_minimum_size = Vector2(350, 72)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="Control/LeftPanel/ButtonsVBox/StartWrapper" unique_id=1412765594]
+custom_minimum_size = Vector2(350, 72)
+layout_mode = 0
+offset_right = 350.0
+offset_bottom = 72.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 38
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_paper_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
+text = "Start"
+
+[node name="CustomizeWrapper" type="Control" parent="Control/LeftPanel/ButtonsVBox" unique_id=1179923601]
+custom_minimum_size = Vector2(350, 72)
+layout_mode = 2
+
+[node name="CustomizeButton" type="Button" parent="Control/LeftPanel/ButtonsVBox/CustomizeWrapper" unique_id=1179923695]
+custom_minimum_size = Vector2(350, 72)
+layout_mode = 0
+offset_right = 350.0
+offset_bottom = 72.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_paper_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
+text = "Customize"
+
+[node name="SettingsWrapper" type="Control" parent="Control/LeftPanel/ButtonsVBox" unique_id=495503401]
+custom_minimum_size = Vector2(350, 72)
+layout_mode = 2
+
+[node name="SettingsButton" type="Button" parent="Control/LeftPanel/ButtonsVBox/SettingsWrapper" unique_id=495503402]
+custom_minimum_size = Vector2(350, 72)
+layout_mode = 0
+offset_right = 350.0
+offset_bottom = 72.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_paper_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
+text = "Settings"
+
+[node name="MenuThumbtack" type="TextureRect" parent="Control/LeftPanel" unique_id=274777868]
+layout_mode = 0
+offset_left = 68.0
+offset_top = 590.0
+offset_right = 118.0
+offset_bottom = 640.0
+rotation = -0.3
+texture = ExtResource("4_thumbtack")
+expand_mode = 1
