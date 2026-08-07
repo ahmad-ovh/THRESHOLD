@@ -181,47 +181,123 @@ static func _add_base_humanoid(
 
 # --- Character Specific Models with Rigged Pivots ---
 
+static func _load_gltf(path: String) -> Node3D:
+	if not ResourceLoader.exists(path):
+		return null
+	var scene = load(path)
+	if not scene or not (scene is PackedScene):
+		return null
+	var inst = scene.instantiate() as Node3D
+	if inst:
+		inst.position = Vector3.ZERO
+		inst.rotation_degrees = Vector3.ZERO
+		inst.scale = Vector3.ONE
+		for child in inst.get_children():
+			if child is Node3D:
+				child.position = Vector3.ZERO
+				child.rotation_degrees = Vector3.ZERO
+				child.scale = Vector3.ONE
+	return inst
+
+static func _set_node_material(node: Node, mat: Material) -> void:
+	if node is MeshInstance3D:
+		node.material_override = mat
+	for child in node.get_children():
+		_set_node_material(child, mat)
+
 static func _build_player(root: Node3D) -> void:
 	var c = PlayerStore.customization
+
 	var skin_color: Color = c.get("skin_color", Color(0.92, 0.76, 0.65))
-	var skin_mat = _mat(skin_color)
-	var shirt_mat = _mat(Color(0.95, 0.95, 0.95))
-	var jacket_mat = _mat(Color(0.14, 0.48, 0.55))
-	var pants_mat = _mat(Color(0.18, 0.26, 0.42))
-	var shoes_mat = _mat(Color(0.90, 0.90, 0.92))
 	var hair_color: Color = c.get("hair_color", Color(0.24, 0.16, 0.10))
+
+	var skin_mat = _mat(skin_color)
 	var hair_mat = _mat(hair_color)
+	var shirt_mat = _mat(Color(0.95, 0.95, 0.95))
 
-	var rig = _add_base_humanoid(root, skin_mat, shirt_mat, pants_mat, shoes_mat, false)
-	var head_pivot = rig.head_pivot
+	var avatar = Node3D.new()
+	avatar.name = "MiiAvatar"
+	root.add_child(avatar)
 
-	# --- Composite Face Texture on Head Sphere ---
-	var head_mesh: MeshInstance3D = head_pivot.get_node_or_null("HeadMesh")
-	if not head_mesh:
-		head_mesh = _sphere(0.19, Vector3(0.0, 0.16, 0.0), skin_mat)
-		head_mesh.name = "HeadMesh"
-		head_pivot.add_child(head_mesh)
+	# 1. Base Body GLTF
+	var body_style: int = c.get("body_style", 0) # 0: Male, 1: Female
+	var body_path = "res://assets/character_models/body/body_torso_m.gltf" if body_style == 0 else "res://assets/character_models/body/body_torso_f.gltf"
+	var body_gltf = _load_gltf(body_path)
+	if body_gltf:
+		body_gltf.name = "GLTFBody"
+		body_gltf.scale = Vector3(2.5, 2.5, 2.5)
+		body_gltf.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
+		body_gltf.position = Vector3(0.0, 0.0, 0.0)
+		_set_node_material(body_gltf, shirt_mat)
+		avatar.add_child(body_gltf)
 
-	head_mesh.rotation_degrees.y = 180.0
+	# 2. 3D GLTF Head Mesh
+	var head_style: int = c.get("head_style", 1) # 1..12
+	var head_path = "res://assets/character_models/heads/head_head_%03d.gltf" % head_style
+	if not ResourceLoader.exists(head_path):
+		head_path = "res://assets/character_models/heads/head_head_001.gltf"
 
-	var face_tex = _create_face_texture(c)
-	var head_mat = StandardMaterial3D.new()
-	head_mat.albedo_color = Color.WHITE
-	head_mat.albedo_texture = face_tex
-	head_mat.roughness = 0.85
-	head_mesh.material_override = head_mat
+	var head_gltf = _load_gltf(head_path)
+	if head_gltf:
+		head_gltf.name = "GLTFHead"
+		head_gltf.scale = Vector3(0.7, 0.7, 0.7)
+		head_gltf.position = Vector3(0.0, 1.15, 0.0)
+		head_gltf.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
+		var face_tex = _create_face_texture(c)
+		var head_mat = StandardMaterial3D.new()
+		head_mat.albedo_color = Color.WHITE
+		head_mat.albedo_texture = face_tex
+		head_mat.roughness = 0.85
+		_set_node_material(head_gltf, head_mat)
+		avatar.add_child(head_gltf)
 
-	# --- Hair ---
-	var hair_style: int = c.get("hair_style", 0)
-	_add_hair_style(head_pivot, hair_style, hair_mat)
+	# 3. 3D GLTF Hair
+	var hair_style: int = c.get("hair_style", 0) # 0..133
+	var hair_path = "res://assets/character_models/hair/hair_%03d.gltf" % hair_style
+	if not ResourceLoader.exists(hair_path):
+		hair_path = "res://assets/character_models/hair/hair_000.gltf"
 
-	# --- Accessories ---
+	var hair_gltf = _load_gltf(hair_path)
+	if hair_gltf:
+		hair_gltf.name = "GLTFHair"
+		hair_gltf.scale = Vector3(2.5, 2.5, 2.5)
+		hair_gltf.position = Vector3(0.0, 1.45, 0.0)
+		hair_gltf.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
+		_set_node_material(hair_gltf, hair_mat)
+		avatar.add_child(hair_gltf)
+
+	# 4. Accessories & Glasses
+	var glasses_style: int = c.get("glasses_style", 0) # 0..5
+	if glasses_style > 0:
+		var glasses_path = "res://assets/character_models/glasses/glasses_glasses%d.gltf" % glasses_style
+		var glasses_gltf = _load_gltf(glasses_path)
+		if glasses_gltf:
+			glasses_gltf.name = "GLTFGlasses"
+			glasses_gltf.scale = Vector3(0.7, 0.7, 0.7)
+			glasses_gltf.position = Vector3(0.0, 1.15, 0.05)
+			glasses_gltf.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
+			var glass_mat = _mat(Color(0.1, 0.1, 0.1), 0.1, 0.9)
+			_set_node_material(glasses_gltf, glass_mat)
+			avatar.add_child(glasses_gltf)
+
 	var acc_style: int = c.get("accessory_style", 0)
-	_add_accessory(rig.body_pivot, head_pivot, acc_style)
+	_add_accessory(avatar, avatar, acc_style)
 
-	# Open Teal Jacket
-	rig.body_pivot.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(-0.13, 0.35, 0.0), jacket_mat))
-	rig.body_pivot.add_child(_box(Vector3(0.22, 0.60, 0.30), Vector3(0.13, 0.35, 0.0), jacket_mat))
+static func apply_alignment(avatar: Node3D, alignment: Dictionary) -> void:
+	if not avatar:
+		return
+	var mii = avatar.get_node_or_null("MiiAvatar") if avatar.name != "MiiAvatar" else avatar
+	if not mii:
+		return
+	for part in ["body", "head", "hair", "glasses"]:
+		if alignment.has(part):
+			var node_name = "GLTF" + part.capitalize()
+			var node = mii.get_node_or_null(node_name)
+			if node:
+				var t = alignment[part]
+				if t.has("position"): node.position = t["position"]
+				if t.has("rotation"): node.rotation_degrees = t["rotation"]
+				if t.has("scale"): node.scale = t["scale"]
 
 static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var skin_color: Color = customization.get("skin_color", Color(0.92, 0.76, 0.65))
@@ -278,6 +354,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 		img_m.resize(70, 45, Image.INTERPOLATE_BILINEAR)
 		_blit_alpha(face_img, img_m, Vector2i(221, 310))
 
+	face_img.flip_y()
 	return ImageTexture.create_from_image(face_img)
 
 static func _apply_chroma_and_blit(dest: Image, src: Image, pos: Vector2i, sclera: Color, pupil: Color, iris: Color) -> void:

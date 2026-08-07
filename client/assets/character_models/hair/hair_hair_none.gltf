@@ -1,0 +1,30 @@
+{
+	"asset":{
+		"generator":"Khronos glTF Blender I/O v5.2.39",
+		"version":"2.0"
+	},
+	"scene":0,
+	"scenes":[
+		{
+			"name":"Scene",
+			"nodes":[
+				0
+			]
+		}
+	],
+	"nodes":[
+		{
+			"name":"hair none",
+			"scale":[
+				0.09678473323583603,
+				0.09678473323583603,
+				0.09678473323583603
+			],
+			"translation":[
+				1.2499980926513672,
+				1.031958818435669,
+				0
+			]
+		}
+	]
+}
