@@ -104,12 +104,12 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/HairRow"]
 layout_mode = 2
-text = "Hair (0..133): "
+text = "Hair (0..270): "
 
 [node name="HairSpin" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/HairRow"]
 layout_mode = 2
 min_value = 0.0
-max_value = 133.0
+max_value = 270.0
 value = 0.0
 
 [node name="GlassesRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]

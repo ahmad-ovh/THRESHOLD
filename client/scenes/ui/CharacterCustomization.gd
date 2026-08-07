@@ -209,7 +209,7 @@ func _build_hair_workspace() -> void:
 
 	var paged_hbox = HBoxContainer.new()
 	var prev_b = Button.new(); prev_b.text = "<"
-	prev_b.pressed.connect(func(): current_hair_page = posmod(current_hair_page - 1, 12); _render_active_workspace())
+	prev_b.pressed.connect(func(): current_hair_page = posmod(current_hair_page - 1, 23); _render_active_workspace())
 	paged_hbox.add_child(prev_b)
 
 	var grid = GridContainer.new()
@@ -220,7 +220,7 @@ func _build_hair_workspace() -> void:
 	paged_hbox.add_child(grid)
 
 	var next_b = Button.new(); next_b.text = ">"
-	next_b.pressed.connect(func(): current_hair_page = posmod(current_hair_page + 1, 12); _render_active_workspace())
+	next_b.pressed.connect(func(): current_hair_page = posmod(current_hair_page + 1, 23); _render_active_workspace())
 	paged_hbox.add_child(next_b)
 	workspace_vbox.add_child(paged_hbox)
 
@@ -228,7 +228,7 @@ func _build_hair_workspace() -> void:
 	var start_idx = current_hair_page * PAGE_SIZE
 	for i in range(PAGE_SIZE):
 		var h_idx = start_idx + i
-		if h_idx > 133: break
+		if h_idx > 270: break
 		var is_sel = (cur_hair == h_idx)
 		var blob = _create_option_blob("Style %d" % (h_idx + 1), is_sel, func():
 			PlayerStore.customization["hair_style"] = h_idx
