@@ -319,9 +319,11 @@ static func _build_player(root: Node3D) -> void:
 			head_path = "res://assets/character_models/heads/head_head_001.gltf"
 		var head_gltf = _load_gltf(head_path)
 		if head_gltf:
-			var custom_head_mi = head_gltf.find_child("*", "MeshInstance3D", true, false) as MeshInstance3D
-			if custom_head_mi and custom_head_mi.mesh:
-				head_mesh.mesh = custom_head_mi.mesh
+			var meshes = head_gltf.find_children("*", "MeshInstance3D", true, false)
+			if meshes.size() > 0:
+				var custom_head_mi = meshes[0] as MeshInstance3D
+				if custom_head_mi and custom_head_mi.mesh:
+					head_mesh.mesh = custom_head_mi.mesh
 
 	var skeleton = avatar.find_child("Armature", true, false) as Skeleton3D
 	if not skeleton:
