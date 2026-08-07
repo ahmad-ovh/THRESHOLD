@@ -334,9 +334,9 @@ static func _build_player(root: Node3D) -> void:
 					var head_gltf = _load_gltf(head_path)
 					if head_gltf:
 						head_gltf.name = "GLTFHeadCustom"
-						head_gltf.position = Vector3(0.0, 0.60, 0.0)
-						head_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
-						head_gltf.scale = Vector3(4.293, 4.293, 4.293)
+						head_gltf.position = Vector3.ZERO
+						head_gltf.rotation_degrees = Vector3.ZERO
+						head_gltf.scale = Vector3.ONE
 						_set_node_material(head_gltf, head_mat)
 						head_attach.add_child(head_gltf)
 
