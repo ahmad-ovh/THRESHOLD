@@ -225,9 +225,9 @@ static func _build_player(root: Node3D) -> void:
 	var body_gltf = _load_gltf(body_path)
 	if body_gltf:
 		body_gltf.name = "GLTFBody"
-		body_gltf.scale = Vector3(2.5, 2.5, 2.5)
-		body_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
 		body_gltf.position = Vector3(0.0, 0.0, 0.0)
+		body_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
+		body_gltf.scale = Vector3(2.5, 2.5, 2.5)
 		_set_node_material(body_gltf, shirt_mat)
 		avatar.add_child(body_gltf)
 
@@ -240,9 +240,9 @@ static func _build_player(root: Node3D) -> void:
 	var head_gltf = _load_gltf(head_path)
 	if head_gltf:
 		head_gltf.name = "GLTFHead"
-		head_gltf.scale = Vector3(1.0, 1.0, 1.0)
-		head_gltf.position = Vector3(0.0, 0.95, 0.0)
+		head_gltf.position = Vector3(0.0, 1.155, 0.0)
 		head_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
+		head_gltf.scale = Vector3(1.0, 1.0, 1.0)
 		var face_tex = _create_face_texture(c)
 		var head_mat = StandardMaterial3D.new()
 		head_mat.albedo_color = Color.WHITE
@@ -260,9 +260,9 @@ static func _build_player(root: Node3D) -> void:
 	var hair_gltf = _load_gltf(hair_path)
 	if hair_gltf:
 		hair_gltf.name = "GLTFHair"
-		hair_gltf.scale = Vector3(3.8, 3.8, 3.8)
-		hair_gltf.position = Vector3(0.0, 1.00, 0.0)
+		hair_gltf.position = Vector3(0.0, 1.605, 0.0)
 		hair_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
+		hair_gltf.scale = Vector3(6.6, 6.6, 6.6)
 		_set_node_material(hair_gltf, hair_mat)
 		avatar.add_child(hair_gltf)
 
@@ -273,9 +273,9 @@ static func _build_player(root: Node3D) -> void:
 		var glasses_gltf = _load_gltf(glasses_path)
 		if glasses_gltf:
 			glasses_gltf.name = "GLTFGlasses"
-			glasses_gltf.scale = Vector3(1.0, 1.0, 1.0)
 			glasses_gltf.position = Vector3(0.0, 0.95, 0.05)
 			glasses_gltf.rotation_degrees = Vector3(0.0, 0.0, 0.0)
+			glasses_gltf.scale = Vector3(1.0, 1.0, 1.0)
 			var glass_mat = _mat(Color(0.1, 0.1, 0.1), 0.1, 0.9)
 			_set_node_material(glasses_gltf, glass_mat)
 			avatar.add_child(glasses_gltf)
