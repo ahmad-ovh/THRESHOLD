@@ -339,7 +339,7 @@ static func _build_player(root: Node3D) -> void:
 					if head_gltf:
 						head_gltf.name = "GLTFHead"
 						var head_key = "head_%03d" % head_style
-						_apply_item_transform(head_gltf, "heads", head_key, Vector3(0.0, 0.015, 0.0), Vector3.ZERO, Vector3(0.1, 0.1, 0.1))
+						_apply_item_transform(head_gltf, "heads", head_key, Vector3(0.0, 0.002, 0.0), Vector3.ZERO, Vector3(0.002, 0.002, 0.002))
 						_set_node_material(head_gltf, head_mat)
 						head_attach.add_child(head_gltf)
 

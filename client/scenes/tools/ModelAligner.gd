@@ -106,7 +106,7 @@ const MAX_UNDO_STACK: int = 50
 
 var alignment_data: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
-	"head": {"position": Vector3(0.0, 0.015, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.1, 0.1, 0.1)},
+	"head": {"position": Vector3(0.0, 0.002, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.002, 0.002, 0.002)},
 	"hair": {"position": Vector3(0.0, 0.02, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.05, 1.05, 1.05)},
 	"glasses": {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
