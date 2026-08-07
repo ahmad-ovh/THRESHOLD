@@ -281,6 +281,7 @@ static func _build_player(root: Node3D) -> void:
 				glass_mat.albedo_texture = glass_tex
 				glass_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				glass_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+				glass_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 				_set_node_material(glasses_gltf, glass_mat)
 			avatar.add_child(glasses_gltf)
 
