@@ -4,7 +4,7 @@ func _ready() -> void:
 	var player = get_node_or_null("Player3D")
 	if player:
 		player.is_fixed_diorama_room = false
-		player.room_camera_pos = Vector3(0, 4.0, 10.0)
+		player.room_camera_pos = Vector3(0.0, 2.2, 4.5)
 		player.room_camera_rot = Vector3(-15.0, 0.0, 0.0)
 
 func _process(delta: float) -> void:
