@@ -323,8 +323,9 @@ static func _build_player(root: Node3D) -> void:
 			var hair_gltf = _load_gltf(hair_path)
 			if hair_gltf:
 				hair_gltf.name = "GLTFHair"
-				var hair_key = "hair_%03d" % hair_style
-				_apply_item_transform(hair_gltf, "hair", hair_key, Vector3(0.0, 0.05, 0.0), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
+				hair_gltf.position = Vector3(0.0, 0.02, 0.0)
+				hair_gltf.rotation_degrees = Vector3.ZERO
+				hair_gltf.scale = Vector3(1.05, 1.05, 1.05)
 				_set_node_material(hair_gltf, hair_mat)
 				head_attach.add_child(hair_gltf)
 
@@ -336,8 +337,9 @@ static func _build_player(root: Node3D) -> void:
 					var glasses_gltf = _load_gltf(glasses_path)
 					if glasses_gltf:
 						glasses_gltf.name = "GLTFGlasses"
-						var glasses_key = "glasses_%d" % glasses_style
-						_apply_item_transform(glasses_gltf, "glasses", glasses_key, Vector3(0.0, 0.0, 0.05), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
+						glasses_gltf.position = Vector3(0.0, -0.02, 0.08)
+						glasses_gltf.rotation_degrees = Vector3.ZERO
+						glasses_gltf.scale = Vector3(1.0, 1.0, 1.0)
 						head_attach.add_child(glasses_gltf)
 
 static func _build_fallback_player(root: Node3D) -> void:
