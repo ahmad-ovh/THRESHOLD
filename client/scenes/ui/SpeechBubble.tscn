@@ -1,28 +1,37 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/SpeechBubble.gd" id="1_bubble_script"]
+[ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tomodachi_bubble"]
-bg_color = Color(1, 1, 1, 0.96)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
+bg_color = Color(0.99, 0.97, 0.93, 0.97)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.85, 0.94, 0.92, 1)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-shadow_color = Color(0, 0, 0, 0.1)
+border_color = Color(0.88, 0.82, 0.72, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.12)
 shadow_size = 6
-shadow_offset = Vector2(0, 4)
+shadow_offset = Vector2(0, 3)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_speaker_badge_blue"]
-bg_color = Color(0.16, 0.71, 0.96, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_speaker_badge"]
+bg_color = Color(0.90, 0.45, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.70, 0.30, 0.04, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.15)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
 
 [node name="SpeechBubble" type="Control"]
 custom_minimum_size = Vector2(360, 90)
@@ -41,6 +50,7 @@ offset_top = 0.0
 offset_right = 180.0
 offset_bottom = 70.0
 grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
 
 [node name="Margin" type="MarginContainer" parent="BubblePanel"]
 layout_mode = 2
@@ -53,9 +63,10 @@ theme_override_constants/margin_bottom = 14
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.15, 0.22, 0.3, 1)
-theme_override_font_sizes/normal_font_size = 17
-theme_override_font_sizes/bold_font_size = 17
+theme_override_colors/default_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
@@ -64,10 +75,10 @@ text = "Woo hoo! Several things, I see!"
 [node name="SpeakerBadgePanel" type="PanelContainer" parent="."]
 layout_mode = 0
 offset_left = -170.0
-offset_top = -15.0
-offset_right = -70.0
-offset_bottom = 12.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_speaker_badge_blue")
+offset_top = -16.0
+offset_right = -60.0
+offset_bottom = 13.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_speaker_badge")
 
 [node name="Margin" type="MarginContainer" parent="SpeakerBadgePanel"]
 layout_mode = 2
@@ -79,6 +90,9 @@ theme_override_constants/margin_bottom = 2
 [node name="SpeakerLabel" type="Label" parent="SpeakerBadgePanel/Margin"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.55, 0.22, 0.02, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Alice"
 horizontal_alignment = 1
@@ -96,7 +110,7 @@ offset_top = -16.0
 offset_right = 10.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.16, 0.71, 0.96, 1)
+theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
 theme_override_font_sizes/font_size = 16
 text = "▼"
 horizontal_alignment = 1

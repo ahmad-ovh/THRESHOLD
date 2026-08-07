@@ -1,20 +1,22 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/JournalUI.gd" id="1_journal_script"]
+[ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
+[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_book_outer"]
-bg_color = Color(0.28, 0.18, 0.12, 0.95)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.5, 0.35, 0.22, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-shadow_color = Color(0, 0, 0, 0.45)
-shadow_size = 14
+bg_color = Color(0.26, 0.16, 0.10, 0.98)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.48, 0.32, 0.18, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.50)
+shadow_size = 18
 shadow_offset = Vector2(0, 8)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_page_paper"]
@@ -28,11 +30,44 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.1)
+shadow_color = Color(0, 0, 0, 0.08)
 shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spine"]
-bg_color = Color(0.4, 0.28, 0.18, 1)
+bg_color = Color(0.38, 0.24, 0.14, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
+texture = ExtResource("3_bg_button")
+region_rect = Rect2(0, 0, 1666, 568)
+texture_margin_left = 60.0
+texture_margin_right = 60.0
+texture_margin_top = 30.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
+texture = ExtResource("3_bg_button")
+region_rect = Rect2(0, 0, 1666, 568)
+texture_margin_left = 60.0
+texture_margin_right = 60.0
+texture_margin_top = 30.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(1.12, 1.05, 0.95, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
+texture = ExtResource("3_bg_button")
+region_rect = Rect2(0, 0, 1666, 568)
+texture_margin_left = 60.0
+texture_margin_right = 60.0
+texture_margin_top = 30.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(0.82, 0.78, 0.72, 1)
 
 [node name="JournalUI" type="CanvasLayer"]
 script = ExtResource("1_journal_script")
@@ -43,7 +78,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.08, 0.06, 0.05, 0.6)
+color = Color(0.10, 0.08, 0.06, 0.65)
 
 [node name="BookContainer" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(860, 560)
@@ -62,10 +97,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_book_outer")
 
 [node name="Margin" type="MarginContainer" parent="BookContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 14
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
 
 [node name="VBox" type="VBoxContainer" parent="BookContainer/Margin"]
 layout_mode = 2
@@ -77,13 +112,22 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="BookContainer/Margin/VBox/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.95, 0.85, 0.7, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.95, 0.87, 0.72, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 20
 text = "📖 PEOPLE NOTEBOOK & SOCIAL LOGS"
 
 [node name="CloseButton" type="Button" parent="BookContainer/Margin/VBox/Header"]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.88, 0.72, 1)
+theme_override_colors/font_outline_color = Color(0.26, 0.14, 0.06, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
 text = " ✖ "
 
 [node name="BookSpread" type="HBoxContainer" parent="BookContainer/Margin/VBox"]
@@ -99,15 +143,16 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_page_paper")
 
 [node name="Margin" type="MarginContainer" parent="BookContainer/Margin/VBox/BookSpread/LeftPage"]
 layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 14
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
 
 [node name="LeftText" type="RichTextLabel" parent="BookContainer/Margin/VBox/BookSpread/LeftPage/Margin"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.2, 0.18, 0.15, 1)
+theme_override_colors/default_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "Left Page NPC"
 
@@ -123,35 +168,55 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_page_paper")
 
 [node name="Margin" type="MarginContainer" parent="BookContainer/Margin/VBox/BookSpread/RightPage"]
 layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 14
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
 
 [node name="RightText" type="RichTextLabel" parent="BookContainer/Margin/VBox/BookSpread/RightPage/Margin"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.2, 0.18, 0.15, 1)
+theme_override_colors/default_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "Right Page NPC"
 
 [node name="Footer" type="HBoxContainer" parent="BookContainer/Margin/VBox"]
 layout_mode = 2
 alignment = 1
+theme_override_constants/separation = 12
 
 [node name="PrevButton" type="Button" parent="BookContainer/Margin/VBox/Footer"]
-custom_minimum_size = Vector2(120, 36)
+custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.88, 0.72, 1)
+theme_override_colors/font_outline_color = Color(0.26, 0.14, 0.06, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
 text = "◄ Prev Page"
 
 [node name="PageIndicator" type="Label" parent="BookContainer/Margin/VBox/Footer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.9, 0.82, 0.7, 1)
+theme_override_colors/font_color = Color(0.90, 0.82, 0.68, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 15
 text = "Pages 1-2 of 2"
 horizontal_alignment = 1
 
 [node name="NextButton" type="Button" parent="BookContainer/Margin/VBox/Footer"]
-custom_minimum_size = Vector2(120, 36)
+custom_minimum_size = Vector2(130, 40)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.88, 0.72, 1)
+theme_override_colors/font_outline_color = Color(0.26, 0.14, 0.06, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
 text = "Next Page ►"
