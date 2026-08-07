@@ -53,6 +53,11 @@ var is_orbiting: bool = false
 var active_gizmo_axis: String = "" # "X", "Y", "Z", or ""
 var last_mouse_pos: Vector2 = Vector2.ZERO
 
+var cam_yaw: float = 0.0
+var cam_pitch: float = deg_to_rad(10.0)
+var cam_distance: float = 2.2
+var cam_anchor: Vector3 = Vector3(0.0, 1.0, 0.0)
+
 var alignment_data: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
 	"head": {"position": Vector3(0.0, 0.95, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)},
@@ -67,11 +72,20 @@ func _ready() -> void:
 	_connect_signals()
 	_rebuild_avatar()
 	_update_gizmo_spinboxes()
+	_update_camera_orbit()
 
 func _process(delta: float) -> void:
 	if model_pivot and auto_rotate:
-		model_pivot.rotation.y += delta * 0.5
+		cam_yaw += delta * 0.5
+		_update_camera_orbit()
 	_update_gizmo_3d_position()
+
+func _update_camera_orbit() -> void:
+	if not camera:
+		return
+	var rot_q = Quaternion.from_euler(Vector3(cam_pitch, cam_yaw, 0.0))
+	camera.global_position = cam_anchor + rot_q * Vector3(0.0, 0.0, cam_distance)
+	camera.look_at(cam_anchor, Vector3.UP)
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -90,16 +104,19 @@ func _gui_input(event: InputEvent) -> void:
 			is_orbiting = event.pressed
 			last_mouse_pos = event.position
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP and camera:
-			camera.position.z = max(0.8, camera.position.z - 0.15)
+			cam_distance = max(0.6, cam_distance - 0.15)
+			_update_camera_orbit()
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and camera:
-			camera.position.z = min(5.0, camera.position.z + 0.15)
+			cam_distance = min(6.0, cam_distance + 0.15)
+			_update_camera_orbit()
 
 	elif event is InputEventMouseMotion:
-		if is_orbiting and model_pivot:
+		if is_orbiting and camera:
 			var delta_m = event.position - last_mouse_pos
 			last_mouse_pos = event.position
-			model_pivot.rotation.y += delta_m.x * 0.01
-			model_pivot.rotation.x += delta_m.y * 0.01
+			cam_yaw -= delta_m.x * 0.005
+			cam_pitch = clamp(cam_pitch - delta_m.y * 0.005, deg_to_rad(-85.0), deg_to_rad(85.0))
+			_update_camera_orbit()
 		elif active_gizmo_axis != "" and current_avatar_instance:
 			var delta_m = event.position - last_mouse_pos
 			last_mouse_pos = event.position
