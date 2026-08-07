@@ -346,6 +346,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var iris_col: Color = customization.get("eye_iris_color", Color(0.18, 0.55, 0.85))
 	var nose_style: int = customization.get("nose_style", 1)
 	var mouth_style: int = customization.get("mouth_style", 1)
+	var glasses_style: int = customization.get("glasses_style", 0)
 
 	var face_offsets: Dictionary = customization.get("face_offsets", {})
 	var eye_x_off: int = int(face_offsets.get("eye_x", 0))
@@ -433,7 +434,6 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 				var glass_frame = atlas_img.get_region(rect)
 				glass_frame.resize(glass_w, glass_h, Image.INTERPOLATE_BILINEAR)
 				_blit_alpha(face_img, glass_frame, Vector2i(211 + glass_x_off, 396 + glass_y_off))
->>>>>>> 1c021a2 (feat(customization): add face offsets for dynamic eye, nose, mouth and glasses customization)
 
 	return ImageTexture.create_from_image(face_img)
 
