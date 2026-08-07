@@ -78,7 +78,7 @@ var alignment_data: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
 	"head": {"position": Vector3(0.0, 1.155, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)},
 	"hair": {"position": Vector3(0.0, 1.605, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(6.6, 6.6, 6.6)},
-	"glasses": {"position": Vector3(0.0, 0.95, 0.05), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
+	"glasses": {"position": Vector3(0.0, 1.12, 0.31), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
 
 var catalog_presets: Dictionary = {}

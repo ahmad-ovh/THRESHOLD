@@ -274,7 +274,7 @@ static func _build_player(root: Node3D) -> void:
 		if glasses_gltf:
 			glasses_gltf.name = "GLTFGlasses"
 			var glasses_key = "glasses_%d" % glasses_style
-			_apply_item_transform(glasses_gltf, "glasses", glasses_key, Vector3(0.0, 0.95, 0.05), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
+			_apply_item_transform(glasses_gltf, "glasses", glasses_key, Vector3(0.0, 1.12, 0.31), Vector3.ZERO, Vector3(1.0, 1.0, 1.0))
 			var glass_tex = load("res://assets/character_models/glasses/glasses_sprite.png") as Texture2D
 			if glass_tex:
 				var glass_mat = StandardMaterial3D.new()
@@ -393,7 +393,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 		img_m.resize(70, 45, Image.INTERPOLATE_BILINEAR)
 		_blit_alpha(face_img, img_m, Vector2i(221, 310))
 
-	face_img.flip_y()
+	# face_img.flip_y() # Removed so facial features map to the front face
 	return ImageTexture.create_from_image(face_img)
 
 static func _apply_chroma_and_blit(dest: Image, src: Image, pos: Vector2i, sclera: Color, pupil: Color, iris: Color) -> void:
