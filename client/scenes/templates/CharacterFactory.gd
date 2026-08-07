@@ -308,6 +308,21 @@ static func _build_player(root: Node3D) -> void:
 			mi.material_override = shirt_mat
 
 	# 3. Skeleton & Attachments (Hair & Glasses)
+	var head_mesh = avatar.find_child("Head_Mesh", true, false) as MeshInstance3D
+	if head_mesh:
+		head_mesh.material_override = head_mat
+
+		# Dynamic 3D Head Shape Swapping (1..12)
+		var head_style: int = c.get("head_style", 1)
+		var head_path = "res://assets/character_models/heads/head_head_%03d.gltf" % head_style
+		if not ResourceLoader.exists(head_path):
+			head_path = "res://assets/character_models/heads/head_head_001.gltf"
+		var head_gltf = _load_gltf(head_path)
+		if head_gltf:
+			var custom_head_mi = head_gltf.find_child("*", "MeshInstance3D", true, false) as MeshInstance3D
+			if custom_head_mi and custom_head_mi.mesh:
+				head_mesh.mesh = custom_head_mi.mesh
+
 	var skeleton = avatar.find_child("Armature", true, false) as Skeleton3D
 	if not skeleton:
 		skeleton = avatar.find_child("*Skeleton*", true, false) as Skeleton3D

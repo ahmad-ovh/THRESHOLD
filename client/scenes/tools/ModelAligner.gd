@@ -297,8 +297,8 @@ func _try_select_3d_part(mouse_pos: Vector2) -> void:
 	var min_dist = 9999.0
 
 	for part in ["head", "body", "hair", "glasses"]:
-		var node_name = "GLTF" + part.capitalize()
-		var node = mii.get_node_or_null(node_name)
+		var search_term = "*" + part.capitalize() + "*"
+		var node = mii.find_child(search_term, true, false)
 		if node and node is Node3D and node.visible:
 			var pos_3d = node.global_position
 			var dist_to_ray = (pos_3d - ray_origin).cross(ray_dir).length()
