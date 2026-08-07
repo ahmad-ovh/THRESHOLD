@@ -316,6 +316,10 @@ static func _build_player(root: Node3D) -> void:
 	var head_mesh = avatar.find_child("Head_Mesh", true, false) as MeshInstance3D
 	var head_style: int = c.get("head_style", 1)
 
+	var skeleton = avatar.find_child("Armature", true, false) as Skeleton3D
+	if not skeleton:
+		skeleton = avatar.find_child("*Skeleton*", true, false) as Skeleton3D
+
 	if skeleton:
 		var head_attach = _get_or_create_head_bone_attachment(skeleton)
 		if head_attach:
