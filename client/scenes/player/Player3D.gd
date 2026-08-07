@@ -187,12 +187,14 @@ func _setup_dollhouse_camera() -> void:
 	camera_pivot.global_position = room_camera_pos
 	camera_pivot.rotation_degrees = room_camera_rot
 
-func _unhandled_input(event: InputEvent) -> void:
-	if is_development_mode and event is InputEventKey and event.pressed and event.keycode == KEY_F1:
-		if camera_dev_layer:
-			camera_dev_layer.visible = not camera_dev_layer.visible
-			return
+func _input(event: InputEvent) -> void:
+	if is_development_mode and event is InputEventKey and event.is_pressed() and not event.is_echo():
+		if event.keycode == KEY_F1 or event.physical_keycode == KEY_F1:
+			if camera_dev_layer:
+				camera_dev_layer.visible = not camera_dev_layer.visible
+				get_viewport().set_input_as_handled()
 
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and current_target:
 		if current_target.has_method("interact"):
 			current_target.interact()
