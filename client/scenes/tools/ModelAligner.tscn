@@ -60,16 +60,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
 [node name="LeftPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(240, 0)
+custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel"]
@@ -141,16 +141,16 @@ size_flags_horizontal = 3
 mouse_filter = 1
 
 [node name="RightPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(280, 0)
+custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 5
 
 [node name="Title" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
 layout_mode = 2
-text = "🛠️ Transform Gizmo"
+text = "🛠️ 3D Movement Gizmo & Controls"
 horizontal_alignment = 1
 
 [node name="AutoRotateCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
@@ -162,7 +162,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PartHBox"]
 layout_mode = 2
-text = "Select Part: "
+text = "Selected Part: "
 
 [node name="PartOption" type="OptionButton" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PartHBox"]
 layout_mode = 2
@@ -180,91 +180,186 @@ popup/item_3/id = 3
 layout_mode = 2
 text = "Position (X, Y, Z):"
 
-[node name="PosHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="PosRowX" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="SpinPX" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="LabelX" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowX"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+text = "X:"
+
+[node name="SliderPX" type="HSlider" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowX"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -3.0
+max_value = 3.0
+step = 0.005
+
+[node name="SpinPX" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowX"]
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 min_value = -5.0
 max_value = 5.0
-step = 0.01
+step = 0.001
 
-[node name="SpinPY" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="PosRowY" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelY" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowY"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.3, 1)
+text = "Y:"
+
+[node name="SliderPY" type="HSlider" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowY"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -3.0
+max_value = 3.0
+step = 0.005
+
+[node name="SpinPY" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowY"]
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 min_value = -5.0
 max_value = 5.0
-step = 0.01
+step = 0.001
 
-[node name="SpinPZ" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="PosRowZ" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelZ" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowZ"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.5, 1, 1)
+text = "Z:"
+
+[node name="SliderPZ" type="HSlider" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowZ"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -3.0
+max_value = 3.0
+step = 0.005
+
+[node name="SpinPZ" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowZ"]
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 min_value = -5.0
 max_value = 5.0
-step = 0.01
+step = 0.001
 
 [node name="LabelRot" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
 layout_mode = 2
 text = "Rotation Deg (X, Y, Z):"
 
-[node name="RotHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="RotRowX" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="SpinRX" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="LabelRX" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowX"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+text = "RX:"
+
+[node name="SliderRX" type="HSlider" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowX"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -180.0
+max_value = 180.0
+step = 1.0
+
+[node name="SpinRX" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowX"]
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 min_value = -360.0
 max_value = 360.0
+step = 0.1
+
+[node name="RotRowY" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelRY" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowY"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+text = "RY:"
+
+[node name="SliderRY" type="HSlider" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowY"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -180.0
+max_value = 180.0
 step = 1.0
 
-[node name="SpinRY" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="SpinRY" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowY"]
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 min_value = -360.0
 max_value = 360.0
+step = 0.1
+
+[node name="RotRowZ" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="LabelRZ" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowZ"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+text = "RZ:"
+
+[node name="SliderRZ" type="HSlider" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowZ"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -180.0
+max_value = 180.0
 step = 1.0
 
-[node name="SpinRZ" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="SpinRZ" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowZ"]
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 min_value = -360.0
 max_value = 360.0
-step = 1.0
+step = 0.1
 
 [node name="LabelScale" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
 layout_mode = 2
 text = "Scale (X, Y, Z):"
 
-[node name="ScaleHBox" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
+[node name="ScaleRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="SpinSX" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="SliderSX" type="HSlider" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow"]
 layout_mode = 2
-min_value = 0.01
-max_value = 10.0
+size_flags_horizontal = 3
+min_value = 0.1
+max_value = 8.0
 step = 0.05
 value = 1.0
 
-[node name="SpinSY" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="SpinSX" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow"]
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 min_value = 0.01
 max_value = 10.0
-step = 0.05
+step = 0.001
 value = 1.0
 
-[node name="SpinSZ" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleHBox"]
-custom_minimum_size = Vector2(65, 0)
+[node name="SpinSY" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow"]
+custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
 min_value = 0.01
 max_value = 10.0
-step = 0.05
+step = 0.001
+value = 1.0
+
+[node name="SpinSZ" type="SpinBox" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+min_value = 0.01
+max_value = 10.0
+step = 0.001
 value = 1.0
 
 [node name="CopyBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 text = "📋 COPY ALIGNMENT JSON"
 

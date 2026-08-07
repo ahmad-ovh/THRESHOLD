@@ -3,22 +3,37 @@ extends Control
 
 @onready var model_pivot: Node3D = $SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
 @onready var camera: Camera3D = $SubViewportContainer/SubViewport/PreviewWorld/Camera3D
+@onready var preview_world: Node3D = $SubViewportContainer/SubViewport/PreviewWorld
 
 # Control references
 @onready var part_option: OptionButton = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PartHBox/PartOption
 @onready var auto_rotate_check: CheckBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/AutoRotateCheck
 
-@onready var spin_px: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosHBox/SpinPX
-@onready var spin_py: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosHBox/SpinPY
-@onready var spin_pz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosHBox/SpinPZ
+# Position Sliders & Spinboxes
+@onready var slider_px: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowX/SliderPX
+@onready var spin_px: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowX/SpinPX
 
-@onready var spin_rx: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotHBox/SpinRX
-@onready var spin_ry: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotHBox/SpinRY
-@onready var spin_rz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotHBox/SpinRZ
+@onready var slider_py: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowY/SliderPY
+@onready var spin_py: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowY/SpinPY
 
-@onready var spin_sx: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleHBox/SpinSX
-@onready var spin_sy: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleHBox/SpinSY
-@onready var spin_sz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleHBox/SpinSZ
+@onready var slider_pz: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowZ/SliderPZ
+@onready var spin_pz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/PosRowZ/SpinPZ
+
+# Rotation Sliders & Spinboxes
+@onready var slider_rx: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowX/SliderRX
+@onready var spin_rx: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowX/SpinRX
+
+@onready var slider_ry: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowY/SliderRY
+@onready var spin_ry: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowY/SpinRY
+
+@onready var slider_rz: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowZ/SliderRZ
+@onready var spin_rz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/RotRowZ/SpinRZ
+
+# Scale Sliders & Spinboxes
+@onready var slider_sx: HSlider = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SliderSX
+@onready var spin_sx: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SpinSX
+@onready var spin_sy: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SpinSY
+@onready var spin_sz: SpinBox = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/ScaleRow/SpinSZ
 
 @onready var copy_btn: Button = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/CopyBtn
 @onready var status_label: Label = $MarginContainer/HBoxContainer/RightPanel/VBoxContainer/StatusLabel
@@ -33,6 +48,7 @@ extends Control
 var auto_rotate: bool = false
 var selected_part: String = "head"
 var is_orbiting: bool = false
+var active_gizmo_axis: String = "" # "X", "Y", "Z", or ""
 var last_mouse_pos: Vector2 = Vector2.ZERO
 
 var alignment_data: Dictionary = {
@@ -43,27 +59,31 @@ var alignment_data: Dictionary = {
 }
 
 var current_avatar_instance: Node3D
+var gizmo_node: Node3D
 
 func _ready() -> void:
 	_connect_signals()
-	_update_gizmo_spinboxes()
 	_rebuild_avatar()
+	_update_gizmo_spinboxes()
 
 func _process(delta: float) -> void:
 	if model_pivot and auto_rotate:
 		model_pivot.rotation.y += delta * 0.5
-
-var is_dragging_part: bool = false
+	_update_gizmo_3d_position()
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				_try_select_3d_part(event.position)
-				is_dragging_part = true
+				var axis = _hit_test_gizmo(event.position)
+				if axis != "":
+					active_gizmo_axis = axis
+				else:
+					_try_select_3d_part(event.position)
+					active_gizmo_axis = ""
 				last_mouse_pos = event.position
 			else:
-				is_dragging_part = false
+				active_gizmo_axis = ""
 		elif event.button_index == MOUSE_BUTTON_RIGHT or event.button_index == MOUSE_BUTTON_MIDDLE:
 			is_orbiting = event.pressed
 			last_mouse_pos = event.position
@@ -71,30 +91,59 @@ func _gui_input(event: InputEvent) -> void:
 			camera.position.z = max(0.8, camera.position.z - 0.15)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and camera:
 			camera.position.z = min(5.0, camera.position.z + 0.15)
+
 	elif event is InputEventMouseMotion:
 		if is_orbiting and model_pivot:
 			var delta_m = event.position - last_mouse_pos
 			last_mouse_pos = event.position
 			model_pivot.rotation.y += delta_m.x * 0.01
 			model_pivot.rotation.x += delta_m.y * 0.01
-		elif is_dragging_part and current_avatar_instance:
+		elif active_gizmo_axis != "" and current_avatar_instance:
 			var delta_m = event.position - last_mouse_pos
 			last_mouse_pos = event.position
 			var move_speed = 0.005
 			var t = alignment_data[selected_part]
 			var cur_pos: Vector3 = t["position"]
 
-			if Input.is_key_pressed(KEY_SHIFT):
-				cur_pos.z += delta_m.y * move_speed
-			else:
-				cur_pos.x += delta_m.x * move_speed
-				cur_pos.y -= delta_m.y * move_speed
+			match active_gizmo_axis:
+				"X":
+					cur_pos.x += delta_m.x * move_speed
+				"Y":
+					cur_pos.y -= delta_m.y * move_speed
+				"Z":
+					cur_pos.z += delta_m.y * move_speed
 
 			alignment_data[selected_part]["position"] = cur_pos
 			_update_gizmo_spinboxes()
 			_on_transform_changed()
+
 	elif event is InputEventKey and event.pressed:
 		_handle_keyboard_nudge(event)
+
+func _hit_test_gizmo(mouse_pos: Vector2) -> String:
+	if not camera or not gizmo_node:
+		return ""
+	var ray_origin = camera.project_ray_origin(mouse_pos)
+	var ray_dir = camera.project_ray_normal(mouse_pos)
+
+	var gizmo_pos = gizmo_node.global_position
+
+	# Test X axis (Red)
+	var pos_x = gizmo_pos + Vector3(0.2, 0, 0)
+	if (pos_x - ray_origin).cross(ray_dir).length() < 0.15:
+		return "X"
+
+	# Test Y axis (Green)
+	var pos_y = gizmo_pos + Vector3(0, 0.2, 0)
+	if (pos_y - ray_origin).cross(ray_dir).length() < 0.15:
+		return "Y"
+
+	# Test Z axis (Blue)
+	var pos_z = gizmo_pos + Vector3(0, 0, 0.2)
+	if (pos_z - ray_origin).cross(ray_dir).length() < 0.15:
+		return "Z"
+
+	return ""
 
 func _try_select_3d_part(mouse_pos: Vector2) -> void:
 	if not camera or not current_avatar_instance:
@@ -130,7 +179,7 @@ func _try_select_3d_part(mouse_pos: Vector2) -> void:
 func _handle_keyboard_nudge(event: InputEventKey) -> void:
 	if not alignment_data.has(selected_part):
 		return
-	var step = 0.01
+	var step = 0.005
 	if event.shift_pressed: step = 0.05
 	var cur_pos: Vector3 = alignment_data[selected_part]["position"]
 	var cur_rot: Vector3 = alignment_data[selected_part]["rotation"]
@@ -172,15 +221,29 @@ func _connect_signals() -> void:
 		_update_gizmo_spinboxes()
 	)
 
-	spin_px.value_changed.connect(func(_v): _on_transform_changed())
-	spin_py.value_changed.connect(func(_v): _on_transform_changed())
-	spin_pz.value_changed.connect(func(_v): _on_transform_changed())
+	# Position Sliders & Spinboxes bidirectional sync
+	slider_px.value_changed.connect(func(v): spin_px.set_value_no_signal(v); _on_transform_changed())
+	spin_px.value_changed.connect(func(v): slider_px.set_value_no_signal(v); _on_transform_changed())
 
-	spin_rx.value_changed.connect(func(_v): _on_transform_changed())
-	spin_ry.value_changed.connect(func(_v): _on_transform_changed())
-	spin_rz.value_changed.connect(func(_v): _on_transform_changed())
+	slider_py.value_changed.connect(func(v): spin_py.set_value_no_signal(v); _on_transform_changed())
+	spin_py.value_changed.connect(func(v): slider_py.set_value_no_signal(v); _on_transform_changed())
 
-	spin_sx.value_changed.connect(func(_v): _on_transform_changed())
+	slider_pz.value_changed.connect(func(v): spin_pz.set_value_no_signal(v); _on_transform_changed())
+	spin_pz.value_changed.connect(func(v): slider_pz.set_value_no_signal(v); _on_transform_changed())
+
+	# Rotation Sliders & Spinboxes
+	slider_rx.value_changed.connect(func(v): spin_rx.set_value_no_signal(v); _on_transform_changed())
+	spin_rx.value_changed.connect(func(v): slider_rx.set_value_no_signal(v); _on_transform_changed())
+
+	slider_ry.value_changed.connect(func(v): spin_ry.set_value_no_signal(v); _on_transform_changed())
+	spin_ry.value_changed.connect(func(v): slider_ry.set_value_no_signal(v); _on_transform_changed())
+
+	slider_rz.value_changed.connect(func(v): spin_rz.set_value_no_signal(v); _on_transform_changed())
+	spin_rz.value_changed.connect(func(v): slider_rz.set_value_no_signal(v); _on_transform_changed())
+
+	# Scale Sliders & Spinboxes
+	slider_sx.value_changed.connect(func(v): spin_sx.set_value_no_signal(v); spin_sy.set_value_no_signal(v); spin_sz.set_value_no_signal(v); _on_transform_changed())
+	spin_sx.value_changed.connect(func(v): slider_sx.set_value_no_signal(v); _on_transform_changed())
 	spin_sy.value_changed.connect(func(_v): _on_transform_changed())
 	spin_sz.value_changed.connect(func(_v): _on_transform_changed())
 
@@ -201,16 +264,27 @@ func _update_gizmo_spinboxes() -> void:
 	var s: Vector3 = t["scale"]
 
 	spin_px.set_value_no_signal(p.x)
+	slider_px.set_value_no_signal(p.x)
+
 	spin_py.set_value_no_signal(p.y)
+	slider_py.set_value_no_signal(p.y)
+
 	spin_pz.set_value_no_signal(p.z)
+	slider_pz.set_value_no_signal(p.z)
 
 	spin_rx.set_value_no_signal(r.x)
+	slider_rx.set_value_no_signal(r.x)
+
 	spin_ry.set_value_no_signal(r.y)
+	slider_ry.set_value_no_signal(r.y)
+
 	spin_rz.set_value_no_signal(r.z)
+	slider_rz.set_value_no_signal(r.z)
 
 	spin_sx.set_value_no_signal(s.x)
 	spin_sy.set_value_no_signal(s.y)
 	spin_sz.set_value_no_signal(s.z)
+	slider_sx.set_value_no_signal(s.x)
 
 func _on_transform_changed() -> void:
 	if not alignment_data.has(selected_part):
@@ -230,7 +304,77 @@ func _rebuild_avatar() -> void:
 	current_avatar_instance = CharacterFactory.create_character_mesh("player")
 	model_pivot.add_child(current_avatar_instance)
 	CharacterFactory.apply_alignment(current_avatar_instance, alignment_data)
+	_spawn_3d_gizmo()
 	_take_debug_screenshot("authoring_alignment_preview")
+
+func _spawn_3d_gizmo() -> void:
+	if gizmo_node:
+		gizmo_node.queue_free()
+
+	gizmo_node = Node3D.new()
+	gizmo_node.name = "TransformGizmo3D"
+	preview_world.add_child(gizmo_node)
+
+	# Red X Axis
+	var mat_x = StandardMaterial3D.new()
+	mat_x.albedo_color = Color(1.0, 0.2, 0.2)
+	mat_x.no_depth_test = true
+	mat_x.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+
+	var axis_x = MeshInstance3D.new()
+	var cyl_x = CylinderMesh.new()
+	cyl_x.top_radius = 0.015
+	cyl_x.bottom_radius = 0.015
+	cyl_x.height = 0.4
+	axis_x.mesh = cyl_x
+	axis_x.material_override = mat_x
+	axis_x.position = Vector3(0.2, 0.0, 0.0)
+	axis_x.rotation_degrees = Vector3(0, 0, -90)
+	gizmo_node.add_child(axis_x)
+
+	# Green Y Axis
+	var mat_y = StandardMaterial3D.new()
+	mat_y.albedo_color = Color(0.2, 1.0, 0.2)
+	mat_y.no_depth_test = true
+	mat_y.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+
+	var axis_y = MeshInstance3D.new()
+	var cyl_y = CylinderMesh.new()
+	cyl_y.top_radius = 0.015
+	cyl_y.bottom_radius = 0.015
+	cyl_y.height = 0.4
+	axis_y.mesh = cyl_y
+	axis_y.material_override = mat_y
+	axis_y.position = Vector3(0.0, 0.2, 0.0)
+	gizmo_node.add_child(axis_y)
+
+	# Blue Z Axis
+	var mat_z = StandardMaterial3D.new()
+	mat_z.albedo_color = Color(0.3, 0.5, 1.0)
+	mat_z.no_depth_test = true
+	mat_z.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+
+	var axis_z = MeshInstance3D.new()
+	var cyl_z = CylinderMesh.new()
+	cyl_z.top_radius = 0.015
+	cyl_z.bottom_radius = 0.015
+	cyl_z.height = 0.4
+	axis_z.mesh = cyl_z
+	axis_z.material_override = mat_z
+	axis_z.position = Vector3(0.0, 0.0, 0.2)
+	axis_z.rotation_degrees = Vector3(90, 0, 0)
+	gizmo_node.add_child(axis_z)
+
+func _update_gizmo_3d_position() -> void:
+	if not gizmo_node or not current_avatar_instance:
+		return
+	var mii = current_avatar_instance.get_node_or_null("MiiAvatar") if current_avatar_instance.name != "MiiAvatar" else current_avatar_instance
+	if not mii:
+		return
+	var node_name = "GLTF" + selected_part.capitalize()
+	var part_node = mii.get_node_or_null(node_name)
+	if part_node and part_node is Node3D:
+		gizmo_node.global_position = part_node.global_position
 
 func _on_copy_json_pressed() -> void:
 	var export_dict = {}
