@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://vga4k2kdqgiw"]
 
-[ext_resource type="Script" path="res://scenes/ui/SpeechBubble.gd" id="1_bubble_script"]
+[ext_resource type="Script" uid="uid://ch4h6aimtp0aa" path="res://scenes/ui/SpeechBubble.gd" id="1_bubble_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
@@ -19,12 +19,12 @@ shadow_size = 6
 shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_speaker_badge"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
+bg_color = Color(0.9, 0.45, 0.08, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.70, 0.30, 0.04, 1)
+border_color = Color(0.7, 0.3, 0.04, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -33,46 +33,46 @@ shadow_color = Color(0, 0, 0, 0.15)
 shadow_size = 4
 shadow_offset = Vector2(0, 2)
 
-[node name="SpeechBubble" type="Control"]
+[node name="SpeechBubble" type="Control" unique_id=926908382]
 custom_minimum_size = Vector2(360, 90)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_bubble_script")
 
-[node name="BubblePanel" type="PanelContainer" parent="."]
+[node name="BubblePanel" type="PanelContainer" parent="." unique_id=1949593922]
 custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -180.0
-offset_top = 0.0
+offset_top = 1.0
 offset_right = 180.0
-offset_bottom = 70.0
+offset_bottom = 77.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
 
-[node name="Margin" type="MarginContainer" parent="BubblePanel"]
+[node name="Margin" type="MarginContainer" parent="BubblePanel" unique_id=638433844]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 14
 
-[node name="MessageText" type="RichTextLabel" parent="BubblePanel/Margin"]
+[node name="MessageText" type="RichTextLabel" parent="BubblePanel/Margin" unique_id=1922246490]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/default_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/normal_font_size = 16
 theme_override_font_sizes/bold_font_size = 16
 bbcode_enabled = true
+text = "Woo hoo! Several things, I see!"
 fit_content = true
 scroll_active = false
-text = "Woo hoo! Several things, I see!"
 
-[node name="SpeakerBadgePanel" type="PanelContainer" parent="."]
+[node name="SpeakerBadgePanel" type="PanelContainer" parent="." unique_id=649075847]
 layout_mode = 0
 offset_left = -170.0
 offset_top = -16.0
@@ -80,14 +80,14 @@ offset_right = -60.0
 offset_bottom = 13.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_speaker_badge")
 
-[node name="Margin" type="MarginContainer" parent="SpeakerBadgePanel"]
+[node name="Margin" type="MarginContainer" parent="SpeakerBadgePanel" unique_id=1391802277]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 2
 
-[node name="SpeakerLabel" type="Label" parent="SpeakerBadgePanel/Margin"]
+[node name="SpeakerLabel" type="Label" parent="SpeakerBadgePanel/Margin" unique_id=849302048]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.55, 0.22, 0.02, 1)
@@ -97,7 +97,7 @@ theme_override_font_sizes/font_size = 14
 text = "Alice"
 horizontal_alignment = 1
 
-[node name="ContinueArrow" type="Label" parent="."]
+[node name="ContinueArrow" type="Label" parent="." unique_id=1880114385]
 visible = false
 layout_mode = 1
 anchors_preset = 7
@@ -110,7 +110,7 @@ offset_top = -16.0
 offset_right = 10.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
+theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
 theme_override_font_sizes/font_size = 16
 text = "▼"
 horizontal_alignment = 1

@@ -2,25 +2,25 @@
 
 [ext_resource type="Script" uid="uid://taflknabuho8" path="res://scenes/ui/DialogueUI.gd" id="1_dialogue_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
+[ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper_ribbon"]
-bg_color = Color(0.98, 0.96, 0.91, 0.97)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_70hjk"]
+bg_color = Color(0.99, 0.97, 0.93, 0.97)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
 shadow_color = Color(0, 0, 0, 0.12)
 shadow_size = 6
 shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tag_stamp"]
-bg_color = Color(0.92, 0.88, 0.80, 1)
+bg_color = Color(0.92, 0.88, 0.8, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -31,13 +31,45 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(0.82, 0.78, 0.72, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(1.12, 1.05, 0.95, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_goal_banner"]
-bg_color = Color(1.0, 0.97, 0.82, 0.97)
+bg_color = Color(1, 0.97, 0.82, 0.97)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.90, 0.45, 0.08, 1)
+border_color = Color(0.9, 0.45, 0.08, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -49,7 +81,7 @@ border_width_left = 4
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.90, 0.45, 0.08, 1)
+border_color = Color(0.9, 0.45, 0.08, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -58,7 +90,7 @@ corner_radius_bottom_left = 8
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_status_ribbon"]
 bg_color = Color(0.98, 0.96, 0.91, 0.96)
 border_width_top = 3
-border_color = Color(0.90, 0.45, 0.08, 1)
+border_color = Color(0.9, 0.45, 0.08, 1)
 shadow_color = Color(0, 0, 0, 0.06)
 shadow_size = 3
 shadow_offset = Vector2(0, -1)
@@ -72,7 +104,7 @@ shadow_size = 4
 shadow_offset = Vector2(0, -2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_lineedit"]
-bg_color = Color(1.0, 0.99, 0.95, 0.97)
+bg_color = Color(1, 0.99, 0.95, 0.97)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -91,44 +123,11 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
+bg_color = Color(0.9, 0.45, 0.08, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(1.12, 1.05, 0.95, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(0.82, 0.78, 0.72, 1)
 
 [node name="DialogueUI" type="CanvasLayer" unique_id=615538034]
 script = ExtResource("1_dialogue_script")
@@ -140,6 +139,30 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="BubblePanel" type="PanelContainer" parent="OverlayRoot" unique_id=2091788138]
+custom_minimum_size = Vector2(340, 70)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.78800005
+anchor_top = 0.17600001
+anchor_right = 0.99300003
+anchor_bottom = 0.65300006
+offset_left = 266.841
+offset_top = 91.28001
+offset_right = 344.44104
+offset_bottom = -38.160034
+grow_horizontal = 2
+rotation = 1.5707964
+scale = Vector2(1.2, 1.3200049)
+theme_override_styles/panel = SubResource("StyleBoxFlat_70hjk")
+
+[node name="Margin" type="MarginContainer" parent="OverlayRoot/BubblePanel" unique_id=900020845]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 14
 
 [node name="HeaderContainer" type="HBoxContainer" parent="OverlayRoot" unique_id=590204611]
 layout_mode = 1
@@ -155,7 +178,7 @@ theme_override_constants/separation = 10
 [node name="SpeakerLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=2027361671]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 22
 text = "NPC Name"
@@ -187,7 +210,7 @@ text = " [Mood: neutral] "
 [node name="LoadingLabel" type="Label" parent="OverlayRoot/HeaderContainer" unique_id=1233796803]
 visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 0.45, 0.30, 1)
+theme_override_colors/font_color = Color(0.55, 0.45, 0.3, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Walking over..."
@@ -196,13 +219,13 @@ text = "Walking over..."
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_outline_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
 text = "Say Goodbye"
 
 [node name="ScenarioGoalBanner" type="PanelContainer" parent="OverlayRoot" unique_id=1739124727]
@@ -219,7 +242,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_goal_banner")
 
 [node name="ScenarioGoalLabel" type="Label" parent="OverlayRoot/ScenarioGoalBanner" unique_id=1053769463]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.35, 0.25, 0.10, 1)
+theme_override_colors/font_color = Color(0.35, 0.25, 0.1, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Conversation Focus: Active listening and validating feelings"
@@ -240,7 +263,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_hint_banner")
 
 [node name="CoachHintLabel" type="Label" parent="OverlayRoot/CoachHintBanner" unique_id=1915605562]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.40, 0.30, 0.15, 1)
+theme_override_colors/font_color = Color(0.4, 0.3, 0.15, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "Coach Hint: ..."
@@ -262,7 +285,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_status_ribbon")
 
 [node name="StatusRibbonLabel" type="Label" parent="OverlayRoot/StatusRibbonPanel" unique_id=884648785]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.25, 0.20, 0.12, 1)
+theme_override_colors/font_color = Color(0.25, 0.2, 0.12, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 text = "Status update..."
@@ -291,7 +314,7 @@ theme_override_constants/separation = 8
 [node name="MessageInput" type="LineEdit" parent="OverlayRoot/BottomInputPanel/InputContainer" unique_id=465635476]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_colors/font_placeholder_color = Color(0.55, 0.48, 0.38, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
@@ -302,13 +325,13 @@ placeholder_text = "Say something..."
 custom_minimum_size = Vector2(80, 42)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_outline_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
 text = "Send"
 
 [node name="FeedbackPanel" type="VBoxContainer" parent="OverlayRoot" unique_id=1797998074]
@@ -319,17 +342,17 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -276.0
-offset_top = -240.0
-offset_right = -16.0
-offset_bottom = 240.0
+offset_left = -273.51892
+offset_top = -136.0
+offset_right = -13.518921
+offset_bottom = 344.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 6
 
 [node name="ScoresHeader" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1086411765]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 15
 text = "Communication Reflection"
@@ -347,7 +370,7 @@ text = "Overall: 50%"
 
 [node name="DeltaLabel" type="Label" parent="OverlayRoot/FeedbackPanel/OverallContainer" unique_id=901833543]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 0.45, 0.30, 1)
+theme_override_colors/font_color = Color(0.55, 0.45, 0.3, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "[--]"
@@ -355,9 +378,9 @@ text = "[--]"
 [node name="OverallProgressBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1193420288]
 custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
-value = 50.0
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 50.0
 
 [node name="StatusBadgeLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=2016737326]
 layout_mode = 2
@@ -371,63 +394,63 @@ layout_mode = 2
 
 [node name="ClarityLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1620772102]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.30, 0.24, 0.16, 1)
+tooltip_text = "Clarity: How clearly and directly you state your point."
+theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-tooltip_text = "Clarity: How clearly and directly you state your point."
 text = "Clarity: 50%"
 
 [node name="ClarityBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1950693667]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
-value = 50.0
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 50.0
 
 [node name="EmpathyLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1497877979]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.30, 0.24, 0.16, 1)
+tooltip_text = "Empathy: Validating feelings and acknowledging emotions."
+theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-tooltip_text = "Empathy: Validating feelings and acknowledging emotions."
 text = "Empathy: 50%"
 
 [node name="EmpathyBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=730519276]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
-value = 50.0
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 50.0
 
 [node name="PolitenessLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=145048484]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.30, 0.24, 0.16, 1)
+tooltip_text = "Politeness: Maintaining a respectful and considerate tone."
+theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-tooltip_text = "Politeness: Maintaining a respectful and considerate tone."
 text = "Politeness: 50%"
 
 [node name="PolitenessBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=1756125853]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
-value = 50.0
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 50.0
 
 [node name="ExpressionLabel" type="Label" parent="OverlayRoot/FeedbackPanel" unique_id=1508251752]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.30, 0.24, 0.16, 1)
+tooltip_text = "Expression: Emotional honesty and authentic personal engagement."
+theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-tooltip_text = "Expression: Emotional honesty and authentic personal engagement."
 text = "Expression: 50%"
 
 [node name="ExpressionBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel" unique_id=518400406]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
-value = 50.0
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 50.0
 
 [node name="FeedbackText" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel" unique_id=1032672357]
 custom_minimum_size = Vector2(0, 50)

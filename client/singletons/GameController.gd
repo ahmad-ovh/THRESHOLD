@@ -5,7 +5,7 @@ signal game_phase_changed(old_phase: Phase, new_phase: Phase)
 signal game_paused_changed(is_paused: bool)
 signal is_development_mode_changed(enabled: bool)
 
-@export var is_development_mode: bool = false:
+@export var is_development_mode: bool = true:
 	set(value):
 		is_development_mode = value
 		is_development_mode_changed.emit(value)
