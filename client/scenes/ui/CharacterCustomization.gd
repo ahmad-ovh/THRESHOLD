@@ -61,12 +61,13 @@ const LIP_PALETTE: Array[Color] = [
 ]
 
 
+const GLASSES_ENABLED := false  # Feature flag – flip to true to re-enable glasses
 const CATEGORIES: Array[Dictionary] = [
 	{"name": "Skin Tone", "icon": "😊", "mode": "SKIN"},
 	{"name": "Hairstyle", "icon": "💇", "mode": "HAIR"},
 	{"name": "Eyes", "icon": "👀", "mode": "EYES"},
 	{"name": "Nose & Mouth", "icon": "👃", "mode": "NOSE_MOUTH"},
-	{"name": "Glasses", "icon": "👓", "mode": "GLASSES"}
+	# {"name": "Glasses", "icon": "👓", "mode": "GLASSES"}  # DISABLED – glasses system off
 ]
 
 @export var is_development_mode: bool = false
@@ -539,6 +540,7 @@ func _build_nose_mouth_workspace() -> void:
 
 
 func _build_glasses_workspace() -> void:
+	return  # DISABLED – glasses system off
 	workspace_vbox.add_child(_create_section_label("Glasses / Eyewear:"))
 	var grid = GridContainer.new()
 	grid.columns = 3

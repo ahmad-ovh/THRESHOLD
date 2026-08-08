@@ -625,7 +625,8 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 
 
 	# 4. Load Glasses directly onto Face Texture Map (Highest Layer Order!)
-	if glasses_style > 0:
+	# DISABLED – glasses system off. Flip condition to re-enable.
+	if false and glasses_style > 0:
 		var glasses_atlas_path = "res://assets/character_models/textures/glasses_sprite.png"
 		var glasses_atlas_img = _load_cpu_image(glasses_atlas_path)
 		if glasses_atlas_img:
@@ -1079,9 +1080,9 @@ static func _build_character_from_dict(root: Node3D, c: Dictionary) -> void:
 					head_attach.remove_child(child)
 					child.free()
 
-			# Glasses Attachment
+			# Glasses Attachment – DISABLED (glasses system off)
 			var glasses_style: int = c.get("glasses_style", 0)
-			if glasses_style > 0:
+			if false and glasses_style > 0:  # disabled
 				var glasses_path = "res://assets/character_models/glasses/glasses_glasses%d.gltf" % glasses_style
 				if ResourceLoader.exists(glasses_path):
 					var glasses_gltf = _load_gltf(glasses_path)
@@ -1099,8 +1100,8 @@ static func _build_prof_adler(root: Node3D) -> void:
 		"shirt_color": Color(0.22, 0.24, 0.28),
 		"pants_color": Color(0.22, 0.24, 0.28),
 		"hair_color": Color(0.72, 0.74, 0.76),
-		"hair_style": 2,
-		"glasses_style": 1
+		"hair_style": 2
+		# "glasses_style": 1  # DISABLED – glasses system off
 	})
 
 static func _build_daria(root: Node3D) -> void:
@@ -1136,8 +1137,8 @@ static func _build_ms_okoro(root: Node3D) -> void:
 		"shirt_color": Color(0.55, 0.18, 0.24),
 		"pants_color": Color(0.22, 0.22, 0.26),
 		"hair_color": Color(0.12, 0.10, 0.10),
-		"hair_style": 4,
-		"glasses_style": 1
+		"hair_style": 4
+		# "glasses_style": 1  # DISABLED – glasses system off
 	})
 
 static func _build_mr_vance(root: Node3D) -> void:
@@ -1191,8 +1192,8 @@ static func _build_seren(root: Node3D) -> void:
 		"shirt_color": Color(0.88, 0.84, 0.76),
 		"pants_color": Color(0.20, 0.22, 0.26),
 		"hair_color": Color(0.55, 0.35, 0.20),
-		"hair_style": 0,
-		"glasses_style": 1
+		"hair_style": 0
+		# "glasses_style": 1  # DISABLED – glasses system off
 	})
 
 static func _build_sibling(root: Node3D) -> void:

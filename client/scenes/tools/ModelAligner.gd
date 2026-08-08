@@ -377,10 +377,11 @@ func _set_selected_part(part: String) -> void:
 			part_option.select(i)
 			break
 
-	if selected_part == "glasses" and glasses_spin.value == 0:
-		glasses_spin.value = 1
-		PlayerStore.customization["glasses_style"] = 1
-		_rebuild_avatar()
+	# DISABLED – glasses system off
+	#if selected_part == "glasses" and glasses_spin.value == 0:
+	#	glasses_spin.value = 1
+	#	PlayerStore.customization["glasses_style"] = 1
+	#	_rebuild_avatar()
 
 	_update_gizmo_spinboxes()
 	_spawn_3d_gizmo()
@@ -570,9 +571,9 @@ func _connect_signals() -> void:
 		_on_item_changed("hair", "hair_%03d" % int(v), "hair")
 	)
 
-	glasses_spin.value_changed.connect(func(v):
-		PlayerStore.customization["glasses_style"] = int(v)
-		_on_item_changed("glasses", "glasses_%d" % int(v), "glasses")
+	# DISABLED – glasses system off
+	glasses_spin.value_changed.connect(func(_v):
+		glasses_spin.set_value_no_signal(0)  # Force glasses off
 	)
 
 	if eye_style_spin:
