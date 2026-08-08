@@ -113,10 +113,10 @@ border_width_right = 2
 border_color = Color(0.70, 0.30, 0.04, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-expand_margin_top = 3.0
-expand_margin_bottom = 1.0
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_unselected"]
 bg_color = Color(0.92, 0.86, 0.74, 1)
@@ -127,10 +127,10 @@ border_width_bottom = 2
 border_color = Color(0.80, 0.72, 0.58, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-expand_margin_top = 2.0
-expand_margin_bottom = 1.0
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_hovered"]
 bg_color = Color(0.96, 0.55, 0.15, 1)
@@ -140,10 +140,11 @@ border_width_right = 2
 border_color = Color(0.70, 0.30, 0.04, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-expand_margin_top = 3.0
-expand_margin_bottom = 1.0
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
+
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_panel"]
 bg_color = Color(0.98, 0.94, 0.84, 0.6)
@@ -482,6 +483,7 @@ size_flags_vertical = 3
 theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hovered_color = Color(1, 1, 1, 1)
 theme_override_colors/font_unselected_color = Color(0.45, 0.35, 0.22, 1)
+theme_override_constants/side_margin = 6
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 theme_override_styles/panel = SubResource("StyleBoxFlat_tab_panel")
@@ -489,6 +491,7 @@ theme_override_styles/tab_selected = SubResource("StyleBoxFlat_tab_selected")
 theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_tab_hovered")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_tab_unselected")
 current_tab = 0
+
 
 
 [node name="Overview" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer"]
