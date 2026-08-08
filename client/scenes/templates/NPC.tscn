@@ -21,6 +21,7 @@ radius = 2.5
 script = ExtResource("1_npc_script")
 
 [node name="MeshContainer" type="Node3D" parent="."]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0)
 
 [node name="GroundRing" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
@@ -28,11 +29,11 @@ visible = false
 mesh = SubResource("TorusMesh_ring")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_npc")
 
 [node name="HeadMarker" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
 
 [node name="MoodSprite3D" type="Sprite3D" parent="HeadMarker"]
 billboard = 2
