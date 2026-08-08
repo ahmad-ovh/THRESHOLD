@@ -473,16 +473,14 @@ static func _load_cpu_image(res_path: String) -> Image:
 		return _cpu_img_cache[res_path]
 	if not ResourceLoader.exists(res_path):
 		return null
-	var global_path = ProjectSettings.globalize_path(res_path)
-	var img = Image.load_from_file(global_path)
-	if img:
-		_cpu_img_cache[res_path] = img
-		return img
 	var tex = load(res_path) as Texture2D
 	if tex:
-		var tex_img = tex.get_image()
-		_cpu_img_cache[res_path] = tex_img
-		return tex_img
+		var img = tex.get_image()
+		if img:
+			if img.is_compressed():
+				img.decompress()
+			_cpu_img_cache[res_path] = img
+			return img
 	return null
 
 static func _create_face_texture(customization: Dictionary) -> ImageTexture:
