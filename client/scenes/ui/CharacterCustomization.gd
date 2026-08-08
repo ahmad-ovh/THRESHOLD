@@ -47,6 +47,8 @@ const CATEGORIES: Array[Dictionary] = [
 	{"name": "Glasses", "icon": "👓", "mode": "GLASSES"}
 ]
 
+@export var is_development_mode: bool = true
+
 var camera_tween: Tween = null
 var camera_presets: Dictionary = {
 	"SKIN": {"pos": [0.0, 1.05, 2.5], "rot": [0.0, 0.0, 0.0], "pivot_y": 0.0},
@@ -65,7 +67,8 @@ func _ready() -> void:
 	_animate_camera_for_tab(CATEGORIES[0]["mode"])
 	_render_active_workspace()
 
-	if GameController and GameController.is_development_mode:
+	var is_dev = is_development_mode or (GameController and GameController.is_development_mode)
+	if is_dev:
 		_setup_cam_tuner_widget()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -441,6 +444,7 @@ func _on_back_pressed() -> void:
 func _setup_cam_tuner_widget() -> void:
 	cam_tuner_layer = CanvasLayer.new()
 	cam_tuner_layer.name = "CamTunerLayer"
+	cam_tuner_layer.layer = 100
 	add_child(cam_tuner_layer)
 
 	var panel = PanelContainer.new()
