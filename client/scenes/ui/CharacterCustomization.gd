@@ -51,11 +51,13 @@ const CATEGORIES: Array[Dictionary] = [
 
 var camera_tween: Tween = null
 var camera_presets: Dictionary = {
-	"SKIN": {"pos": [0.0, 1.05, 2.5], "rot": [0.0, 0.0, 0.0], "pivot_y": 0.0},
+	"SKIN": {"pos": [0.12, 1.42, 1.4], "rot": [-4.0, 18.0, 0.0], "pivot_y": -15.0},
 	"HAIR": {"pos": [0.12, 1.42, 1.4], "rot": [-4.0, 18.0, 0.0], "pivot_y": -15.0},
 	"FACE": {"pos": [0.0, 1.55, 1.05], "rot": [-2.0, 0.0, 0.0], "pivot_y": 0.0}
 }
 var cam_tuner_layer: CanvasLayer = null
+var _tuner_opt: OptionButton = null
+var _tuner_rebuild_rows: Callable = Callable()
 
 func _ready() -> void:
 	if back_button: back_button.pressed.connect(_on_back_pressed)
@@ -144,6 +146,18 @@ func _setup_category_tabs() -> void:
 		btn.pressed.connect(func(): _switch_tab(i))
 		category_header.add_child(btn)
 
+func _mode_to_stage_key(mode: String) -> String:
+	match mode:
+		"SKIN": return "SKIN"
+		"HAIR": return "HAIR"
+		_: return "FACE"
+
+func _stage_key_to_opt_index(stage_key: String) -> int:
+	match stage_key:
+		"SKIN": return 0
+		"HAIR": return 1
+		_: return 2
+
 func _switch_tab(index: int) -> void:
 	active_tab_index = index
 	var cat = CATEGORIES[index]
@@ -160,14 +174,22 @@ func _switch_tab(index: int) -> void:
 			else:
 				tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.15)
 
-	_animate_camera_for_tab(cat["mode"])
+	var stage_key = _mode_to_stage_key(cat["mode"])
+	_animate_camera_for_tab(stage_key)
+
+	# Sync tuner dropdown to match the active category
+	if _tuner_opt:
+		_tuner_opt.selected = _stage_key_to_opt_index(stage_key)
+	if _tuner_rebuild_rows.is_valid():
+		_tuner_rebuild_rows.call(stage_key)
+
 	_render_active_workspace()
 
 func _animate_camera_for_tab(mode: String) -> void:
 	if not camera or not model_pivot:
 		return
 
-	var stage_key = "SKIN" if mode == "SKIN" else ("HAIR" if mode == "HAIR" else "FACE")
+	var stage_key = _mode_to_stage_key(mode)
 	var preset = camera_presets.get(stage_key, {"pos": [0.0, 1.05, 2.5], "rot": [0.0, 0.0, 0.0], "pivot_y": 0.0})
 
 	var target_pos = Vector3(preset["pos"][0], preset["pos"][1], preset["pos"][2])
@@ -463,14 +485,14 @@ func _setup_cam_tuner_widget() -> void:
 	style_box.content_margin_bottom = 14
 	panel.add_theme_stylebox_override("panel", style_box)
 
-	panel.anchor_left = 0.0
-	panel.anchor_right = 0.0
-	panel.anchor_top = 0.0
-	panel.anchor_bottom = 0.0
-	panel.offset_left = 16
-	panel.offset_right = 340
-	panel.offset_top = 16
-	panel.offset_bottom = 540
+	panel.anchor_left = 1.0
+	panel.anchor_right = 1.0
+	panel.anchor_top = 1.0
+	panel.anchor_bottom = 1.0
+	panel.offset_left = -340
+	panel.offset_right = -16
+	panel.offset_top = -520
+	panel.offset_bottom = -16
 
 	var vbox = VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 6)
@@ -492,7 +514,26 @@ func _setup_cam_tuner_widget() -> void:
 
 	vbox.add_child(HSeparator.new())
 
-	var selected_stage = "SKIN"
+	# Stage Selection Dropdown
+	var stage_hbox = HBoxContainer.new()
+	var stage_lbl = Label.new()
+	stage_lbl.text = "Editing Stage:"
+	stage_lbl.custom_minimum_size = Vector2(95, 0)
+	stage_lbl.add_theme_font_size_override("font_size", 12)
+	stage_hbox.add_child(stage_lbl)
+
+	var opt = OptionButton.new()
+	opt.add_item("SKIN (Full Body)", 0)
+	opt.add_item("HAIR (3/4 View)", 1)
+	opt.add_item("FACE (Eyes/Nose/Glasses)", 2)
+	opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stage_hbox.add_child(opt)
+	vbox.add_child(stage_hbox)
+	_tuner_opt = opt
+
+	var rows_container = VBoxContainer.new()
+	rows_container.add_theme_constant_override("separation", 6)
+	vbox.add_child(rows_container)
 
 	var create_row = func(label_text: String, min_val: float, max_val: float, step_val: float, initial_val: float, on_val_changed: Callable) -> HBoxContainer:
 		var hbox = HBoxContainer.new()
@@ -529,32 +570,13 @@ func _setup_cam_tuner_widget() -> void:
 		)
 		return hbox
 
-	# Stage Selection Dropdown
-	var stage_hbox = HBoxContainer.new()
-	var stage_lbl = Label.new()
-	stage_lbl.text = "Stage:"
-	stage_lbl.custom_minimum_size = Vector2(95, 0)
-	stage_lbl.add_theme_font_size_override("font_size", 12)
-	stage_hbox.add_child(stage_lbl)
-
-	var opt = OptionButton.new()
-	opt.add_item("SKIN (Full Body)", 0)
-	opt.add_item("HAIR (3/4 View)", 1)
-	opt.add_item("FACE (Face Zoom)", 2)
-	opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	stage_hbox.add_child(opt)
-	vbox.add_child(stage_hbox)
-
-	var rows_container = VBoxContainer.new()
-	rows_container.add_theme_constant_override("separation", 6)
-	vbox.add_child(rows_container)
-
-	var rebuild_rows = Callable()
-	rebuild_rows = func():
+	# rebuild_rows now accepts an explicit stage key so it can be driven externally
+	var rebuild_rows: Callable
+	rebuild_rows = func(stage_key: String):
 		for child in rows_container.get_children():
 			child.queue_free()
 
-		var p = camera_presets.get(selected_stage, {"pos": [0.0, 1.05, 2.5], "rot": [0.0, 0.0, 0.0], "pivot_y": 0.0})
+		var p = camera_presets.get(stage_key, {"pos": [0.0, 1.05, 2.5], "rot": [0.0, 0.0, 0.0], "pivot_y": 0.0})
 		var cur_p = Vector3(p["pos"][0], p["pos"][1], p["pos"][2])
 		var cur_r = Vector3(p["rot"][0], p["rot"][1], p["rot"][2])
 		var cur_py = float(p["pivot_y"])
@@ -571,7 +593,6 @@ func _setup_cam_tuner_widget() -> void:
 			p["pos"][2] = snapped(v, 0.01)
 			if camera: camera.position.z = v
 		))
-
 		rows_container.add_child(create_row.call("Cam Rot Pitch:", -90.0, 90.0, 0.5, cur_r.x, func(v):
 			p["rot"][0] = snapped(v, 0.1)
 			if camera: camera.rotation_degrees.x = v
@@ -584,22 +605,21 @@ func _setup_cam_tuner_widget() -> void:
 			p["rot"][2] = snapped(v, 0.1)
 			if camera: camera.rotation_degrees.z = v
 		))
-
 		rows_container.add_child(create_row.call("Model Yaw:", -180.0, 180.0, 0.5, cur_py, func(v):
 			p["pivot_y"] = snapped(v, 0.1)
 			if model_pivot: model_pivot.rotation_degrees.y = v
 		))
 
+	_tuner_rebuild_rows = rebuild_rows
+
+	# When the user manually picks a stage from the dropdown
 	opt.item_selected.connect(func(idx):
-		match idx:
-			0: selected_stage = "SKIN"
-			1: selected_stage = "HAIR"
-			2: selected_stage = "FACE"
-		_animate_camera_for_tab(selected_stage)
-		rebuild_rows.call()
+		var sk = "SKIN" if idx == 0 else ("HAIR" if idx == 1 else "FACE")
+		_animate_camera_for_tab(sk)
+		rebuild_rows.call(sk)
 	)
 
-	rebuild_rows.call()
+	rebuild_rows.call("SKIN")
 
 	var save_btn = Button.new()
 	save_btn.text = "💾 SAVE ALL STAGE CAMERAS TO JSON"
