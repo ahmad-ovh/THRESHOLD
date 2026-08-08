@@ -47,12 +47,15 @@ const CATEGORIES: Array[Dictionary] = [
 	{"name": "Glasses", "icon": "👓", "mode": "GLASSES"}
 ]
 
+var camera_tween: Tween = null
+
 func _ready() -> void:
 	if back_button: back_button.pressed.connect(_on_back_pressed)
 	if save_button: save_button.pressed.connect(_on_save_pressed)
 
 	_setup_category_tabs()
 	_update_character_preview()
+	_animate_camera_for_tab(CATEGORIES[0]["mode"])
 	_render_active_workspace()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -70,10 +73,10 @@ func _process(delta: float) -> void:
 		if vp_size.x > 0 and vp_size.y > 0:
 			var norm_x = (mouse_pos.x / float(vp_size.x) - 0.5) * 2.0
 			var norm_y = (mouse_pos.y / float(vp_size.y) - 0.5) * 2.0
-			
+
 			var target_yaw = clamp(-norm_x * deg_to_rad(24.0), deg_to_rad(-35.0), deg_to_rad(35.0))
 			var target_pitch = clamp(-norm_y * deg_to_rad(15.0), deg_to_rad(-20.0), deg_to_rad(20.0))
-			
+
 			var skel = active_avatar_instance.find_child("Skeleton3D", true, false) as Skeleton3D
 			if skel:
 				var head_idx = skel.find_bone("mixamorig:Head")
@@ -113,7 +116,41 @@ func _switch_tab(index: int) -> void:
 			else:
 				tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.15)
 
+	_animate_camera_for_tab(cat["mode"])
 	_render_active_workspace()
+
+func _animate_camera_for_tab(mode: String) -> void:
+	if not camera or not model_pivot:
+		return
+
+	var target_pos: Vector3 = Vector3(0.0, 1.05, 2.5)
+	var target_rot: Vector3 = Vector3(0.0, 0.0, 0.0)
+	var target_pivot_y: float = 0.0
+
+	match mode:
+		"SKIN":
+			# Full Standing Body View (Image 1)
+			target_pos = Vector3(0.0, 1.05, 2.5)
+			target_rot = Vector3(0.0, 0.0, 0.0)
+			target_pivot_y = 0.0
+		"HAIR":
+			# Front Three-Quarter View (Image 2)
+			target_pos = Vector3(0.12, 1.42, 1.4)
+			target_rot = Vector3(-4.0, 18.0, 0.0)
+			target_pivot_y = deg_to_rad(-15.0)
+		_:
+			# Face / Bust Zoom (Eyes, Nose, Mouth, Glasses)
+			target_pos = Vector3(0.0, 1.55, 1.05)
+			target_rot = Vector3(-2.0, 0.0, 0.0)
+			target_pivot_y = 0.0
+
+	if camera_tween and camera_tween.is_running():
+		camera_tween.kill()
+
+	camera_tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	camera_tween.tween_property(camera, "position", target_pos, 0.45)
+	camera_tween.tween_property(camera, "rotation_degrees", target_rot, 0.45)
+	camera_tween.tween_property(model_pivot, "rotation:y", target_pivot_y, 0.45)
 
 func _render_active_workspace() -> void:
 	if not workspace_vbox:
