@@ -94,22 +94,43 @@ func _on_player_message_submitted(text: String) -> void:
 	if res.get("encounter_over", false):
 		_finalize_encounter()
 
+signal prefetch_finished
+
+var _prefetch_data: Dictionary = {}
+var _is_prefetching: bool = false
+
+func _start_prefetch(p_id: String, npc_id: String) -> void:
+	_is_prefetching = true
+	_prefetch_data.clear()
+	var end_res = await ApiClient.end_interaction(p_id, npc_id)
+	var status = await ApiClient.get_player_status(p_id)
+	_prefetch_data = {
+		"end_res": end_res,
+		"status": status
+	}
+	_is_prefetching = false
+	prefetch_finished.emit()
+
 func _finalize_encounter() -> void:
 	if current_state == State.RESOLVING:
 		return
 	current_state = State.RESOLVING
 	
-	# Start background generation of settlement and status update immediately
+	# Start background generation of settlement and status update immediately via Callable
 	# so player experiences zero latency when they confirm dialogue exit
-	var summary_task = _fetch_encounter_summary_async(PlayerStore.player_id, active_npc_id)
+	_start_prefetch.call(PlayerStore.player_id, active_npc_id)
 	
 	# Allow final closing line to rest gracefully before closing window
 	if dialogue_ui_ref:
 		await dialogue_ui_ref.close_dialogue_gracefully()
 		
-	var summary_results: Dictionary = await summary_task
-	var end_res: Dictionary = summary_results.get("end_res", {})
-	var status: Dictionary = summary_results.get("status", {})
+	# If background prefetch is still in flight, wait for it to complete
+	if _is_prefetching:
+		await prefetch_finished
+		
+	var end_res: Dictionary = _prefetch_data.get("end_res", {})
+	var status: Dictionary = _prefetch_data.get("status", {})
+	_prefetch_data.clear()
 	
 	# Refresh player status after encounter end
 	if not status.has("error"):
@@ -126,14 +147,6 @@ func _finalize_encounter() -> void:
 		player.set_physics_process(true)
 		
 	current_state = State.LOBBY
-
-func _fetch_encounter_summary_async(p_id: String, npc_id: String) -> Dictionary:
-	var end_res = await ApiClient.end_interaction(p_id, npc_id)
-	var status = await ApiClient.get_player_status(p_id)
-	return {
-		"end_res": end_res,
-		"status": status
-	}
 
 func _ensure_dialogue_ui() -> void:
 	if not dialogue_ui_ref:
