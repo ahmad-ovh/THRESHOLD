@@ -412,12 +412,31 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ReportHeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+[node name="ReportHeaderRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
 layout_mode = 2
+
+[node name="ReportHeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.55, 0.30, 0.05, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "📋 COMMUNICATION GROWTH REPORT"
+
+[node name="MiniRefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Regenerate Growth Report"
+theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("3_font_hitchcut")
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+text = " ↺ "
+
 
 [node name="ReportTabContainer" type="TabContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
 layout_mode = 2

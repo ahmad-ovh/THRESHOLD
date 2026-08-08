@@ -17,11 +17,13 @@ extends CanvasLayer
 @onready var analysis_text: RichTextLabel = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Analysis/AnalysisText
 @onready var advice_text: RichTextLabel = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Advice/AdviceText
 @onready var refresh_button: Button = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/RefreshButton
+@onready var mini_refresh_button: Button = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow/MiniRefreshButton
 
 func _ready() -> void:
 	visible = false
 	close_button.pressed.connect(_on_close_pressed)
 	refresh_button.pressed.connect(_on_refresh_report_pressed)
+	mini_refresh_button.pressed.connect(_on_refresh_report_pressed)
 	PlayerStore.player_data_updated.connect(_update_id_card)
 
 func toggle() -> void:
@@ -44,12 +46,16 @@ func _update_id_card() -> void:
 func _on_refresh_report_pressed() -> void:
 	if AudioManager:
 		AudioManager.play_click()
+	
+	refresh_button.visible = false
+	mini_refresh_button.disabled = true
+	
 	analysis_text.text = "[i]Analyzing dialogue history and compiling growth report...[/i]"
 	advice_text.text = "[i]Compiling recommendations...[/i]"
-	refresh_button.disabled = true
 	
 	var res = await ApiClient.get_report(PlayerStore.player_id)
-	refresh_button.disabled = false
+	mini_refresh_button.disabled = false
+
 	
 	if res.has("error"):
 		analysis_text.text = "[color=red]Failed to generate report: " + str(res.get("detail", "Server error")) + "[/color]"
