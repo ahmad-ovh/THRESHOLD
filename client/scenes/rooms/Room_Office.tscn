@@ -1,9 +1,9 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=3 uid="uid://bgrrx1g2q4q17"]
 
-[ext_resource type="Script" path="res://scenes/rooms/RoomTemplate.gd" id="1_room_script"]
-[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="2_player"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
-[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+[ext_resource type="Script" uid="uid://8d1u56vhj4g1" path="res://scenes/rooms/RoomTemplate.gd" id="1_room_script"]
+[ext_resource type="PackedScene" uid="uid://cplayer3d001" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://cdoor3d001" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" uid="uid://cnpc001" path="res://scenes/templates/NPC.tscn" id="4_npc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.18, 0.22, 0.28, 1)
@@ -17,67 +17,67 @@ albedo_color = Color(0.45, 0.25, 0.12, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_couch"]
 albedo_color = Color(0.85, 0.8, 0.72, 1)
 
-[node name="Room_Office" type="Node3D"]
+[node name="Room_Office" type="Node3D" unique_id=1495080971]
 script = ExtResource("1_room_script")
 
-[node name="RoomBounds" type="Node3D" parent="."]
+[node name="RoomBounds" type="Node3D" parent="." unique_id=1171118800]
 
-[node name="Floor" type="CSGBox3D" parent="RoomBounds"]
+[node name="Floor" type="CSGBox3D" parent="RoomBounds" unique_id=124448370]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 use_collision = true
 size = Vector3(16, 0.4, 10)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="BackWall" type="CSGBox3D" parent="RoomBounds"]
+[node name="BackWall" type="CSGBox3D" parent="RoomBounds" unique_id=740187678]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -5)
 use_collision = true
 size = Vector3(16, 5, 0.4)
 material = SubResource("StandardMaterial3D_wall")
 
-[node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
+[node name="LeftWall" type="CSGBox3D" parent="RoomBounds" unique_id=999178041]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, 0)
 use_collision = true
 size = Vector3(0.4, 5, 10)
 material = SubResource("StandardMaterial3D_wall")
 
-[node name="RightWall" type="CSGBox3D" parent="RoomBounds"]
+[node name="RightWall" type="CSGBox3D" parent="RoomBounds" unique_id=2090033193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.5, 0)
 use_collision = true
 size = Vector3(0.4, 5, 10)
 material = SubResource("StandardMaterial3D_wall")
 
-[node name="CameraAnchor" type="Marker3D" parent="."]
+[node name="CameraAnchor" type="Marker3D" parent="." unique_id=1130625581]
 transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 3.2, 7.5)
 
-[node name="Decorations" type="Node3D" parent="."]
+[node name="Decorations" type="Node3D" parent="." unique_id=1694172143]
 
-[node name="OfficeDesk" type="CSGBox3D" parent="Decorations"]
+[node name="OfficeDesk" type="CSGBox3D" parent="Decorations" unique_id=1245480601]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.6, -2.5)
 use_collision = true
 size = Vector3(3.2, 1.2, 1.2)
 material = SubResource("StandardMaterial3D_wood_desk")
 
-[node name="Bookcase" type="CSGBox3D" parent="Decorations"]
+[node name="Bookcase" type="CSGBox3D" parent="Decorations" unique_id=1938742783]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 1.8, -4.5)
 use_collision = true
 size = Vector3(2.5, 3.6, 0.8)
 material = SubResource("StandardMaterial3D_couch")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=613099647]
 transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 5, 8, 5)
 light_color = Color(1, 0.96, 0.9, 1)
 shadow_enabled = true
 
-[node name="Player3D" parent="." instance=ExtResource("2_player")]
+[node name="Player3D" parent="." unique_id=1825120331 instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 2)
 
-[node name="from_start" type="Marker3D" parent="." groups=["spawn_markers"]]
+[node name="from_start" type="Marker3D" parent="." unique_id=327243363 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 2)
 
-[node name="DoorToStart" parent="." instance=ExtResource("3_door")]
+[node name="DoorToStart" parent="." unique_id=805203384 instance=ExtResource("3_door")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, -4.5)
 target_room_scene = "res://scenes/rooms/Room_Start.tscn"
 
-[node name="NPC_ProfAdler" parent="." instance=ExtResource("4_npc")]
+[node name="NPC_ProfAdler" parent="." unique_id=1554073615 instance=ExtResource("4_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, -2.5)
 npc_id = "prof_adler"
