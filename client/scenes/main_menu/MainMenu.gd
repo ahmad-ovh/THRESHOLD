@@ -2,8 +2,8 @@
 extends CanvasLayer
 
 @export_group("Development Mode")
-@export var is_development_mode: bool = true
-@export var enable_dev_tools: bool = true
+@export var is_development_mode: bool = false
+@export var enable_dev_tools: bool = false
 
 @onready var username_input: LineEdit = $Control/LeftPanel/PlayerCard/MarginContainer/VBoxContainer/UsernameInput
 @onready var daily_details: RichTextLabel = $Control/RightPanel/DailyCard/MarginContainer/VBoxContainer/DailyDetails

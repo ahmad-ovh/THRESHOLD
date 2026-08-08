@@ -28,7 +28,7 @@ extends CharacterBody3D
 @export var head_tilt_deg: float = 1.5
 
 @export_group("Development Mode")
-@export var is_development_mode: bool = true
+@export var is_development_mode: bool = false
 
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var spring_arm: SpringArm3D = $CameraPivot/SpringArm3D

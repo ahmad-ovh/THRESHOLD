@@ -72,13 +72,21 @@ extends Control
 @onready var slider_eye_rot: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow/SliderEyeRot
 @onready var spin_eye_rot: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/EyeRotRow/SpinEyeRot
 
+@onready var slider_nose_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseXRow/SliderNoseX
+@onready var spin_nose_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseXRow/SpinNoseX
 @onready var slider_nose_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseYRow/SliderNoseY
 @onready var spin_nose_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseYRow/SpinNoseY
+@onready var slider_nose_size: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseSizeRow/SliderNoseSize
+@onready var spin_nose_size: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseSizeRow/SpinNoseSize
 @onready var slider_nose_rot: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseRotRow/SliderNoseRot
 @onready var spin_nose_rot: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/NoseRotRow/SpinNoseRot
 
+@onready var slider_mouth_x: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthXRow/SliderMouthX
+@onready var spin_mouth_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthXRow/SpinMouthX
 @onready var slider_mouth_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthYRow/SliderMouthY
 @onready var spin_mouth_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthYRow/SpinMouthY
+@onready var slider_mouth_size: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthSizeRow/SliderMouthSize
+@onready var spin_mouth_size: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthSizeRow/SpinMouthSize
 @onready var slider_mouth_rot: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthRotRow/SliderMouthRot
 @onready var spin_mouth_rot: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/MouthRotRow/SpinMouthRot
 
@@ -86,6 +94,10 @@ extends Control
 @onready var spin_glass_x: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassXRow/SpinGlassX
 @onready var slider_glass_y: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassYRow/SliderGlassY
 @onready var spin_glass_y: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassYRow/SpinGlassY
+@onready var slider_glass_w: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassWRow/SliderGlassW
+@onready var spin_glass_w: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassWRow/SpinGlassW
+@onready var slider_glass_h: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassHRow/SliderGlassH
+@onready var spin_glass_h: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassHRow/SpinGlassH
 @onready var slider_glass_rot: HSlider = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassRotRow/SliderGlassRot
 @onready var spin_glass_rot: SpinBox = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassRotRow/SpinGlassRot
 
@@ -462,12 +474,21 @@ func _connect_signals() -> void:
 		PlayerStore.customization["face_offsets"]["eye_y"] = int(spin_eye_y.value)
 		PlayerStore.customization["face_offsets"]["eye_size"] = int(spin_eye_size.value)
 		PlayerStore.customization["face_offsets"]["eye_rot"] = int(spin_eye_rot.value)
+
+		if spin_nose_x: PlayerStore.customization["face_offsets"]["nose_x"] = int(spin_nose_x.value)
 		PlayerStore.customization["face_offsets"]["nose_y"] = int(spin_nose_y.value)
+		if spin_nose_size: PlayerStore.customization["face_offsets"]["nose_size"] = int(spin_nose_size.value)
 		PlayerStore.customization["face_offsets"]["nose_rot"] = int(spin_nose_rot.value) if spin_nose_rot else 0
+
+		if spin_mouth_x: PlayerStore.customization["face_offsets"]["mouth_x"] = int(spin_mouth_x.value)
 		PlayerStore.customization["face_offsets"]["mouth_y"] = int(spin_mouth_y.value)
+		if spin_mouth_size: PlayerStore.customization["face_offsets"]["mouth_size"] = int(spin_mouth_size.value)
 		PlayerStore.customization["face_offsets"]["mouth_rot"] = int(spin_mouth_rot.value) if spin_mouth_rot else 0
+
 		PlayerStore.customization["face_offsets"]["glass_x"] = int(spin_glass_x.value)
 		PlayerStore.customization["face_offsets"]["glass_y"] = int(spin_glass_y.value)
+		if spin_glass_w: PlayerStore.customization["face_offsets"]["glass_w"] = int(spin_glass_w.value)
+		if spin_glass_h: PlayerStore.customization["face_offsets"]["glass_h"] = int(spin_glass_h.value)
 		PlayerStore.customization["face_offsets"]["glass_rot"] = int(spin_glass_rot.value) if spin_glass_rot else 0
 		_rebuild_avatar()
 
@@ -484,15 +505,31 @@ func _connect_signals() -> void:
 		slider_eye_rot.value_changed.connect(func(v): spin_eye_rot.set_value_no_signal(v); update_face_offsets.call())
 		spin_eye_rot.value_changed.connect(func(v): slider_eye_rot.set_value_no_signal(v); update_face_offsets.call())
 
+	if slider_nose_x and spin_nose_x:
+		slider_nose_x.value_changed.connect(func(v): spin_nose_x.set_value_no_signal(v); update_face_offsets.call())
+		spin_nose_x.value_changed.connect(func(v): slider_nose_x.set_value_no_signal(v); update_face_offsets.call())
+
 	slider_nose_y.value_changed.connect(func(v): spin_nose_y.set_value_no_signal(v); update_face_offsets.call())
 	spin_nose_y.value_changed.connect(func(v): slider_nose_y.set_value_no_signal(v); update_face_offsets.call())
+
+	if slider_nose_size and spin_nose_size:
+		slider_nose_size.value_changed.connect(func(v): spin_nose_size.set_value_no_signal(v); update_face_offsets.call())
+		spin_nose_size.value_changed.connect(func(v): slider_nose_size.set_value_no_signal(v); update_face_offsets.call())
 
 	if slider_nose_rot and spin_nose_rot:
 		slider_nose_rot.value_changed.connect(func(v): spin_nose_rot.set_value_no_signal(v); update_face_offsets.call())
 		spin_nose_rot.value_changed.connect(func(v): slider_nose_rot.set_value_no_signal(v); update_face_offsets.call())
 
+	if slider_mouth_x and spin_mouth_x:
+		slider_mouth_x.value_changed.connect(func(v): spin_mouth_x.set_value_no_signal(v); update_face_offsets.call())
+		spin_mouth_x.value_changed.connect(func(v): slider_mouth_x.set_value_no_signal(v); update_face_offsets.call())
+
 	slider_mouth_y.value_changed.connect(func(v): spin_mouth_y.set_value_no_signal(v); update_face_offsets.call())
 	spin_mouth_y.value_changed.connect(func(v): slider_mouth_y.set_value_no_signal(v); update_face_offsets.call())
+
+	if slider_mouth_size and spin_mouth_size:
+		slider_mouth_size.value_changed.connect(func(v): spin_mouth_size.set_value_no_signal(v); update_face_offsets.call())
+		spin_mouth_size.value_changed.connect(func(v): slider_mouth_size.set_value_no_signal(v); update_face_offsets.call())
 
 	if slider_mouth_rot and spin_mouth_rot:
 		slider_mouth_rot.value_changed.connect(func(v): spin_mouth_rot.set_value_no_signal(v); update_face_offsets.call())
@@ -503,6 +540,14 @@ func _connect_signals() -> void:
 
 	slider_glass_y.value_changed.connect(func(v): spin_glass_y.set_value_no_signal(v); update_face_offsets.call())
 	spin_glass_y.value_changed.connect(func(v): slider_glass_y.set_value_no_signal(v); update_face_offsets.call())
+
+	if slider_glass_w and spin_glass_w:
+		slider_glass_w.value_changed.connect(func(v): spin_glass_w.set_value_no_signal(v); update_face_offsets.call())
+		spin_glass_w.value_changed.connect(func(v): slider_glass_w.set_value_no_signal(v); update_face_offsets.call())
+
+	if slider_glass_h and spin_glass_h:
+		slider_glass_h.value_changed.connect(func(v): spin_glass_h.set_value_no_signal(v); update_face_offsets.call())
+		spin_glass_h.value_changed.connect(func(v): slider_glass_h.set_value_no_signal(v); update_face_offsets.call())
 
 	if slider_glass_rot and spin_glass_rot:
 		slider_glass_rot.value_changed.connect(func(v): spin_glass_rot.set_value_no_signal(v); update_face_offsets.call())
@@ -676,16 +721,28 @@ func _update_face_offset_spinboxes() -> void:
 		spin_eye_rot.set_value_no_signal(fo["eye_rot"])
 		if slider_eye_rot: slider_eye_rot.set_value_no_signal(fo["eye_rot"])
 
+	if fo.has("nose_x") and spin_nose_x:
+		spin_nose_x.set_value_no_signal(fo["nose_x"])
+		if slider_nose_x: slider_nose_x.set_value_no_signal(fo["nose_x"])
 	if fo.has("nose_y") and spin_nose_y:
 		spin_nose_y.set_value_no_signal(fo["nose_y"])
 		if slider_nose_y: slider_nose_y.set_value_no_signal(fo["nose_y"])
+	if fo.has("nose_size") and spin_nose_size:
+		spin_nose_size.set_value_no_signal(fo["nose_size"])
+		if slider_nose_size: slider_nose_size.set_value_no_signal(fo["nose_size"])
 	if fo.has("nose_rot") and spin_nose_rot:
 		spin_nose_rot.set_value_no_signal(fo["nose_rot"])
 		if slider_nose_rot: slider_nose_rot.set_value_no_signal(fo["nose_rot"])
 
+	if fo.has("mouth_x") and spin_mouth_x:
+		spin_mouth_x.set_value_no_signal(fo["mouth_x"])
+		if slider_mouth_x: slider_mouth_x.set_value_no_signal(fo["mouth_x"])
 	if fo.has("mouth_y") and spin_mouth_y:
 		spin_mouth_y.set_value_no_signal(fo["mouth_y"])
 		if slider_mouth_y: slider_mouth_y.set_value_no_signal(fo["mouth_y"])
+	if fo.has("mouth_size") and spin_mouth_size:
+		spin_mouth_size.set_value_no_signal(fo["mouth_size"])
+		if slider_mouth_size: slider_mouth_size.set_value_no_signal(fo["mouth_size"])
 	if fo.has("mouth_rot") and spin_mouth_rot:
 		spin_mouth_rot.set_value_no_signal(fo["mouth_rot"])
 		if slider_mouth_rot: slider_mouth_rot.set_value_no_signal(fo["mouth_rot"])
@@ -696,6 +753,12 @@ func _update_face_offset_spinboxes() -> void:
 	if fo.has("glass_y") and spin_glass_y:
 		spin_glass_y.set_value_no_signal(fo["glass_y"])
 		if slider_glass_y: slider_glass_y.set_value_no_signal(fo["glass_y"])
+	if fo.has("glass_w") and spin_glass_w:
+		spin_glass_w.set_value_no_signal(fo["glass_w"])
+		if slider_glass_w: slider_glass_w.set_value_no_signal(fo["glass_w"])
+	if fo.has("glass_h") and spin_glass_h:
+		spin_glass_h.set_value_no_signal(fo["glass_h"])
+		if slider_glass_h: slider_glass_h.set_value_no_signal(fo["glass_h"])
 	if fo.has("glass_rot") and spin_glass_rot:
 		spin_glass_rot.set_value_no_signal(fo["glass_rot"])
 		if slider_glass_rot: slider_glass_rot.set_value_no_signal(fo["glass_rot"])

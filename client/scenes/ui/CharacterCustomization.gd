@@ -47,7 +47,7 @@ const CATEGORIES: Array[Dictionary] = [
 	{"name": "Glasses", "icon": "👓", "mode": "GLASSES"}
 ]
 
-@export var is_development_mode: bool = true
+@export var is_development_mode: bool = false
 
 var camera_tween: Tween = null
 var camera_presets: Dictionary = {

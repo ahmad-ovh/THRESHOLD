@@ -493,10 +493,17 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var eye_y_off: int = int(face_offsets.get("eye_y", -135))
 	var eye_size: int = int(face_offsets.get("eye_size", 43))
 	var eye_rot: float = float(face_offsets.get("eye_rot", 90.0))
+
+	var nose_x_off: int = int(face_offsets.get("nose_x", 0))
 	var nose_y_off: int = int(face_offsets.get("nose_y", 0))
+	var nose_size_val: int = int(face_offsets.get("nose_size", 32))
 	var nose_rot: float = float(face_offsets.get("nose_rot", 0))
+
+	var mouth_x_off: int = int(face_offsets.get("mouth_x", 0))
 	var mouth_y_off: int = int(face_offsets.get("mouth_y", 0))
+	var mouth_size_val: int = int(face_offsets.get("mouth_size", 28))
 	var mouth_rot: float = float(face_offsets.get("mouth_rot", 0))
+
 	var glass_x_off: int = int(face_offsets.get("glass_x", 0))
 	var glass_y_off: int = int(face_offsets.get("glass_y", 0))
 	var glass_w: int = int(face_offsets.get("glass_w", 60))
@@ -550,10 +557,10 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 
 	# 2. Load Nose from 'nose_sprite.png'
 	var nose_sheet_path = "res://assets/character_models/textures/nose_sprite.png"
-	var nose_size = Vector2i(int(32 * scale_factor), int(32 * scale_factor))
+	var nose_size = Vector2i(int(nose_size_val * scale_factor), int(nose_size_val * scale_factor))
 	var nose_rendered_h = nose_size.y
 	var nose_base_y = int(eye_center.y) + hd_eye_size / 2 + nose_rendered_h / 2
-	var nose_center = Vector2i(512, nose_base_y + int(nose_y_off * scale_factor))
+	var nose_center = Vector2i(512 + int(nose_x_off * scale_factor), nose_base_y + int(nose_y_off * scale_factor))
 	var nose_top_left = nose_center - nose_size / 2
 	var nose_drawn = false
 
@@ -579,10 +586,11 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var mouth_sheet_path = "res://assets/character_models/textures/mouth_sprite_rgb.png"
 	if not ResourceLoader.exists(mouth_sheet_path):
 		mouth_sheet_path = "res://assets/character_models/textures/mouth_sprite.png"
-	var mouth_size = Vector2i(int(44 * scale_factor), int(28 * scale_factor))
+	var mouth_aspect = 44.0 / 28.0
+	var mouth_size = Vector2i(int(mouth_size_val * mouth_aspect * scale_factor), int(mouth_size_val * scale_factor))
 	var mouth_rendered_h = mouth_size.y
 	var mouth_base_y = nose_base_y + nose_rendered_h / 2 + mouth_rendered_h / 2
-	var mouth_center = Vector2i(512, mouth_base_y + int(mouth_y_off * scale_factor))
+	var mouth_center = Vector2i(512 + int(mouth_x_off * scale_factor), mouth_base_y + int(mouth_y_off * scale_factor))
 	var mouth_top_left = mouth_center - mouth_size / 2
 	var mouth_drawn = false
 
@@ -604,7 +612,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	if not mouth_drawn:
 		_draw_procedural_mouth_style(face_img, mouth_center, mouth_style, Color(0.7, 0.25, 0.25), mouth_rot)
 
-	# Load Glasses directly onto Face Texture Map (Binds and morphs onto 3D face mesh!)
+	# 4. Load Glasses directly onto Face Texture Map (Highest Layer Order!)
 	if glasses_style > 0:
 		var glasses_atlas_path = "res://assets/character_models/glasses/glasses_sprite.png"
 		var glasses_atlas_img = _load_cpu_image(glasses_atlas_path)
@@ -622,7 +630,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 				if glass_frame and hd_glass_w > 0 and hd_glass_h > 0:
 					glass_frame.resize(hd_glass_w, hd_glass_h, Image.INTERPOLATE_BILINEAR)
 					glass_frame = _rotate_image_exact(glass_frame, glass_rot)
-					var glass_center = Vector2i(512 + int(glass_x_off * scale_factor), 420 + int(glass_y_off * scale_factor))
+					var glass_center = Vector2i(512 + int(glass_x_off * scale_factor), int(eye_center.y) + int(glass_y_off * scale_factor))
 					_blit_alpha(face_img, glass_frame, glass_center - Vector2i(hd_glass_w / 2, hd_glass_h / 2))
 
 	return ImageTexture.create_from_image(face_img)
