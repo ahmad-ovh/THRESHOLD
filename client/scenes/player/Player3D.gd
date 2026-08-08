@@ -82,11 +82,16 @@ func _update_dev_mode(enabled: bool) -> void:
 			_setup_camera_dev_widget()
 		else:
 			camera_dev_layer.visible = true
-			var panel = camera_dev_layer.find_child("CameraDevPanel", true, false)
-			if panel:
-				panel.visible = true
-	elif camera_dev_layer:
-		camera_dev_layer.visible = false
+
+		if not hair_dev_layer:
+			_create_hair_dev_widget()
+		else:
+			hair_dev_layer.visible = true
+	else:
+		if camera_dev_layer:
+			camera_dev_layer.visible = false
+		if hair_dev_layer:
+			hair_dev_layer.visible = false
 
 func _setup_camera_dev_widget() -> void:
 	if camera_dev_layer:
