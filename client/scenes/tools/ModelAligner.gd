@@ -107,14 +107,14 @@ const MAX_UNDO_STACK: int = 50
 var alignment_data: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
 	"head": {"position": Vector3(0.0, 0.002, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.002, 0.002, 0.002)},
-	"hair": {"position": Vector3(0.0, -0.33, 0.0001), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.0168, 0.0168, 0.0168)},
+	"hair": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.0168, 0.0168, 0.0168)},
 	"glasses": {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
 
 var base_transforms: Dictionary = {
 	"body": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(2.5, 2.5, 2.5)},
 	"head": {"position": Vector3(0.0, 0.002, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.002, 0.002, 0.002)},
-	"hair": {"position": Vector3(0.0, -0.33, 0.0001), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.0168, 0.0168, 0.0168)},
+	"hair": {"position": Vector3(0.0, 0.0, 0.0), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(0.0168, 0.0168, 0.0168)},
 	"glasses": {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3(0.0, 0.0, 0.0), "scale": Vector3(1.0, 1.0, 1.0)}
 }
 
@@ -140,8 +140,8 @@ func _ready() -> void:
 func _configure_slider_ranges() -> void:
 	for s in [slider_px, spin_px, slider_py, spin_py, slider_pz, spin_pz]:
 		if s:
-			s.min_value = -0.5
-			s.max_value = 0.5
+			s.min_value = -2.0
+			s.max_value = 2.0
 			s.step = 0.0001
 
 	for s in [slider_rx, spin_rx, slider_ry, spin_ry, slider_rz, spin_rz]:
@@ -576,7 +576,7 @@ func _on_item_changed(cat: String, item_key: String, part: String) -> void:
 		if t.has("scale"): base_transforms[part]["scale"] = Vector3(t["scale"][0], t["scale"][1], t["scale"][2])
 	else:
 		match part:
-			"hair": base_transforms[part] = {"position": Vector3(0.0, -0.33, 0.0001), "rotation": Vector3.ZERO, "scale": Vector3(0.0168, 0.0168, 0.0168)}
+			"hair": base_transforms[part] = {"position": Vector3.ZERO, "rotation": Vector3.ZERO, "scale": Vector3(0.0168, 0.0168, 0.0168)}
 			"glasses": base_transforms[part] = {"position": Vector3(0.0, -0.02, 0.08), "rotation": Vector3.ZERO, "scale": Vector3(1.0, 1.0, 1.0)}
 			"head": base_transforms[part] = {"position": Vector3(0.0, 0.002, 0.0), "rotation": Vector3.ZERO, "scale": Vector3(0.002, 0.002, 0.002)}
 			_: base_transforms[part] = {"position": Vector3.ZERO, "rotation": Vector3.ZERO, "scale": Vector3.ONE}
