@@ -48,15 +48,25 @@ const CATEGORIES: Array[Dictionary] = [
 ]
 
 var camera_tween: Tween = null
+var camera_presets: Dictionary = {
+	"SKIN": {"pos": [0.0, 1.05, 2.5], "rot": [0.0, 0.0, 0.0], "pivot_y": 0.0},
+	"HAIR": {"pos": [0.12, 1.42, 1.4], "rot": [-4.0, 18.0, 0.0], "pivot_y": -15.0},
+	"FACE": {"pos": [0.0, 1.55, 1.05], "rot": [-2.0, 0.0, 0.0], "pivot_y": 0.0}
+}
+var cam_tuner_layer: CanvasLayer = null
 
 func _ready() -> void:
 	if back_button: back_button.pressed.connect(_on_back_pressed)
 	if save_button: save_button.pressed.connect(_on_save_pressed)
 
+	_load_camera_presets()
 	_setup_category_tabs()
 	_update_character_preview()
 	_animate_camera_for_tab(CATEGORIES[0]["mode"])
 	_render_active_workspace()
+
+	if GameController and GameController.is_development_mode:
+		_setup_cam_tuner_widget()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.is_echo():
@@ -64,6 +74,45 @@ func _unhandled_input(event: InputEvent) -> void:
 			_switch_tab(posmod(active_tab_index - 1, CATEGORIES.size()))
 		elif event.keycode == KEY_E:
 			_switch_tab(posmod(active_tab_index + 1, CATEGORIES.size()))
+		elif event.keycode == KEY_F3 or event.physical_keycode == KEY_F3:
+			if cam_tuner_layer:
+				var panel = cam_tuner_layer.find_child("CamTunerPanel", true, false)
+				if panel:
+					panel.visible = not panel.visible
+				else:
+					cam_tuner_layer.visible = not cam_tuner_layer.visible
+				get_viewport().set_input_as_handled()
+
+func _load_camera_presets() -> void:
+	var user_path = "user://customization_camera_presets.json"
+	var res_path = "res://resources/customization_camera_presets.json"
+	var target_path = user_path if FileAccess.file_exists(user_path) else (res_path if FileAccess.file_exists(res_path) else "")
+	if target_path != "":
+		var f = FileAccess.open(target_path, FileAccess.READ)
+		if f:
+			var txt = f.get_as_text()
+			f.close()
+			var json = JSON.new()
+			if json.parse(txt) == OK and json.data is Dictionary:
+				for k in json.data.keys():
+					camera_presets[k] = json.data[k]
+
+func _save_camera_presets() -> void:
+	var json_str = JSON.stringify(camera_presets, "  ")
+	var u_f = FileAccess.open("user://customization_camera_presets.json", FileAccess.WRITE)
+	if u_f:
+		u_f.store_string(json_str)
+		u_f.close()
+
+	var res_p = ProjectSettings.globalize_path("res://resources/customization_camera_presets.json")
+	if res_p == "":
+		res_p = "c:/Users/User/Documents/THRESHOLD/client/resources/customization_camera_presets.json"
+	var r_f = FileAccess.open(res_p, FileAccess.WRITE)
+	if not r_f:
+		r_f = FileAccess.open("res://resources/customization_camera_presets.json", FileAccess.WRITE)
+	if r_f:
+		r_f.store_string(json_str)
+		r_f.close()
 
 func _process(delta: float) -> void:
 	# Real-time LookIK Head Tracking toward Mouse Cursor
@@ -123,26 +172,12 @@ func _animate_camera_for_tab(mode: String) -> void:
 	if not camera or not model_pivot:
 		return
 
-	var target_pos: Vector3 = Vector3(0.0, 1.05, 2.5)
-	var target_rot: Vector3 = Vector3(0.0, 0.0, 0.0)
-	var target_pivot_y: float = 0.0
+	var stage_key = "SKIN" if mode == "SKIN" else ("HAIR" if mode == "HAIR" else "FACE")
+	var preset = camera_presets.get(stage_key, {"pos": [0.0, 1.05, 2.5], "rot": [0.0, 0.0, 0.0], "pivot_y": 0.0})
 
-	match mode:
-		"SKIN":
-			# Full Standing Body View (Image 1)
-			target_pos = Vector3(0.0, 1.05, 2.5)
-			target_rot = Vector3(0.0, 0.0, 0.0)
-			target_pivot_y = 0.0
-		"HAIR":
-			# Front Three-Quarter View (Image 2)
-			target_pos = Vector3(0.12, 1.42, 1.4)
-			target_rot = Vector3(-4.0, 18.0, 0.0)
-			target_pivot_y = deg_to_rad(-15.0)
-		_:
-			# Face / Bust Zoom (Eyes, Nose, Mouth, Glasses)
-			target_pos = Vector3(0.0, 1.55, 1.05)
-			target_rot = Vector3(-2.0, 0.0, 0.0)
-			target_pivot_y = 0.0
+	var target_pos = Vector3(preset["pos"][0], preset["pos"][1], preset["pos"][2])
+	var target_rot = Vector3(preset["rot"][0], preset["rot"][1], preset["rot"][2])
+	var target_pivot_y = deg_to_rad(preset["pivot_y"])
 
 	if camera_tween and camera_tween.is_running():
 		camera_tween.kill()
@@ -410,3 +445,174 @@ func _on_save_pressed() -> void:
 func _on_back_pressed() -> void:
 	PlayerStore.load_customization()
 	get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn")
+
+func _setup_cam_tuner_widget() -> void:
+	cam_tuner_layer = CanvasLayer.new()
+	cam_tuner_layer.name = "CamTunerLayer"
+	add_child(cam_tuner_layer)
+
+	var panel = PanelContainer.new()
+	panel.name = "CamTunerPanel"
+	panel.visible = false
+
+	var style_box = StyleBoxFlat.new()
+	style_box.bg_color = Color(0.10, 0.12, 0.14, 0.94)
+	style_box.corner_radius_top_left = 12
+	style_box.corner_radius_top_right = 12
+	style_box.corner_radius_bottom_left = 12
+	style_box.corner_radius_bottom_right = 12
+	style_box.content_margin_left = 14
+	style_box.content_margin_right = 14
+	style_box.content_margin_top = 14
+	style_box.content_margin_bottom = 14
+	panel.add_theme_stylebox_override("panel", style_box)
+
+	panel.anchor_left = 0.0
+	panel.anchor_right = 0.0
+	panel.anchor_top = 0.0
+	panel.anchor_bottom = 0.0
+	panel.offset_left = 16
+	panel.offset_right = 340
+	panel.offset_top = 16
+	panel.offset_bottom = 540
+
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 6)
+	panel.add_child(vbox)
+
+	var title = Label.new()
+	title.text = "🎥 Customization Camera Tuner (F3)"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 14)
+	title.add_theme_color_override("font_color", Color(0.3, 0.8, 1.0))
+	vbox.add_child(title)
+
+	var status_label = Label.new()
+	status_label.text = "Press F3 to toggle"
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_label.add_theme_font_size_override("font_size", 11)
+	status_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+	vbox.add_child(status_label)
+
+	vbox.add_child(HSeparator.new())
+
+	var selected_stage = "SKIN"
+
+	var create_row = func(label_text: String, min_val: float, max_val: float, step_val: float, initial_val: float, on_val_changed: Callable) -> HBoxContainer:
+		var hbox = HBoxContainer.new()
+		var lbl = Label.new()
+		lbl.text = label_text
+		lbl.custom_minimum_size = Vector2(95, 0)
+		lbl.add_theme_font_size_override("font_size", 12)
+		hbox.add_child(lbl)
+
+		var slider = HSlider.new()
+		slider.min_value = min_val
+		slider.max_value = max_val
+		slider.step = step_val
+		slider.value = initial_val
+		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		hbox.add_child(slider)
+
+		var spin = SpinBox.new()
+		spin.min_value = min_val
+		spin.max_value = max_val
+		spin.step = step_val
+		spin.value = initial_val
+		spin.custom_minimum_size = Vector2(65, 0)
+		spin.add_theme_font_size_override("font_size", 11)
+		hbox.add_child(spin)
+
+		slider.value_changed.connect(func(v):
+			spin.set_value_no_signal(v)
+			on_val_changed.call(v)
+		)
+		spin.value_changed.connect(func(v):
+			slider.set_value_no_signal(v)
+			on_val_changed.call(v)
+		)
+		return hbox
+
+	# Stage Selection Dropdown
+	var stage_hbox = HBoxContainer.new()
+	var stage_lbl = Label.new()
+	stage_lbl.text = "Stage:"
+	stage_lbl.custom_minimum_size = Vector2(95, 0)
+	stage_lbl.add_theme_font_size_override("font_size", 12)
+	stage_hbox.add_child(stage_lbl)
+
+	var opt = OptionButton.new()
+	opt.add_item("SKIN (Full Body)", 0)
+	opt.add_item("HAIR (3/4 View)", 1)
+	opt.add_item("FACE (Face Zoom)", 2)
+	opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stage_hbox.add_child(opt)
+	vbox.add_child(stage_hbox)
+
+	var rows_container = VBoxContainer.new()
+	rows_container.add_theme_constant_override("separation", 6)
+	vbox.add_child(rows_container)
+
+	var rebuild_rows = Callable()
+	rebuild_rows = func():
+		for child in rows_container.get_children():
+			child.queue_free()
+
+		var p = camera_presets.get(selected_stage, {"pos": [0.0, 1.05, 2.5], "rot": [0.0, 0.0, 0.0], "pivot_y": 0.0})
+		var cur_p = Vector3(p["pos"][0], p["pos"][1], p["pos"][2])
+		var cur_r = Vector3(p["rot"][0], p["rot"][1], p["rot"][2])
+		var cur_py = float(p["pivot_y"])
+
+		rows_container.add_child(create_row.call("Cam Pos X:", -3.0, 3.0, 0.01, cur_p.x, func(v):
+			p["pos"][0] = snapped(v, 0.01)
+			if camera: camera.position.x = v
+		))
+		rows_container.add_child(create_row.call("Cam Pos Y:", -1.0, 4.0, 0.01, cur_p.y, func(v):
+			p["pos"][1] = snapped(v, 0.01)
+			if camera: camera.position.y = v
+		))
+		rows_container.add_child(create_row.call("Cam Pos Z:", 0.2, 8.0, 0.01, cur_p.z, func(v):
+			p["pos"][2] = snapped(v, 0.01)
+			if camera: camera.position.z = v
+		))
+
+		rows_container.add_child(create_row.call("Cam Rot Pitch:", -90.0, 90.0, 0.5, cur_r.x, func(v):
+			p["rot"][0] = snapped(v, 0.1)
+			if camera: camera.rotation_degrees.x = v
+		))
+		rows_container.add_child(create_row.call("Cam Rot Yaw:", -180.0, 180.0, 0.5, cur_r.y, func(v):
+			p["rot"][1] = snapped(v, 0.1)
+			if camera: camera.rotation_degrees.y = v
+		))
+		rows_container.add_child(create_row.call("Cam Rot Roll:", -180.0, 180.0, 0.5, cur_r.z, func(v):
+			p["rot"][2] = snapped(v, 0.1)
+			if camera: camera.rotation_degrees.z = v
+		))
+
+		rows_container.add_child(create_row.call("Model Yaw:", -180.0, 180.0, 0.5, cur_py, func(v):
+			p["pivot_y"] = snapped(v, 0.1)
+			if model_pivot: model_pivot.rotation_degrees.y = v
+		))
+
+	opt.item_selected.connect(func(idx):
+		match idx:
+			0: selected_stage = "SKIN"
+			1: selected_stage = "HAIR"
+			2: selected_stage = "FACE"
+		_animate_camera_for_tab(selected_stage)
+		rebuild_rows.call()
+	)
+
+	rebuild_rows.call()
+
+	var save_btn = Button.new()
+	save_btn.text = "💾 SAVE ALL STAGE CAMERAS TO JSON"
+	vbox.add_child(save_btn)
+
+	save_btn.pressed.connect(func():
+		_save_camera_presets()
+		status_label.text = "✓ Camera presets saved to JSON!"
+		print("SAVED_CUSTOMIZATION_CAMERAS: ", camera_presets)
+	)
+
+	cam_tuner_layer.add_child(panel)
