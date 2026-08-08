@@ -115,11 +115,11 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassesRow" unique_id=770382367]
 layout_mode = 2
-text = "Glasses (0..5): "
+text = "Glasses (0..19): "
 
 [node name="GlassesSpin" type="SpinBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/GlassesRow" unique_id=1266138054]
 layout_mode = 2
-max_value = 5.0
+max_value = 19.0
 
 [node name="EyeStyleRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=1881546580]
 layout_mode = 2

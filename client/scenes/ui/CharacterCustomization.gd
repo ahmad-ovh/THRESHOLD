@@ -435,7 +435,28 @@ func _build_glasses_workspace() -> void:
 	grid.add_theme_constant_override("v_separation", 16)
 	workspace_vbox.add_child(grid)
 
-	const GLASSES_LIST = ["None", "Style 1", "Style 2", "Style 3", "Style 4"]
+	const GLASSES_LIST = [
+		"None",
+		"Wire Round",    # 0 → style 1
+		"Thick Square",  # style 2
+		"Rect Thin",     # style 3
+		"Half Rim",      # style 4
+		"Round Large",   # style 5
+		"Round Outline", # style 6
+		"Cat Eye Thin",  # style 7
+		"Oval Wide",     # style 8
+		"Visor Thin",    # style 9
+		"Round Filled",  # style 10
+		"Cat Eye Wide",  # style 11
+		"Oval Thick",    # style 12
+		"Square Wide",   # style 13
+		"Aviator",       # style 14
+		"Round Solid",   # style 15
+		"Cat Eye Wide2", # style 16
+		"Oval Thick2",   # style 17
+		"Square Wide2",  # style 18
+		"Aviator Dark",  # style 19
+	]
 	var cur_acc: int = PlayerStore.customization.get("glasses_style", 0)
 	for g_idx in range(GLASSES_LIST.size()):
 		var is_sel = (cur_acc == g_idx)

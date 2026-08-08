@@ -618,15 +618,16 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 
 	# 4. Load Glasses directly onto Face Texture Map (Highest Layer Order!)
 	if glasses_style > 0:
-		var glasses_atlas_path = "res://assets/character_models/glasses/glasses_sprite.png"
+		var glasses_atlas_path = "res://assets/character_models/textures/glasses_sprite.png"
 		var glasses_atlas_img = _load_cpu_image(glasses_atlas_path)
 		if glasses_atlas_img:
 			if glasses_atlas_img.is_compressed():
 				glasses_atlas_img.decompress()
-			var frame_w = glasses_atlas_img.get_width() / 10
+			const GLASS_FRAME_COUNT = 19
+			var frame_w = glasses_atlas_img.get_width() / GLASS_FRAME_COUNT
 			var frame_h = glasses_atlas_img.get_height()
 			if frame_w > 0 and frame_h > 0:
-				var idx = clamp(glasses_style - 1, 0, 9)
+				var idx = clamp(glasses_style - 1, 0, GLASS_FRAME_COUNT - 1)
 				var rect = Rect2i(idx * frame_w, 0, frame_w, frame_h)
 				var glass_frame = glasses_atlas_img.get_region(rect)
 				var hd_glass_w = int(glass_w * scale_factor)
@@ -636,6 +637,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 					glass_frame = _rotate_image_exact(glass_frame, glass_rot)
 					var glass_center = Vector2i(512 + int(glass_x_off * scale_factor), int(eye_center.y) + int(glass_y_off * scale_factor))
 					_blit_alpha(face_img, glass_frame, glass_center - Vector2i(hd_glass_w / 2, hd_glass_h / 2))
+
 
 	return ImageTexture.create_from_image(face_img)
 
