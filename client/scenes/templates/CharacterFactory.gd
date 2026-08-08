@@ -483,29 +483,9 @@ static func _load_cpu_image(res_path: String) -> Image:
 			return img
 	return null
 
-static func _tight_crop_alpha(src: Image) -> Image:
-	if src == null or src.is_empty():
-		return src
-	var w = src.get_width()
-	var h = src.get_height()
-	var min_x = w
-	var max_x = 0
-	var min_y = h
-	var max_y = 0
-	for y in range(h):
-		for x in range(w):
-			if src.get_pixel(x, y).a > 0.02:
-				if x < min_x: min_x = x
-				if x > max_x: max_x = x
-				if y < min_y: min_y = y
-				if y > max_y: max_y = y
-	if min_x <= max_x and min_y <= max_y:
-		var crop_w = (max_x - min_x) + 1
-		var crop_h = (max_y - min_y) + 1
-		return src.get_region(Rect2i(min_x, min_y, crop_w, crop_h))
-	return src
 
 static func _create_face_texture(customization: Dictionary) -> ImageTexture:
+
 	var skin_color: Color = customization.get("skin_color", Color(0.92, 0.76, 0.65))
 	var eye_style: int = customization.get("eye_style", 1)
 	var sclera_col: Color = customization.get("eye_sclera_color", Color(1.0, 1.0, 1.0))
@@ -519,18 +499,18 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var eye_x_off: int = int(face_offsets.get("eye_x", 26))
 	var eye_y_off: int = int(face_offsets.get("eye_y", -135))
 	var eye_size: int = int(face_offsets.get("eye_size", 43))
-	var eye_rot: float = float(face_offsets.get("eye_rot", 0.0))
-
+	var eye_rot: float = float(face_offsets.get("eye_rot", 89.0))
 
 	var nose_x_off: int = int(face_offsets.get("nose_x", 0))
 	var nose_y_off: int = int(face_offsets.get("nose_y", 0))
 	var nose_size_val: int = int(face_offsets.get("nose_size", 32))
-	var nose_rot: float = float(face_offsets.get("nose_rot", 0))
+	var nose_rot: float = float(face_offsets.get("nose_rot", 90.0))
 
 	var mouth_x_off: int = int(face_offsets.get("mouth_x", 0))
 	var mouth_y_off: int = int(face_offsets.get("mouth_y", 0))
 	var mouth_size_val: int = int(face_offsets.get("mouth_size", 28))
-	var mouth_rot: float = float(face_offsets.get("mouth_rot", 0))
+	var mouth_rot: float = float(face_offsets.get("mouth_rot", 90.0))
+
 
 	var glass_x_off: int = int(face_offsets.get("glass_x", 0))
 	var glass_y_off: int = int(face_offsets.get("glass_y", 0))

@@ -1,6 +1,6 @@
 {
   "face_offsets": {
-    "eye_rot": 0,
+    "eye_rot": 89,
     "eye_size": 43,
     "eye_x": 28,
     "eye_y": -135,
@@ -9,11 +9,11 @@
     "glass_w": 60,
     "glass_x": -1,
     "glass_y": -2,
-    "mouth_rot": 0,
+    "mouth_rot": 90,
     "mouth_size": 54,
     "mouth_x": -16,
     "mouth_y": -111,
-    "nose_rot": 0,
+    "nose_rot": 90,
     "nose_size": 47,
     "nose_x": -12,
     "nose_y": -46
