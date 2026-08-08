@@ -373,15 +373,20 @@ func _create_hair_dev_widget() -> void:
 	vbox.add_child(save_btn)
 
 	save_btn.pressed.connect(func():
+		var hair_node = get_current_hair.call()
+		var live_pos = hair_node.position if hair_node else cur_pos
+		var live_rot = hair_node.rotation_degrees if hair_node else cur_rot
+		var live_scale = hair_node.scale if hair_node else cur_scale
+
+		var transform_data = {
+			"position": [snapped(live_pos.x, 0.0001), snapped(live_pos.y, 0.0001), snapped(live_pos.z, 0.0001)],
+			"rotation": [snapped(live_rot.x, 0.1), snapped(live_rot.y, 0.1), snapped(live_rot.z, 0.1)],
+			"scale": [snapped(live_scale.x, 0.0001), snapped(live_scale.y, 0.0001), snapped(live_scale.z, 0.0001)]
+		}
+
 		var all_presets = CharacterFactory.get_model_presets()
 		if not all_presets.has("hair"):
 			all_presets["hair"] = {}
-
-		var transform_data = {
-			"position": [snapped(cur_pos.x, 0.0001), snapped(cur_pos.y, 0.0001), snapped(cur_pos.z, 0.0001)],
-			"rotation": [snapped(cur_rot.x, 0.1), snapped(cur_rot.y, 0.1), snapped(cur_rot.z, 0.1)],
-			"scale": [snapped(cur_scale.x, 0.0001), snapped(cur_scale.y, 0.0001), snapped(cur_scale.z, 0.0001)]
-		}
 
 		for i in range(271):
 			var hk = "hair_%03d" % i
@@ -403,8 +408,8 @@ func _create_hair_dev_widget() -> void:
 
 		CharacterFactory._presets_loaded = false
 		CharacterFactory._load_model_presets()
-		status_label.text = "✓ Presets saved to all 271 hair styles!"
-		print("SAVED_HAIR_PRESETS_TO_ALL: Pos Y=", cur_pos.y)
+		status_label.text = "✓ Saved Pos Y=%.4f to all 271 hair styles!" % live_pos.y
+		print("SAVED_HAIR_PRESETS_TO_ALL: Pos Y=", live_pos.y)
 	)
 
 	hair_dev_layer.add_child(panel)
