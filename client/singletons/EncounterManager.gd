@@ -99,14 +99,19 @@ func _finalize_encounter() -> void:
 		return
 	current_state = State.RESOLVING
 	
+	# Start background generation of settlement and status update immediately
+	# so player experiences zero latency when they confirm dialogue exit
+	var summary_task = _fetch_encounter_summary_async(PlayerStore.player_id, active_npc_id)
+	
 	# Allow final closing line to rest gracefully before closing window
 	if dialogue_ui_ref:
 		await dialogue_ui_ref.close_dialogue_gracefully()
 		
-	var end_res = await ApiClient.end_interaction(PlayerStore.player_id, active_npc_id)
+	var summary_results: Dictionary = await summary_task
+	var end_res: Dictionary = summary_results.get("end_res", {})
+	var status: Dictionary = summary_results.get("status", {})
 	
 	# Refresh player status after encounter end
-	var status = await ApiClient.get_player_status(PlayerStore.player_id)
 	if not status.has("error"):
 		PlayerStore.update_from_status(status)
 
@@ -121,6 +126,14 @@ func _finalize_encounter() -> void:
 		player.set_physics_process(true)
 		
 	current_state = State.LOBBY
+
+func _fetch_encounter_summary_async(p_id: String, npc_id: String) -> Dictionary:
+	var end_res = await ApiClient.end_interaction(p_id, npc_id)
+	var status = await ApiClient.get_player_status(p_id)
+	return {
+		"end_res": end_res,
+		"status": status
+	}
 
 func _ensure_dialogue_ui() -> void:
 	if not dialogue_ui_ref:
