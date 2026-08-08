@@ -21,6 +21,7 @@ extends CanvasLayer
 
 func _ready() -> void:
 	visible = false
+	mini_refresh_button.visible = false
 	close_button.pressed.connect(_on_close_pressed)
 	refresh_button.pressed.connect(_on_refresh_report_pressed)
 	mini_refresh_button.pressed.connect(_on_refresh_report_pressed)
@@ -55,12 +56,14 @@ func _on_refresh_report_pressed() -> void:
 	
 	var res = await ApiClient.get_report(PlayerStore.player_id)
 	mini_refresh_button.disabled = false
-
 	
 	if res.has("error"):
 		analysis_text.text = "[color=red]Failed to generate report: " + str(res.get("detail", "Server error")) + "[/color]"
 		advice_text.text = "[color=red]Failed to generate report.[/color]"
 		return
+	
+	mini_refresh_button.visible = true
+
 		
 	var strongest = str(res.get("strongest_skill", "—"))
 	var improving = str(res.get("improving_area", "—"))
