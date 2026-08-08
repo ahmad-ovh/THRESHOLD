@@ -2,8 +2,23 @@
 
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="1_font_hitchcut"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(1, 0.6, 0.16, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9, 0.45, 0.08, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.22)
+shadow_size = 7
+shadow_offset = Vector2(0, 3)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
+bg_color = Color(0.9, 0.45, 0.08, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -16,21 +31,6 @@ corner_radius_bottom_left = 14
 shadow_color = Color(0, 0, 0, 0.18)
 shadow_size = 5
 shadow_offset = Vector2(0, 2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
-bg_color = Color(1.0, 0.60, 0.16, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.90, 0.45, 0.08, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0, 0, 0, 0.22)
-shadow_size = 7
-shadow_offset = Vector2(0, 3)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
 bg_color = Color(0.72, 0.32, 0.04, 1)
@@ -45,7 +45,7 @@ corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lineedit"]
-bg_color = Color(1.0, 0.99, 0.95, 0.97)
+bg_color = Color(1, 0.99, 0.95, 0.97)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -79,7 +79,7 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progressbar_fill"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
+bg_color = Color(0.9, 0.45, 0.08, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -94,8 +94,8 @@ Button/colors/font_pressed_color = Color(0.96, 0.88, 0.78, 1)
 Button/styles/hover = SubResource("StyleBoxFlat_btn_hover")
 Button/styles/normal = SubResource("StyleBoxFlat_btn_normal")
 Button/styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-Label/colors/font_color = Color(0.18, 0.15, 0.10, 1)
-LineEdit/colors/font_color = Color(0.18, 0.15, 0.10, 1)
+Label/colors/font_color = Color(0.18, 0.15, 0.1, 1)
+LineEdit/colors/font_color = Color(0.18, 0.15, 0.1, 1)
 LineEdit/colors/font_placeholder_color = Color(0.55, 0.48, 0.38, 1)
 LineEdit/styles/normal = SubResource("StyleBoxFlat_lineedit")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_panel")

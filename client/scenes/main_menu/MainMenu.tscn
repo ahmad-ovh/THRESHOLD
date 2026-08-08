@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://boy37nxl6ellh"]
+[gd_scene format=3 uid="uid://cmainmenu001"]
 
 [ext_resource type="Script" uid="uid://bsyvx46nrl0yn" path="res://scenes/main_menu/MainMenu.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
@@ -39,19 +39,19 @@ axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 1666, 568)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_hover"]
-texture = ExtResource("5_bg_button")
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-region_rect = Rect2(0, 0, 1666, 568)
-modulate_color = Color(1.15, 1.15, 1.15, 1)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_pressed"]
 texture = ExtResource("5_bg_button")
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 1666, 568)
 modulate_color = Color(0.85, 0.85, 0.85, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_hover"]
+texture = ExtResource("5_bg_button")
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(1.15, 1.15, 1.15, 1)
 
 [node name="MainMenu" type="CanvasLayer" unique_id=1876854707]
 script = ExtResource("1_script")
@@ -307,10 +307,10 @@ layout_mode = 2
 [node name="DevAlignerButton" type="Button" parent="Control/LeftPanel/ButtonsVBox/DevAlignerWrapper" unique_id=495503404]
 custom_minimum_size = Vector2(350, 72)
 layout_mode = 0
-offset_left = 65.0
-offset_top = 18.0
-offset_right = 429.0
-offset_bottom = 106.0
+offset_left = 628.0
+offset_top = -482.0
+offset_right = 992.0
+offset_bottom = -394.0
 rotation = -0.07853982
 focus_mode = 0
 theme_override_colors/font_color = Color(0.98, 0.85, 0.45, 1)
