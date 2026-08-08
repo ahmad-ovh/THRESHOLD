@@ -47,6 +47,7 @@ var anim_body: Node3D
 var anim_head: Node3D
 var walk_anim_time: float = 0.0
 var camera_dev_layer: CanvasLayer = null
+var hair_dev_layer: CanvasLayer = null
 
 func _ready() -> void:
 	add_to_group("player")
@@ -218,6 +219,187 @@ func _setup_camera_dev_widget() -> void:
 
 	camera_dev_layer.add_child(panel)
 
+func _create_hair_dev_widget() -> void:
+	hair_dev_layer = CanvasLayer.new()
+	hair_dev_layer.name = "HairDevLayer"
+	add_child(hair_dev_layer)
+
+	var panel = PanelContainer.new()
+	panel.name = "HairDevPanel"
+	panel.visible = false
+
+	var style_box = StyleBoxFlat.new()
+	style_box.bg_color = Color(0.12, 0.10, 0.08, 0.92)
+	style_box.corner_radius_top_left = 12
+	style_box.corner_radius_top_right = 12
+	style_box.corner_radius_bottom_left = 12
+	style_box.corner_radius_bottom_right = 12
+	style_box.content_margin_left = 16
+	style_box.content_margin_right = 16
+	style_box.content_margin_top = 16
+	style_box.content_margin_bottom = 16
+	panel.add_theme_stylebox_override("panel", style_box)
+
+	panel.anchor_left = 1.0
+	panel.anchor_right = 1.0
+	panel.anchor_top = 0.0
+	panel.anchor_bottom = 0.0
+	panel.offset_left = -340
+	panel.offset_right = -16
+	panel.offset_top = 16
+	panel.offset_bottom = 540
+
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 6)
+	panel.add_child(vbox)
+
+	var title = Label.new()
+	title.text = "💇 Runtime Hair Aligner (F2)"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 15)
+	title.add_theme_color_override("font_color", Color(1.0, 0.65, 0.2))
+	vbox.add_child(title)
+
+	var status_label = Label.new()
+	status_label.text = "Press F2 to toggle"
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_label.add_theme_font_size_override("font_size", 11)
+	status_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+	vbox.add_child(status_label)
+
+	vbox.add_child(HSeparator.new())
+
+	var active_hair_node: Node3D = null
+	var get_current_hair = func() -> Node3D:
+		if character_mesh and character_mesh.get_child_count() > 0:
+			var avatar = character_mesh.get_child(0)
+			return avatar.find_child("GLTFHair", true, false) as Node3D
+		return null
+
+	var create_row = func(label_text: String, min_val: float, max_val: float, step_val: float, initial_val: float, on_val_changed: Callable) -> HBoxContainer:
+		var hbox = HBoxContainer.new()
+		var lbl = Label.new()
+		lbl.text = label_text
+		lbl.custom_minimum_size = Vector2(90, 0)
+		lbl.add_theme_font_size_override("font_size", 12)
+		hbox.add_child(lbl)
+
+		var slider = HSlider.new()
+		slider.min_value = min_val
+		slider.max_value = max_val
+		slider.step = step_val
+		slider.value = initial_val
+		slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		hbox.add_child(slider)
+
+		var spin = SpinBox.new()
+		spin.min_value = min_val
+		spin.max_value = max_val
+		spin.step = step_val
+		spin.value = initial_val
+		spin.custom_minimum_size = Vector2(70, 0)
+		spin.add_theme_font_size_override("font_size", 11)
+		hbox.add_child(spin)
+
+		slider.value_changed.connect(func(v):
+			spin.set_value_no_signal(v)
+			on_val_changed.call(v)
+		)
+		spin.value_changed.connect(func(v):
+			slider.set_value_no_signal(v)
+			on_val_changed.call(v)
+		)
+		return hbox
+
+	var cur_hair_style = PlayerStore.customization.get("hair_style", 0) if PlayerStore else 0
+	var cur_hair_color = PlayerStore.customization.get("hair_color", Color.WHITE) if PlayerStore else Color.WHITE
+	var cur_hair_key = "hair_%03d" % cur_hair_style
+	var presets = CharacterFactory.get_model_presets()
+	var cur_t = presets.get("hair", {}).get(cur_hair_key, {"position": [0.0, 0.0, 0.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.0168, 0.0168, 0.0168]})
+
+	var cur_pos = Vector3(cur_t["position"][0], cur_t["position"][1], cur_t["position"][2])
+	var cur_rot = Vector3(cur_t["rotation"][0], cur_t["rotation"][1], cur_t["rotation"][2])
+	var cur_scale = Vector3(cur_t["scale"][0], cur_t["scale"][1], cur_t["scale"][2])
+
+	# Hair Style selector
+	vbox.add_child(create_row.call("Style #:", 0, 270, 1, float(cur_hair_style), func(v):
+		var h_idx = int(v)
+		set_player_hair(h_idx, cur_hair_color)
+		status_label.text = "Switched to hair_%03d" % h_idx
+	))
+
+	# Hair Y Position
+	vbox.add_child(create_row.call("Pos Y:", -2.0, 2.0, 0.001, cur_pos.y, func(v):
+		cur_pos.y = v
+		var hair = get_current_hair.call()
+		if hair: hair.position.y = v
+	))
+
+	# Hair Z Position
+	vbox.add_child(create_row.call("Pos Z:", -1.0, 1.0, 0.001, cur_pos.z, func(v):
+		cur_pos.z = v
+		var hair = get_current_hair.call()
+		if hair: hair.position.z = v
+	))
+
+	# Hair X Position
+	vbox.add_child(create_row.call("Pos X:", -1.0, 1.0, 0.001, cur_pos.x, func(v):
+		cur_pos.x = v
+		var hair = get_current_hair.call()
+		if hair: hair.position.x = v
+	))
+
+	# Hair Scale Uniform
+	vbox.add_child(create_row.call("Scale:", 0.001, 0.2, 0.0005, cur_scale.x, func(v):
+		cur_scale = Vector3(v, v, v)
+		var hair = get_current_hair.call()
+		if hair: hair.scale = Vector3(v, v, v)
+	))
+
+	# Hair Rot Pitch X
+	vbox.add_child(create_row.call("Rot Pitch:", -180.0, 180.0, 0.5, cur_rot.x, func(v):
+		cur_rot.x = v
+		var hair = get_current_hair.call()
+		if hair: hair.rotation_degrees.x = v
+	))
+
+	var save_btn = Button.new()
+	save_btn.text = "💾 SAVE TO MODEL_PRESETS.JSON"
+	vbox.add_child(save_btn)
+
+	save_btn.pressed.connect(func():
+		var h_style = PlayerStore.customization.get("hair_style", 0) if PlayerStore else 0
+		var h_key = "hair_%03d" % h_style
+		var all_presets = CharacterFactory.get_model_presets()
+		if not all_presets.has("hair"):
+			all_presets["hair"] = {}
+
+		all_presets["hair"][h_key] = {
+			"position": [snapped(cur_pos.x, 0.0001), snapped(cur_pos.y, 0.0001), snapped(cur_pos.z, 0.0001)],
+			"rotation": [snapped(cur_rot.x, 0.1), snapped(cur_rot.y, 0.1), snapped(cur_rot.z, 0.1)],
+			"scale": [snapped(cur_scale.x, 0.0001), snapped(cur_scale.y, 0.0001), snapped(cur_scale.z, 0.0001)]
+		}
+
+		var json_str = JSON.stringify(all_presets, "  ")
+		var user_path = "user://model_presets.json"
+		var f_u = FileAccess.open(user_path, FileAccess.WRITE)
+		if f_u:
+			f_u.store_string(json_str)
+			f_u.close()
+
+		var res_path = ProjectSettings.globalize_path("res://assets/character_models/model_presets.json")
+		var f_r = FileAccess.open(res_path, FileAccess.WRITE)
+		if f_r:
+			f_r.store_string(json_str)
+			f_r.close()
+
+		CharacterFactory._load_model_presets()
+		status_label.text = "✓ Saved " + h_key + " preset!"
+		print("SAVED_HAIR_PRESET: ", h_key, " -> ", all_presets["hair"][h_key])
+	)
+
+	hair_dev_layer.add_child(panel)
+
 func _setup_player_mesh() -> void:
 	if character_mesh:
 		for child in character_mesh.get_children():
@@ -259,6 +441,14 @@ func _input(event: InputEvent) -> void:
 					panel.visible = not panel.visible
 				else:
 					camera_dev_layer.visible = not camera_dev_layer.visible
+				get_viewport().set_input_as_handled()
+		elif event is InputEventKey and event.is_pressed() and not event.is_echo() and (event.keycode == KEY_F2 or event.physical_keycode == KEY_F2):
+			if hair_dev_layer:
+				var panel = hair_dev_layer.find_child("HairDevPanel", true, false)
+				if panel:
+					panel.visible = not panel.visible
+				else:
+					hair_dev_layer.visible = not hair_dev_layer.visible
 				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
