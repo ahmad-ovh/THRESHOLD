@@ -51,9 +51,18 @@ func _on_refresh_report_pressed() -> void:
 		report_text.text = "[color=red]Failed to generate report: " + str(res.get("detail", "Server error")) + "[/color]"
 		return
 		
-	var summary = res.get("summary", "")
-	var rec = res.get("recommendation", "")
-	report_text.text = "[b]Growth Analysis:[/b]\n" + summary + "\n\n[b]Recommendation:[/b]\n" + rec
+	var strongest = str(res.get("strongest_skill", "—"))
+	var improving = str(res.get("improving_area", "—"))
+	var pattern = str(res.get("recent_pattern_summary", "—"))
+	var practice = str(res.get("recommended_practice", "—"))
+
+	report_text.text = (
+		"[b]Strongest Skill:[/b] " + strongest.capitalize() + "\n" +
+		"[b]Focus Area:[/b] " + improving.capitalize() + "\n\n" +
+		"[b]Growth Analysis:[/b]\n" + pattern + "\n\n" +
+		"[b]Recommendation:[/b]\n" + practice
+	)
+
 
 func _on_close_pressed() -> void:
 	if AudioManager:

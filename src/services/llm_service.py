@@ -466,10 +466,19 @@ Recent encounter history (most recent up to 5):
 Generate a personal communication summary. Return as JSON.
 """.strip()
 
-    raw = await _call(_REPORT_GENERATION_SYSTEM, user_prompt, temperature=0.6)
-    result = _parse_json(raw, "Report Generation")
+    result: dict = {}
+    try:
+        raw = await _call(_REPORT_GENERATION_SYSTEM, user_prompt, temperature=0.6)
+        result = _parse_json(raw, "Report Generation")
+    except Exception as exc:
+        logger.warning("report_generation LLM call failed (%s). Using fallback values.", exc)
 
-    result.setdefault("strongest_skill", max(skill_vector, key=lambda k: skill_vector[k]))
+    strongest_fallback = (
+        max(skill_vector, key=lambda k: skill_vector[k])
+        if skill_vector
+        else "clarity"
+    )
+    result.setdefault("strongest_skill", strongest_fallback)
     result.setdefault("improving_area", "emotional_acknowledgment")
     result.setdefault("recent_pattern_summary", "Your communication patterns are developing.")
     result.setdefault("recommended_practice", "Try a friendship scenario.")
