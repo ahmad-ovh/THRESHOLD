@@ -847,7 +847,7 @@ static func attach_hair_to_character(avatar_root: Node3D, hair_style: int, hair_
 	var hair_key = "hair_%03d" % hair_style
 
 	# Inherit exact anchoring metrics established by Model Aligner from model_presets.json
-	_apply_item_transform(hair_gltf, "hair", hair_key, Vector3(0.0, 0.005, 0.0001), Vector3.ZERO, Vector3(0.0168, 0.0168, 0.0168))
+	_apply_item_transform(hair_gltf, "hair", hair_key, Vector3(0.0, -0.33, 0.0001), Vector3.ZERO, Vector3(0.0168, 0.0168, 0.0168))
 
 	var hair_mat = _mat(hair_color)
 	_set_node_material(hair_gltf, hair_mat)
