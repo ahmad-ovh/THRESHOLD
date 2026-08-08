@@ -840,19 +840,23 @@ static func attach_hair_to_character(avatar_root: Node3D, hair_style: int, hair_
 	if not head_attach:
 		return null
 
-	# Remove any existing hair nodes
+	# Remove any existing hair nodes immediately
 	var to_remove = []
 	for child in head_attach.get_children():
 		if child.name.begins_with("GLTFHair") or child.name.to_lower().contains("hair"):
 			to_remove.append(child)
 
-	var old_hairs = mii.find_children("*GLTFHair*", "Node3D", true, false)
+	var old_hairs = mii.find_children("*hair*", "Node3D", true, false)
 	for h in old_hairs:
 		if h != null and is_instance_valid(h) and not to_remove.has(h):
 			to_remove.append(h)
 
 	for node in to_remove:
-		node.queue_free()
+		if is_instance_valid(node):
+			var parent = node.get_parent()
+			if parent:
+				parent.remove_child(node)
+			node.free()
 
 	# Load hair GLTF
 	var hair_path = "res://assets/character_models/hair/hair_%03d.gltf" % hair_style
@@ -942,6 +946,12 @@ static func _build_character_from_dict(root: Node3D, c: Dictionary) -> void:
 	if skeleton:
 		var head_attach = _get_or_create_head_bone_attachment(skeleton)
 		if head_attach:
+			# Clear existing custom head nodes
+			for child in head_attach.get_children():
+				if child.name.begins_with("GLTFHead") or child.name.to_lower().contains("head"):
+					head_attach.remove_child(child)
+					child.free()
+
 			if head_style == 1:
 				# Base Head 1 uses rigged Head_Mesh on idle.fbx
 				if head_mesh:
@@ -965,6 +975,12 @@ static func _build_character_from_dict(root: Node3D, c: Dictionary) -> void:
 			# 3D Hair Attachment via dedicated attach_hair_to_character helper
 			var hair_style: int = c.get("hair_style", 0)
 			attach_hair_to_character(avatar, hair_style, hair_color)
+
+			# Clear existing glasses nodes
+			for child in head_attach.get_children():
+				if child.name.begins_with("GLTFGlasses") or child.name.to_lower().contains("glasses"):
+					head_attach.remove_child(child)
+					child.free()
 
 			# Glasses Attachment
 			var glasses_style: int = c.get("glasses_style", 0)

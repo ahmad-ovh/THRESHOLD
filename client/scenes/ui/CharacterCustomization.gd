@@ -361,7 +361,8 @@ func _update_character_preview() -> void:
 	if not model_pivot:
 		return
 	for child in model_pivot.get_children():
-		child.queue_free()
+		model_pivot.remove_child(child)
+		child.free()
 	active_avatar_instance = CharacterFactory.create_character_mesh("player")
 	model_pivot.add_child(active_avatar_instance)
 
