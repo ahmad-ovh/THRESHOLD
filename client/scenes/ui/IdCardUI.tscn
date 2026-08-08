@@ -366,13 +366,94 @@ theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "📋 COMMUNICATION GROWTH REPORT"
 
-[node name="ReportText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+[node name="ReportTabContainer" type="TabContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("3_font_hitchcut")
+theme_override_font_sizes/font_size = 13
+current_tab = 0
+
+[node name="Overview" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StrongestRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/StrongestRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40, 0.30, 0.18, 1)
+theme_override_fonts/font = ExtResource("3_font_hitchcut")
+theme_override_font_sizes/font_size = 13
+text = "Strongest Skill: "
+
+[node name="Value" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/StrongestRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
+theme_override_fonts/font = ExtResource("3_font_hitchcut")
+theme_override_font_sizes/font_size = 13
+text = "—"
+
+[node name="FocusRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/FocusRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40, 0.30, 0.18, 1)
+theme_override_fonts/font = ExtResource("3_font_hitchcut")
+theme_override_font_sizes/font_size = 13
+text = "Focus Area: "
+
+[node name="Value" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/FocusRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_fonts/font = ExtResource("3_font_hitchcut")
+theme_override_font_sizes/font_size = 13
+text = "—"
+
+[node name="Analysis" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="AnalysisText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Analysis"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.25, 0.20, 0.13, 1)
 theme_override_font_sizes/normal_font_size = 13
 bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 3
 text = "Click 'Generate Growth Report' to run AI analysis on your conversation history."
+
+[node name="Advice" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="AdviceText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Advice"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.25, 0.20, 0.13, 1)
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 3
+text = "Recommendations will appear here after report generation."
+
 
 [node name="RefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
 custom_minimum_size = Vector2(0, 44)

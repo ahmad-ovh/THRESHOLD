@@ -12,7 +12,10 @@ extends CanvasLayer
 @onready var politeness_bar: ProgressBar = $PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid/PolitenessBar
 @onready var expression_bar: ProgressBar = $PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid/ExpressionBar
 
-@onready var report_text: RichTextLabel = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportText
+@onready var strongest_val: Label = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/StrongestRow/Value
+@onready var focus_val: Label = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/FocusRow/Value
+@onready var analysis_text: RichTextLabel = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Analysis/AnalysisText
+@onready var advice_text: RichTextLabel = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Advice/AdviceText
 @onready var refresh_button: Button = $PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/RefreshButton
 
 func _ready() -> void:
@@ -41,14 +44,16 @@ func _update_id_card() -> void:
 func _on_refresh_report_pressed() -> void:
 	if AudioManager:
 		AudioManager.play_click()
-	report_text.text = "[i]Analyzing dialogue history and compiling growth report...[/i]"
+	analysis_text.text = "[i]Analyzing dialogue history and compiling growth report...[/i]"
+	advice_text.text = "[i]Compiling recommendations...[/i]"
 	refresh_button.disabled = true
 	
 	var res = await ApiClient.get_report(PlayerStore.player_id)
 	refresh_button.disabled = false
 	
 	if res.has("error"):
-		report_text.text = "[color=red]Failed to generate report: " + str(res.get("detail", "Server error")) + "[/color]"
+		analysis_text.text = "[color=red]Failed to generate report: " + str(res.get("detail", "Server error")) + "[/color]"
+		advice_text.text = "[color=red]Failed to generate report.[/color]"
 		return
 		
 	var strongest = str(res.get("strongest_skill", "—"))
@@ -56,12 +61,11 @@ func _on_refresh_report_pressed() -> void:
 	var pattern = str(res.get("recent_pattern_summary", "—"))
 	var practice = str(res.get("recommended_practice", "—"))
 
-	report_text.text = (
-		"[b]Strongest Skill:[/b] " + strongest.capitalize() + "\n" +
-		"[b]Focus Area:[/b] " + improving.capitalize() + "\n\n" +
-		"[b]Growth Analysis:[/b]\n" + pattern + "\n\n" +
-		"[b]Recommendation:[/b]\n" + practice
-	)
+	strongest_val.text = strongest.capitalize()
+	focus_val.text = improving.capitalize()
+	analysis_text.text = pattern
+	advice_text.text = practice
+
 
 
 func _on_close_pressed() -> void:
