@@ -239,17 +239,38 @@ static func _get_or_create_head_bone_attachment(skeleton: Skeleton3D) -> BoneAtt
 	if not skeleton:
 		return null
 	for child in skeleton.get_children():
-		if child is BoneAttachment3D and (child.bone_name == "mixamorig:Head" or child.bone_name == "mixamorig:HeadTop_End"):
+		if child is BoneAttachment3D:
 			var idx = skeleton.find_bone(child.bone_name)
 			if idx != -1:
 				child.bone_idx = idx
 			return child
+
+	var head_bone_name = ""
+	var head_bone_idx = -1
+
+	for candidate in ["mixamorig_Head", "mixamorig:Head", "Head"]:
+		var idx = skeleton.find_bone(candidate)
+		if idx != -1:
+			head_bone_name = candidate
+			head_bone_idx = idx
+			break
+
+	if head_bone_idx == -1:
+		for i in range(skeleton.get_bone_count()):
+			var bname = skeleton.get_bone_name(i)
+			if "head" in bname.to_lower() and not "end" in bname.to_lower() and not "top" in bname.to_lower():
+				head_bone_name = bname
+				head_bone_idx = i
+				break
+
+	if head_bone_idx == -1:
+		head_bone_idx = 0
+		head_bone_name = skeleton.get_bone_name(0)
+
 	var ba = BoneAttachment3D.new()
 	ba.name = "HeadBoneAttachment"
-	ba.bone_name = "mixamorig:Head"
-	var idx = skeleton.find_bone("mixamorig:Head")
-	if idx != -1:
-		ba.bone_idx = idx
+	ba.bone_name = head_bone_name
+	ba.bone_idx = head_bone_idx
 	skeleton.add_child(ba)
 	return ba
 
