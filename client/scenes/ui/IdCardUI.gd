@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var level_num_label: Label = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/LevelHeader/LevelNumLabel
 @onready var overall_bar: ProgressBar = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/OverallProgressBar
 @onready var streak_label: Label = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/StreakLabel
+@onready var model_pivot: Node3D = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
 
 @onready var clarity_bar: ProgressBar = $PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid/ClarityBar
 @onready var empathy_bar: ProgressBar = $PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid/EmpathyBar
@@ -31,6 +32,7 @@ func toggle() -> void:
 	visible = not visible
 	if visible:
 		_update_id_card()
+		_spawn_preview_model()
 
 func _update_id_card() -> void:
 	player_id_label.text = "ID: " + PlayerStore.player_id.to_upper()
@@ -81,3 +83,14 @@ func _on_close_pressed() -> void:
 	if AudioManager:
 		AudioManager.play_click()
 	visible = false
+
+func _spawn_preview_model() -> void:
+	if not model_pivot:
+		return
+	# Clear any previous preview
+	for child in model_pivot.get_children():
+		model_pivot.remove_child(child)
+		child.queue_free()
+	# Clone the player's character into the isolated viewport
+	var avatar = CharacterFactory.create_character_mesh("player")
+	model_pivot.add_child(avatar)
