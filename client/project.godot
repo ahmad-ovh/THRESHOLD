@@ -29,9 +29,10 @@ AudioManager="*res://singletons/AudioManager.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/size/min_width=640
+window/size/min_height=360
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
-
 
 [gui]
 
@@ -96,6 +97,7 @@ toggle_dev_camera={
 
 [rendering]
 
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
