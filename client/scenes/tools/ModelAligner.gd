@@ -53,6 +53,7 @@ extends Control
 
 @onready var save_preset_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/SavePresetBtn
 @onready var save_catalog_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/SaveCatalogBtn
+@onready var save_face_offsets_btn: Button = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/SaveFaceOffsetsBtn
 @onready var preset_status_label: Label = $MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer/PresetStatusLabel
 
 # Visibility Checkboxes & Focus Button
@@ -132,6 +133,7 @@ var gizmo_node: Node3D
 func _ready() -> void:
 	_configure_slider_ranges()
 	_load_catalog()
+	_update_face_offset_spinboxes()
 	_connect_signals()
 	_rebuild_avatar()
 	_update_gizmo_spinboxes()
@@ -511,6 +513,7 @@ func _connect_signals() -> void:
 
 	if save_preset_btn: save_preset_btn.pressed.connect(_on_save_current_item_preset)
 	if save_catalog_btn: save_catalog_btn.pressed.connect(_on_save_catalog_to_file)
+	if save_face_offsets_btn: save_face_offsets_btn.pressed.connect(_on_save_face_offsets_pressed)
 
 	head_spin.value_changed.connect(func(v):
 		PlayerStore.customization["head_style"] = int(v)
@@ -647,6 +650,55 @@ func _on_save_catalog_to_file() -> void:
 	CharacterFactory._load_model_presets()
 	if preset_status_label:
 		preset_status_label.text = "✓ Presets saved to catalog & user data!"
+
+func _on_save_face_offsets_pressed() -> void:
+	if not PlayerStore.customization.has("face_offsets"):
+		return
+	catalog_presets["face_offsets"] = PlayerStore.customization["face_offsets"].duplicate(true)
+	_on_save_catalog_to_file()
+	if preset_status_label:
+		preset_status_label.text = "✓ Face offsets saved to catalog & user data!"
+
+func _update_face_offset_spinboxes() -> void:
+	if not PlayerStore.customization.has("face_offsets"):
+		return
+	var fo = PlayerStore.customization["face_offsets"]
+	if fo.has("eye_x") and spin_eye_x:
+		spin_eye_x.set_value_no_signal(fo["eye_x"])
+		if slider_eye_x: slider_eye_x.set_value_no_signal(fo["eye_x"])
+	if fo.has("eye_y") and spin_eye_y:
+		spin_eye_y.set_value_no_signal(fo["eye_y"])
+		if slider_eye_y: slider_eye_y.set_value_no_signal(fo["eye_y"])
+	if fo.has("eye_size") and spin_eye_size:
+		spin_eye_size.set_value_no_signal(fo["eye_size"])
+		if slider_eye_size: slider_eye_size.set_value_no_signal(fo["eye_size"])
+	if fo.has("eye_rot") and spin_eye_rot:
+		spin_eye_rot.set_value_no_signal(fo["eye_rot"])
+		if slider_eye_rot: slider_eye_rot.set_value_no_signal(fo["eye_rot"])
+
+	if fo.has("nose_y") and spin_nose_y:
+		spin_nose_y.set_value_no_signal(fo["nose_y"])
+		if slider_nose_y: slider_nose_y.set_value_no_signal(fo["nose_y"])
+	if fo.has("nose_rot") and spin_nose_rot:
+		spin_nose_rot.set_value_no_signal(fo["nose_rot"])
+		if slider_nose_rot: slider_nose_rot.set_value_no_signal(fo["nose_rot"])
+
+	if fo.has("mouth_y") and spin_mouth_y:
+		spin_mouth_y.set_value_no_signal(fo["mouth_y"])
+		if slider_mouth_y: slider_mouth_y.set_value_no_signal(fo["mouth_y"])
+	if fo.has("mouth_rot") and spin_mouth_rot:
+		spin_mouth_rot.set_value_no_signal(fo["mouth_rot"])
+		if slider_mouth_rot: slider_mouth_rot.set_value_no_signal(fo["mouth_rot"])
+
+	if fo.has("glass_x") and spin_glass_x:
+		spin_glass_x.set_value_no_signal(fo["glass_x"])
+		if slider_glass_x: slider_glass_x.set_value_no_signal(fo["glass_x"])
+	if fo.has("glass_y") and spin_glass_y:
+		spin_glass_y.set_value_no_signal(fo["glass_y"])
+		if slider_glass_y: slider_glass_y.set_value_no_signal(fo["glass_y"])
+	if fo.has("glass_rot") and spin_glass_rot:
+		spin_glass_rot.set_value_no_signal(fo["glass_rot"])
+		if slider_glass_rot: slider_glass_rot.set_value_no_signal(fo["glass_rot"])
 
 func _update_gizmo_spinboxes() -> void:
 	if not relative_edits.has(selected_part):

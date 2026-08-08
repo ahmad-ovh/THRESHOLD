@@ -470,6 +470,11 @@ max_value = 360.0
 step = 1.0
 value = 0.0
 
+[node name="SaveFaceOffsetsBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "💾 SAVE FACE OFFSETS"
+
 [node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3

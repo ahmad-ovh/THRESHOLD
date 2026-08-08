@@ -344,11 +344,21 @@ static func _load_model_presets() -> void:
 			if json_u.parse(txt_user) == OK and json_u.data is Dictionary:
 				var u_data = json_u.data as Dictionary
 				for cat in u_data.keys():
-					if not model_presets.has(cat):
-						model_presets[cat] = {}
 					if u_data[cat] is Dictionary:
-						for item in u_data[cat].keys():
-							model_presets[cat][item] = u_data[cat][item]
+						if not model_presets.has(cat):
+							model_presets[cat] = {}
+						if cat == "face_offsets":
+							model_presets[cat] = u_data[cat].duplicate(true)
+						else:
+							for item in u_data[cat].keys():
+								model_presets[cat][item] = u_data[cat][item]
+
+	if model_presets.has("face_offsets") and model_presets["face_offsets"] is Dictionary:
+		var loaded_offsets = model_presets["face_offsets"] as Dictionary
+		if not PlayerStore.customization.has("face_offsets"):
+			PlayerStore.customization["face_offsets"] = {}
+		for k in loaded_offsets.keys():
+			PlayerStore.customization["face_offsets"][k] = loaded_offsets[k]
 
 static func _apply_item_transform(node: Node3D, cat: String, item_key: String, def_pos: Vector3, def_rot: Vector3, def_scale: Vector3) -> void:
 	if not node:
@@ -527,7 +537,9 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 		if eye_frame and hd_eye_size > 0:
 			eye_frame.resize(hd_eye_size, hd_eye_size, Image.INTERPOLATE_BILINEAR)
 			var eye_l_img = _rotate_image_exact(eye_frame.duplicate(), eye_rot)
-			var eye_r_img = _rotate_image_exact(eye_frame.duplicate(), eye_rot)
+			var eye_r_frame = eye_frame.duplicate()
+			eye_r_frame.flip_x()
+			var eye_r_img = _rotate_image_exact(eye_r_frame, eye_rot)
 			_apply_chroma_and_blit(face_img, eye_l_img, eye_l_pos, sclera_col, pupil_col, iris_col)
 			_apply_chroma_and_blit(face_img, eye_r_img, eye_r_pos, sclera_col, pupil_col, iris_col)
 			eye_drawn = true
@@ -539,7 +551,9 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	# 2. Load Nose from 'nose_sprite.png'
 	var nose_sheet_path = "res://assets/character_models/textures/nose_sprite.png"
 	var nose_size = Vector2i(int(32 * scale_factor), int(32 * scale_factor))
-	var nose_center = Vector2i(512, 480 + int(nose_y_off * scale_factor))
+	var nose_rendered_h = nose_size.y
+	var nose_base_y = int(eye_center.y) + hd_eye_size / 2 + nose_rendered_h / 2
+	var nose_center = Vector2i(512, nose_base_y + int(nose_y_off * scale_factor))
 	var nose_top_left = nose_center - nose_size / 2
 	var nose_drawn = false
 
@@ -566,7 +580,9 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	if not ResourceLoader.exists(mouth_sheet_path):
 		mouth_sheet_path = "res://assets/character_models/textures/mouth_sprite.png"
 	var mouth_size = Vector2i(int(44 * scale_factor), int(28 * scale_factor))
-	var mouth_center = Vector2i(512, 520 + int(mouth_y_off * scale_factor))
+	var mouth_rendered_h = mouth_size.y
+	var mouth_base_y = nose_base_y + nose_rendered_h / 2 + mouth_rendered_h / 2
+	var mouth_center = Vector2i(512, mouth_base_y + int(mouth_y_off * scale_factor))
 	var mouth_top_left = mouth_center - mouth_size / 2
 	var mouth_drawn = false
 
