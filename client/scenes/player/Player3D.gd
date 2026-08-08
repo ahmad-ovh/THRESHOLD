@@ -373,38 +373,38 @@ func _create_hair_dev_widget() -> void:
 	vbox.add_child(save_btn)
 
 	save_btn.pressed.connect(func():
-		var h_style = PlayerStore.customization.get("hair_style", 0) if PlayerStore else 0
-		var h_key = "hair_%03d" % h_style
 		var all_presets = CharacterFactory.get_model_presets()
 		if not all_presets.has("hair"):
 			all_presets["hair"] = {}
 
-		all_presets["hair"][h_key] = {
+		var transform_data = {
 			"position": [snapped(cur_pos.x, 0.0001), snapped(cur_pos.y, 0.0001), snapped(cur_pos.z, 0.0001)],
 			"rotation": [snapped(cur_rot.x, 0.1), snapped(cur_rot.y, 0.1), snapped(cur_rot.z, 0.1)],
 			"scale": [snapped(cur_scale.x, 0.0001), snapped(cur_scale.y, 0.0001), snapped(cur_scale.z, 0.0001)]
 		}
 
+		for i in range(271):
+			var hk = "hair_%03d" % i
+			all_presets["hair"][hk] = transform_data.duplicate(true)
+
 		var json_str = JSON.stringify(all_presets, "  ")
+
 		var user_path = "user://model_presets.json"
 		var f_u = FileAccess.open(user_path, FileAccess.WRITE)
 		if f_u:
 			f_u.store_string(json_str)
 			f_u.close()
 
-		var res_path = ProjectSettings.globalize_path("res://assets/character_models/model_presets.json")
-		if res_path == "":
-			res_path = "c:/Users/User/Documents/THRESHOLD/client/assets/character_models/model_presets.json"
+		var res_path = "c:/Users/User/Documents/THRESHOLD/client/assets/character_models/model_presets.json"
 		var f_r = FileAccess.open(res_path, FileAccess.WRITE)
-		if not f_r:
-			f_r = FileAccess.open("res://assets/character_models/model_presets.json", FileAccess.WRITE)
 		if f_r:
 			f_r.store_string(json_str)
 			f_r.close()
 
+		CharacterFactory._presets_loaded = false
 		CharacterFactory._load_model_presets()
-		status_label.text = "✓ Saved " + h_key + " preset!"
-		print("SAVED_HAIR_PRESET: ", h_key, " -> ", all_presets["hair"][h_key])
+		status_label.text = "✓ Presets saved to all 271 hair styles!"
+		print("SAVED_HAIR_PRESETS_TO_ALL: Pos Y=", cur_pos.y)
 	)
 
 	hair_dev_layer.add_child(panel)
