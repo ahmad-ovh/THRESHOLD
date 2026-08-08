@@ -473,17 +473,37 @@ static func _load_cpu_image(res_path: String) -> Image:
 		return _cpu_img_cache[res_path]
 	if not ResourceLoader.exists(res_path):
 		return null
-	var global_path = ProjectSettings.globalize_path(res_path)
-	var img = Image.load_from_file(global_path)
-	if img:
-		_cpu_img_cache[res_path] = img
-		return img
 	var tex = load(res_path) as Texture2D
 	if tex:
-		var tex_img = tex.get_image()
-		_cpu_img_cache[res_path] = tex_img
-		return tex_img
+		var img = tex.get_image()
+		if img:
+			if img.is_compressed():
+				img.decompress()
+			_cpu_img_cache[res_path] = img
+			return img
 	return null
+
+static func _tight_crop_alpha(src: Image) -> Image:
+	if src == null or src.is_empty():
+		return src
+	var w = src.get_width()
+	var h = src.get_height()
+	var min_x = w
+	var max_x = 0
+	var min_y = h
+	var max_y = 0
+	for y in range(h):
+		for x in range(w):
+			if src.get_pixel(x, y).a > 0.02:
+				if x < min_x: min_x = x
+				if x > max_x: max_x = x
+				if y < min_y: min_y = y
+				if y > max_y: max_y = y
+	if min_x <= max_x and min_y <= max_y:
+		var crop_w = (max_x - min_x) + 1
+		var crop_h = (max_y - min_y) + 1
+		return src.get_region(Rect2i(min_x, min_y, crop_w, crop_h))
+	return src
 
 static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var skin_color: Color = customization.get("skin_color", Color(0.92, 0.76, 0.65))
@@ -499,7 +519,8 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var eye_x_off: int = int(face_offsets.get("eye_x", 26))
 	var eye_y_off: int = int(face_offsets.get("eye_y", -135))
 	var eye_size: int = int(face_offsets.get("eye_size", 43))
-	var eye_rot: float = float(face_offsets.get("eye_rot", 90.0))
+	var eye_rot: float = float(face_offsets.get("eye_rot", 0.0))
+
 
 	var nose_x_off: int = int(face_offsets.get("nose_x", 0))
 	var nose_y_off: int = int(face_offsets.get("nose_y", 0))
