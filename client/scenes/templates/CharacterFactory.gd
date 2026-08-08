@@ -290,9 +290,12 @@ static func _build_fallback_player(root: Node3D) -> void:
 	var c = PlayerStore.customization
 	var skin_color: Color = c.get("skin_color", Color(0.92, 0.76, 0.65))
 	var hair_color: Color = c.get("hair_color", Color(0.24, 0.16, 0.10))
+	var shirt_color: Color = c.get("shirt_color", Color(0.95, 0.95, 0.95))
 
 	var hair_mat = _mat(hair_color)
-	var shirt_mat = _mat(Color(0.95, 0.95, 0.95))
+	var shirt_mat = _mat(shirt_color)
+
+
 
 	var avatar = Node3D.new()
 	avatar.name = "MiiAvatar"
@@ -586,6 +589,10 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	if not nose_drawn:
 		_draw_procedural_nose_style(face_img, nose_center, nose_style, skin_color.darkened(0.25), nose_rot)
 
+	var lip_color: Color = customization.get("lip_color", Color(0.85, 0.45, 0.50))
+	var upper_lip_col: Color = customization.get("upper_lip_color", lip_color.darkened(0.18))
+	var lower_lip_col: Color = customization.get("lower_lip_color", lip_color)
+
 	# 3. Load Mouth from 'mouth_sprite_rgb.png'
 	var mouth_sheet_path = "res://assets/character_models/textures/mouth_sprite_rgb.png"
 	if not ResourceLoader.exists(mouth_sheet_path):
@@ -610,11 +617,12 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 		if mouth_frame and mouth_size.x > 0 and mouth_size.y > 0:
 			mouth_frame.resize(mouth_size.x, mouth_size.y, Image.INTERPOLATE_BILINEAR)
 			mouth_frame = _rotate_image_exact(mouth_frame, mouth_rot)
-			_blit_alpha(face_img, mouth_frame, mouth_top_left)
+			_apply_mouth_chroma_and_blit(face_img, mouth_frame, mouth_top_left, upper_lip_col, lower_lip_col)
 			mouth_drawn = true
 
 	if not mouth_drawn:
-		_draw_procedural_mouth_style(face_img, mouth_center, mouth_style, Color(0.7, 0.25, 0.25), mouth_rot)
+		_draw_procedural_mouth_style(face_img, mouth_center, mouth_style, lower_lip_col, mouth_rot)
+
 
 	# 4. Load Glasses directly onto Face Texture Map (Highest Layer Order!)
 	if glasses_style > 0:
@@ -747,23 +755,82 @@ static func _apply_chroma_and_blit(dest: Image, src: Image, pos: Vector2i, scler
 			var max_c = max(r, max(g, b))
 
 			var final_col: Color
-			if max_c < 0.20:
+			if max_c < 0.18:
 				final_col = Color(0.05, 0.05, 0.05, px.a)
 			else:
 				var c_rgb = Vector3(1, 1, 1)
-				if g > r and g > b:
-					c_rgb = lerp(Vector3(sclera.r, sclera.g, sclera.b), Vector3(g, g, g), 0.15)
-				elif r > g and r > b and (r - b) > 0.15:
-					c_rgb = Vector3(pupil.r, pupil.g, pupil.b)
-				elif b > g or (r > 0.35 and b > 0.35):
-					c_rgb = Vector3(iris.r, iris.g, iris.b)
+				if g > 0.30 and g > r + 0.10 and g > b + 0.10:
+					# GREEN => Sclera
+					var shade_factor = clamp(g / 0.85, 0.5, 1.1)
+					c_rgb = Vector3(sclera.r * shade_factor, sclera.g * shade_factor, sclera.b * shade_factor)
+				elif r > 0.30 and r > g + 0.10 and r > b + 0.10:
+					# RED => Pupil
+					var shade_factor = clamp(r / 0.85, 0.5, 1.1)
+					c_rgb = Vector3(pupil.r * shade_factor, pupil.g * shade_factor, pupil.b * shade_factor)
+				elif b > 0.30 or (r > 0.25 and b > 0.25 and g < r):
+					# PURPLE / BLUE => Iris
+					var shade_factor = clamp(max(b, r) / 0.85, 0.5, 1.1)
+					c_rgb = Vector3(iris.r * shade_factor, iris.g * shade_factor, iris.b * shade_factor)
 				else:
-					c_rgb = lerp(Vector3(0.1, 0.1, 0.1), Vector3(sclera.r, sclera.g, sclera.b), max_c)
+					c_rgb = Vector3(sclera.r, sclera.g, sclera.b)
 				final_col = Color(c_rgb.x, c_rgb.y, c_rgb.z, px.a)
 
 			var bg = dest.get_pixel(dx, dy)
 			var blended = bg.blend(final_col)
 			dest.set_pixel(dx, dy, blended)
+
+static func _apply_mouth_chroma_and_blit(dest: Image, src: Image, pos: Vector2i, upper_lip: Color, lower_lip: Color) -> void:
+	if src == null or dest == null:
+		return
+	if src.is_compressed():
+		src.decompress()
+	if src.get_format() != Image.FORMAT_RGBA8:
+		src.convert(Image.FORMAT_RGBA8)
+	if dest.is_compressed():
+		dest.decompress()
+	if dest.get_format() != Image.FORMAT_RGBA8:
+		dest.convert(Image.FORMAT_RGBA8)
+
+	var sw = src.get_width()
+	var sh = src.get_height()
+	var dw = dest.get_width()
+	var dh = dest.get_height()
+	if sw <= 0 or sh <= 0 or dw <= 0 or dh <= 0:
+		return
+
+	for y in range(sh):
+		var dy = pos.y + y
+		if dy < 0 or dy >= dh:
+			continue
+		for x in range(sw):
+			var dx = pos.x + x
+			if dx < 0 or dx >= dw:
+				continue
+			var px = src.get_pixel(x, y)
+			if px.a < 0.05:
+				continue
+
+			var r = px.r
+			var g = px.g
+			var b = px.b
+
+			var final_col: Color
+			if g > 0.35 and g > r + 0.15 and g > b + 0.15:
+				# Green channel => Upper Lip
+				var shade_factor = clamp(g / 0.85, 0.4, 1.2)
+				final_col = Color(upper_lip.r * shade_factor, upper_lip.g * shade_factor, upper_lip.b * shade_factor, px.a)
+			elif r > 0.35 and r > g + 0.15 and r > b + 0.15:
+				# Red channel => Lower Lip
+				var shade_factor = clamp(r / 0.85, 0.4, 1.2)
+				final_col = Color(lower_lip.r * shade_factor, lower_lip.g * shade_factor, lower_lip.b * shade_factor, px.a)
+			else:
+				# Outlines / detail lines / cavity / teeth
+				final_col = px
+
+			var bg = dest.get_pixel(dx, dy)
+			var blended = bg.blend(final_col)
+			dest.set_pixel(dx, dy, blended)
+
 
 static func _blit_alpha(dest: Image, src: Image, pos: Vector2i) -> void:
 	if src == null or dest == null:

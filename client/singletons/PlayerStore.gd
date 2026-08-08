@@ -12,6 +12,8 @@ var skill_vector: Dictionary = {"clarity": 0.5, "empathy": 0.5, "politeness": 0.
 
 var customization: Dictionary = {
 	"skin_color": Color(0.92, 0.76, 0.65),
+	"shirt_color": Color(0.95, 0.95, 0.95),
+	"pants_color": Color(0.20, 0.25, 0.35),
 	"hair_style": 0,
 	"hair_color": Color(0.24, 0.16, 0.10),
 	"eye_style": 1,
@@ -20,8 +22,12 @@ var customization: Dictionary = {
 	"eye_iris_color": Color(0.18, 0.55, 0.85),
 	"nose_style": 1,
 	"mouth_style": 1,
+	"lip_color": Color(0.85, 0.45, 0.50),
+	"upper_lip_color": Color(0.70, 0.37, 0.41),
+	"lower_lip_color": Color(0.85, 0.45, 0.50),
 	"accessory_style": 0
 }
+
 
 const CUSTOMIZATION_SAVE_PATH: String = "user://customization.json"
 

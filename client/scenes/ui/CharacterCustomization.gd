@@ -39,6 +39,28 @@ const EYE_PALETTE: Array[Color] = [
 	Color(0.55, 0.25, 0.65), Color(0.75, 0.62, 0.20)
 ]
 
+const CLOTHING_PALETTE: Array[Color] = [
+	Color(0.95, 0.95, 0.95), Color(0.15, 0.15, 0.18), Color(0.20, 0.25, 0.40), Color(0.80, 0.22, 0.22),
+	Color(0.22, 0.60, 0.35), Color(0.85, 0.55, 0.18), Color(0.55, 0.25, 0.65), Color(0.40, 0.70, 0.85),
+	Color(0.88, 0.45, 0.55), Color(0.50, 0.50, 0.55), Color(0.45, 0.32, 0.22), Color(0.85, 0.78, 0.65)
+]
+
+const SCLERA_PALETTE: Array[Color] = [
+	Color(1.0, 1.0, 1.0), Color(0.96, 0.94, 0.90), Color(0.90, 0.95, 1.0), Color(0.18, 0.15, 0.18), Color(0.95, 0.90, 0.60)
+]
+
+const PUPIL_PALETTE: Array[Color] = [
+	Color(0.10, 0.10, 0.10), Color(0.85, 0.15, 0.15), Color(0.90, 0.70, 0.10), Color(0.60, 0.20, 0.80),
+	Color(0.10, 0.40, 0.90), Color(0.15, 0.65, 0.30), Color(0.45, 0.25, 0.15)
+]
+
+const LIP_PALETTE: Array[Color] = [
+	Color(0.85, 0.45, 0.50), Color(0.90, 0.35, 0.35), Color(0.70, 0.15, 0.20), Color(0.55, 0.18, 0.35),
+	Color(0.82, 0.55, 0.48), Color(0.40, 0.22, 0.18), Color(0.90, 0.60, 0.65), Color(0.45, 0.15, 0.50),
+	Color(0.18, 0.15, 0.18)
+]
+
+
 const CATEGORIES: Array[Dictionary] = [
 	{"name": "Skin Tone", "icon": "😊", "mode": "SKIN"},
 	{"name": "Hairstyle", "icon": "💇", "mode": "HAIR"},
@@ -293,6 +315,42 @@ func _build_skin_workspace() -> void:
 		)
 		grid.add_child(swatch)
 
+	workspace_vbox.add_child(HSeparator.new())
+	workspace_vbox.add_child(_create_section_label("Shirt Color:"))
+	var shirt_grid = GridContainer.new()
+	shirt_grid.columns = 6
+	shirt_grid.add_theme_constant_override("h_separation", 10)
+	shirt_grid.add_theme_constant_override("v_separation", 10)
+	workspace_vbox.add_child(shirt_grid)
+
+	var cur_shirt: Color = PlayerStore.customization.get("shirt_color", Color(0.95, 0.95, 0.95))
+	for col in CLOTHING_PALETTE:
+		var is_sel = (cur_shirt.to_html() == col.to_html())
+		var swatch = _create_color_swatch(col, is_sel, func():
+			PlayerStore.customization["shirt_color"] = col
+			_update_character_preview()
+			_render_active_workspace()
+		)
+		shirt_grid.add_child(swatch)
+
+	workspace_vbox.add_child(HSeparator.new())
+	workspace_vbox.add_child(_create_section_label("Pants Color:"))
+	var pants_grid = GridContainer.new()
+	pants_grid.columns = 6
+	pants_grid.add_theme_constant_override("h_separation", 10)
+	pants_grid.add_theme_constant_override("v_separation", 10)
+	workspace_vbox.add_child(pants_grid)
+
+	var cur_pants: Color = PlayerStore.customization.get("pants_color", Color(0.20, 0.25, 0.35))
+	for col in CLOTHING_PALETTE:
+		var is_sel = (cur_pants.to_html() == col.to_html())
+		var swatch = _create_color_swatch(col, is_sel, func():
+			PlayerStore.customization["pants_color"] = col
+			_update_character_preview()
+			_render_active_workspace()
+		)
+		pants_grid.add_child(swatch)
+
 func _build_hair_workspace() -> void:
 	workspace_vbox.add_child(_create_section_label("Select Hair Style:"))
 
@@ -380,7 +438,23 @@ func _build_eyes_workspace() -> void:
 		grid.add_child(blob)
 
 	workspace_vbox.add_child(HSeparator.new())
-	workspace_vbox.add_child(_create_section_label("Iris Color:"))
+	workspace_vbox.add_child(_create_section_label("Sclera Color (Green Channel):"))
+	var sclera_row = HBoxContainer.new()
+	sclera_row.add_theme_constant_override("separation", 12)
+	workspace_vbox.add_child(sclera_row)
+
+	var cur_sclera: Color = PlayerStore.customization.get("eye_sclera_color", Color(1.0, 1.0, 1.0))
+	for col in SCLERA_PALETTE:
+		var is_sel = (cur_sclera.to_html() == col.to_html())
+		var swatch = _create_color_swatch(col, is_sel, func():
+			PlayerStore.customization["eye_sclera_color"] = col
+			_update_character_preview()
+			_render_active_workspace()
+		)
+		sclera_row.add_child(swatch)
+
+	workspace_vbox.add_child(HSeparator.new())
+	workspace_vbox.add_child(_create_section_label("Iris Color (Purple Channel):"))
 	var color_row = HBoxContainer.new()
 	color_row.add_theme_constant_override("separation", 12)
 	workspace_vbox.add_child(color_row)
@@ -394,6 +468,22 @@ func _build_eyes_workspace() -> void:
 			_render_active_workspace()
 		)
 		color_row.add_child(swatch)
+
+	workspace_vbox.add_child(HSeparator.new())
+	workspace_vbox.add_child(_create_section_label("Pupil Color (Red Channel):"))
+	var pupil_row = HBoxContainer.new()
+	pupil_row.add_theme_constant_override("separation", 12)
+	workspace_vbox.add_child(pupil_row)
+
+	var cur_pupil: Color = PlayerStore.customization.get("eye_pupil_color", Color(0.1, 0.1, 0.1))
+	for col in PUPIL_PALETTE:
+		var is_sel = (cur_pupil.to_html() == col.to_html())
+		var swatch = _create_color_swatch(col, is_sel, func():
+			PlayerStore.customization["eye_pupil_color"] = col
+			_update_character_preview()
+			_render_active_workspace()
+		)
+		pupil_row.add_child(swatch)
 
 func _build_nose_mouth_workspace() -> void:
 	workspace_vbox.add_child(_create_section_label("Nose Shape:"))
@@ -426,6 +516,27 @@ func _build_nose_mouth_workspace() -> void:
 			_render_active_workspace()
 		)
 		mouth_row.add_child(blob)
+
+	workspace_vbox.add_child(HSeparator.new())
+	workspace_vbox.add_child(_create_section_label("Lip Color (Auto-Shaded Pair):"))
+	var lip_grid = GridContainer.new()
+	lip_grid.columns = 5
+	lip_grid.add_theme_constant_override("h_separation", 10)
+	lip_grid.add_theme_constant_override("v_separation", 10)
+	workspace_vbox.add_child(lip_grid)
+
+	var cur_lip: Color = PlayerStore.customization.get("lip_color", Color(0.85, 0.45, 0.50))
+	for col in LIP_PALETTE:
+		var is_sel = (cur_lip.to_html() == col.to_html())
+		var swatch = _create_color_swatch(col, is_sel, func():
+			PlayerStore.customization["lip_color"] = col
+			PlayerStore.customization["lower_lip_color"] = col
+			PlayerStore.customization["upper_lip_color"] = col.darkened(0.18)
+			_update_character_preview()
+			_render_active_workspace()
+		)
+		lip_grid.add_child(swatch)
+
 
 func _build_glasses_workspace() -> void:
 	workspace_vbox.add_child(_create_section_label("Glasses / Eyewear:"))
