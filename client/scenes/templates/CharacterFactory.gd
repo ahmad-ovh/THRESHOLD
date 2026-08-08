@@ -320,15 +320,35 @@ static func get_model_presets() -> Dictionary:
 
 static func _load_model_presets() -> void:
 	_presets_loaded = true
-	var preset_path = "res://assets/character_models/model_presets.json"
-	if FileAccess.file_exists(preset_path):
-		var f = FileAccess.open(preset_path, FileAccess.READ)
+	model_presets = {}
+
+	# 1. Base project presets from res://
+	var res_path = "res://assets/character_models/model_presets.json"
+	if FileAccess.file_exists(res_path):
+		var f = FileAccess.open(res_path, FileAccess.READ)
 		if f:
 			var txt = f.get_as_text()
 			f.close()
 			var json = JSON.new()
 			if json.parse(txt) == OK and json.data is Dictionary:
-				model_presets = json.data
+				model_presets = json.data.duplicate(true)
+
+	# 2. Overriding user presets saved by Model Aligner to user://
+	var user_path = "user://model_presets.json"
+	if FileAccess.file_exists(user_path):
+		var f_user = FileAccess.open(user_path, FileAccess.READ)
+		if f_user:
+			var txt_user = f_user.get_as_text()
+			f_user.close()
+			var json_u = JSON.new()
+			if json_u.parse(txt_user) == OK and json_u.data is Dictionary:
+				var u_data = json_u.data as Dictionary
+				for cat in u_data.keys():
+					if not model_presets.has(cat):
+						model_presets[cat] = {}
+					if u_data[cat] is Dictionary:
+						for item in u_data[cat].keys():
+							model_presets[cat][item] = u_data[cat][item]
 
 static func _apply_item_transform(node: Node3D, cat: String, item_key: String, def_pos: Vector3, def_rot: Vector3, def_scale: Vector3) -> void:
 	if not node:

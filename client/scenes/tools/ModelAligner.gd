@@ -629,8 +629,11 @@ func _on_save_current_item_preset() -> void:
 
 func _on_save_catalog_to_file() -> void:
 	var json_text = JSON.stringify(catalog_presets, "  ")
-	var res_path = "c:/Users/User/Documents/THRESHOLD/client/assets/character_models/model_presets.json"
+	var res_path = ProjectSettings.globalize_path("res://assets/character_models/model_presets.json")
 	var f = FileAccess.open(res_path, FileAccess.WRITE)
+	if not f:
+		res_path = "res://assets/character_models/model_presets.json"
+		f = FileAccess.open(res_path, FileAccess.WRITE)
 	if f:
 		f.store_string(json_text)
 		f.close()
@@ -643,7 +646,7 @@ func _on_save_catalog_to_file() -> void:
 
 	CharacterFactory._load_model_presets()
 	if preset_status_label:
-		preset_status_label.text = "✓ Presets saved to catalog!"
+		preset_status_label.text = "✓ Presets saved to catalog & user data!"
 
 func _update_gizmo_spinboxes() -> void:
 	if not relative_edits.has(selected_part):
