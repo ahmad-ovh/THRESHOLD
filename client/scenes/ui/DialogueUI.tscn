@@ -129,6 +129,33 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_end_banner_normal"]
+bg_color = Color(0.98, 0.95, 0.88, 0.96)
+border_width_top = 2
+border_color = Color(0.9, 0.45, 0.08, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_end_banner_hover"]
+bg_color = Color(1.0, 0.97, 0.88, 0.99)
+border_width_top = 2
+border_color = Color(0.9, 0.45, 0.08, 1.0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_end_banner_pressed"]
+bg_color = Color(0.95, 0.9, 0.8, 1.0)
+border_width_top = 2
+border_color = Color(0.9, 0.45, 0.08, 1.0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [node name="DialogueUI" type="CanvasLayer" unique_id=615538034]
 script = ExtResource("1_dialogue_script")
 
@@ -469,3 +496,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="ConversationEndBanner" type="Button" parent="OverlayRoot" unique_id=293847561]
+visible = false
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -136.0
+offset_right = -296.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.38, 0.28, 0.16, 1)
+theme_override_fonts/font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_end_banner_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_end_banner_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_end_banner_pressed")
+focus_mode = 0
+text = "✦  Conversation ended — click to continue"

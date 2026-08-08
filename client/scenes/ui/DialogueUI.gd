@@ -18,6 +18,7 @@ extends CanvasLayer
 
 @onready var message_input: LineEdit = $OverlayRoot/BottomInputPanel/InputContainer/MessageInput
 @onready var send_button: Button = $OverlayRoot/BottomInputPanel/InputContainer/SendButton
+@onready var conversation_end_banner: Button = $OverlayRoot/ConversationEndBanner
 
 @onready var overall_label: Label = $OverlayRoot/FeedbackPanel/OverallContainer/OverallLabel
 @onready var delta_label: Label = $OverlayRoot/FeedbackPanel/OverallContainer/DeltaLabel
@@ -37,6 +38,7 @@ extends CanvasLayer
 @onready var bubbles_container: Control = $OverlayRoot/BubblesContainer
 
 signal message_submitted(text: String)
+signal conversation_end_confirmed
 signal leave_requested
 
 var active_npc_name: String = ""
@@ -59,9 +61,11 @@ func _ready() -> void:
 	loading_label.visible = false
 	coach_hint_banner.visible = false
 	status_ribbon_panel.visible = false
+	conversation_end_banner.visible = false
 	send_button.pressed.connect(_on_send_pressed)
 	leave_button.pressed.connect(_on_leave_pressed)
 	message_input.text_submitted.connect(_on_text_submitted)
+	conversation_end_banner.pressed.connect(_on_end_banner_pressed)
 	_reset_encounter_metrics()
 
 func _process(delta: float) -> void:
@@ -293,11 +297,32 @@ func close_dialogue_gracefully() -> void:
 	message_input.editable = false
 	send_button.disabled = true
 	leave_button.disabled = true
-	await get_tree().create_timer(1.5).timeout
+	# Show the end banner and wait for player to confirm before closing
+	_show_end_banner()
+	await conversation_end_confirmed
 	close_dialogue()
+
+func _show_end_banner() -> void:
+	conversation_end_banner.modulate.a = 0.0
+	conversation_end_banner.visible = true
+	var tween = create_tween()
+	tween.tween_property(conversation_end_banner, "modulate:a", 1.0, 0.5)
+	await tween.finished
+	# Gentle pulse so the player notices it without it being obtrusive
+	var pulse = create_tween().set_loops()
+	pulse.tween_property(conversation_end_banner, "modulate:a", 0.6, 0.8)
+	pulse.tween_property(conversation_end_banner, "modulate:a", 1.0, 0.8)
+
+func _hide_end_banner() -> void:
+	conversation_end_banner.visible = false
+
+func _on_end_banner_pressed() -> void:
+	_hide_end_banner()
+	conversation_end_confirmed.emit()
 
 func close_dialogue() -> void:
 	stop_thinking()
+	_hide_end_banner()
 	_clear_bubbles()
 	visible = false
 
