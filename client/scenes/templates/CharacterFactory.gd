@@ -473,19 +473,19 @@ static func _load_cpu_image(res_path: String) -> Image:
 		return _cpu_img_cache[res_path]
 	if not ResourceLoader.exists(res_path):
 		return null
+	var global_path = ProjectSettings.globalize_path(res_path)
+	var img = Image.load_from_file(global_path)
+	if img:
+		_cpu_img_cache[res_path] = img
+		return img
 	var tex = load(res_path) as Texture2D
 	if tex:
-		var img = tex.get_image()
-		if img:
-			if img.is_compressed():
-				img.decompress()
-			_cpu_img_cache[res_path] = img
-			return img
+		var tex_img = tex.get_image()
+		_cpu_img_cache[res_path] = tex_img
+		return tex_img
 	return null
 
-
 static func _create_face_texture(customization: Dictionary) -> ImageTexture:
-
 	var skin_color: Color = customization.get("skin_color", Color(0.92, 0.76, 0.65))
 	var eye_style: int = customization.get("eye_style", 1)
 	var sclera_col: Color = customization.get("eye_sclera_color", Color(1.0, 1.0, 1.0))
@@ -499,18 +499,17 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var eye_x_off: int = int(face_offsets.get("eye_x", 26))
 	var eye_y_off: int = int(face_offsets.get("eye_y", -135))
 	var eye_size: int = int(face_offsets.get("eye_size", 43))
-	var eye_rot: float = float(face_offsets.get("eye_rot", 89.0))
+	var eye_rot: float = float(face_offsets.get("eye_rot", 90.0))
 
 	var nose_x_off: int = int(face_offsets.get("nose_x", 0))
 	var nose_y_off: int = int(face_offsets.get("nose_y", 0))
 	var nose_size_val: int = int(face_offsets.get("nose_size", 32))
-	var nose_rot: float = float(face_offsets.get("nose_rot", 90.0))
+	var nose_rot: float = float(face_offsets.get("nose_rot", 0))
 
 	var mouth_x_off: int = int(face_offsets.get("mouth_x", 0))
 	var mouth_y_off: int = int(face_offsets.get("mouth_y", 0))
 	var mouth_size_val: int = int(face_offsets.get("mouth_size", 28))
-	var mouth_rot: float = float(face_offsets.get("mouth_rot", 0.0))
-
+	var mouth_rot: float = float(face_offsets.get("mouth_rot", 0))
 
 	var glass_x_off: int = int(face_offsets.get("glass_x", 0))
 	var glass_y_off: int = int(face_offsets.get("glass_y", 0))
@@ -528,14 +527,14 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 	var scale_factor = 2.0
 	var hd_eye_size = max(16, int(eye_size * scale_factor))
 
-	# Eye positions: place left/right directly by X offset (do NOT rotate displacement vector)
-	var eye_center_y = 420.0 + (eye_y_off * scale_factor)
-	var eye_l_pos = Vector2i(
-		512 + int(eye_x_off * scale_factor) - hd_eye_size / 2,
-		int(eye_center_y) - hd_eye_size / 2)
-	var eye_r_pos = Vector2i(
-		512 - int(eye_x_off * scale_factor) - hd_eye_size / 2,
-		int(eye_center_y) - hd_eye_size / 2)
+	# Shared Eye Pivot Center (Between Eyes)
+	var eye_center = Vector2(512.0, 420.0 + (eye_y_off * scale_factor))
+	var rad_eye = deg_to_rad(eye_rot)
+	var rel_left = Vector2(eye_x_off * scale_factor, 0.0).rotated(rad_eye)
+	var rel_right = Vector2(-eye_x_off * scale_factor, 0.0).rotated(rad_eye)
+
+	var eye_l_pos = Vector2i(eye_center + rel_left - Vector2(hd_eye_size / 2.0, hd_eye_size / 2.0))
+	var eye_r_pos = Vector2i(eye_center + rel_right - Vector2(hd_eye_size / 2.0, hd_eye_size / 2.0))
 
 	# 1. Load / Chroma-Key Eyes from 'eye sprite_rgb.png'
 	var eye_sheet_path = "res://assets/character_models/textures/eye sprite_rgb.png"
@@ -560,14 +559,14 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 			eye_drawn = true
 
 	if not eye_drawn:
-		_draw_procedural_eye_style(face_img, eye_l_pos + Vector2i(hd_eye_size / 2, hd_eye_size / 2), hd_eye_size / 2, eye_style, sclera_col, pupil_col, iris_col, 0.0, true)
-		_draw_procedural_eye_style(face_img, eye_r_pos + Vector2i(hd_eye_size / 2, hd_eye_size / 2), hd_eye_size / 2, eye_style, sclera_col, pupil_col, iris_col, 0.0, false)
+		_draw_procedural_eye_style(face_img, eye_l_pos + Vector2i(hd_eye_size / 2, hd_eye_size / 2), hd_eye_size / 2, eye_style, sclera_col, pupil_col, iris_col, eye_rot, true)
+		_draw_procedural_eye_style(face_img, eye_r_pos + Vector2i(hd_eye_size / 2, hd_eye_size / 2), hd_eye_size / 2, eye_style, sclera_col, pupil_col, iris_col, eye_rot, false)
 
 	# 2. Load Nose from 'nose_sprite.png'
 	var nose_sheet_path = "res://assets/character_models/textures/nose_sprite.png"
 	var nose_size = Vector2i(int(nose_size_val * scale_factor), int(nose_size_val * scale_factor))
 	var nose_rendered_h = nose_size.y
-	var nose_base_y = int(eye_center_y) + hd_eye_size / 2 + nose_rendered_h / 2
+	var nose_base_y = int(eye_center.y) + hd_eye_size / 2 + nose_rendered_h / 2
 	var nose_center = Vector2i(512 + int(nose_x_off * scale_factor), nose_base_y + int(nose_y_off * scale_factor))
 	var nose_top_left = nose_center - nose_size / 2
 	var nose_drawn = false
@@ -644,7 +643,7 @@ static func _create_face_texture(customization: Dictionary) -> ImageTexture:
 				if glass_frame and hd_glass_w > 0 and hd_glass_h > 0:
 					glass_frame.resize(hd_glass_w, hd_glass_h, Image.INTERPOLATE_BILINEAR)
 					glass_frame = _rotate_image_exact(glass_frame, glass_rot)
-					var glass_center = Vector2i(512 + int(glass_x_off * scale_factor), int(eye_center_y) + int(glass_y_off * scale_factor))
+					var glass_center = Vector2i(512 + int(glass_x_off * scale_factor), int(eye_center.y) + int(glass_y_off * scale_factor))
 					_blit_alpha(face_img, glass_frame, glass_center - Vector2i(hd_glass_w / 2, hd_glass_h / 2))
 
 
