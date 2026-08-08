@@ -74,14 +74,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			_switch_tab(posmod(active_tab_index - 1, CATEGORIES.size()))
 		elif event.keycode == KEY_E:
 			_switch_tab(posmod(active_tab_index + 1, CATEGORIES.size()))
-		elif event.keycode == KEY_F3 or event.physical_keycode == KEY_F3:
-			if cam_tuner_layer:
-				var panel = cam_tuner_layer.find_child("CamTunerPanel", true, false)
-				if panel:
-					panel.visible = not panel.visible
-				else:
-					cam_tuner_layer.visible = not cam_tuner_layer.visible
-				get_viewport().set_input_as_handled()
 
 func _load_camera_presets() -> void:
 	var user_path = "user://customization_camera_presets.json"
@@ -453,7 +445,7 @@ func _setup_cam_tuner_widget() -> void:
 
 	var panel = PanelContainer.new()
 	panel.name = "CamTunerPanel"
-	panel.visible = false
+	panel.visible = true
 
 	var style_box = StyleBoxFlat.new()
 	style_box.bg_color = Color(0.10, 0.12, 0.14, 0.94)
@@ -481,14 +473,14 @@ func _setup_cam_tuner_widget() -> void:
 	panel.add_child(vbox)
 
 	var title = Label.new()
-	title.text = "🎥 Customization Camera Tuner (F3)"
+	title.text = "🎥 Customization Camera Tuner"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", Color(0.3, 0.8, 1.0))
 	vbox.add_child(title)
 
 	var status_label = Label.new()
-	status_label.text = "Press F3 to toggle"
+	status_label.text = "Developer Mode Active"
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.add_theme_font_size_override("font_size", 11)
 	status_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
