@@ -353,12 +353,16 @@ static func _load_model_presets() -> void:
 							for item in u_data[cat].keys():
 								model_presets[cat][item] = u_data[cat][item]
 
+
 	if model_presets.has("face_offsets") and model_presets["face_offsets"] is Dictionary:
 		var loaded_offsets = model_presets["face_offsets"] as Dictionary
 		if not PlayerStore.customization.has("face_offsets"):
 			PlayerStore.customization["face_offsets"] = {}
 		for k in loaded_offsets.keys():
-			PlayerStore.customization["face_offsets"][k] = loaded_offsets[k]
+			# Only fill in keys the player's save file didn't already provide
+			if not PlayerStore.customization["face_offsets"].has(k):
+				PlayerStore.customization["face_offsets"][k] = loaded_offsets[k]
+
 
 static func _apply_item_transform(node: Node3D, cat: String, item_key: String, def_pos: Vector3, def_rot: Vector3, def_scale: Vector3) -> void:
 	if not node:

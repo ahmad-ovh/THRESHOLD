@@ -41,6 +41,9 @@ func save_customization() -> void:
 		var val = customization[k]
 		if val is Color:
 			dict_to_save[k] = val.to_html(true)
+		elif val is Dictionary:
+			# Persist sub-dictionaries (e.g. face_offsets) as-is
+			dict_to_save[k] = val.duplicate(true)
 		else:
 			dict_to_save[k] = val
 	var file = FileAccess.open(CUSTOMIZATION_SAVE_PATH, FileAccess.WRITE)
@@ -69,5 +72,8 @@ func load_customization() -> void:
 						customization[k] = int(data[k])
 					else:
 						customization[k] = data[k]
+				elif data[k] is Dictionary:
+					# Accept sub-dictionaries not in the default (e.g. face_offsets)
+					customization[k] = data[k].duplicate(true)
 	customization_updated.emit()
 

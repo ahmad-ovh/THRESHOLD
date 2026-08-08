@@ -701,6 +701,8 @@ func _on_save_face_offsets_pressed() -> void:
 		return
 	catalog_presets["face_offsets"] = PlayerStore.customization["face_offsets"].duplicate(true)
 	_on_save_catalog_to_file()
+	# Also persist into customization.json so face_offsets survive without dev mode
+	PlayerStore.save_customization()
 	if preset_status_label:
 		preset_status_label.text = "✓ Face offsets saved to catalog & user data!"
 
