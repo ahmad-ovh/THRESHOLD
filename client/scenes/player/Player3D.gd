@@ -393,7 +393,11 @@ func _create_hair_dev_widget() -> void:
 			f_u.close()
 
 		var res_path = ProjectSettings.globalize_path("res://assets/character_models/model_presets.json")
+		if res_path == "":
+			res_path = "c:/Users/User/Documents/THRESHOLD/client/assets/character_models/model_presets.json"
 		var f_r = FileAccess.open(res_path, FileAccess.WRITE)
+		if not f_r:
+			f_r = FileAccess.open("res://assets/character_models/model_presets.json", FileAccess.WRITE)
 		if f_r:
 			f_r.store_string(json_str)
 			f_r.close()
