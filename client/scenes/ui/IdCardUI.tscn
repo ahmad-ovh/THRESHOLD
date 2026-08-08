@@ -1,9 +1,8 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene format=3 uid="uid://7puxseh8ht3u"]
 
-[ext_resource type="Script" path="res://scenes/ui/IdCardUI.gd" id="1_idcard_script"]
-[ext_resource type="Texture2D" path="res://assets/ui/player_avatar.jpg" id="2_avatar_tex"]
+[ext_resource type="Script" uid="uid://2m3rmspbwp3r" path="res://scenes/ui/IdCardUI.gd" id="1_idcard_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="3_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="4_bg_button"]
+[ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="4_bg_button"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_id_panel"]
 bg_color = Color(0.98, 0.96, 0.91, 0.99)
@@ -11,14 +10,58 @@ border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(0.10, 0.28, 0.52, 1)
+border_color = Color(0.1, 0.28, 0.52, 1)
 corner_radius_top_left = 18
 corner_radius_top_right = 18
 corner_radius_bottom_right = 18
 corner_radius_bottom_left = 18
-shadow_color = Color(0, 0, 0, 0.40)
+shadow_color = Color(0, 0, 0, 0.4)
 shadow_size = 16
 shadow_offset = Vector2(0, 8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill_orange"]
+bg_color = Color(0.9, 0.45, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.3, 0.04, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
+texture = ExtResource("4_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
+texture = ExtResource("4_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(0.82, 0.78, 0.72, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
+texture = ExtResource("4_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(1.12, 1.05, 0.95, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar_frame"]
 bg_color = Color(0.94, 0.92, 0.86, 1)
@@ -34,30 +77,6 @@ corner_radius_bottom_left = 10
 shadow_color = Color(0, 0, 0, 0.12)
 shadow_size = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill_orange"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.70, 0.30, 0.04, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_report_bg"]
-bg_color = Color(1.0, 0.97, 0.82, 1)
-border_width_left = 4
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.90, 0.45, 0.08, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
 bg_color = Color(0.88, 0.82, 0.72, 1)
 corner_radius_top_left = 6
@@ -66,85 +85,59 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
+bg_color = Color(0.9, 0.45, 0.08, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
-texture = ExtResource("4_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
-texture = ExtResource("4_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(1.12, 1.05, 0.95, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
-texture = ExtResource("4_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(0.82, 0.78, 0.72, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_selected"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
-border_width_left = 2
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_report_bg"]
+bg_color = Color(1, 0.97, 0.82, 1)
+border_width_left = 4
 border_width_top = 2
 border_width_right = 2
-border_color = Color(0.70, 0.30, 0.04, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-content_margin_left = 12.0
-content_margin_top = 6.0
-content_margin_right = 12.0
-content_margin_bottom = 5.0
+border_width_bottom = 2
+border_color = Color(0.9, 0.45, 0.08, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_unselected"]
-bg_color = Color(0.92, 0.86, 0.74, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mini_btn"]
+bg_color = Color(0.7, 0.72, 0.65, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.80, 0.72, 0.58, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-content_margin_left = 12.0
-content_margin_top = 6.0
-content_margin_right = 12.0
-content_margin_bottom = 5.0
+border_color = Color(0.55, 0.58, 0.5, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_hovered"]
-bg_color = Color(0.96, 0.55, 0.15, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mini_btn_pressed"]
+bg_color = Color(0.55, 0.58, 0.5, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
-border_color = Color(0.70, 0.30, 0.04, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-content_margin_left = 12.0
-content_margin_top = 6.0
-content_margin_right = 12.0
-content_margin_bottom = 5.0
+border_width_bottom = 2
+border_color = Color(0.4, 0.42, 0.35, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mini_btn_hover"]
+bg_color = Color(0.9, 0.45, 0.08, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.3, 0.04, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_panel"]
 bg_color = Color(0.98, 0.94, 0.84, 0.6)
@@ -152,62 +145,75 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.90, 0.45, 0.08, 0.4)
-corner_radius_top_left = 0
+border_color = Color(0.9, 0.45, 0.08, 0.4)
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mini_btn"]
-bg_color = Color(0.70, 0.72, 0.65, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_unselected"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
+bg_color = Color(0.92, 0.86, 0.74, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.55, 0.58, 0.50, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(0.8, 0.72, 0.58, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+expand_margin_left = 6.0
+expand_margin_top = 2.0
+expand_margin_right = 6.0
+expand_margin_bottom = 1.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mini_btn_hover"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_hovered"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
+bg_color = Color(0.96, 0.55, 0.15, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.70, 0.30, 0.04, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(0.7, 0.3, 0.04, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+expand_margin_left = 6.0
+expand_margin_top = 3.0
+expand_margin_right = 6.0
+expand_margin_bottom = 1.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mini_btn_pressed"]
-bg_color = Color(0.55, 0.58, 0.50, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_selected"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
+bg_color = Color(0.9, 0.45, 0.08, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.40, 0.42, 0.35, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(0.7, 0.3, 0.04, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+expand_margin_left = 6.0
+expand_margin_top = 3.0
+expand_margin_right = 6.0
+expand_margin_bottom = 1.0
 
-
-
-[node name="IdCardUI" type="CanvasLayer"]
+[node name="IdCardUI" type="CanvasLayer" unique_id=1533071305]
 script = ExtResource("1_idcard_script")
 
-[node name="ColorRectBackdrop" type="ColorRect" parent="."]
+[node name="ColorRectBackdrop" type="ColorRect" parent="." unique_id=1473424061]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.10, 0.08, 0.06, 0.65)
+color = Color(0.1, 0.08, 0.06, 0.65)
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1332693114]
 custom_minimum_size = Vector2(760, 500)
 anchors_preset = 8
 anchor_left = 0.5
@@ -222,41 +228,41 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_id_panel")
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer" unique_id=1219533118]
 layout_mode = 2
 theme_override_constants/margin_left = 22
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 18
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Margin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Margin" unique_id=2113070850]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Header" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer"]
+[node name="Header" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer" unique_id=254399860]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header"]
+[node name="TitleLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header" unique_id=575005970]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_colors/font_color = Color(0.1, 0.28, 0.52, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 22
 text = "CITIZEN ID CARD & PROFILE"
 
-[node name="ArchetypePill1" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Header"]
+[node name="ArchetypePill1" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Header" unique_id=1259918845]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pill_orange")
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill1"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill1" unique_id=1661120612]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill1/Margin"]
+[node name="Label" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill1/Margin" unique_id=312341678]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.55, 0.22, 0.02, 1)
@@ -265,18 +271,18 @@ theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "Ambitious"
 
-[node name="ArchetypePill2" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Header"]
+[node name="ArchetypePill2" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Header" unique_id=579131160]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pill_orange")
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill2"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill2" unique_id=256058569]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 2
 
-[node name="Label" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill2/Margin"]
+[node name="Label" type="Label" parent="PanelContainer/Margin/VBoxContainer/Header/ArchetypePill2/Margin" unique_id=1204174807]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.55, 0.22, 0.02, 1)
@@ -285,183 +291,200 @@ theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "Achiever"
 
-[node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Header"]
+[node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Header" unique_id=111884406]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_outline_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
 theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
 text = " ✖ "
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/Margin/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/Margin/VBoxContainer" unique_id=602545299]
 layout_mode = 2
 
-[node name="Body" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer"]
+[node name="Body" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer" unique_id=1214765286]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 22
 
-[node name="LeftCard" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body"]
+[node name="LeftCard" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body" unique_id=2118909858]
 custom_minimum_size = Vector2(230, 0)
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="AvatarFrame" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+[node name="AvatarFrame" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard" unique_id=2104296582]
 custom_minimum_size = Vector2(180, 180)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_avatar_frame")
 
-[node name="AvatarTexture" type="TextureRect" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame" unique_id=695969168]
 layout_mode = 2
-texture = ExtResource("2_avatar_tex")
-expand_mode = 1
-stretch_mode = 6
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
 
-[node name="PlayerIdLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+
+[node name="SubViewport" type="SubViewport" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame/SubViewportContainer" unique_id=964617582]
+handle_input_locally = false
+size = Vector2i(400, 420)
+render_target_update_mode = 4
+
+[node name="PreviewWorld" type="Node3D" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame/SubViewportContainer/SubViewport" unique_id=1070914316]
+
+[node name="PreviewCamera" type="Camera3D" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame/SubViewportContainer/SubViewport/PreviewWorld" unique_id=356549098]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.55, 1.1)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1329989597]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2, 4, 3)
+
+[node name="ModelPivot" type="Node3D" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1910848753]
+
+[node name="PlayerIdLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard" unique_id=2115144326]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 text = "ID: PLAYER_01"
 horizontal_alignment = 1
 
-[node name="LevelHeader" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+[node name="LevelHeader" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard" unique_id=1281023074]
 layout_mode = 2
 
-[node name="HappinessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/LevelHeader"]
+[node name="HappinessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/LevelHeader" unique_id=750762610]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_colors/font_color = Color(0.1, 0.28, 0.52, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Growth Level"
 
-[node name="LevelNumLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/LevelHeader"]
+[node name="LevelNumLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard/LevelHeader" unique_id=1647214959]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_colors/font_color = Color(0.1, 0.28, 0.52, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Lv. 1"
 
-[node name="OverallProgressBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+[node name="OverallProgressBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard" unique_id=244341252]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
-value = 50.0
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 50.0
 
-[node name="StreakLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard"]
+[node name="StreakLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard" unique_id=319656104]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
+theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Daily Streak: 0 🔥"
 horizontal_alignment = 1
 
-[node name="RightSection" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body"]
+[node name="RightSection" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body" unique_id=420396120]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
-[node name="SkillTitle" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection"]
+[node name="SkillTitle" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection" unique_id=1681484157]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 text = "Communication Skill Vector"
 
-[node name="SkillGrid" type="GridContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection"]
+[node name="SkillGrid" type="GridContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection" unique_id=1226645229]
 layout_mode = 2
-columns = 2
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 6
+columns = 2
 
-[node name="ClarityLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+[node name="ClarityLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid" unique_id=1079680128]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.30, 0.24, 0.16, 1)
+theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Clarity"
 
-[node name="EmpathyLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+[node name="EmpathyLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid" unique_id=1128063920]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.30, 0.24, 0.16, 1)
+theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Empathy"
 
-[node name="ClarityBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+[node name="ClarityBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid" unique_id=1183563729]
 custom_minimum_size = Vector2(200, 14)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
 
-[node name="EmpathyBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+[node name="EmpathyBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid" unique_id=1576736726]
 custom_minimum_size = Vector2(200, 14)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
 
-[node name="PolitenessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+[node name="PolitenessLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid" unique_id=903710944]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.30, 0.24, 0.16, 1)
+theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Politeness"
 
-[node name="ExpressionLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+[node name="ExpressionLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid" unique_id=62204125]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.30, 0.24, 0.16, 1)
+theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Expression"
 
-[node name="PolitenessBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+[node name="PolitenessBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid" unique_id=264534821]
 custom_minimum_size = Vector2(200, 14)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
 
-[node name="ExpressionBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid"]
+[node name="ExpressionBar" type="ProgressBar" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid" unique_id=1661588254]
 custom_minimum_size = Vector2(200, 14)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
 
-[node name="ReportPanel" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection"]
+[node name="ReportPanel" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection" unique_id=1354463117]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_report_bg")
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel" unique_id=265793741]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="VBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin"]
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin" unique_id=1876507907]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ReportHeaderRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+[node name="ReportHeaderRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox" unique_id=1815428746]
 layout_mode = 2
 
-[node name="ReportHeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow"]
+[node name="ReportHeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow" unique_id=226013091]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.55, 0.30, 0.05, 1)
+theme_override_colors/font_color = Color(0.55, 0.3, 0.05, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "📋 COMMUNICATION GROWTH REPORT"
 
-[node name="MiniRefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow"]
+[node name="MiniRefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow" unique_id=1956061480]
 visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -471,13 +494,11 @@ theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_mini_btn")
-theme_override_styles/hover = SubResource("StyleBoxFlat_mini_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_mini_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_mini_btn_hover")
 text = " ↺ "
 
-
-
-[node name="ReportTabContainer" type="TabContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+[node name="ReportTabContainer" type="TabContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox" unique_id=1184786079]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
@@ -487,104 +508,102 @@ theme_override_constants/side_margin = 6
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 theme_override_styles/panel = SubResource("StyleBoxFlat_tab_panel")
-theme_override_styles/tab_selected = SubResource("StyleBoxFlat_tab_selected")
-theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_tab_hovered")
 theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_tab_unselected")
+theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_tab_hovered")
+theme_override_styles/tab_selected = SubResource("StyleBoxFlat_tab_selected")
 current_tab = 0
 
-
-
-[node name="Overview" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer"]
+[node name="Overview" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer" unique_id=1361352133]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
+metadata/_tab_index = 0
 
-[node name="VBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview"]
+[node name="VBox" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview" unique_id=1238344189]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="StrongestRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox"]
+[node name="StrongestRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox" unique_id=955197321]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/StrongestRow"]
+[node name="Key" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/StrongestRow" unique_id=1062283939]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.40, 0.30, 0.18, 1)
+theme_override_colors/font_color = Color(0.4, 0.3, 0.18, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "Strongest Skill: "
 
-[node name="Value" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/StrongestRow"]
+[node name="Value" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/StrongestRow" unique_id=1231586017]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
+theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "—"
 
-[node name="FocusRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox"]
+[node name="FocusRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox" unique_id=2093541267]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/FocusRow"]
+[node name="Key" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/FocusRow" unique_id=246189289]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.40, 0.30, 0.18, 1)
+theme_override_colors/font_color = Color(0.4, 0.3, 0.18, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "Focus Area: "
 
-[node name="Value" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/FocusRow"]
+[node name="Value" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Overview/VBox/FocusRow" unique_id=271699385]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_colors/font_color = Color(0.1, 0.28, 0.52, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "—"
 
-[node name="Analysis" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer"]
+[node name="Analysis" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer" unique_id=1937696571]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 6
+metadata/_tab_index = 1
 
-[node name="AnalysisText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Analysis"]
+[node name="AnalysisText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Analysis" unique_id=480946101]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.25, 0.20, 0.13, 1)
+theme_override_colors/default_color = Color(0.25, 0.2, 0.13, 1)
 theme_override_font_sizes/normal_font_size = 13
 bbcode_enabled = true
-scroll_active = false
-autowrap_mode = 3
 text = "Click 'Generate Growth Report' to run AI analysis on your conversation history."
+scroll_active = false
 
-[node name="Advice" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer"]
+[node name="Advice" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer" unique_id=1684338235]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 6
+metadata/_tab_index = 2
 
-[node name="AdviceText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Advice"]
+[node name="AdviceText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportTabContainer/Advice" unique_id=924084251]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/default_color = Color(0.25, 0.20, 0.13, 1)
+theme_override_colors/default_color = Color(0.25, 0.2, 0.13, 1)
 theme_override_font_sizes/normal_font_size = 13
 bbcode_enabled = true
-scroll_active = false
-autowrap_mode = 3
 text = "Recommendations will appear here after report generation."
+scroll_active = false
 
-
-[node name="RefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox"]
+[node name="RefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox" unique_id=775256291]
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_outline_color = Color(0.10, 0.28, 0.52, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
 text = "Generate Growth Report"
