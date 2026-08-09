@@ -18,6 +18,7 @@ albedo_color = Color(0.92, 0.94, 0.96, 1)
 
 [node name="Room_OfficeConference" type="Node3D"]
 script = ExtResource("1_script")
+lighting_mood = "neutral_cool"
 
 [node name="RoomBounds" type="Node3D" parent="."]
 

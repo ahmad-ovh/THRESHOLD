@@ -18,6 +18,7 @@ albedo_color = Color(0.88, 0.9, 0.92, 1)
 
 [node name="Room_CampusHallway" type="Node3D"]
 script = ExtResource("1_script")
+lighting_mood = "cool"
 
 [node name="RoomBounds" type="Node3D" parent="."]
 

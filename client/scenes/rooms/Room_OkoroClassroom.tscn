@@ -23,6 +23,7 @@ albedo_color = Color(0.2, 0.3, 0.25, 1)
 
 [node name="Room_OkoroClassroom" type="Node3D"]
 script = ExtResource("1_script")
+lighting_mood = "neutral_warm"
 
 [node name="RoomBounds" type="Node3D" parent="."]
 

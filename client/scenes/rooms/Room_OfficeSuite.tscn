@@ -23,6 +23,7 @@ albedo_color = Color(0.94, 0.92, 0.88, 1)
 
 [node name="Room_OfficeSuite" type="Node3D"]
 script = ExtResource("1_script")
+lighting_mood = "executive"
 
 [node name="RoomBounds" type="Node3D" parent="."]
 
