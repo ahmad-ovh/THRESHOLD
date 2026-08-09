@@ -2,14 +2,14 @@
 extends CanvasLayer
 
 @onready var panel_container: PanelContainer = $PanelContainer
-@onready var title_label: Label = $PanelContainer/Margin/VBoxContainer/TitleLabel
-@onready var outcome_badge: Label = $PanelContainer/Margin/VBoxContainer/OutcomeBadge
-@onready var narrative_text: RichTextLabel = $PanelContainer/Margin/VBoxContainer/NarrativeText
-@onready var observer_card: PanelContainer = $PanelContainer/Margin/VBoxContainer/ObserverCard
-@onready var observer_text: Label = $PanelContainer/Margin/VBoxContainer/ObserverCard/Margin/VBoxContainer/ObserverText
-@onready var level_up_banner: PanelContainer = $PanelContainer/Margin/VBoxContainer/LevelUpBanner
-@onready var level_up_text: Label = $PanelContainer/Margin/VBoxContainer/LevelUpBanner/Margin/LevelUpText
-@onready var close_button: Button = $PanelContainer/Margin/VBoxContainer/CloseButton
+@onready var title_label: Label = $PanelContainer/ContentArea/TitleLabel
+@onready var outcome_badge: Label = $PanelContainer/ContentArea/OutcomeBadge
+@onready var narrative_text: RichTextLabel = $PanelContainer/ContentArea/NarrativeText
+@onready var observer_card: PanelContainer = $PanelContainer/ContentArea/ObserverCard
+@onready var observer_text: Label = $PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer/ObserverText
+@onready var level_up_banner: PanelContainer = $PanelContainer/ContentArea/LevelUpBanner
+@onready var level_up_text: Label = $PanelContainer/ContentArea/LevelUpBanner/Margin/LevelUpText
+@onready var close_button: Button = $PanelContainer/ContentArea/CloseButton
 
 signal closed
 

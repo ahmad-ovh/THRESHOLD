@@ -34,35 +34,25 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
 texture = ExtResource("4_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 1666, 568)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
 texture = ExtResource("4_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 1666, 568)
-modulate_color = Color(0.82, 0.78, 0.72, 1)
+modulate_color = Color(0.85, 0.85, 0.85, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
 texture = ExtResource("4_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 1666, 568)
-modulate_color = Color(1.12, 1.05, 0.95, 1)
+modulate_color = Color(1.15, 1.15, 1.15, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_close_btn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar_frame"]
 bg_color = Color(0.94, 0.92, 0.86, 1)
@@ -295,15 +285,17 @@ text = "Achiever"
 [node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Header" unique_id=111884406]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_outline_color = Color(0.1, 0.28, 0.52, 1)
+theme_override_colors/font_color = Color(0.1, 0.28, 0.52, 1)
+theme_override_colors/font_hover_color = Color(0.9, 0.45, 0.08, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
-text = " ✖ "
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_close_btn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_close_btn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_close_btn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_close_btn")
+text = "✖"
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/Margin/VBoxContainer" unique_id=602545299]
 layout_mode = 2
