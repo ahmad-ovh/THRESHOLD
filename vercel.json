@@ -1,35 +1,28 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/game/(.*)",
-      "dest": "/game/$1"
+      "source": "/",
+      "destination": "/game/index.html"
     },
     {
-      "src": "/game$",
-      "dest": "/game/index.html"
+      "source": "/game",
+      "destination": "/game/index.html"
     },
     {
-      "src": "/game/",
-      "dest": "/game/index.html"
+      "source": "/game/",
+      "destination": "/game/index.html"
     },
     {
-      "src": "/favicon.ico",
-      "dest": "/game/index.icon.png"
+      "source": "/health",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/$",
-      "dest": "/game/index.html"
+      "source": "/interaction/:path*",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/(.*)",
-      "dest": "api/index.py"
+      "source": "/player/:path*",
+      "destination": "/api/index.py"
     }
   ]
 }
