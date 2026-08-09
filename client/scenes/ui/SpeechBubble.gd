@@ -118,7 +118,7 @@ func convert_to_npc_reply(npc_name: String, text: String) -> void:
 	var color_hex = badge_color.to_html(false)
 	var clean_text = text.strip_edges()
 	var prefix = "[color=#" + color_hex + "][b]" + npc_name + ":[/b][/color] "
-	message_text.text = prefix + clean_text
+	message_text.text = clean_text
 	message_text.visible_ratio = 0.0
 	
 	_recalculate_dynamic_size()
