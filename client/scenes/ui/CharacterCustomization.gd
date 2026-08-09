@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var camera: Camera3D = $Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld/PreviewCamera
 @onready var model_pivot: Node3D = $Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
 
-@onready var category_header: HBoxContainer = $Control/TabHBox
+@onready var category_header: Control = $Control/TabsContainer
 @onready var category_title: Label = $Control/CategoryTitle
 @onready var workspace_vbox: VBoxContainer = $Control/WorkspaceArea/ScrollContainer/WorkspaceVBox
 
@@ -61,13 +61,12 @@ const LIP_PALETTE: Array[Color] = [
 ]
 
 
-const GLASSES_ENABLED := false  # Feature flag – flip to true to re-enable glasses
+const GLASSES_ENABLED := false
 const CATEGORIES: Array[Dictionary] = [
 	{"name": "Skin Tone", "icon": "😊", "mode": "SKIN"},
 	{"name": "Hairstyle", "icon": "💇", "mode": "HAIR"},
 	{"name": "Eyes", "icon": "👀", "mode": "EYES"},
 	{"name": "Nose & Mouth", "icon": "👃", "mode": "NOSE_MOUTH"},
-	# {"name": "Glasses", "icon": "👓", "mode": "GLASSES"}  # DISABLED – glasses system off
 ]
 
 @export var is_development_mode: bool = false
@@ -83,8 +82,10 @@ var _tuner_opt: OptionButton = null
 var _tuner_rebuild_rows: Callable = Callable()
 
 func _ready() -> void:
-	if back_button: back_button.pressed.connect(_on_back_pressed)
-	if save_button: save_button.pressed.connect(_on_save_pressed)
+	if back_button:
+		_setup_action_button(back_button, _on_back_pressed)
+	if save_button:
+		_setup_action_button(save_button, _on_save_pressed)
 
 	_load_camera_presets()
 	_setup_category_tabs()
@@ -95,6 +96,31 @@ func _ready() -> void:
 	var is_dev = is_development_mode or (GameController and GameController.is_development_mode)
 	if is_dev:
 		_setup_cam_tuner_widget()
+
+func _setup_action_button(btn: Button, on_click: Callable) -> void:
+	if not btn:
+		return
+	btn.pivot_offset = btn.size / 2.0
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.mouse_entered.connect(func():
+		if AudioManager and AudioManager.has_method("play_hover"):
+			AudioManager.play_hover()
+		var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.08, 1.08), 0.1)
+	)
+	btn.mouse_exited.connect(func():
+		var tw = btn.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+	)
+	btn.pressed.connect(func():
+		var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(0.90, 0.90), 0.05)
+		tw.tween_property(btn, "scale", Vector2(1.14, 1.14), 0.08)
+		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.08)
+		if AudioManager and AudioManager.has_method("play_click"):
+			AudioManager.play_click()
+		on_click.call()
+	)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.is_echo():
@@ -157,46 +183,65 @@ func _process(delta: float) -> void:
 func _setup_category_tabs() -> void:
 	if not category_header:
 		return
-	for child in category_header.get_children():
-		child.queue_free()
 
-	for i in range(CATEGORIES.size()):
-		var cat = CATEGORIES[i]
-		var btn = Button.new()
-		btn.text = cat["name"]
-		btn.focus_mode = Control.FOCUS_NONE
-		btn.custom_minimum_size = Vector2(105, 42)
-		btn.pivot_offset = Vector2(52, 21)
+	var tab_buttons: Array[Button] = _get_tab_buttons()
+	for i in range(tab_buttons.size()):
+		var btn = tab_buttons[i]
+		if not btn:
+			continue
 
-		var empty_sb = StyleBoxEmpty.new()
-		btn.add_theme_stylebox_override("normal", empty_sb)
-		btn.add_theme_stylebox_override("hover", empty_sb)
-		btn.add_theme_stylebox_override("pressed", empty_sb)
-		btn.add_theme_stylebox_override("focus", empty_sb)
+		btn.pivot_offset = btn.size / 2.0
 
-		var hitchcut_font = preload("res://assets/fonts/Hitchcut-Regular.ttf")
-		if hitchcut_font:
-			btn.add_theme_font_override("font", hitchcut_font)
-		btn.add_theme_font_size_override("font_size", 18)
+		if not btn.mouse_entered.is_connected(_on_tab_btn_hover.bind(btn, i)):
+			btn.mouse_entered.connect(_on_tab_btn_hover.bind(btn, i))
+		if not btn.mouse_exited.is_connected(_on_tab_btn_exit.bind(btn, i)):
+			btn.mouse_exited.connect(_on_tab_btn_exit.bind(btn, i))
 
-		btn.mouse_entered.connect(func():
-			if AudioManager and AudioManager.has_method("play_hover"):
-				AudioManager.play_hover()
-		)
-		btn.pressed.connect(func():
-			if AudioManager and AudioManager.has_method("play_click"):
-				AudioManager.play_click()
-			_switch_tab(i)
-		)
-		category_header.add_child(btn)
+		var cb = Callable(self, "_on_tab_btn_pressed").bind(i)
+		if not btn.pressed.is_connected(cb):
+			btn.pressed.connect(cb)
 
 	_update_tab_styles()
 
-func _update_tab_styles() -> void:
+func _on_tab_btn_hover(btn: Button, i: int) -> void:
+	if AudioManager and AudioManager.has_method("play_hover"):
+		AudioManager.play_hover()
+	var target_scale = Vector2(1.10, 1.10) if i == active_tab_index else Vector2(1.08, 1.08)
+	var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(btn, "scale", target_scale, 0.1)
+
+func _on_tab_btn_exit(btn: Button, i: int) -> void:
+	var target_scale = Vector2(1.06, 1.06) if i == active_tab_index else Vector2(1.0, 1.0)
+	var tw = btn.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_property(btn, "scale", target_scale, 0.1)
+
+func _on_tab_btn_pressed(i: int) -> void:
+	var tab_buttons = _get_tab_buttons()
+	if i >= 0 and i < tab_buttons.size():
+		var btn = tab_buttons[i]
+		if btn:
+			btn.pivot_offset = btn.size / 2.0
+			var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			tw.tween_property(btn, "scale", Vector2(0.90, 0.90), 0.05)
+			tw.tween_property(btn, "scale", Vector2(1.14, 1.14), 0.08)
+			tw.tween_property(btn, "scale", Vector2(1.06, 1.06), 0.08)
+	if AudioManager and AudioManager.has_method("play_click"):
+		AudioManager.play_click()
+	_switch_tab(i)
+
+func _get_tab_buttons() -> Array[Button]:
 	if not category_header:
-		return
-	for i in range(category_header.get_child_count()):
-		var btn = category_header.get_child(i) as Button
+		return []
+	var buttons: Array[Button] = []
+	for child in category_header.get_children():
+		if child is Button:
+			buttons.append(child as Button)
+	return buttons
+
+func _update_tab_styles() -> void:
+	var tab_buttons: Array[Button] = _get_tab_buttons()
+	for i in range(tab_buttons.size()):
+		var btn = tab_buttons[i]
 		if btn:
 			var is_active = (i == active_tab_index)
 			var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -298,29 +343,39 @@ func _create_option_blob(title_text: String, is_selected: bool, on_click: Callab
 	btn.add_theme_font_size_override("font_size", 16)
 
 	var sb = StyleBoxFlat.new()
-	sb.bg_color = COLOR_ORANGE_ACTIVE if is_selected else COLOR_CREAM_BLOB
+	sb.bg_color = Color(1.0, 0.99, 0.96, 0.98) if is_selected else COLOR_CREAM_BLOB
 	sb.set_corner_radius_all(10)
 	sb.border_width_left = 3 if is_selected else 2
 	sb.border_width_top = 3 if is_selected else 2
 	sb.border_width_right = 3 if is_selected else 2
 	sb.border_width_bottom = 3 if is_selected else 2
 	sb.border_color = COLOR_ORANGE_ACTIVE if is_selected else Color(0.82, 0.75, 0.65)
+	sb.shadow_color = Color(0.9, 0.45, 0.08, 0.25) if is_selected else Color(0.15, 0.12, 0.08, 0.08)
+	sb.shadow_size = 4 if is_selected else 2
+	sb.shadow_offset = Vector2(1, 2)
 	btn.add_theme_stylebox_override("normal", sb)
 
 	if is_selected:
-		btn.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+		btn.add_theme_color_override("font_color", COLOR_ORANGE_ACTIVE)
 	else:
 		btn.add_theme_color_override("font_color", COLOR_DARK_BROWN)
 
 	btn.mouse_entered.connect(func():
 		if AudioManager and AudioManager.has_method("play_hover"):
 			AudioManager.play_hover()
+		var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.08, 1.08), 0.08)
+	)
+	btn.mouse_exited.connect(func():
+		var tw = btn.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.08)
 	)
 	btn.pressed.connect(func():
 		if AudioManager and AudioManager.has_method("play_click"):
 			AudioManager.play_click()
 		var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tw.tween_property(btn, "scale", Vector2(1.1, 1.1), 0.08)
+		tw.tween_property(btn, "scale", Vector2(0.90, 0.90), 0.05)
+		tw.tween_property(btn, "scale", Vector2(1.14, 1.14), 0.08)
 		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.08)
 		on_click.call()
 	)
@@ -340,7 +395,7 @@ func _create_color_swatch(col: Color, is_selected: bool, on_click: Callable) -> 
 	sb.border_width_right = 4 if is_selected else 2
 	sb.border_width_bottom = 4 if is_selected else 2
 	sb.border_color = COLOR_ORANGE_ACTIVE if is_selected else Color(0.98, 0.96, 0.92, 0.9)
-	sb.shadow_color = Color(0.15, 0.12, 0.08, 0.2) if is_selected else Color(0.15, 0.12, 0.08, 0.1)
+	sb.shadow_color = Color(0.9, 0.45, 0.08, 0.3) if is_selected else Color(0.15, 0.12, 0.08, 0.1)
 	sb.shadow_size = 4 if is_selected else 2
 	sb.shadow_offset = Vector2(1, 2)
 	btn.add_theme_stylebox_override("normal", sb)
@@ -359,7 +414,8 @@ func _create_color_swatch(col: Color, is_selected: bool, on_click: Callable) -> 
 		if AudioManager and AudioManager.has_method("play_click"):
 			AudioManager.play_click()
 		var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tw.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.08)
+		tw.tween_property(btn, "scale", Vector2(0.88, 0.88), 0.05)
+		tw.tween_property(btn, "scale", Vector2(1.22, 1.22), 0.08)
 		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.08)
 		on_click.call()
 	)

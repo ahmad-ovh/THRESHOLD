@@ -12,9 +12,9 @@ const STREET_PATH := "res://scenes/rooms/Street.tscn"
 @onready var paper_bg: TextureRect = $Root/PaperBg
 @onready var studio_logo_1: TextureRect = $Root/StudioLogo1
 @onready var studio_logo_2: TextureRect = $Root/StudioLogo2
+@onready var studio_logo_3: TextureRect = $Root/StudioLogo3
 @onready var game_logo: TextureRect = $Root/GameLogo
 @onready var tagline_label: Label = $Root/TaglineLabel
-@onready var rule_line: ColorRect = $Root/RuleLine
 @onready var press_any_key: Label = $Root/PressAnyKeyLabel
 
 var _loading_done := false
@@ -32,12 +32,11 @@ func _ready() -> void:
 	paper_bg.modulate.a = 1.0
 	studio_logo_1.modulate.a = 0.0
 	studio_logo_2.modulate.a = 0.0
+	studio_logo_3.modulate.a = 0.0
 	game_logo.modulate.a = 0.0
 	game_logo.scale = Vector2(0.6, 0.6)
 	game_logo.pivot_offset = game_logo.size / 2.0
 	tagline_label.modulate.a = 0.0
-	rule_line.scale.x = 0.0
-	rule_line.pivot_offset = Vector2(0, 0)
 	press_any_key.modulate.a = 0.0
 	press_any_key.visible = false
 	
@@ -84,8 +83,13 @@ func _play_intro_sequence() -> void:
 	seq.tween_property(studio_logo_2, "modulate:a", 1.0, 0.4)
 	seq.tween_interval(0.8)
 	seq.tween_property(studio_logo_2, "modulate:a", 0.0, 0.5)
+
+	# --- Phase 3: Arkie Studio logo fade in/out (3.4 → 5.1s) ---
+	seq.tween_property(studio_logo_3, "modulate:a", 1.0, 0.4)
+	seq.tween_interval(0.8)
+	seq.tween_property(studio_logo_3, "modulate:a", 0.0, 0.5)
 	
-	# --- Phase 4: Game logo reveal (3.9 → 5.0s) ---
+	# --- Phase 4: Game logo reveal ---
 	seq.tween_callback(func():
 		if AudioManager and AudioManager.has_method("play_click"):
 			AudioManager.play_click()
@@ -95,18 +99,16 @@ func _play_intro_sequence() -> void:
 	logo_group.tween_property(game_logo, "scale", Vector2(1.0, 1.0), 0.5).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	seq.tween_interval(0.1)
 	
-	# --- Phase 5: Tagline (5.0 → 5.8s) ---
+	# --- Phase 5: Tagline ---
 	seq.tween_property(tagline_label, "modulate:a", 1.0, 0.4)
 	seq.tween_interval(0.2)
 	
-	# --- Phase 6: Rule line draws (5.8 → 6.3s) ---
-	seq.tween_property(rule_line, "scale:x", 1.0, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	
-	# --- Phase 7: Animation complete ---
+	# --- Phase 6: Animation complete ---
 	seq.tween_callback(func():
 		_animation_done = true
 		_check_ready_to_skip()
 	)
+
 	
 	# Auto-advance after a short wait if already skippable
 	seq.tween_interval(2.0)
