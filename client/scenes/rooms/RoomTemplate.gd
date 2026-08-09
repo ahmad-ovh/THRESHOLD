@@ -15,7 +15,7 @@ func _ready() -> void:
 		camera_anchor.rotation_degrees = camera_rotation
 		
 	_setup_visual_environment()
-	_apply_room_lighting_profile()
+	InteriorLighting.apply_to_room(self, lighting_mood)
 	_ensure_front_wall_collider()
 	_generate_model_collisions(self)
 
@@ -32,46 +32,6 @@ func _setup_visual_environment() -> void:
 		var env_res = load(VISUAL_ENV_PATH)
 		if env_res:
 			world_env.environment = env_res
-
-func _apply_room_lighting_profile() -> void:
-	var lighting_node = get_node_or_null("Lighting")
-	if not lighting_node:
-		return
-
-	# Layer 1 & 2 & 3: Configure Light Nodes according to room lighting mood
-	match lighting_mood:
-		"cozy_study": # Prof. Adler Office
-			_set_omni_light(lighting_node, "WarmDeskLight", Color(1.0, 0.86, 0.65), 1.2, 4.5)
-			_set_omni_light(lighting_node, "AmbientLight", Color(0.68, 0.58, 0.50), 0.35, 8.0)
-		"warm": # Café & Living Room
-			_set_omni_light(lighting_node, "OmniLightAmber1", Color(1.0, 0.84, 0.62), 1.0, 6.0)
-			_set_omni_light(lighting_node, "OmniLightAmber2", Color(1.0, 0.84, 0.62), 0.9, 6.0)
-			_set_omni_light(lighting_node, "WarmLivingLight", Color(1.0, 0.86, 0.68), 1.0, 7.0)
-		"cool": # Campus Hallway
-			_set_omni_light(lighting_node, "FluorescentLight1", Color(0.85, 0.92, 1.0), 0.75, 6.0)
-			_set_omni_light(lighting_node, "FluorescentLight2", Color(0.85, 0.92, 1.0), 0.75, 6.0)
-		"neutral_warm": # Okoro Classroom
-			_set_omni_light(lighting_node, "ClassroomLight1", Color(1.0, 0.94, 0.84), 0.85, 7.0)
-			_set_omni_light(lighting_node, "ClassroomLight2", Color(1.0, 0.94, 0.84), 0.85, 7.0)
-		"balcony": # Apartment Balcony
-			_set_omni_light(lighting_node, "CoolNightLight", Color(0.60, 0.75, 0.95), 0.55, 5.0)
-		"neutral": # Office Lobby
-			_set_omni_light(lighting_node, "CoolLobbyLight1", Color(0.90, 0.95, 1.0), 0.75, 7.0)
-			_set_omni_light(lighting_node, "CoolLobbyLight2", Color(0.90, 0.95, 1.0), 0.75, 7.0)
-		"neutral_cool": # Conference Room
-			_set_omni_light(lighting_node, "NeutralLighting", Color(0.92, 0.94, 1.0), 0.75, 8.0)
-		"executive": # Executive Suite
-			_set_omni_light(lighting_node, "GoldenDeskLight", Color(1.0, 0.88, 0.68), 1.0, 5.0)
-			_set_omni_light(lighting_node, "GoldenAmbientLight", Color(0.88, 0.80, 0.70), 0.40, 8.0)
-
-func _set_omni_light(parent: Node, name: String, color: Color, energy: float, light_range: float) -> void:
-	if parent.has_node(name):
-		var light = parent.get_node(name) as OmniLight3D
-		if light:
-			light.light_color = color
-			light.light_energy = energy
-			light.omni_range = light_range
-			light.shadow_enabled = true
 
 func _ensure_front_wall_collider() -> void:
 	var bounds = get_node_or_null("RoomBounds")
