@@ -3,7 +3,14 @@ extends Node
 
 signal request_failed(detail: String)
 
-const BASE_URL := "http://127.0.0.1:8000"
+var BASE_URL := "http://127.0.0.1:8000"
+
+func _ready() -> void:
+	if OS.has_feature("web"):
+		var origin = JavaScriptBridge.eval("window.location.origin")
+		if origin != null and str(origin) != "" and str(origin) != "null":
+			BASE_URL = str(origin)
+
 
 func get_health() -> Dictionary:
 	return await _http_get("/health")
