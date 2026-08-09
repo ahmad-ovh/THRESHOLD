@@ -1,0 +1,111 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+[ext_resource type="PackedScene" path="res://assets/threshold/environment/bench_01.gltf" id="5_bench"]
+[ext_resource type="PackedScene" path="res://assets/threshold/furniture/cabinet_01.gltf" id="6_lockers"]
+[ext_resource type="PackedScene" path="res://assets/threshold/furniture/shelf_02.gltf" id="7_shelf"]
+[ext_resource type="PackedScene" path="res://assets/threshold/environment/trash_bin_01.gltf" id="8_trash"]
+[ext_resource type="PackedScene" path="res://assets/threshold/lighting/lamp_standing_01.gltf" id="9_lamp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.7, 0.72, 0.75, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.88, 0.9, 0.92, 1)
+
+[node name="Room_CampusHallway" type="Node3D"]
+script = ExtResource("1_script")
+lighting_mood = "cool"
+
+[node name="RoomBounds" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+use_collision = true
+size = Vector3(14, 0.4, 6)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="BackWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -3)
+use_collision = true
+size = Vector3(14, 5, 0.4)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 6)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="RightWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 6)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="CameraAnchor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 2.8, 5.5)
+
+[node name="Furniture" type="Node3D" parent="."]
+
+[node name="LockersLeft" parent="Furniture" instance=ExtResource("6_lockers")]
+transform = Transform3D(0.75, 0, 0, 0, 1.4, 0, 0, 0, 0.75, -5.0, 0, -2.6)
+
+[node name="LockersRight" parent="Furniture" instance=ExtResource("6_lockers")]
+transform = Transform3D(0.75, 0, 0, 0, 1.4, 0, 0, 0, 0.75, 3.0, 0, -2.6)
+
+[node name="HallwayBench" parent="Furniture" instance=ExtResource("5_bench")]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -1.0, 0, -2.2)
+
+[node name="NoticeShelf" parent="Furniture" instance=ExtResource("7_shelf")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 5.5, 1.5, -2.7)
+
+[node name="CornerLamp" parent="Furniture" instance=ExtResource("9_lamp")]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, -6.2, 0, -2.5)
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="TrashBin" parent="Props" instance=ExtResource("8_trash")]
+transform = Transform3D(12.0, 0, 0, 0, 12.0, 0, 0, 0, 12.0, -3.2, 0, -2.5)
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="FluorescentLight1" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 3.5, 0)
+light_color = Color(0.85, 0.92, 1.0, 1)
+light_energy = 1.5
+
+[node name="FluorescentLight2" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 3.5, 0)
+light_color = Color(0.85, 0.92, 1.0, 1)
+light_energy = 1.5
+
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+
+[node name="Spawn_Default" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="from_street" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+
+[node name="from_classroom" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 0, -1.0)
+
+[node name="Doors" type="Node3D" parent="."]
+
+[node name="DoorToClassroom" parent="Doors" instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 0, -2.5)
+target_room_scene = "res://scenes/rooms/Room_OkoroClassroom.tscn"
+target_spawn_id = "from_hallway"
+
+[node name="DoorToStreet" parent="Doors" instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+target_room_scene = "res://scenes/rooms/Street.tscn"
+target_spawn_id = "from_campus"
+
+[node name="NPC_MrVance" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0, 0, -1.5)
+npc_id = "mr_vance"

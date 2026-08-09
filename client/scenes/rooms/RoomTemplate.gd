@@ -63,19 +63,9 @@ func _process_room_models(node: Node) -> void:
 			continue
 			
 		if child is MeshInstance3D and child.mesh:
-			_align_mesh_to_floor(child)
 			_ensure_mesh_collision(child)
 			
 		_process_room_models(child)
-
-func _align_mesh_to_floor(mi: MeshInstance3D) -> void:
-	if not mi or not mi.mesh:
-		return
-	var aabb = mi.mesh.get_aabb()
-	# Shift mesh position so its lowest bounding Y rests flat on Y = 0.0m floor level
-	var bottom_y = aabb.position.y * mi.scale.y
-	if abs(bottom_y) > 0.001:
-		mi.position.y -= bottom_y
 
 func _ensure_mesh_collision(mi: MeshInstance3D) -> void:
 	for sibling in mi.get_children():

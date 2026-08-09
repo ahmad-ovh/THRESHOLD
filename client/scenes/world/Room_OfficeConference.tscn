@@ -1,0 +1,102 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+[ext_resource type="PackedScene" path="res://assets/threshold/furniture/table_03.gltf" id="5_conftable"]
+[ext_resource type="PackedScene" path="res://assets/threshold/furniture/chair_01.gltf" id="6_chair"]
+[ext_resource type="PackedScene" path="res://assets/threshold/furniture/cabinet_01.gltf" id="7_credenza"]
+[ext_resource type="PackedScene" path="res://assets/threshold/props/book_01.gltf" id="8_notebooks"]
+[ext_resource type="PackedScene" path="res://assets/threshold/props/picture_frame_01.gltf" id="9_board"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.75, 0.77, 0.8, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.92, 0.94, 0.96, 1)
+
+[node name="Room_OfficeConference" type="Node3D"]
+script = ExtResource("1_script")
+lighting_mood = "neutral_cool"
+
+[node name="RoomBounds" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+use_collision = true
+size = Vector3(12, 0.4, 8)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="BackWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -4)
+use_collision = true
+size = Vector3(12, 5, 0.4)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 8)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="RightWall" type="CSGBox3D" parent="RoomBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.5, 0)
+use_collision = true
+size = Vector3(0.4, 5, 8)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="CameraAnchor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 2.8, 6.0)
+
+[node name="Furniture" type="Node3D" parent="."]
+
+[node name="ConferenceTable" parent="Furniture" instance=ExtResource("5_conftable")]
+transform = Transform3D(0.85, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, -1.8)
+
+[node name="ChairNorth1" parent="Furniture" instance=ExtResource("6_chair")]
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, -1.0, 0, -2.6)
+
+[node name="ChairNorth2" parent="Furniture" instance=ExtResource("6_chair")]
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 1.0, 0, -2.6)
+
+[node name="ChairSouth1" parent="Furniture" instance=ExtResource("6_chair")]
+transform = Transform3D(-0.65, 0, 0, 0, 0.65, 0, 0, 0, -0.65, -1.0, 0, -1.0)
+
+[node name="ChairSouth2" parent="Furniture" instance=ExtResource("6_chair")]
+transform = Transform3D(-0.65, 0, 0, 0, 0.65, 0, 0, 0, -0.65, 1.0, 0, -1.0)
+
+[node name="BackCredenza" parent="Furniture" instance=ExtResource("7_credenza")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, -3.6)
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Notebooks" parent="Props" instance=ExtResource("8_notebooks")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0.84, -1.8)
+
+[node name="PresentationFrame" parent="Props" instance=ExtResource("9_board")]
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 2.2, -3.7)
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="NeutralLighting" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -1.8)
+light_color = Color(0.95, 0.95, 1.0, 1)
+light_energy = 1.8
+
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+
+[node name="Spawn_Default" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="from_lobby" type="Marker3D" parent="." groups=["spawn_markers"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="DoorToLobby" parent="." instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5)
+target_room_scene = "res://scenes/rooms/Room_OfficeLobby.tscn"
+target_spawn_id = "from_conference"
+
+[node name="NPC_Seren" parent="." instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.6)
+npc_id = "seren"
