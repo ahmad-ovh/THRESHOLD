@@ -25,8 +25,9 @@ func _ready() -> void:
 	# Start background loading immediately
 	ResourceLoader.load_threaded_request(MAIN_MENU_PATH)
 	
-	# Hide everything initially
-	paper_bg.modulate.a = 0.0
+	# Paper bg starts at FULL opacity — seamless transition from boot splash
+	# (boot splash shows the same splash.png, so no visual seam)
+	paper_bg.modulate.a = 1.0
 	studio_logo_1.modulate.a = 0.0
 	studio_logo_2.modulate.a = 0.0
 	game_logo.modulate.a = 0.0
@@ -67,15 +68,16 @@ func _check_ready_to_skip() -> void:
 func _play_intro_sequence() -> void:
 	var seq = create_tween()
 	
-	# --- Phase 1: Paper background fade (0.0 → 0.5s) ---
-	seq.tween_property(paper_bg, "modulate:a", 1.0, 0.5)
+	# No paper bg fade — it's already at full alpha (matches boot splash).
+	# Logos start appearing immediately on the same background.
 	
-	# --- Phase 2: UTM logo fade in/out (0.5 → 2.2s) ---
+	# --- Phase 1: UTM logo fade in/out (0.0 → 1.7s) ---
+	seq.tween_interval(0.3) # brief pause after boot splash loading bar disappears
 	seq.tween_property(studio_logo_1, "modulate:a", 1.0, 0.4)
 	seq.tween_interval(0.8)
 	seq.tween_property(studio_logo_1, "modulate:a", 0.0, 0.5)
 	
-	# --- Phase 3: Tencent Cloud logo fade in/out (2.2 → 3.9s) ---
+	# --- Phase 2: Tencent Cloud logo fade in/out (1.7 → 3.4s) ---
 	seq.tween_property(studio_logo_2, "modulate:a", 1.0, 0.4)
 	seq.tween_interval(0.8)
 	seq.tween_property(studio_logo_2, "modulate:a", 0.0, 0.5)
