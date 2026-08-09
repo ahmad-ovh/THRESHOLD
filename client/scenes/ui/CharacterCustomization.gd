@@ -1,16 +1,16 @@
 # res://scenes/ui/CharacterCustomization.gd
 extends CanvasLayer
 
-@onready var viewport: SubViewport = $Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport
-@onready var camera: Camera3D = $Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld/PreviewCamera
-@onready var model_pivot: Node3D = $Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
+@onready var viewport: SubViewport = $Control/PolaroidArea/SubViewportContainer/SubViewport
+@onready var camera: Camera3D = $Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld/PreviewCamera
+@onready var model_pivot: Node3D = $Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
 
-@onready var category_header: HBoxContainer = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader/TabHBox
-@onready var category_title: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader/CategoryTitle
-@onready var workspace_vbox: VBoxContainer = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/ScrollContainer/WorkspaceVBox
+@onready var category_header: HBoxContainer = $Control/TabHBox
+@onready var category_title: Label = $Control/CategoryTitle
+@onready var workspace_vbox: VBoxContainer = $Control/WorkspaceArea/ScrollContainer/WorkspaceVBox
 
-@onready var back_button: Button = $Control/MarginContainer/VBoxContainer/FooterBox/BackButton
-@onready var save_button: Button = $Control/MarginContainer/VBoxContainer/FooterBox/SaveButton
+@onready var back_button: Button = $Control/BackButton
+@onready var save_button: Button = $Control/SaveButton
 
 var active_avatar_instance: Node3D = null
 var active_tab_index: int = 0

@@ -1,8 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://centbyp1oiykv"]
+[gd_scene load_steps=5 format=3 uid="uid://centbyp1oiykv"]
 
 [ext_resource type="Script" uid="uid://0ae511psj2ei" path="res://scenes/ui/CharacterCustomization.gd" id="1_customization_script"]
 [ext_resource type="Theme" uid="uid://cyxi2trp6esvr" path="res://resources/theme/main_theme.tres" id="2_main_theme"]
-[ext_resource type="Texture2D" uid="uid://cbgcustomization001" path="res://assets/ui/paper_craft/customization.png" id="3_bg_customization"]
+[ext_resource type="Texture2D" uid="uid://c5frnyt5goqje" path="res://assets/ui/paper_craft/customization.png" id="3_bg_customization"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="4_font_hitchcut"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_transparent"]
@@ -29,104 +29,94 @@ grow_vertical = 2
 texture = ExtResource("3_bg_customization")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1922043607]
+[node name="PolaroidArea" type="Control" parent="Control" unique_id=1748218154]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 65.0
+offset_top = 110.0
+offset_right = 450.0
+offset_bottom = 490.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/PolaroidArea" unique_id=1625162123]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 24
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" unique_id=995374711]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="MainHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer" unique_id=1538241777]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 32
-
-[node name="ViewportCard" type="MarginContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox" unique_id=1748218154]
-custom_minimum_size = Vector2(410, 0)
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 36
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 54
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard" unique_id=1625162123]
-custom_minimum_size = Vector2(386, 400)
-layout_mode = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer" unique_id=580300749]
+[node name="SubViewport" type="SubViewport" parent="Control/PolaroidArea/SubViewportContainer" unique_id=580300749]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(386, 400)
+size = Vector2i(385, 380)
 render_target_update_mode = 4
 
-[node name="PreviewWorld" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport" unique_id=892540301]
+[node name="PreviewWorld" type="Node3D" parent="Control/PolaroidArea/SubViewportContainer/SubViewport" unique_id=892540301]
 
-[node name="PreviewCamera" type="Camera3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld" unique_id=854366411]
+[node name="PreviewCamera" type="Camera3D" parent="Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld" unique_id=854366411]
 transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.55, 1.1)
 current = true
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1982612764]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1982612764]
 transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2, 4, 3)
 
-[node name="ModelPivot" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1393049140]
+[node name="ModelPivot" type="Node3D" parent="Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1393049140]
 
-[node name="ControlsCard" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox" unique_id=1916043928]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_transparent")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard" unique_id=979893888]
-layout_mode = 2
+[node name="TabHBox" type="HBoxContainer" parent="Control" unique_id=2134956646]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 546.0
+offset_top = 126.0
+offset_right = 1176.0
+offset_bottom = 176.0
 theme_override_constants/separation = 12
 
-[node name="CategoryHeader" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer" unique_id=1487507282]
-layout_mode = 2
-theme_override_constants/separation = 14
-
-[node name="CategoryTitle" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader" unique_id=295405481]
-layout_mode = 2
+[node name="CategoryTitle" type="Label" parent="Control" unique_id=295405481]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_left = 546.0
+offset_top = 70.0
+offset_right = 800.0
+offset_bottom = 115.0
 theme_override_colors/font_color = Color(0.26, 0.48, 0.14, 1)
 theme_override_colors/font_outline_color = Color(0.96, 0.93, 0.85, 1)
 theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("4_font_hitchcut")
 theme_override_font_sizes/font_size = 36
 text = "Skin Tone"
-horizontal_alignment = 0
 
-[node name="TabHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader" unique_id=2134956646]
-layout_mode = 2
-theme_override_constants/separation = 12
-alignment = 0
+[node name="WorkspaceArea" type="Control" parent="Control" unique_id=482019384]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 500.0
+offset_top = 185.0
+offset_right = 1160.0
+offset_bottom = 575.0
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer" unique_id=482019384]
-layout_mode = 2
-size_flags_vertical = 3
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/WorkspaceArea" unique_id=482019385]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 horizontal_scroll_mode = 0
 
-[node name="WorkspaceVBox" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/ScrollContainer" unique_id=112936672]
+[node name="WorkspaceVBox" type="VBoxContainer" parent="Control/WorkspaceArea/ScrollContainer" unique_id=112936672]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="FooterBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer" unique_id=1096410710]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-alignment = 1
-
-[node name="BackButton" type="Button" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=1021514350]
-custom_minimum_size = Vector2(150, 48)
-layout_mode = 2
+[node name="BackButton" type="Button" parent="Control" unique_id=1021514350]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 54.0
+offset_top = 632.0
+offset_right = 204.0
+offset_bottom = 682.0
 focus_mode = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.08, 0.26, 0.48, 1)
@@ -139,25 +129,13 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
 text = "< Back"
 
-[node name="Spacer" type="Control" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=725569753]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="ActionHintsLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=152585270]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.35, 0.28, 0.18, 1)
-theme_override_fonts/font = ExtResource("4_font_hitchcut")
-theme_override_font_sizes/font_size = 16
-text = "↕ [Q / E] Switch Category  |  ↕ Click Option"
-horizontal_alignment = 1
-
-[node name="Spacer2" type="Control" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=1169934797]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SaveButton" type="Button" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=1812573760]
-custom_minimum_size = Vector2(180, 48)
-layout_mode = 2
+[node name="SaveButton" type="Button" parent="Control" unique_id=1812573760]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 1020.0
+offset_top = 612.0
+offset_right = 1215.0
+offset_bottom = 682.0
 focus_mode = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.08, 0.26, 0.48, 1)
@@ -169,3 +147,16 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
 text = "Save & Apply"
+
+[node name="ActionHintsLabel" type="Label" parent="Control" unique_id=152585270]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 420.0
+offset_top = 644.0
+offset_right = 860.0
+offset_bottom = 678.0
+theme_override_colors/font_color = Color(0.35, 0.28, 0.18, 1)
+theme_override_fonts/font = ExtResource("4_font_hitchcut")
+theme_override_font_sizes/font_size = 15
+text = "↕ [Q / E] Switch Category  |  ↕ Click Option"
+horizontal_alignment = 1
