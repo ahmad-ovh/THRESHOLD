@@ -6,6 +6,7 @@ extends CanvasLayer
 ## Skip only unlocks after BOTH animation finishes AND MainMenu is loaded.
 
 const MAIN_MENU_PATH := "res://scenes/main_menu/MainMenu.tscn"
+const STREET_PATH := "res://scenes/rooms/Street.tscn"
 
 @onready var root: Control = $Root
 @onready var paper_bg: TextureRect = $Root/PaperBg
@@ -22,8 +23,9 @@ var _skippable := false
 var _transitioning := false
 
 func _ready() -> void:
-	# Start background loading immediately
+	# Start background loading immediately for main menu & initial gameplay room
 	ResourceLoader.load_threaded_request(MAIN_MENU_PATH)
+	ResourceLoader.load_threaded_request(STREET_PATH)
 	
 	# Paper bg starts at FULL opacity — seamless transition from boot splash
 	# (boot splash shows the same splash.png, so no visual seam)
@@ -44,8 +46,9 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if not _loading_done:
-		var status = ResourceLoader.load_threaded_get_status(MAIN_MENU_PATH)
-		if status == ResourceLoader.THREAD_LOAD_LOADED:
+		var status_menu = ResourceLoader.load_threaded_get_status(MAIN_MENU_PATH)
+		var status_street = ResourceLoader.load_threaded_get_status(STREET_PATH)
+		if status_menu == ResourceLoader.THREAD_LOAD_LOADED and status_street == ResourceLoader.THREAD_LOAD_LOADED:
 			_loading_done = true
 			_check_ready_to_skip()
 
