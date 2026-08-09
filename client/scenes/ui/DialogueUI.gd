@@ -1,52 +1,44 @@
 # res://scenes/ui/DialogueUI.gd
 extends CanvasLayer
 
-@onready var speaker_label: Label = $OverlayRoot/HeaderContainer/SpeakerLabel
-@onready var role_badge: Label = $OverlayRoot/HeaderContainer/RoleBadge
-@onready var tier_label: Label = $OverlayRoot/HeaderContainer/TierLabel
-@onready var mood_label: Label = $OverlayRoot/HeaderContainer/MoodLabel
-@onready var loading_label: Label = $OverlayRoot/HeaderContainer/LoadingLabel
-@onready var leave_button: Button = $OverlayRoot/HeaderContainer/LeaveButton
+@onready var main_title_label: Label = $OverlayRoot/MainTitleLabel
+@onready var npc_info_card: PanelContainer = $OverlayRoot/NPCInfoCard
+@onready var speaker_label: Label = $OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/VBoxContainer/SpeakerLabel
+@onready var npc_sub_info_label: Label = $OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/VBoxContainer/NPCSubInfoLabel
+@onready var loading_label: Label = $OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/VBoxContainer/LoadingLabel
+@onready var leave_button: Button = $OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/LeaveButton
 
-@onready var scenario_goal_banner: PanelContainer = $OverlayRoot/ScenarioGoalBanner
-@onready var scenario_goal_label: Label = $OverlayRoot/ScenarioGoalBanner/ScenarioGoalLabel
-@onready var coach_hint_banner: PanelContainer = $OverlayRoot/CoachHintBanner
-@onready var coach_hint_label: Label = $OverlayRoot/CoachHintBanner/CoachHintLabel
-
-@onready var status_ribbon_panel: PanelContainer = $OverlayRoot/StatusRibbonPanel
-@onready var status_ribbon_label: Label = $OverlayRoot/StatusRibbonPanel/StatusRibbonLabel
+@onready var chat_scroll_container: ScrollContainer = $OverlayRoot/ChatScrollContainer
+@onready var bubbles_container: VBoxContainer = $OverlayRoot/ChatScrollContainer/BubblesContainer
 
 @onready var message_input: LineEdit = $OverlayRoot/BottomInputPanel/InputContainer/MessageInput
-@onready var send_button: Button = $OverlayRoot/BottomInputPanel/InputContainer/SendButton
+@onready var send_button: Button = $OverlayRoot/SendButton
 @onready var conversation_end_banner: Button = $OverlayRoot/ConversationEndBanner
 
-@onready var overall_label: Label = $OverlayRoot/FeedbackPanel/OverallContainer/OverallLabel
-@onready var delta_label: Label = $OverlayRoot/FeedbackPanel/OverallContainer/DeltaLabel
-@onready var overall_bar: ProgressBar = $OverlayRoot/FeedbackPanel/OverallProgressBar
-@onready var status_badge_label: Label = $OverlayRoot/FeedbackPanel/StatusBadgeLabel
+@onready var overall_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/OverallContainer/OverallLabel
+@onready var delta_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/OverallContainer/DeltaLabel
+@onready var overall_bar: ProgressBar = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/OverallProgressBar
+@onready var status_badge_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/StatusBadgeLabel
 
-@onready var clarity_label: Label = $OverlayRoot/FeedbackPanel/ClarityLabel
-@onready var clarity_bar: ProgressBar = $OverlayRoot/FeedbackPanel/ClarityBar
-@onready var empathy_label: Label = $OverlayRoot/FeedbackPanel/EmpathyLabel
-@onready var empathy_bar: ProgressBar = $OverlayRoot/FeedbackPanel/EmpathyBar
-@onready var politeness_label: Label = $OverlayRoot/FeedbackPanel/PolitenessLabel
-@onready var politeness_bar: ProgressBar = $OverlayRoot/FeedbackPanel/PolitenessBar
-@onready var expression_label: Label = $OverlayRoot/FeedbackPanel/ExpressionLabel
-@onready var expression_bar: ProgressBar = $OverlayRoot/FeedbackPanel/ExpressionBar
-@onready var feedback_text: RichTextLabel = $OverlayRoot/FeedbackPanel/FeedbackText
-
-@onready var bubbles_container: Control = $OverlayRoot/BubblesContainer
+@onready var clarity_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/ClarityLabel
+@onready var empathy_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/EmpathyLabel
+@onready var politeness_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/PolitenessLabel
+@onready var expression_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/ExpressionLabel
 
 signal message_submitted(text: String)
 signal conversation_end_confirmed
 signal leave_requested
 
-var active_npc_name: String = ""
+var active_npc_name: String = "Stranger"
 var active_npc_node: Node3D = null
 var active_player_node: Node3D = null
 
 var active_npc_bubble: Control = null
 var active_player_bubble: Control = null
+
+var current_role: String = "Peer"
+var current_tier: String = "Stranger"
+var current_mood: String = "neutral"
 
 var is_thinking: bool = false
 var thinking_timer: float = 0.0
@@ -59,8 +51,6 @@ var previous_overall_score: float = 50.0
 func _ready() -> void:
 	visible = false
 	loading_label.visible = false
-	coach_hint_banner.visible = false
-	status_ribbon_panel.visible = false
 	conversation_end_banner.visible = false
 	send_button.pressed.connect(_on_send_pressed)
 	leave_button.pressed.connect(_on_leave_pressed)
@@ -77,83 +67,64 @@ func _process(delta: float) -> void:
 			var dots = ".".repeat(dot_count)
 			loading_label.text = active_npc_name + " pauses" + dots
 			if active_npc_bubble and active_npc_bubble.has_method("update_text_only"):
-				active_npc_bubble.update_text_only("[i]" + active_npc_name + " considers your words" + dots + "[/i]")
-
-func show_status_ribbon(text: String) -> void:
-	status_ribbon_label.text = text
-	status_ribbon_panel.visible = true
-	var tween = create_tween()
-	tween.tween_property(status_ribbon_panel, "modulate:a", 1.0, 0.3)
-	await get_tree().create_timer(2.5).timeout
-	var fade_tween = create_tween()
-	fade_tween.tween_property(status_ribbon_panel, "modulate:a", 0.0, 0.4)
-	await fade_tween.finished
-	status_ribbon_panel.visible = false
-	status_ribbon_panel.modulate.a = 1.0
+				active_npc_bubble.update_text_only("[ " + active_npc_name + " considers your words" + dots + " ]")
 
 func _reset_encounter_metrics() -> void:
 	turn_history_scores.clear()
 	previous_overall_score = 50.0
 	overall_label.text = "Overall: 50%"
-	delta_label.text = "[--]"
+	delta_label.text = "[Sleek Bar]"
 	delta_label.remove_theme_color_override("font_color")
 	overall_bar.value = 50.0
 	status_badge_label.text = "Status: Baseline"
 	status_badge_label.remove_theme_color_override("font_color")
 	
-	clarity_bar.value = 50.0
-	clarity_label.text = "Clarity: 50%"
-	empathy_bar.value = 50.0
-	empathy_label.text = "Empathy: 50%"
-	politeness_bar.value = 50.0
-	politeness_label.text = "Politeness: 50%"
-	expression_bar.value = 50.0
-	expression_label.text = "Expression: 50%"
+	clarity_label.text = "🔍 Clarity: 50%"
+	empathy_label.text = "❤️ Empathy: 50%"
+	politeness_label.text = "👍 Politeness: 50%"
+	expression_label.text = "😊 Expression: 50%"
 
 func set_spatial_targets(npc_node: Node3D, player_node: Node3D) -> void:
 	active_npc_node = npc_node
 	active_player_node = player_node
 
 func set_scenario_context(role: String, goal_text: String) -> void:
-	role_badge.text = "[Role: " + role.capitalize() + "]"
-	scenario_goal_label.text = "Conversation Focus: " + goal_text
+	current_role = role.capitalize()
+	_update_npc_sub_info()
 
 func show_connecting_state(npc_name: String) -> void:
 	active_npc_name = npc_name.capitalize()
 	speaker_label.text = active_npc_name
-	role_badge.text = "[Role: Peer]"
-	tier_label.text = "[Tier: Stranger]"
-	mood_label.text = "[Mood: neutral]"
-	scenario_goal_label.text = "Conversation Focus: Active listening and sharing"
+	current_role = "Peer"
+	current_tier = "Stranger"
+	current_mood = "neutral"
+	_update_npc_sub_info()
 	visible = true
 	_clear_bubbles()
 	_reset_encounter_metrics()
 	
-	# Spawn instant in-world speech bubble above NPC
-	_spawn_npc_bubble("Walking over to " + active_npc_name + "...")
+	# Spawn system action message in bottom-left stack
+	_spawn_npc_bubble("[ Walking over to " + active_npc_name + "... ]")
 	
 	message_input.editable = false
 	send_button.disabled = true
 	leave_button.disabled = true
 	loading_label.visible = true
 	loading_label.text = "Walking over..."
-	coach_hint_banner.visible = false
-	status_ribbon_panel.visible = false
-	feedback_text.text = "Awaiting response..."
 
 func open_dialogue(npc_name: String, opening_line: String) -> void:
 	active_npc_name = npc_name.capitalize()
 	speaker_label.text = active_npc_name
+	_update_npc_sub_info()
 	visible = true
 	stop_thinking()
 	
-	# Replace connecting bubble with actual opening line
 	_spawn_npc_bubble(opening_line)
 	
 	message_input.editable = true
 	send_button.disabled = false
 	leave_button.disabled = false
-	message_input.placeholder_text = "Say something to " + active_npc_name + "..."
+	message_input.placeholder_text = "[Character Count] Type your message to " + active_npc_name + "..."
 	message_input.grab_focus()
 
 func append_player_message(text: String) -> void:
@@ -161,43 +132,22 @@ func append_player_message(text: String) -> void:
 	start_thinking()
 
 func update_turn_data(data: Dictionary) -> void:
-	var prev_tier = tier_label.text
-	
-	# Update Status Pills
 	if data.has("relationship_tier"):
-		var new_tier = str(data.get("relationship_tier", "Stranger"))
-		tier_label.text = "[Tier: " + new_tier + "]"
-		if prev_tier != "" and prev_tier != "[Tier: " + new_tier + "]":
-			show_status_ribbon("Relationship with " + active_npc_name + " deepened: " + new_tier + "!")
+		current_tier = str(data.get("relationship_tier", "Stranger"))
 			
 	if data.has("npc_state"):
-		mood_label.text = "[Mood: " + str(data.get("npc_state", "neutral")) + "]"
+		current_mood = str(data.get("npc_state", "neutral"))
 		
-	# Update Coach Hint Banner
-	var hint = data.get("coach_hint", {})
-	if hint is Dictionary and hint.get("shown", false) == true:
-		coach_hint_banner.visible = true
-		coach_hint_label.text = "Coach Hint: " + str(hint.get("line", ""))
-	else:
-		coach_hint_banner.visible = false
+	_update_npc_sub_info()
 		
-	# Process Cumulative Turn Scores
 	var turn_scores = data.get("turn_scores", {})
 	if turn_scores is Dictionary and turn_scores.size() > 0:
 		turn_history_scores.append(turn_scores)
 		_recalculate_cumulative_performance()
-		
-	# Update Feedback Text
-	var fb = data.get("feedback", {})
-	if fb is Dictionary:
-		var str_text = fb.get("strength", "")
-		var imp_text = fb.get("improvement", "")
-		var txt = ""
-		if str_text != "":
-			txt += "[color=green][b]Strength:[/b] " + str(str_text) + "[/color]\n"
-		if imp_text != "":
-			txt += "[color=yellow][b]Improvement:[/b] " + str(imp_text) + "[/color]"
-		feedback_text.text = txt
+
+func _update_npc_sub_info() -> void:
+	if npc_sub_info_label:
+		npc_sub_info_label.text = "[Role: %s 👤 Tier: 🧑 %s Mood: 😐 %s]" % [current_role, current_tier, current_mood]
 
 func _recalculate_cumulative_performance() -> void:
 	if turn_history_scores.size() == 0:
@@ -224,21 +174,15 @@ func _recalculate_cumulative_performance() -> void:
 	var delta = overall - previous_overall_score
 	previous_overall_score = overall
 	
-	# Update Overall Score & Bar with smooth animation
 	overall_label.text = "Overall: %d%%" % int(overall)
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(overall_bar, "value", overall, 0.4)
-	tween.tween_property(clarity_bar, "value", avg_c, 0.4)
-	tween.tween_property(empathy_bar, "value", avg_e, 0.4)
-	tween.tween_property(politeness_bar, "value", avg_p, 0.4)
-	tween.tween_property(expression_bar, "value", avg_x, 0.4)
 	
-	clarity_label.text = "Clarity: %d%%" % int(avg_c)
-	empathy_label.text = "Empathy: %d%%" % int(avg_e)
-	politeness_label.text = "Politeness: %d%%" % int(avg_p)
-	expression_label.text = "Expression: %d%%" % int(avg_x)
+	clarity_label.text = "🔍 Clarity: %d%%" % int(avg_c)
+	empathy_label.text = "❤️ Empathy: %d%%" % int(avg_e)
+	politeness_label.text = "👍 Politeness: %d%%" % int(avg_p)
+	expression_label.text = "😊 Expression: %d%%" % int(avg_x)
 	
-	# Update Delta Badge
 	if delta > 0.5:
 		delta_label.text = "+%d%% ↑" % int(delta)
 		delta_label.add_theme_color_override("font_color", Color(0.18, 0.55, 0.25))
@@ -246,10 +190,9 @@ func _recalculate_cumulative_performance() -> void:
 		delta_label.text = "%d%% ↓" % int(delta)
 		delta_label.add_theme_color_override("font_color", Color(0.85, 0.25, 0.25))
 	else:
-		delta_label.text = "[=" + "]"
-		delta_label.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4))
+		delta_label.text = "[Sleek Bar]"
+		delta_label.remove_theme_color_override("font_color")
 		
-	# Update Overall Performance Status Badge
 	if overall >= 70.0:
 		status_badge_label.text = "Status: Doing Great! (GOOD)"
 		status_badge_label.add_theme_color_override("font_color", Color(0.18, 0.55, 0.25))
@@ -270,7 +213,7 @@ func start_thinking() -> void:
 	message_input.placeholder_text = active_npc_name + " considers your words..."
 	send_button.disabled = true
 	leave_button.disabled = false
-	_spawn_npc_bubble("[i]" + active_npc_name + " considers your words.[/i]")
+	_spawn_npc_bubble("[ " + active_npc_name + " considers your words ]")
 
 func stop_thinking() -> void:
 	is_thinking = false
@@ -281,14 +224,14 @@ func display_reply(text: String) -> void:
 	_spawn_npc_bubble(text)
 	
 	message_input.editable = true
-	message_input.placeholder_text = "Say something to " + active_npc_name + "..."
+	message_input.placeholder_text = "[Character Count] Type your message..."
 	send_button.disabled = false
 	leave_button.disabled = false
 	message_input.grab_focus()
 
 func display_error(error_msg: String) -> void:
 	stop_thinking()
-	_spawn_npc_bubble("[color=red]" + error_msg + "[/color]")
+	_spawn_npc_bubble("[ " + error_msg + " ]")
 	message_input.editable = true
 	send_button.disabled = false
 	leave_button.disabled = false
@@ -297,7 +240,6 @@ func close_dialogue_gracefully() -> void:
 	message_input.editable = false
 	send_button.disabled = true
 	leave_button.disabled = true
-	# Show the end banner and wait for player to confirm before closing
 	_show_end_banner()
 	await conversation_end_confirmed
 	close_dialogue()
@@ -308,7 +250,6 @@ func _show_end_banner() -> void:
 	var tween = create_tween()
 	tween.tween_property(conversation_end_banner, "modulate:a", 1.0, 0.5)
 	await tween.finished
-	# Gentle pulse so the player notices it without it being obtrusive
 	var pulse = create_tween().set_loops()
 	pulse.tween_property(conversation_end_banner, "modulate:a", 0.6, 0.8)
 	pulse.tween_property(conversation_end_banner, "modulate:a", 1.0, 0.8)
@@ -327,32 +268,23 @@ func close_dialogue() -> void:
 	visible = false
 
 func _spawn_npc_bubble(text: String) -> void:
-	if active_npc_bubble and is_instance_valid(active_npc_bubble):
-		active_npc_bubble.queue_free()
-		
-	var target = active_npc_node
-	if not target:
-		var npcs = get_tree().get_nodes_in_group("npcs")
-		if npcs.size() > 0:
-			target = npcs[0]
-			
 	var scene = preload("res://scenes/ui/SpeechBubble.tscn")
 	active_npc_bubble = scene.instantiate()
 	bubbles_container.add_child(active_npc_bubble)
-	active_npc_bubble.setup(active_npc_name, text, target, false)
+	active_npc_bubble.setup(active_npc_name, text, null, false)
+	_scroll_to_bottom()
 
 func _spawn_player_bubble(text: String) -> void:
-	if active_player_bubble and is_instance_valid(active_player_bubble):
-		active_player_bubble.queue_free()
-		
-	var target = active_player_node
-	if not target:
-		target = get_tree().get_first_node_in_group("player")
-		
 	var scene = preload("res://scenes/ui/SpeechBubble.tscn")
 	active_player_bubble = scene.instantiate()
 	bubbles_container.add_child(active_player_bubble)
-	active_player_bubble.setup("You", text, target, true)
+	active_player_bubble.setup("You", text, null, true)
+	_scroll_to_bottom()
+
+func _scroll_to_bottom() -> void:
+	await get_tree().process_frame
+	if chat_scroll_container:
+		chat_scroll_container.scroll_vertical = int(chat_scroll_container.get_v_scroll_bar().max_value)
 
 func _clear_bubbles() -> void:
 	for child in bubbles_container.get_children():
