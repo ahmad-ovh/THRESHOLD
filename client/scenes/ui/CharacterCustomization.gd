@@ -7,7 +7,7 @@ extends CanvasLayer
 
 @onready var category_header: HBoxContainer = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader/TabHBox
 @onready var category_title: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader/CategoryTitle
-@onready var workspace_vbox: VBoxContainer = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/WorkspaceVBox
+@onready var workspace_vbox: VBoxContainer = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/ScrollContainer/WorkspaceVBox
 
 @onready var back_button: Button = $Control/MarginContainer/VBoxContainer/FooterBox/BackButton
 @onready var save_button: Button = $Control/MarginContainer/VBoxContainer/FooterBox/SaveButton
@@ -357,6 +357,8 @@ func _build_hair_workspace() -> void:
 
 	var paged_hbox = HBoxContainer.new()
 	var prev_b = Button.new(); prev_b.text = "<"
+	prev_b.custom_minimum_size = Vector2(36, 44)
+	prev_b.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	prev_b.pressed.connect(func(): current_hair_page = posmod(current_hair_page - 1, 23); _render_active_workspace())
 	paged_hbox.add_child(prev_b)
 
@@ -368,6 +370,8 @@ func _build_hair_workspace() -> void:
 	paged_hbox.add_child(grid)
 
 	var next_b = Button.new(); next_b.text = ">"
+	next_b.custom_minimum_size = Vector2(36, 44)
+	next_b.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	next_b.pressed.connect(func(): current_hair_page = posmod(current_hair_page + 1, 23); _render_active_workspace())
 	paged_hbox.add_child(next_b)
 	workspace_vbox.add_child(paged_hbox)
@@ -410,6 +414,8 @@ func _build_eyes_workspace() -> void:
 
 	var paged_hbox = HBoxContainer.new()
 	var prev_b = Button.new(); prev_b.text = "<"
+	prev_b.custom_minimum_size = Vector2(36, 44)
+	prev_b.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	prev_b.pressed.connect(func(): current_eye_page = posmod(current_eye_page - 1, 5); _render_active_workspace())
 	paged_hbox.add_child(prev_b)
 
@@ -421,6 +427,8 @@ func _build_eyes_workspace() -> void:
 	paged_hbox.add_child(grid)
 
 	var next_b = Button.new(); next_b.text = ">"
+	next_b.custom_minimum_size = Vector2(36, 44)
+	next_b.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	next_b.pressed.connect(func(): current_eye_page = posmod(current_eye_page + 1, 5); _render_active_workspace())
 	paged_hbox.add_child(next_b)
 	workspace_vbox.add_child(paged_hbox)

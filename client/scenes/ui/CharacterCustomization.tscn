@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://centbyp1oiykv"]
 
-[ext_resource type="Script" path="res://scenes/ui/CharacterCustomization.gd" id="1_customization_script"]
+[ext_resource type="Script" uid="uid://0ae511psj2ei" path="res://scenes/ui/CharacterCustomization.gd" id="1_customization_script"]
 [ext_resource type="Theme" uid="uid://cyxi2trp6esvr" path="res://resources/theme/main_theme.tres" id="2_main_theme"]
 
-[node name="CharacterCustomization" type="CanvasLayer"]
+[node name="CharacterCustomization" type="CanvasLayer" unique_id=1692640788]
 script = ExtResource("1_customization_script")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=388603014]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +15,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_main_theme")
 
-[node name="ColorRect" type="ColorRect" parent="Control"]
+[node name="ColorRect" type="ColorRect" parent="Control" unique_id=684031935]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +24,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.98, 0.96, 0.91, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
+[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1922043607]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,102 +36,100 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" unique_id=995374711]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="MainHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
+[node name="MainHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer" unique_id=1538241777]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
-[node name="ViewportCard" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
+[node name="ViewportCard" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox" unique_id=1748218154]
 custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 alignment = 1
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard" unique_id=1625162123]
 custom_minimum_size = Vector2(400, 420)
 layout_mode = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer" unique_id=580300749]
 handle_input_locally = false
-size = Vector2i(400, 420)
-render_target_update_mode = 3
+size = Vector2i(460, 420)
+render_target_update_mode = 4
 
+[node name="PreviewWorld" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport" unique_id=892540301]
 
-[node name="PreviewWorld" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport"]
-
-[node name="PreviewCamera" type="Camera3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
+[node name="PreviewCamera" type="Camera3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld" unique_id=854366411]
 transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.55, 1.1)
 current = true
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1982612764]
 transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2, 4, 3)
 
-[node name="ModelPivot" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld"]
+[node name="ModelPivot" type="Node3D" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1393049140]
 
-[node name="RotateHint" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.45, 0.38, 0.28, 1)
-theme_override_font_sizes/font_size = 13
-text = "✨ Interactive Preview (Character tracks your cursor)"
-horizontal_alignment = 1
-
-[node name="ControlsCard" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox"]
+[node name="ControlsCard" type="PanelContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox" unique_id=1916043928]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard" unique_id=979893888]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="CategoryHeader" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer"]
+[node name="CategoryHeader" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer" unique_id=1487507282]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="CategoryTitle" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader"]
+[node name="CategoryTitle" type="Label" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader" unique_id=295405481]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
 theme_override_font_sizes/font_size = 24
 text = "Skin Tone"
 horizontal_alignment = 1
 
-[node name="TabHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader"]
+[node name="TabHBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader" unique_id=2134956646]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 8
+alignment = 1
 
-[node name="WorkspaceVBox" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer" unique_id=482019384]
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="WorkspaceVBox" type="VBoxContainer" parent="Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/ScrollContainer" unique_id=112936672]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="FooterBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
+[node name="FooterBox" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer" unique_id=1096410710]
 layout_mode = 2
 alignment = 1
 
-[node name="BackButton" type="Button" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
+[node name="BackButton" type="Button" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=1021514350]
 custom_minimum_size = Vector2(130, 44)
 layout_mode = 2
 text = "< Back"
 
-[node name="Spacer" type="Control" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
+[node name="Spacer" type="Control" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=725569753]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ActionHintsLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
+[node name="ActionHintsLabel" type="Label" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=152585270]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.38, 0.28, 1)
 theme_override_font_sizes/font_size = 14
 text = "⌨️ [Q / E] Switch Category  |  🖱️ Click Option"
 
-[node name="Spacer2" type="Control" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
+[node name="Spacer2" type="Control" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=1169934797]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SaveButton" type="Button" parent="Control/MarginContainer/VBoxContainer/FooterBox"]
+[node name="SaveButton" type="Button" parent="Control/MarginContainer/VBoxContainer/FooterBox" unique_id=1812573760]
 custom_minimum_size = Vector2(160, 44)
 layout_mode = 2
 text = "✓ Save & Apply"
