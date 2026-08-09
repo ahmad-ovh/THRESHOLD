@@ -16,9 +16,31 @@ var id_card_ref: CanvasLayer = null
 func _ready() -> void:
 	id_card_button.pressed.connect(_on_id_card_pressed)
 	journal_button.pressed.connect(_on_journal_pressed)
+	
+	_setup_hover_effect(id_card_button, -4.0)
+	_setup_hover_effect(journal_button, 4.0)
+	
 	PlayerStore.player_data_updated.connect(_update_hud)
 	_update_hud()
 	set_objective("Objective: Approach an NPC and press [E] to talk")
+
+func _setup_hover_effect(btn: Control, tilt_angle: float) -> void:
+	btn.pivot_offset = btn.size / 2.0
+	btn.resized.connect(func(): btn.pivot_offset = btn.size / 2.0)
+	
+	btn.mouse_entered.connect(func():
+		btn.pivot_offset = btn.size / 2.0
+		var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.1, 1.1), 0.18)
+		tween.tween_property(btn, "rotation_degrees", tilt_angle, 0.18)
+	)
+	
+	btn.mouse_exited.connect(func():
+		btn.pivot_offset = btn.size / 2.0
+		var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.15)
+		tween.tween_property(btn, "rotation_degrees", 0.0, 0.15)
+	)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_id_card"):
