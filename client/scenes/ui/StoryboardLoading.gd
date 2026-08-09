@@ -44,6 +44,9 @@ func _ready() -> void:
 	prompt_label.modulate.a = 0.0
 	prompt_label.text = "Press [Space / Click] to continue"
 	
+	if target_scene_path != "" and SceneManager.has_method("preload_scene"):
+		SceneManager.preload_scene(target_scene_path)
+	
 	# Fade in overlay
 	var fade_in = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	fade_in.tween_property(root, "modulate:a", 1.0, 0.4)
