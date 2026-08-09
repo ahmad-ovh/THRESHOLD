@@ -6,90 +6,99 @@ static func get_profile(mood: String) -> Dictionary:
 	match mood.to_lower():
 		"hallway", "cool":
 			return {
-				"ambient_color": Color(0.38, 0.44, 0.52),
-				"ambient_energy": 0.42,
-				"fill_color": Color(0.85, 0.92, 1.0),
-				"fill_energy": 0.48,
+				"ambient_color": Color(0.48, 0.54, 0.62),
+				"ambient_energy": 0.62,
+				"key_color": Color(0.88, 0.94, 1.0),
+				"key_energy": 0.40,
 				"practical_color": Color(0.90, 0.95, 1.0),
-				"practical_energy": 0.60
+				"practical_energy": 0.50
 			}
 		"adler_office", "cozy_study":
 			return {
-				"ambient_color": Color(0.42, 0.35, 0.30),
-				"ambient_energy": 0.40,
-				"fill_color": Color(0.92, 0.82, 0.72),
-				"fill_energy": 0.45,
+				"ambient_color": Color(0.56, 0.48, 0.40),
+				"ambient_energy": 0.58,
+				"key_color": Color(1.0, 0.92, 0.82),
+				"key_energy": 0.38,
 				"practical_color": Color(1.0, 0.85, 0.62),
-				"practical_energy": 0.85
+				"practical_energy": 0.60
 			}
 		"classroom", "neutral_warm", "okoro_classroom":
 			return {
-				"ambient_color": Color(0.44, 0.42, 0.40),
-				"ambient_energy": 0.45,
-				"fill_color": Color(1.0, 0.95, 0.88),
-				"fill_energy": 0.52,
+				"ambient_color": Color(0.56, 0.54, 0.50),
+				"ambient_energy": 0.62,
+				"key_color": Color(1.0, 0.95, 0.88),
+				"key_energy": 0.40,
 				"practical_color": Color(1.0, 0.94, 0.84),
-				"practical_energy": 0.70
+				"practical_energy": 0.50
 			}
-		"cafe", "warm", "living_room", "apartment_living":
+		"cafe", "warm":
 			return {
-				"ambient_color": Color(0.46, 0.38, 0.30),
-				"ambient_energy": 0.42,
-				"fill_color": Color(1.0, 0.86, 0.70),
-				"fill_energy": 0.48,
+				"ambient_color": Color(0.58, 0.48, 0.38),
+				"ambient_energy": 0.60,
+				"key_color": Color(1.0, 0.90, 0.78),
+				"key_energy": 0.40,
 				"practical_color": Color(1.0, 0.82, 0.58),
-				"practical_energy": 0.80
+				"practical_energy": 0.55
+			}
+		"living_room", "apartment_living":
+			return {
+				"ambient_color": Color(0.56, 0.46, 0.38),
+				"ambient_energy": 0.58,
+				"key_color": Color(1.0, 0.90, 0.80),
+				"key_energy": 0.38,
+				"practical_color": Color(1.0, 0.84, 0.60),
+				"practical_energy": 0.55
 			}
 		"balcony", "apartment_balcony":
 			return {
-				"ambient_color": Color(0.30, 0.36, 0.48),
-				"ambient_energy": 0.35,
-				"fill_color": Color(0.65, 0.78, 0.95),
-				"fill_energy": 0.45,
+				"ambient_color": Color(0.40, 0.46, 0.58),
+				"ambient_energy": 0.52,
+				"key_color": Color(0.75, 0.88, 1.0),
+				"key_energy": 0.35,
 				"practical_color": Color(1.0, 0.84, 0.62),
-				"practical_energy": 0.85
+				"practical_energy": 0.60
 			}
 		"lobby", "neutral", "office_lobby":
 			return {
-				"ambient_color": Color(0.40, 0.44, 0.50),
-				"ambient_energy": 0.42,
-				"fill_color": Color(0.92, 0.96, 1.0),
-				"fill_energy": 0.50,
+				"ambient_color": Color(0.50, 0.54, 0.60),
+				"ambient_energy": 0.60,
+				"key_color": Color(0.92, 0.96, 1.0),
+				"key_energy": 0.40,
 				"practical_color": Color(0.94, 0.96, 1.0),
-				"practical_energy": 0.70
+				"practical_energy": 0.50
 			}
 		"conference", "neutral_cool", "office_conference":
 			return {
-				"ambient_color": Color(0.40, 0.42, 0.48),
-				"ambient_energy": 0.42,
-				"fill_color": Color(0.90, 0.93, 1.0),
-				"fill_energy": 0.48,
+				"ambient_color": Color(0.50, 0.52, 0.58),
+				"ambient_energy": 0.60,
+				"key_color": Color(0.90, 0.93, 1.0),
+				"key_energy": 0.40,
 				"practical_color": Color(0.92, 0.94, 1.0),
-				"practical_energy": 0.65
+				"practical_energy": 0.50
 			}
 		"executive", "office_suite":
 			return {
-				"ambient_color": Color(0.44, 0.38, 0.32),
-				"ambient_energy": 0.40,
-				"fill_color": Color(1.0, 0.90, 0.75),
-				"fill_energy": 0.46,
+				"ambient_color": Color(0.56, 0.48, 0.40),
+				"ambient_energy": 0.58,
+				"key_color": Color(1.0, 0.92, 0.80),
+				"key_energy": 0.38,
 				"practical_color": Color(1.0, 0.88, 0.65),
-				"practical_energy": 0.80
+				"practical_energy": 0.55
 			}
 		_:
 			return {
-				"ambient_color": Color(0.42, 0.40, 0.38),
-				"ambient_energy": 0.40,
-				"fill_color": Color(0.95, 0.90, 0.82),
-				"fill_energy": 0.48,
+				"ambient_color": Color(0.54, 0.50, 0.46),
+				"ambient_energy": 0.58,
+				"key_color": Color(1.0, 0.92, 0.82),
+				"key_energy": 0.40,
 				"practical_color": Color(1.0, 0.85, 0.65),
-				"practical_energy": 0.75
+				"practical_energy": 0.50
 			}
 
 static func apply_to_room(room: Node3D, mood: String) -> void:
 	var profile = get_profile(mood)
 	
-	# 1. Update WorldEnvironment for balanced global ambient base
+	# 1. Base Layer: High minimum ambient illumination (WorldEnvironment)
 	var world_env: WorldEnvironment = room.get_node_or_null("WorldEnvironment")
 	if not world_env:
 		world_env = WorldEnvironment.new()
@@ -98,15 +107,15 @@ static func apply_to_room(room: Node3D, mood: String) -> void:
 		
 	if world_env and world_env.environment:
 		var env = world_env.environment
-		env.ambient_light_source = 2
+		env.ambient_light_source = 2 # AMBIENT_SOURCE_COLOR
 		env.ambient_light_color = profile["ambient_color"]
 		env.ambient_light_energy = profile["ambient_energy"]
-		env.tonemap_mode = 2
-		env.tonemap_exposure = 0.90
+		env.tonemap_mode = 2 # TONEMAP_ACES
+		env.tonemap_exposure = 0.95
 		env.glow_enabled = false
 		env.adjustment_enabled = true
 		env.adjustment_brightness = 0.98
-		env.adjustment_contrast = 1.08
+		env.adjustment_contrast = 1.06
 		env.adjustment_saturation = 1.04
 
 	# 2. Get or create Lighting parent node
@@ -116,55 +125,29 @@ static func apply_to_room(room: Node3D, mood: String) -> void:
 		lighting_node.name = "Lighting"
 		room.add_child(lighting_node)
 
-	# Remove any single-corner DirectionalLight3D in interior rooms
+	# Clean up any old DistributedRoomFill OmniLight containers (removes circular light artifacts!)
+	var old_fill = lighting_node.get_node_or_null("DistributedRoomFill")
+	if old_fill:
+		old_fill.queue_free()
+
+	# 3. Form Layer: Single Broad Top-Down Interior Key Light (No harsh shadows or corner falloff)
+	var broad_key: DirectionalLight3D = lighting_node.get_node_or_null("BroadInteriorKey")
+	if not broad_key:
+		broad_key = DirectionalLight3D.new()
+		broad_key.name = "BroadInteriorKey"
+		lighting_node.add_child(broad_key)
+
+	broad_key.position = Vector3(0, 5, 0)
+	broad_key.rotation_degrees = Vector3(-65, -20, 0)
+	broad_key.light_color = profile["key_color"]
+	broad_key.light_energy = profile["key_energy"]
+	broad_key.shadow_enabled = false # Broad key provides uniform form without projected shadows
+
+	# 4. Accent Layer: Practical Lights (Lamps/fixtures act as small localized mood accents)
 	for child in lighting_node.get_children():
-		if child is DirectionalLight3D:
-			child.queue_free()
-
-	# 3. Create or update Distributed Overhead Fill Lights (No shadows, broad smooth coverage)
-	var fill_container: Node3D = lighting_node.get_node_or_null("DistributedRoomFill")
-	if not fill_container:
-		fill_container = Node3D.new()
-		fill_container.name = "DistributedRoomFill"
-		lighting_node.add_child(fill_container)
-	else:
-		for c in fill_container.get_children():
-			c.queue_free()
-
-	# Determine room floor dimensions to distribute fill lights evenly
-	var room_width = 12.0
-	var room_depth = 8.0
-	var floor_node = room.get_node_or_null("RoomBounds/Floor") as CSGBox3D
-	if floor_node:
-		room_width = floor_node.size.x
-		room_depth = floor_node.size.z
-
-	# Position 4 broad overhead fill lights (front-left, front-right, back-left, back-right)
-	var x_offset = room_width * 0.25
-	var z_offset = room_depth * 0.25
-	var fill_positions = [
-		Vector3(-x_offset, 3.2, -z_offset),
-		Vector3(x_offset, 3.2, -z_offset),
-		Vector3(-x_offset, 3.2, z_offset),
-		Vector3(x_offset, 3.2, z_offset)
-	]
-
-	for i in range(fill_positions.size()):
-		var fill_light = OmniLight3D.new()
-		fill_light.name = "BroadFill_" + str(i + 1)
-		fill_light.position = fill_positions[i]
-		fill_light.light_color = profile["fill_color"]
-		fill_light.light_energy = profile["fill_energy"]
-		fill_light.omni_range = max(room_width, room_depth) * 0.95
-		fill_light.omni_attenuation = 1.0
-		fill_light.shadow_enabled = false # Fill lights never cast directional shadows!
-		fill_container.add_child(fill_light)
-
-	# 4. Tune existing practical lights for localized accent warmth with soft grounding shadows
-	for child in lighting_node.get_children():
-		if child is OmniLight3D and child.get_parent() != fill_container:
+		if child is OmniLight3D and child != broad_key:
 			child.light_color = profile["practical_color"]
 			child.light_energy = profile["practical_energy"]
-			child.omni_range = 4.5
-			child.shadow_enabled = true
-			child.shadow_opacity = 0.35 # Soft, subtle grounding shadow
+			child.omni_range = 2.5 # Small influence radius
+			child.omni_attenuation = 2.0 # Soft falloff
+			child.shadow_enabled = false # Prevent spotty OmniLight shadow artifacts
