@@ -1,16 +1,16 @@
 # res://scenes/ui/CharacterCustomization.gd
 extends CanvasLayer
 
-@onready var viewport: SubViewport = $Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport
-@onready var camera: Camera3D = $Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld/PreviewCamera
-@onready var model_pivot: Node3D = $Control/MarginContainer/VBoxContainer/MainHBox/ViewportCard/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
+@onready var viewport: SubViewport = $Control/PolaroidArea/SubViewportContainer/SubViewport
+@onready var camera: Camera3D = $Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld/PreviewCamera
+@onready var model_pivot: Node3D = $Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
 
-@onready var category_header: HBoxContainer = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader/TabHBox
-@onready var category_title: Label = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/CategoryHeader/CategoryTitle
-@onready var workspace_vbox: VBoxContainer = $Control/MarginContainer/VBoxContainer/MainHBox/ControlsCard/VBoxContainer/ScrollContainer/WorkspaceVBox
+@onready var category_header: HBoxContainer = $Control/TabHBox
+@onready var category_title: Label = $Control/CategoryTitle
+@onready var workspace_vbox: VBoxContainer = $Control/WorkspaceArea/ScrollContainer/WorkspaceVBox
 
-@onready var back_button: Button = $Control/MarginContainer/VBoxContainer/FooterBox/BackButton
-@onready var save_button: Button = $Control/MarginContainer/VBoxContainer/FooterBox/SaveButton
+@onready var back_button: Button = $Control/BackButton
+@onready var save_button: Button = $Control/SaveButton
 
 var active_avatar_instance: Node3D = null
 var active_tab_index: int = 0
@@ -163,11 +163,53 @@ func _setup_category_tabs() -> void:
 	for i in range(CATEGORIES.size()):
 		var cat = CATEGORIES[i]
 		var btn = Button.new()
-		btn.text = "%s %s" % [cat["icon"], cat["name"]]
-		btn.custom_minimum_size = Vector2(90, 44)
-		btn.pivot_offset = Vector2(45, 22)
-		btn.pressed.connect(func(): _switch_tab(i))
+		btn.text = cat["name"]
+		btn.focus_mode = Control.FOCUS_NONE
+		btn.custom_minimum_size = Vector2(105, 42)
+		btn.pivot_offset = Vector2(52, 21)
+
+		var empty_sb = StyleBoxEmpty.new()
+		btn.add_theme_stylebox_override("normal", empty_sb)
+		btn.add_theme_stylebox_override("hover", empty_sb)
+		btn.add_theme_stylebox_override("pressed", empty_sb)
+		btn.add_theme_stylebox_override("focus", empty_sb)
+
+		var hitchcut_font = preload("res://assets/fonts/Hitchcut-Regular.ttf")
+		if hitchcut_font:
+			btn.add_theme_font_override("font", hitchcut_font)
+		btn.add_theme_font_size_override("font_size", 18)
+
+		btn.mouse_entered.connect(func():
+			if AudioManager and AudioManager.has_method("play_hover"):
+				AudioManager.play_hover()
+		)
+		btn.pressed.connect(func():
+			if AudioManager and AudioManager.has_method("play_click"):
+				AudioManager.play_click()
+			_switch_tab(i)
+		)
 		category_header.add_child(btn)
+
+	_update_tab_styles()
+
+func _update_tab_styles() -> void:
+	if not category_header:
+		return
+	for i in range(category_header.get_child_count()):
+		var btn = category_header.get_child(i) as Button
+		if btn:
+			var is_active = (i == active_tab_index)
+			var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+			if is_active:
+				tw.tween_property(btn, "scale", Vector2(1.06, 1.06), 0.12)
+				btn.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 1.0))
+				btn.add_theme_color_override("font_outline_color", Color(0.08, 0.26, 0.48, 1.0))
+				btn.add_theme_constant_override("outline_size", 6)
+			else:
+				tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.12)
+				btn.add_theme_color_override("font_color", Color(0.85, 0.93, 1.0, 0.90))
+				btn.add_theme_color_override("font_outline_color", Color(0.12, 0.32, 0.55, 0.80))
+				btn.add_theme_constant_override("outline_size", 4)
 
 func _mode_to_stage_key(mode: String) -> String:
 	match mode:
@@ -185,17 +227,9 @@ func _switch_tab(index: int) -> void:
 	active_tab_index = index
 	var cat = CATEGORIES[index]
 	if category_title:
-		category_title.text = cat["name"]
+		category_title.text = cat["name"] + "..."
 
-	for i in range(category_header.get_child_count()):
-		var btn = category_header.get_child(i) as Button
-		if btn:
-			var is_active = (i == active_tab_index)
-			var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-			if is_active:
-				tween.tween_property(btn, "scale", Vector2(1.1, 1.1), 0.15)
-			else:
-				tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.15)
+	_update_tab_styles()
 
 	var stage_key = _mode_to_stage_key(cat["mode"])
 	_animate_camera_for_tab(stage_key)
@@ -245,52 +279,88 @@ func _create_section_label(txt: String) -> Label:
 	var lbl = Label.new()
 	lbl.text = txt
 	lbl.add_theme_color_override("font_color", COLOR_DARK_BROWN)
-	lbl.add_theme_font_size_override("font_size", 15)
+	var hitchcut_font = preload("res://assets/fonts/Hitchcut-Regular.ttf")
+	if hitchcut_font:
+		lbl.add_theme_font_override("font", hitchcut_font)
+	lbl.add_theme_font_size_override("font_size", 17)
 	return lbl
 
 func _create_option_blob(title_text: String, is_selected: bool, on_click: Callable) -> Button:
 	var btn = Button.new()
 	btn.text = title_text
-	btn.custom_minimum_size = Vector2(80, 70)
-	btn.pivot_offset = Vector2(40, 35)
+	btn.custom_minimum_size = Vector2(84, 52)
+	btn.pivot_offset = Vector2(42, 26)
+	btn.focus_mode = Control.FOCUS_NONE
+
+	var hitchcut_font = preload("res://assets/fonts/Hitchcut-Regular.ttf")
+	if hitchcut_font:
+		btn.add_theme_font_override("font", hitchcut_font)
+	btn.add_theme_font_size_override("font_size", 16)
 
 	var sb = StyleBoxFlat.new()
 	sb.bg_color = COLOR_ORANGE_ACTIVE if is_selected else COLOR_CREAM_BLOB
-	sb.set_corner_radius_all(14)
-	sb.border_width_left = 3 if is_selected else 1
-	sb.border_width_top = 3 if is_selected else 1
-	sb.border_width_right = 3 if is_selected else 1
-	sb.border_width_bottom = 3 if is_selected else 1
-	sb.border_color = COLOR_ORANGE_ACTIVE if is_selected else Color(0.85, 0.80, 0.70)
+	sb.set_corner_radius_all(10)
+	sb.border_width_left = 3 if is_selected else 2
+	sb.border_width_top = 3 if is_selected else 2
+	sb.border_width_right = 3 if is_selected else 2
+	sb.border_width_bottom = 3 if is_selected else 2
+	sb.border_color = COLOR_ORANGE_ACTIVE if is_selected else Color(0.82, 0.75, 0.65)
 	btn.add_theme_stylebox_override("normal", sb)
 
+	if is_selected:
+		btn.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	else:
+		btn.add_theme_color_override("font_color", COLOR_DARK_BROWN)
+
+	btn.mouse_entered.connect(func():
+		if AudioManager and AudioManager.has_method("play_hover"):
+			AudioManager.play_hover()
+	)
 	btn.pressed.connect(func():
+		if AudioManager and AudioManager.has_method("play_click"):
+			AudioManager.play_click()
 		var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tw.tween_property(btn, "scale", Vector2(1.15, 1.15), 0.1)
-		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+		tw.tween_property(btn, "scale", Vector2(1.1, 1.1), 0.08)
+		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.08)
 		on_click.call()
 	)
 	return btn
 
 func _create_color_swatch(col: Color, is_selected: bool, on_click: Callable) -> Button:
 	var btn = Button.new()
-	btn.custom_minimum_size = Vector2(42, 42)
-	btn.pivot_offset = Vector2(21, 21)
+	btn.custom_minimum_size = Vector2(44, 44)
+	btn.pivot_offset = Vector2(22, 22)
+	btn.focus_mode = Control.FOCUS_NONE
 
 	var sb = StyleBoxFlat.new()
 	sb.bg_color = col
-	sb.set_corner_radius_all(21)
+	sb.set_corner_radius_all(22)
 	sb.border_width_left = 4 if is_selected else 2
 	sb.border_width_top = 4 if is_selected else 2
 	sb.border_width_right = 4 if is_selected else 2
 	sb.border_width_bottom = 4 if is_selected else 2
-	sb.border_color = COLOR_ORANGE_ACTIVE if is_selected else Color(1, 1, 1, 0.8)
+	sb.border_color = COLOR_ORANGE_ACTIVE if is_selected else Color(0.98, 0.96, 0.92, 0.9)
+	sb.shadow_color = Color(0.15, 0.12, 0.08, 0.2) if is_selected else Color(0.15, 0.12, 0.08, 0.1)
+	sb.shadow_size = 4 if is_selected else 2
+	sb.shadow_offset = Vector2(1, 2)
 	btn.add_theme_stylebox_override("normal", sb)
 
-	btn.pressed.connect(func():
+	btn.mouse_entered.connect(func():
+		if AudioManager and AudioManager.has_method("play_hover"):
+			AudioManager.play_hover()
 		var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tw.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.1)
-		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+		tw.tween_property(btn, "scale", Vector2(1.15, 1.15), 0.08)
+	)
+	btn.mouse_exited.connect(func():
+		var tw = btn.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.08)
+	)
+	btn.pressed.connect(func():
+		if AudioManager and AudioManager.has_method("play_click"):
+			AudioManager.play_click()
+		var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.2, 1.2), 0.08)
+		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.08)
 		on_click.call()
 	)
 	return btn
