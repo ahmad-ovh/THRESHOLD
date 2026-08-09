@@ -98,10 +98,10 @@ static func apply_to_room(room: Node3D, mood: String) -> void:
 		
 	if world_env and world_env.environment:
 		var env = world_env.environment
-		env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+		env.ambient_light_source = 2
 		env.ambient_light_color = profile["ambient_color"]
 		env.ambient_light_energy = profile["ambient_energy"]
-		env.tonemap_mode = Environment.TONEMAP_ACES
+		env.tonemap_mode = 2
 		env.tonemap_exposure = 0.90
 		env.glow_enabled = false
 		env.adjustment_enabled = true
