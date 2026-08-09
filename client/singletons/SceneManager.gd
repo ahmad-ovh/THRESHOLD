@@ -84,4 +84,8 @@ func _position_player() -> void:
 		var target_x = clamp(player.global_position.x, -38.0, 38.0)
 		camera_pivot.global_position.x = target_x
 
+func clear_saved_positions() -> void:
+	pass
+
+
 
