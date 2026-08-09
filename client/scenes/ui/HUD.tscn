@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bet1vfub6jybq" path="res://scenes/ui/HUD.gd" id="1_hud_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
+[ext_resource type="Texture2D" uid="uid://nfee8lb8f5th" path="res://assets/ui/paper_craft/journal.png" id="4_journal_tex"]
+[ext_resource type="Texture2D" uid="uid://bvvn7ku54t5qs" path="res://assets/ui/paper_craft/IDCard.png" id="5_idcard_tex"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_card"]
 bg_color = Color(0.99, 0.97, 0.93, 0.96)
@@ -32,38 +33,6 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn"]
-texture = ExtResource("3_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-region_rect = Rect2(0, 0, 1666, 568)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn_pressed"]
-texture = ExtResource("3_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-region_rect = Rect2(0, 0, 1666, 568)
-modulate_color = Color(0.82, 0.78, 0.72, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn_hover"]
-texture = ExtResource("3_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-region_rect = Rect2(0, 0, 1666, 568)
-modulate_color = Color(1.12, 1.05, 0.95, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_obj_banner"]
 bg_color = Color(1, 0.97, 0.82, 0.97)
@@ -131,42 +100,33 @@ theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Streak: 0"
 
-[node name="NavContainer" type="VBoxContainer" parent="." unique_id=371151055]
+[node name="IdCardButton" type="TextureButton" parent="." unique_id=982192999]
+custom_minimum_size = Vector2(130, 90)
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -264.0
-offset_top = 263.0
-offset_right = -2.0
-offset_bottom = 669.0
+offset_left = -150.0
+offset_top = 260.0
+offset_right = -20.0
+offset_bottom = 350.0
 grow_horizontal = 0
-theme_override_constants/separation = 8
+texture_normal = ExtResource("5_idcard_tex")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="IdCardButton" type="Button" parent="NavContainer" unique_id=982192999]
-custom_minimum_size = Vector2(120, 36)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
-theme_override_colors/font_outline_color = Color(0.98, 0.96, 0.91, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxTexture_stamp_btn")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_stamp_btn_pressed")
-theme_override_styles/hover = SubResource("StyleBoxTexture_stamp_btn_hover")
-text = "ID CARD (I)"
-
-[node name="JournalButton" type="Button" parent="NavContainer" unique_id=1574889082]
-custom_minimum_size = Vector2(120, 36)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
-theme_override_colors/font_outline_color = Color(0.98, 0.96, 0.91, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleBoxTexture_stamp_btn")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_stamp_btn_pressed")
-theme_override_styles/hover = SubResource("StyleBoxTexture_stamp_btn_hover")
-text = "JOURNAL (J)"
+[node name="JournalButton" type="TextureButton" parent="." unique_id=1574889082]
+custom_minimum_size = Vector2(130, 90)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_top = 360.0
+offset_right = -20.0
+offset_bottom = 450.0
+grow_horizontal = 0
+texture_normal = ExtResource("4_journal_tex")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="ObjectiveBanner" type="PanelContainer" parent="." unique_id=1618673739]
 custom_minimum_size = Vector2(400, 0)

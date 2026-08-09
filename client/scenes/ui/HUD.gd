@@ -5,8 +5,8 @@ extends CanvasLayer
 @onready var level_label: Label = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/LevelLabel
 @onready var xp_bar: ProgressBar = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/XPProgressBar
 @onready var streak_label: Label = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/StreakLabel
-@onready var id_card_button: Button = $NavContainer/IdCardButton
-@onready var journal_button: Button = $NavContainer/JournalButton
+@onready var id_card_button: TextureButton = $IdCardButton
+@onready var journal_button: TextureButton = $JournalButton
 @onready var objective_banner: PanelContainer = $ObjectiveBanner
 @onready var objective_label: Label = $ObjectiveBanner/MarginContainer/ObjectiveLabel
 
