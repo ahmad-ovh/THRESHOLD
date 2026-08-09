@@ -66,7 +66,7 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 		
 		var color_hex = badge_color.to_html(false)
 		var prefix = "[color=#" + color_hex + "][b]" + speaker + ":[/b][/color] "
-		message_text.text = prefix + clean_text
+		message_text.text = clean_text
 		
 	active_camera = get_viewport().get_camera_3d()
 	continue_arrow.visible = false
@@ -138,7 +138,7 @@ func update_text_only(new_text: String) -> void:
 		var badge_color = badge_style.bg_color if badge_style else Color(0.85, 0.45, 0.08)
 		var color_hex = badge_color.to_html(false)
 		var prefix = "[color=#" + color_hex + "][b]" + speaker_label.text + ":[/b][/color] "
-		message_text.text = prefix + clean_text
+		message_text.text = clean_text
 	message_text.visible_ratio = 1.0
 	continue_arrow.visible = false
 	_recalculate_dynamic_size()
