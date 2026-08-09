@@ -1,0 +1,13 @@
+# Vercel deployment ignore rules
+client/
+.git/
+.godot/
+.pytest_cache/
+tests/
+scratch/
+docs/
+*.db
+pytest.ini
+run_tests.py
+demo_flow.py
+demo_out.txt

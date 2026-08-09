@@ -1,12 +1,12 @@
-[gd_scene format=3 uid="uid://idcard_preview_3d"]
+[gd_scene format=3 uid="uid://y85q3l5jtrdw"]
 
-[node name="PreviewWorld" type="Node3D"]
+[node name="PreviewWorld" type="Node3D" unique_id=65893619]
 
-[node name="PreviewCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.55, 1.1)
+[node name="PreviewCamera" type="Camera3D" parent="." unique_id=1841210568]
+transform = Transform3D(1, 0, 0, 0, 0.99864763, -0.051990733, 0, 0.051990733, 0.99864763, 0, 0.8907366, 0.6883284)
 current = true
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=675272721]
 transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2, 4, 3)
 
-[node name="ModelPivot" type="Node3D" parent="."]
+[node name="ModelPivot" type="Node3D" parent="." unique_id=67031050]

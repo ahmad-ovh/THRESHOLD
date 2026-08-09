@@ -50,6 +50,11 @@ async def startup_event() -> None:
     logger.info("Database initialised.")
 
 
+import os
+from fastapi.staticfiles import StaticFiles
+
+# ... existing app setup ...
+
 app.include_router(interaction.router)
 app.include_router(player.router)
 
@@ -57,3 +62,8 @@ app.include_router(player.router)
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok", "service": "THRESHOLD Backend"}
+
+
+if os.path.exists("public/game"):
+    app.mount("/game", StaticFiles(directory="public/game", html=True), name="game")
+
