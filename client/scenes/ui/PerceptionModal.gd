@@ -16,6 +16,21 @@ var perception_data: Dictionary = {}
 func _ready() -> void:
 	visible = false
 	enter_button.pressed.connect(_on_enter_pressed)
+	_setup_button_animations(enter_button)
+
+func _setup_button_animations(btn: Button) -> void:
+	if not btn:
+		return
+	btn.pivot_offset = btn.size / 2.0
+	btn.resized.connect(func(): btn.pivot_offset = btn.size / 2.0)
+	btn.mouse_entered.connect(func():
+		var tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.05, 1.05), 0.12)
+	)
+	btn.mouse_exited.connect(func():
+		var tw = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+	)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and (event.is_action_pressed("interact") or event.is_action_pressed("ui_accept")):
