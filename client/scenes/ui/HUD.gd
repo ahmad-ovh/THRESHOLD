@@ -1,14 +1,14 @@
 # res://scenes/ui/HUD.gd
 extends CanvasLayer
 
-@onready var player_id_label: Label = $VBoxRoot/TopBar/MarginContainer/HBoxContainer/PlayerIdLabel
-@onready var level_label: Label = $VBoxRoot/TopBar/MarginContainer/HBoxContainer/LevelLabel
-@onready var xp_bar: ProgressBar = $VBoxRoot/TopBar/MarginContainer/HBoxContainer/XPProgressBar
-@onready var streak_label: Label = $VBoxRoot/TopBar/MarginContainer/HBoxContainer/StreakLabel
-@onready var id_card_button: Button = $VBoxRoot/TopBar/MarginContainer/HBoxContainer/IdCardButton
-@onready var journal_button: Button = $VBoxRoot/TopBar/MarginContainer/HBoxContainer/JournalButton
-@onready var objective_banner: PanelContainer = $VBoxRoot/ObjectiveBanner
-@onready var objective_label: Label = $VBoxRoot/ObjectiveBanner/MarginContainer/ObjectiveLabel
+@onready var player_id_label: Label = $PlayerInfoCard/MarginContainer/VBoxContainer/PlayerIdLabel
+@onready var level_label: Label = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/LevelLabel
+@onready var xp_bar: ProgressBar = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/XPProgressBar
+@onready var streak_label: Label = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/StreakLabel
+@onready var id_card_button: Button = $NavContainer/IdCardButton
+@onready var journal_button: Button = $NavContainer/JournalButton
+@onready var objective_banner: PanelContainer = $ObjectiveBanner
+@onready var objective_label: Label = $ObjectiveBanner/MarginContainer/ObjectiveLabel
 
 var journal_ref: CanvasLayer = null
 var id_card_ref: CanvasLayer = null
@@ -34,7 +34,7 @@ func hide_objective() -> void:
 	objective_banner.visible = false
 
 func _update_hud() -> void:
-	player_id_label.text = "Player: " + PlayerStore.player_id
+	player_id_label.text = "PLAYER: " + PlayerStore.player_id
 	level_label.text = "Lvl " + str(PlayerStore.level)
 	xp_bar.value = PlayerStore.xp_progress * 100.0
 	streak_label.text = "Streak: " + str(PlayerStore.daily_streak)
