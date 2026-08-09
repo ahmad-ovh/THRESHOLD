@@ -1,0 +1,127 @@
+{
+  "bench_01": {
+    "path": "res://assets/threshold/environment/bench_01.gltf",
+    "category": "environment",
+    "subcategory": "street_bench",
+    "tags": [
+      "bench",
+      "street_bench",
+      "outdoor_seating"
+    ],
+    "dimensions": {
+      "x": 0.4,
+      "y": 0.1,
+      "z": 0.15
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "street_corridor",
+      "apartment_balcony"
+    ]
+  },
+  "road_straight_01": {
+    "path": "res://assets/threshold/environment/road_straight_01.gltf",
+    "category": "environment",
+    "subcategory": "road_tile",
+    "tags": [
+      "road",
+      "street",
+      "pavement",
+      "asphalt"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "gameplay_critical",
+    "npc_use": [
+      "walk"
+    ],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "road_crossing_01": {
+    "path": "res://assets/threshold/environment/road_crossing_01.gltf",
+    "category": "environment",
+    "subcategory": "crosswalk",
+    "tags": [
+      "crosswalk",
+      "road",
+      "pedestrian"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [
+      "walk"
+    ],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "trafficlight_01": {
+    "path": "res://assets/threshold/environment/trafficlight_01.gltf",
+    "category": "environment",
+    "subcategory": "traffic_light",
+    "tags": [
+      "traffic_light",
+      "signal",
+      "street_fixture"
+    ],
+    "dimensions": {
+      "x": 0.174,
+      "y": 0.729,
+      "z": 0.151
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "trash_bin_01": {
+    "path": "res://assets/threshold/environment/trash_bin_01.gltf",
+    "category": "environment",
+    "subcategory": "trash_bin",
+    "tags": [
+      "trash_bin",
+      "litter",
+      "street_fixture"
+    ],
+    "dimensions": {
+      "x": 0.127,
+      "y": 0.052,
+      "z": 0.133
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor",
+      "office_lobby",
+      "classroom"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "bush_01": {
+    "path": "res://assets/threshold/nature/bush_01.gltf",
+    "category": "nature",
+    "subcategory": "bush",
+    "tags": [
+      "bush",
+      "shrub",
+      "nature",
+      "vegetation"
+    ],
+    "dimensions": {
+      "x": 0.189,
+      "y": 0.381,
+      "z": 0.199
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor",
+      "apartment_balcony"
+    ]
+  }
+}

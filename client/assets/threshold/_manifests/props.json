@@ -1,0 +1,290 @@
+{
+  "book_01": {
+    "path": "res://assets/threshold/props/book_01.gltf",
+    "category": "props",
+    "subcategory": "book",
+    "tags": [
+      "book",
+      "reading",
+      "study",
+      "desk_prop"
+    ],
+    "dimensions": {
+      "x": 0.26,
+      "y": 0.5,
+      "z": 0.365
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "read"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "classroom",
+      "cafe"
+    ]
+  },
+  "book_02": {
+    "path": "res://assets/threshold/props/book_02.gltf",
+    "category": "props",
+    "subcategory": "book_set",
+    "tags": [
+      "books",
+      "book_stack",
+      "academic",
+      "study"
+    ],
+    "dimensions": {
+      "x": 0.78,
+      "y": 0.5,
+      "z": 0.365
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "read"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "classroom"
+    ]
+  },
+  "plant_01": {
+    "path": "res://assets/threshold/props/plant_01.gltf",
+    "category": "props",
+    "subcategory": "potted_plant",
+    "tags": [
+      "plant",
+      "potted_plant",
+      "cactus",
+      "desk_decor"
+    ],
+    "dimensions": {
+      "x": 0.5,
+      "y": 0.552,
+      "z": 0.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [
+      "view"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "adler_office",
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "plant_02": {
+    "path": "res://assets/threshold/props/plant_02.gltf",
+    "category": "props",
+    "subcategory": "potted_plant",
+    "tags": [
+      "plant",
+      "potted_plant",
+      "cactus",
+      "floor_decor"
+    ],
+    "dimensions": {
+      "x": 0.88,
+      "y": 0.827,
+      "z": 0.837
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [
+      "view"
+    ],
+    "suitable_rooms": [
+      "office_lobby",
+      "executive_suite",
+      "apartment_living"
+    ]
+  },
+  "picture_frame_01": {
+    "path": "res://assets/threshold/props/picture_frame_01.gltf",
+    "category": "props",
+    "subcategory": "wall_art",
+    "tags": [
+      "picture_frame",
+      "wall_art",
+      "decor"
+    ],
+    "dimensions": {
+      "x": 0.7,
+      "y": 0.9,
+      "z": 0.2
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "view"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "picture_frame_02": {
+    "path": "res://assets/threshold/props/picture_frame_02.gltf",
+    "category": "props",
+    "subcategory": "desk_frame",
+    "tags": [
+      "photo_frame",
+      "desk_decor",
+      "standing_frame"
+    ],
+    "dimensions": {
+      "x": 0.5,
+      "y": 0.619,
+      "z": 0.379
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "view"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "apartment_living",
+      "executive_suite"
+    ]
+  },
+  "rug_01": {
+    "path": "res://assets/threshold/props/rug_01.gltf",
+    "category": "props",
+    "subcategory": "rug",
+    "tags": [
+      "rug",
+      "carpet",
+      "floor_decor",
+      "cozy"
+    ],
+    "dimensions": {
+      "x": 3.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "apartment_living",
+      "adler_office",
+      "office_lobby"
+    ]
+  },
+  "rug_02": {
+    "path": "res://assets/threshold/props/rug_02.gltf",
+    "category": "props",
+    "subcategory": "rug",
+    "tags": [
+      "rug",
+      "oval_rug",
+      "floor_decor"
+    ],
+    "dimensions": {
+      "x": 3.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "cafe",
+      "apartment_living"
+    ]
+  },
+  "pillow_01": {
+    "path": "res://assets/threshold/props/pillow_01.gltf",
+    "category": "props",
+    "subcategory": "cushion",
+    "tags": [
+      "pillow",
+      "cushion",
+      "sofa_decor",
+      "cozy"
+    ],
+    "dimensions": {
+      "x": 0.65,
+      "y": 0.2,
+      "z": 0.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "dumpster_01": {
+    "path": "res://assets/threshold/props/dumpster_01.gltf",
+    "category": "props",
+    "subcategory": "dumpster",
+    "tags": [
+      "dumpster",
+      "trash",
+      "alley",
+      "outdoor_prop"
+    ],
+    "dimensions": {
+      "x": 0.566,
+      "y": 0.317,
+      "z": 0.353
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "firehydrant_01": {
+    "path": "res://assets/threshold/props/firehydrant_01.gltf",
+    "category": "props",
+    "subcategory": "hydrant",
+    "tags": [
+      "fire_hydrant",
+      "street_decor",
+      "outdoor"
+    ],
+    "dimensions": {
+      "x": 0.135,
+      "y": 0.225,
+      "z": 0.131
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  }
+}

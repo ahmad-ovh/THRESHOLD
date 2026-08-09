@@ -1,0 +1,374 @@
+{
+  "chair_01": {
+    "path": "res://assets/threshold/furniture/chair_01.gltf",
+    "category": "furniture",
+    "subcategory": "chair",
+    "tags": [
+      "chair",
+      "seating",
+      "indoor",
+      "stylized",
+      "low_poly",
+      "padded"
+    ],
+    "dimensions": {
+      "x": 0.75,
+      "y": 1.258,
+      "z": 0.845
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "classroom",
+      "office",
+      "living_room"
+    ]
+  },
+  "chair_02": {
+    "path": "res://assets/threshold/furniture/chair_02.gltf",
+    "category": "furniture",
+    "subcategory": "chair",
+    "tags": [
+      "chair",
+      "seating",
+      "indoor",
+      "stylized",
+      "wooden"
+    ],
+    "dimensions": {
+      "x": 0.75,
+      "y": 1.258,
+      "z": 0.845
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "classroom",
+      "adler_office"
+    ]
+  },
+  "chair_03": {
+    "path": "res://assets/threshold/furniture/chair_03.gltf",
+    "category": "furniture",
+    "subcategory": "stool",
+    "tags": [
+      "stool",
+      "seating",
+      "indoor",
+      "counter_seating",
+      "bar_stool"
+    ],
+    "dimensions": {
+      "x": 0.75,
+      "y": 0.5,
+      "z": 0.75
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "apartment_living"
+    ]
+  },
+  "armchair_01": {
+    "path": "res://assets/threshold/furniture/armchair_01.gltf",
+    "category": "furniture",
+    "subcategory": "armchair",
+    "tags": [
+      "armchair",
+      "seating",
+      "cozy",
+      "lounge",
+      "indoor"
+    ],
+    "dimensions": {
+      "x": 1.8,
+      "y": 1.224,
+      "z": 1.6
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "couch_01": {
+    "path": "res://assets/threshold/furniture/couch_01.gltf",
+    "category": "furniture",
+    "subcategory": "sofa",
+    "tags": [
+      "couch",
+      "sofa",
+      "seating",
+      "living_room",
+      "lounge"
+    ],
+    "dimensions": {
+      "x": 3.0,
+      "y": 1.224,
+      "z": 1.6
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "apartment_living",
+      "office_lobby",
+      "executive_suite"
+    ]
+  },
+  "table_01": {
+    "path": "res://assets/threshold/furniture/table_01.gltf",
+    "category": "furniture",
+    "subcategory": "table",
+    "tags": [
+      "table",
+      "dining_table",
+      "wood",
+      "surface",
+      "indoor"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 1.0,
+      "z": 2.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "place_prop",
+      "dine"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "table_02": {
+    "path": "res://assets/threshold/furniture/table_02.gltf",
+    "category": "furniture",
+    "subcategory": "coffee_table",
+    "tags": [
+      "coffee_table",
+      "low_table",
+      "surface",
+      "living_room"
+    ],
+    "dimensions": {
+      "x": 2.4,
+      "y": 0.5,
+      "z": 1.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "place_prop"
+    ],
+    "suitable_rooms": [
+      "apartment_living",
+      "office_lobby",
+      "executive_suite"
+    ]
+  },
+  "table_03": {
+    "path": "res://assets/threshold/furniture/table_03.gltf",
+    "category": "furniture",
+    "subcategory": "conference_table",
+    "tags": [
+      "long_table",
+      "conference_table",
+      "executive",
+      "meeting"
+    ],
+    "dimensions": {
+      "x": 3.0,
+      "y": 1.0,
+      "z": 2.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "place_prop",
+      "meeting"
+    ],
+    "suitable_rooms": [
+      "executive_suite",
+      "classroom",
+      "adler_office"
+    ]
+  },
+  "desk_01": {
+    "path": "res://assets/threshold/furniture/desk_01.gltf",
+    "category": "furniture",
+    "subcategory": "desk",
+    "tags": [
+      "desk",
+      "study_desk",
+      "small_table",
+      "workstation"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "work",
+      "place_prop"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "classroom",
+      "office_lobby"
+    ]
+  },
+  "shelf_01": {
+    "path": "res://assets/threshold/furniture/shelf_01.gltf",
+    "category": "furniture",
+    "subcategory": "bookshelf",
+    "tags": [
+      "bookshelf",
+      "shelf",
+      "storage",
+      "study",
+      "academic"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 0.4,
+      "z": 0.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "inspect"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "classroom",
+      "apartment_living"
+    ]
+  },
+  "shelf_02": {
+    "path": "res://assets/threshold/furniture/shelf_02.gltf",
+    "category": "furniture",
+    "subcategory": "wall_shelf",
+    "tags": [
+      "wall_shelf",
+      "small_shelf",
+      "display"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 0.4,
+      "z": 0.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "inspect"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "adler_office",
+      "apartment_living"
+    ]
+  },
+  "cabinet_01": {
+    "path": "res://assets/threshold/furniture/cabinet_01.gltf",
+    "category": "furniture",
+    "subcategory": "cabinet",
+    "tags": [
+      "cabinet",
+      "storage",
+      "credenza",
+      "wood"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 1.0,
+      "z": 1.002
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "storage"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "office_lobby",
+      "executive_suite"
+    ]
+  },
+  "cabinet_02": {
+    "path": "res://assets/threshold/furniture/cabinet_02.gltf",
+    "category": "furniture",
+    "subcategory": "side_cabinet",
+    "tags": [
+      "side_cabinet",
+      "nightstand",
+      "small_storage"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.002
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "storage"
+    ],
+    "suitable_rooms": [
+      "apartment_living",
+      "adler_office"
+    ]
+  }
+}

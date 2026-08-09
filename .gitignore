@@ -167,6 +167,9 @@ vite.config.ts.timestamp-*
 *.blend1
 *.blend2
 
+# Raw asset dump directory
+client/dump/
+
 # ── Scratch / one-off dev scripts ────────────────────────────────────────────
 # These are throwaway investigation scripts, not part of the project
 scratch/

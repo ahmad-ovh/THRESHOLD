@@ -1,0 +1,1013 @@
+{
+  "chair_01": {
+    "path": "res://assets/threshold/furniture/chair_01.gltf",
+    "category": "furniture",
+    "subcategory": "chair",
+    "tags": [
+      "chair",
+      "seating",
+      "indoor",
+      "stylized",
+      "low_poly",
+      "padded"
+    ],
+    "dimensions": {
+      "x": 0.75,
+      "y": 1.258,
+      "z": 0.845
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "classroom",
+      "office",
+      "living_room"
+    ]
+  },
+  "chair_02": {
+    "path": "res://assets/threshold/furniture/chair_02.gltf",
+    "category": "furniture",
+    "subcategory": "chair",
+    "tags": [
+      "chair",
+      "seating",
+      "indoor",
+      "stylized",
+      "wooden"
+    ],
+    "dimensions": {
+      "x": 0.75,
+      "y": 1.258,
+      "z": 0.845
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "classroom",
+      "adler_office"
+    ]
+  },
+  "chair_03": {
+    "path": "res://assets/threshold/furniture/chair_03.gltf",
+    "category": "furniture",
+    "subcategory": "stool",
+    "tags": [
+      "stool",
+      "seating",
+      "indoor",
+      "counter_seating",
+      "bar_stool"
+    ],
+    "dimensions": {
+      "x": 0.75,
+      "y": 0.5,
+      "z": 0.75
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "apartment_living"
+    ]
+  },
+  "armchair_01": {
+    "path": "res://assets/threshold/furniture/armchair_01.gltf",
+    "category": "furniture",
+    "subcategory": "armchair",
+    "tags": [
+      "armchair",
+      "seating",
+      "cozy",
+      "lounge",
+      "indoor"
+    ],
+    "dimensions": {
+      "x": 1.8,
+      "y": 1.224,
+      "z": 1.6
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "couch_01": {
+    "path": "res://assets/threshold/furniture/couch_01.gltf",
+    "category": "furniture",
+    "subcategory": "sofa",
+    "tags": [
+      "couch",
+      "sofa",
+      "seating",
+      "living_room",
+      "lounge"
+    ],
+    "dimensions": {
+      "x": 3.0,
+      "y": 1.224,
+      "z": 1.6
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "apartment_living",
+      "office_lobby",
+      "executive_suite"
+    ]
+  },
+  "table_01": {
+    "path": "res://assets/threshold/furniture/table_01.gltf",
+    "category": "furniture",
+    "subcategory": "table",
+    "tags": [
+      "table",
+      "dining_table",
+      "wood",
+      "surface",
+      "indoor"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 1.0,
+      "z": 2.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "place_prop",
+      "dine"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "table_02": {
+    "path": "res://assets/threshold/furniture/table_02.gltf",
+    "category": "furniture",
+    "subcategory": "coffee_table",
+    "tags": [
+      "coffee_table",
+      "low_table",
+      "surface",
+      "living_room"
+    ],
+    "dimensions": {
+      "x": 2.4,
+      "y": 0.5,
+      "z": 1.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "place_prop"
+    ],
+    "suitable_rooms": [
+      "apartment_living",
+      "office_lobby",
+      "executive_suite"
+    ]
+  },
+  "table_03": {
+    "path": "res://assets/threshold/furniture/table_03.gltf",
+    "category": "furniture",
+    "subcategory": "conference_table",
+    "tags": [
+      "long_table",
+      "conference_table",
+      "executive",
+      "meeting"
+    ],
+    "dimensions": {
+      "x": 3.0,
+      "y": 1.0,
+      "z": 2.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "place_prop",
+      "meeting"
+    ],
+    "suitable_rooms": [
+      "executive_suite",
+      "classroom",
+      "adler_office"
+    ]
+  },
+  "desk_01": {
+    "path": "res://assets/threshold/furniture/desk_01.gltf",
+    "category": "furniture",
+    "subcategory": "desk",
+    "tags": [
+      "desk",
+      "study_desk",
+      "small_table",
+      "workstation"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "work",
+      "place_prop"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "classroom",
+      "office_lobby"
+    ]
+  },
+  "shelf_01": {
+    "path": "res://assets/threshold/furniture/shelf_01.gltf",
+    "category": "furniture",
+    "subcategory": "bookshelf",
+    "tags": [
+      "bookshelf",
+      "shelf",
+      "storage",
+      "study",
+      "academic"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 0.4,
+      "z": 0.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "inspect"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "classroom",
+      "apartment_living"
+    ]
+  },
+  "shelf_02": {
+    "path": "res://assets/threshold/furniture/shelf_02.gltf",
+    "category": "furniture",
+    "subcategory": "wall_shelf",
+    "tags": [
+      "wall_shelf",
+      "small_shelf",
+      "display"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 0.4,
+      "z": 0.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "inspect"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "adler_office",
+      "apartment_living"
+    ]
+  },
+  "cabinet_01": {
+    "path": "res://assets/threshold/furniture/cabinet_01.gltf",
+    "category": "furniture",
+    "subcategory": "cabinet",
+    "tags": [
+      "cabinet",
+      "storage",
+      "credenza",
+      "wood"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 1.0,
+      "z": 1.002
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "storage"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "office_lobby",
+      "executive_suite"
+    ]
+  },
+  "cabinet_02": {
+    "path": "res://assets/threshold/furniture/cabinet_02.gltf",
+    "category": "furniture",
+    "subcategory": "side_cabinet",
+    "tags": [
+      "side_cabinet",
+      "nightstand",
+      "small_storage"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.002
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "storage"
+    ],
+    "suitable_rooms": [
+      "apartment_living",
+      "adler_office"
+    ]
+  },
+  "book_01": {
+    "path": "res://assets/threshold/props/book_01.gltf",
+    "category": "props",
+    "subcategory": "book",
+    "tags": [
+      "book",
+      "reading",
+      "study",
+      "desk_prop"
+    ],
+    "dimensions": {
+      "x": 0.26,
+      "y": 0.5,
+      "z": 0.365
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "read"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "classroom",
+      "cafe"
+    ]
+  },
+  "book_02": {
+    "path": "res://assets/threshold/props/book_02.gltf",
+    "category": "props",
+    "subcategory": "book_set",
+    "tags": [
+      "books",
+      "book_stack",
+      "academic",
+      "study"
+    ],
+    "dimensions": {
+      "x": 0.78,
+      "y": 0.5,
+      "z": 0.365
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "read"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "classroom"
+    ]
+  },
+  "plant_01": {
+    "path": "res://assets/threshold/props/plant_01.gltf",
+    "category": "props",
+    "subcategory": "potted_plant",
+    "tags": [
+      "plant",
+      "potted_plant",
+      "cactus",
+      "desk_decor"
+    ],
+    "dimensions": {
+      "x": 0.5,
+      "y": 0.552,
+      "z": 0.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [
+      "view"
+    ],
+    "suitable_rooms": [
+      "cafe",
+      "adler_office",
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "plant_02": {
+    "path": "res://assets/threshold/props/plant_02.gltf",
+    "category": "props",
+    "subcategory": "potted_plant",
+    "tags": [
+      "plant",
+      "potted_plant",
+      "cactus",
+      "floor_decor"
+    ],
+    "dimensions": {
+      "x": 0.88,
+      "y": 0.827,
+      "z": 0.837
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [
+      "view"
+    ],
+    "suitable_rooms": [
+      "office_lobby",
+      "executive_suite",
+      "apartment_living"
+    ]
+  },
+  "picture_frame_01": {
+    "path": "res://assets/threshold/props/picture_frame_01.gltf",
+    "category": "props",
+    "subcategory": "wall_art",
+    "tags": [
+      "picture_frame",
+      "wall_art",
+      "decor"
+    ],
+    "dimensions": {
+      "x": 0.7,
+      "y": 0.9,
+      "z": 0.2
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "view"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "picture_frame_02": {
+    "path": "res://assets/threshold/props/picture_frame_02.gltf",
+    "category": "props",
+    "subcategory": "desk_frame",
+    "tags": [
+      "photo_frame",
+      "desk_decor",
+      "standing_frame"
+    ],
+    "dimensions": {
+      "x": 0.5,
+      "y": 0.619,
+      "z": 0.379
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [
+      "view"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "apartment_living",
+      "executive_suite"
+    ]
+  },
+  "rug_01": {
+    "path": "res://assets/threshold/props/rug_01.gltf",
+    "category": "props",
+    "subcategory": "rug",
+    "tags": [
+      "rug",
+      "carpet",
+      "floor_decor",
+      "cozy"
+    ],
+    "dimensions": {
+      "x": 3.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "apartment_living",
+      "adler_office",
+      "office_lobby"
+    ]
+  },
+  "rug_02": {
+    "path": "res://assets/threshold/props/rug_02.gltf",
+    "category": "props",
+    "subcategory": "rug",
+    "tags": [
+      "rug",
+      "oval_rug",
+      "floor_decor"
+    ],
+    "dimensions": {
+      "x": 3.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "cafe",
+      "apartment_living"
+    ]
+  },
+  "pillow_01": {
+    "path": "res://assets/threshold/props/pillow_01.gltf",
+    "category": "props",
+    "subcategory": "cushion",
+    "tags": [
+      "pillow",
+      "cushion",
+      "sofa_decor",
+      "cozy"
+    ],
+    "dimensions": {
+      "x": 0.65,
+      "y": 0.2,
+      "z": 0.5
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "apartment_living",
+      "office_lobby"
+    ]
+  },
+  "dumpster_01": {
+    "path": "res://assets/threshold/props/dumpster_01.gltf",
+    "category": "props",
+    "subcategory": "dumpster",
+    "tags": [
+      "dumpster",
+      "trash",
+      "alley",
+      "outdoor_prop"
+    ],
+    "dimensions": {
+      "x": 0.566,
+      "y": 0.317,
+      "z": 0.353
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "firehydrant_01": {
+    "path": "res://assets/threshold/props/firehydrant_01.gltf",
+    "category": "props",
+    "subcategory": "hydrant",
+    "tags": [
+      "fire_hydrant",
+      "street_decor",
+      "outdoor"
+    ],
+    "dimensions": {
+      "x": 0.135,
+      "y": 0.225,
+      "z": 0.131
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "building_01": {
+    "path": "res://assets/threshold/architecture/building_01.gltf",
+    "category": "architecture",
+    "subcategory": "building_facade",
+    "tags": [
+      "building",
+      "facade",
+      "storefront",
+      "urban"
+    ],
+    "dimensions": {
+      "x": 1.207,
+      "y": 1.55,
+      "z": 1.45
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "building_02": {
+    "path": "res://assets/threshold/architecture/building_02.gltf",
+    "category": "architecture",
+    "subcategory": "building_facade",
+    "tags": [
+      "building",
+      "facade",
+      "office_facade",
+      "urban"
+    ],
+    "dimensions": {
+      "x": 1.607,
+      "y": 1.55,
+      "z": 1.3
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "building_03": {
+    "path": "res://assets/threshold/architecture/building_03.gltf",
+    "category": "architecture",
+    "subcategory": "building_facade",
+    "tags": [
+      "building",
+      "facade",
+      "cafe_facade",
+      "urban"
+    ],
+    "dimensions": {
+      "x": 1.207,
+      "y": 2.25,
+      "z": 1.3
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "building_04": {
+    "path": "res://assets/threshold/architecture/building_04.gltf",
+    "category": "architecture",
+    "subcategory": "building_facade",
+    "tags": [
+      "building",
+      "facade",
+      "apartment_facade",
+      "urban"
+    ],
+    "dimensions": {
+      "x": 1.607,
+      "y": 2.25,
+      "z": 1.3
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "base_tile_01": {
+    "path": "res://assets/threshold/architecture/base_tile_01.gltf",
+    "category": "architecture",
+    "subcategory": "ground_tile",
+    "tags": [
+      "base",
+      "ground",
+      "tile",
+      "sidewalk"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "gameplay_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "bench_01": {
+    "path": "res://assets/threshold/environment/bench_01.gltf",
+    "category": "environment",
+    "subcategory": "street_bench",
+    "tags": [
+      "bench",
+      "street_bench",
+      "outdoor_seating"
+    ],
+    "dimensions": {
+      "x": 0.4,
+      "y": 0.1,
+      "z": 0.15
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [
+      "sit"
+    ],
+    "suitable_rooms": [
+      "street_corridor",
+      "apartment_balcony"
+    ]
+  },
+  "road_straight_01": {
+    "path": "res://assets/threshold/environment/road_straight_01.gltf",
+    "category": "environment",
+    "subcategory": "road_tile",
+    "tags": [
+      "road",
+      "street",
+      "pavement",
+      "asphalt"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "gameplay_critical",
+    "npc_use": [
+      "walk"
+    ],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "road_crossing_01": {
+    "path": "res://assets/threshold/environment/road_crossing_01.gltf",
+    "category": "environment",
+    "subcategory": "crosswalk",
+    "tags": [
+      "crosswalk",
+      "road",
+      "pedestrian"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [
+      "walk"
+    ],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "trafficlight_01": {
+    "path": "res://assets/threshold/environment/trafficlight_01.gltf",
+    "category": "environment",
+    "subcategory": "traffic_light",
+    "tags": [
+      "traffic_light",
+      "signal",
+      "street_fixture"
+    ],
+    "dimensions": {
+      "x": 0.174,
+      "y": 0.729,
+      "z": 0.151
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "trash_bin_01": {
+    "path": "res://assets/threshold/environment/trash_bin_01.gltf",
+    "category": "environment",
+    "subcategory": "trash_bin",
+    "tags": [
+      "trash_bin",
+      "litter",
+      "street_fixture"
+    ],
+    "dimensions": {
+      "x": 0.127,
+      "y": 0.052,
+      "z": 0.133
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor",
+      "office_lobby",
+      "classroom"
+    ]
+  },
+  "bush_01": {
+    "path": "res://assets/threshold/nature/bush_01.gltf",
+    "category": "nature",
+    "subcategory": "bush",
+    "tags": [
+      "bush",
+      "shrub",
+      "nature",
+      "vegetation"
+    ],
+    "dimensions": {
+      "x": 0.189,
+      "y": 0.381,
+      "z": 0.199
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "decorative",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor",
+      "apartment_balcony"
+    ]
+  },
+  "lamp_standing_01": {
+    "path": "res://assets/threshold/lighting/lamp_standing_01.gltf",
+    "category": "lighting",
+    "subcategory": "floor_lamp",
+    "tags": [
+      "lamp",
+      "floor_lamp",
+      "lighting",
+      "cozy"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 2.52,
+      "z": 1.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "light"
+    ],
+    "suitable_rooms": [
+      "apartment_living",
+      "adler_office",
+      "office_lobby"
+    ]
+  },
+  "lamp_table_01": {
+    "path": "res://assets/threshold/lighting/lamp_table_01.gltf",
+    "category": "lighting",
+    "subcategory": "desk_lamp",
+    "tags": [
+      "lamp",
+      "desk_lamp",
+      "table_lamp",
+      "study_light"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 1.022,
+      "z": 1.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "light"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "executive_suite",
+      "apartment_living"
+    ]
+  },
+  "streetlamp_01": {
+    "path": "res://assets/threshold/lighting/streetlamp_01.gltf",
+    "category": "lighting",
+    "subcategory": "street_lamp",
+    "tags": [
+      "street_lamp",
+      "streetlight",
+      "outdoor_lighting"
+    ],
+    "dimensions": {
+      "x": 0.269,
+      "y": 0.96,
+      "z": 0.069
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [
+      "light"
+    ],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  }
+}

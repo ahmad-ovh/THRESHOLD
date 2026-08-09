@@ -1,0 +1,83 @@
+{
+  "lamp_standing_01": {
+    "path": "res://assets/threshold/lighting/lamp_standing_01.gltf",
+    "category": "lighting",
+    "subcategory": "floor_lamp",
+    "tags": [
+      "lamp",
+      "floor_lamp",
+      "lighting",
+      "cozy"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 2.52,
+      "z": 1.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "light"
+    ],
+    "suitable_rooms": [
+      "apartment_living",
+      "adler_office",
+      "office_lobby"
+    ]
+  },
+  "lamp_table_01": {
+    "path": "res://assets/threshold/lighting/lamp_table_01.gltf",
+    "category": "lighting",
+    "subcategory": "desk_lamp",
+    "tags": [
+      "lamp",
+      "desk_lamp",
+      "table_lamp",
+      "study_light"
+    ],
+    "dimensions": {
+      "x": 1.0,
+      "y": 1.022,
+      "z": 1.0
+    },
+    "origin": "KayKit_Furniture_Bits_1.0_FREE",
+    "indoor": true,
+    "outdoor": false,
+    "importance": "identity_critical",
+    "npc_use": [
+      "light"
+    ],
+    "suitable_rooms": [
+      "adler_office",
+      "executive_suite",
+      "apartment_living"
+    ]
+  },
+  "streetlamp_01": {
+    "path": "res://assets/threshold/lighting/streetlamp_01.gltf",
+    "category": "lighting",
+    "subcategory": "street_lamp",
+    "tags": [
+      "street_lamp",
+      "streetlight",
+      "outdoor_lighting"
+    ],
+    "dimensions": {
+      "x": 0.269,
+      "y": 0.96,
+      "z": 0.069
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [
+      "light"
+    ],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  }
+}

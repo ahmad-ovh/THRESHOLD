@@ -1,0 +1,122 @@
+{
+  "building_01": {
+    "path": "res://assets/threshold/architecture/building_01.gltf",
+    "category": "architecture",
+    "subcategory": "building_facade",
+    "tags": [
+      "building",
+      "facade",
+      "storefront",
+      "urban"
+    ],
+    "dimensions": {
+      "x": 1.207,
+      "y": 1.55,
+      "z": 1.45
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "building_02": {
+    "path": "res://assets/threshold/architecture/building_02.gltf",
+    "category": "architecture",
+    "subcategory": "building_facade",
+    "tags": [
+      "building",
+      "facade",
+      "office_facade",
+      "urban"
+    ],
+    "dimensions": {
+      "x": 1.607,
+      "y": 1.55,
+      "z": 1.3
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "building_03": {
+    "path": "res://assets/threshold/architecture/building_03.gltf",
+    "category": "architecture",
+    "subcategory": "building_facade",
+    "tags": [
+      "building",
+      "facade",
+      "cafe_facade",
+      "urban"
+    ],
+    "dimensions": {
+      "x": 1.207,
+      "y": 2.25,
+      "z": 1.3
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "building_04": {
+    "path": "res://assets/threshold/architecture/building_04.gltf",
+    "category": "architecture",
+    "subcategory": "building_facade",
+    "tags": [
+      "building",
+      "facade",
+      "apartment_facade",
+      "urban"
+    ],
+    "dimensions": {
+      "x": 1.607,
+      "y": 2.25,
+      "z": 1.3
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "identity_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  },
+  "base_tile_01": {
+    "path": "res://assets/threshold/architecture/base_tile_01.gltf",
+    "category": "architecture",
+    "subcategory": "ground_tile",
+    "tags": [
+      "base",
+      "ground",
+      "tile",
+      "sidewalk"
+    ],
+    "dimensions": {
+      "x": 2.0,
+      "y": 0.1,
+      "z": 2.0
+    },
+    "origin": "KayKit_City_Builder_Bits_1.0_FREE",
+    "indoor": false,
+    "outdoor": true,
+    "importance": "gameplay_critical",
+    "npc_use": [],
+    "suitable_rooms": [
+      "street_corridor"
+    ]
+  }
+}
