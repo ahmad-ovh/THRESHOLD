@@ -14,6 +14,7 @@ func _ready() -> void:
 		camera_anchor.rotation_degrees = camera_rotation
 		
 	_setup_visual_environment()
+	_ensure_front_wall_collider()
 	_generate_model_collisions(self)
 
 func _setup_visual_environment() -> void:
@@ -29,6 +30,32 @@ func _setup_visual_environment() -> void:
 		var env_res = load(VISUAL_ENV_PATH)
 		if env_res:
 			world_env.environment = env_res
+
+func _ensure_front_wall_collider() -> void:
+	var bounds = get_node_or_null("RoomBounds")
+	if not bounds:
+		return
+		
+	if bounds.has_node("FrontWallCollider"):
+		return
+
+	var floor_node = bounds.get_node_or_null("Floor") as CSGBox3D
+	if not floor_node:
+		return
+
+	var floor_size = floor_node.size
+	var floor_pos = floor_node.position
+	
+	# Front edge of floor (facing positive Z towards camera)
+	var front_z = floor_pos.z + (floor_size.z / 2.0)
+	
+	var front_wall = CSGBox3D.new()
+	front_wall.name = "FrontWallCollider"
+	front_wall.use_collision = true
+	front_wall.visible = false
+	front_wall.size = Vector3(floor_size.x, 5.0, 0.4)
+	front_wall.position = Vector3(floor_pos.x, 2.5, front_z)
+	bounds.add_child(front_wall)
 
 func _generate_model_collisions(node: Node) -> void:
 	for child in node.get_children():
