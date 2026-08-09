@@ -30,12 +30,13 @@ def _ensure_engine() -> tuple[AsyncEngine, async_sessionmaker[AsyncSession]]:
     global _engine, _AsyncSessionLocal
     if _engine is None:
         _engine = create_async_engine(
-            settings.db_url,
+            settings.effective_db_url,
             echo=False,
             poolclass=NullPool,  # one connection per request — safe across threads/loops
         )
         _AsyncSessionLocal = async_sessionmaker(_engine, expire_on_commit=False)
     return _engine, _AsyncSessionLocal  # type: ignore[return-value]
+
 
 
 class Base(DeclarativeBase):

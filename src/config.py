@@ -1,8 +1,6 @@
-"""
-Application configuration — reads from .env.
-"""
-from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
 from functools import lru_cache
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -25,7 +23,15 @@ class Settings(BaseSettings):
     max_turns_safety_limit: int = 8
     min_turns_before_end: int = 3
 
+    @property
+    def effective_db_url(self) -> str:
+        if os.getenv("VERCEL") or os.getenv("AWS_EXECUTION_ENV"):
+            if "sqlite" in self.db_url and "./threshold.db" in self.db_url:
+                return "sqlite+aiosqlite:////tmp/threshold.db"
+        return self.db_url
+
 
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+

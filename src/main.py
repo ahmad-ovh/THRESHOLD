@@ -35,19 +35,28 @@ app.add_middleware(
 )
 
 
+# Ensure registry is loaded immediately on import
+try:
+    registry.load()
+except Exception as e:
+    logger.warning("Initial registry load on import: %s", e)
+
+
 @app.on_event("startup")
 async def startup_event() -> None:
     logger.info("THRESHOLD backend starting up...")
-    # Load content registry (NPC templates + scenario seeds)
-    registry.load()
-    logger.info(
-        "Content loaded: %d NPC templates, %d scenario seeds.",
-        len(registry.all_templates()),
-        len(registry.all_seeds()),
-    )
-    # Initialise database
-    await init_db()
-    logger.info("Database initialised.")
+    try:
+        registry.load()
+        logger.info(
+            "Content loaded: %d NPC templates, %d scenario seeds.",
+            len(registry.all_templates()),
+            len(registry.all_seeds()),
+        )
+        await init_db()
+        logger.info("Database initialised.")
+    except Exception as e:
+        logger.error("Startup error: %s", e, exc_info=True)
+
 
 
 import os
