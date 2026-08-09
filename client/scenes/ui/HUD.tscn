@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene format=3 uid="uid://d2r5rfbf0jbhg"]
 
-[ext_resource type="Script" path="res://scenes/ui/HUD.gd" id="1_hud_script"]
+[ext_resource type="Script" uid="uid://bet1vfub6jybq" path="res://scenes/ui/HUD.gd" id="1_hud_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
+[ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_card"]
 bg_color = Color(0.99, 0.97, 0.93, 0.96)
@@ -27,60 +27,60 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_fill"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
+bg_color = Color(0.9, 0.45, 0.08, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn_pressed"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(0.82, 0.78, 0.72, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn_hover"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(1.12, 1.05, 0.95, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_obj_banner"]
-bg_color = Color(1.0, 0.97, 0.82, 0.97)
+bg_color = Color(1, 0.97, 0.82, 0.97)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.90, 0.45, 0.08, 1)
+border_color = Color(0.9, 0.45, 0.08, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn_hover"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(1.12, 1.05, 0.95, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_stamp_btn_pressed"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(0.82, 0.78, 0.72, 1)
-
-[node name="HUD" type="CanvasLayer"]
+[node name="HUD" type="CanvasLayer" unique_id=454706253]
 script = ExtResource("1_hud_script")
 
-[node name="PlayerInfoCard" type="PanelContainer" parent="."]
+[node name="PlayerInfoCard" type="PanelContainer" parent="." unique_id=606699394]
 custom_minimum_size = Vector2(290, 64)
 offset_left = 16.0
 offset_top = 16.0
@@ -88,87 +88,87 @@ offset_right = 310.0
 offset_bottom = 80.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_player_card")
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerInfoCard"]
+[node name="MarginContainer" type="MarginContainer" parent="PlayerInfoCard" unique_id=2084198043]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerInfoCard/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerInfoCard/MarginContainer" unique_id=174372665]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="PlayerIdLabel" type="Label" parent="PlayerInfoCard/MarginContainer/VBoxContainer"]
+[node name="PlayerIdLabel" type="Label" parent="PlayerInfoCard/MarginContainer/VBoxContainer" unique_id=399875501]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 15
 text = "PLAYER: player_01"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PlayerInfoCard/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PlayerInfoCard/MarginContainer/VBoxContainer" unique_id=171348083]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="LevelLabel" type="Label" parent="PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="LevelLabel" type="Label" parent="PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer" unique_id=717390714]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.22, 0.55, 0.20, 1)
+theme_override_colors/font_color = Color(0.22, 0.55, 0.2, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Lvl 1"
 
-[node name="XPProgressBar" type="ProgressBar" parent="PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="XPProgressBar" type="ProgressBar" parent="PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1282265727]
 custom_minimum_size = Vector2(130, 14)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/background = SubResource("StyleBoxFlat_xp_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
 
-[node name="StreakLabel" type="Label" parent="PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="StreakLabel" type="Label" parent="PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1382415797]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
+theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "Streak: 0"
 
-[node name="NavContainer" type="HBoxContainer" parent="."]
+[node name="NavContainer" type="VBoxContainer" parent="." unique_id=371151055]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -270.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = 54.0
+offset_left = -264.0
+offset_top = 263.0
+offset_right = -2.0
+offset_bottom = 669.0
 grow_horizontal = 0
 theme_override_constants/separation = 8
 
-[node name="IdCardButton" type="Button" parent="NavContainer"]
+[node name="IdCardButton" type="Button" parent="NavContainer" unique_id=982192999]
 custom_minimum_size = Vector2(120, 36)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_colors/font_outline_color = Color(0.98, 0.96, 0.91, 1)
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxTexture_stamp_btn")
-theme_override_styles/hover = SubResource("StyleBoxTexture_stamp_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_stamp_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_stamp_btn_hover")
 text = "ID CARD (I)"
 
-[node name="JournalButton" type="Button" parent="NavContainer"]
+[node name="JournalButton" type="Button" parent="NavContainer" unique_id=1574889082]
 custom_minimum_size = Vector2(120, 36)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_colors/font_outline_color = Color(0.98, 0.96, 0.91, 1)
 theme_override_constants/outline_size = 2
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxTexture_stamp_btn")
-theme_override_styles/hover = SubResource("StyleBoxTexture_stamp_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_stamp_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_stamp_btn_hover")
 text = "JOURNAL (J)"
 
-[node name="ObjectiveBanner" type="PanelContainer" parent="."]
+[node name="ObjectiveBanner" type="PanelContainer" parent="." unique_id=1618673739]
 custom_minimum_size = Vector2(400, 0)
 anchors_preset = 5
 anchor_left = 0.5
@@ -180,16 +180,16 @@ offset_bottom = 112.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_obj_banner")
 
-[node name="MarginContainer" type="MarginContainer" parent="ObjectiveBanner"]
+[node name="MarginContainer" type="MarginContainer" parent="ObjectiveBanner" unique_id=755493238]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 4
 
-[node name="ObjectiveLabel" type="Label" parent="ObjectiveBanner/MarginContainer"]
+[node name="ObjectiveLabel" type="Label" parent="ObjectiveBanner/MarginContainer" unique_id=203723887]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.35, 0.25, 0.10, 1)
+theme_override_colors/font_color = Color(0.35, 0.25, 0.1, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "Objective: Explore the room & press [E] near an NPC to talk"
