@@ -56,7 +56,7 @@
         {
             "mimeType": "image/png",
             "name": "citybits_texture",
-            "uri": "citybits_texture.png"
+            "uri": "../common/citybits_texture.png"
         }
     ],
     "accessors": [

@@ -56,7 +56,7 @@
         {
             "mimeType": "image/png",
             "name": "furniturebits_texture",
-            "uri": "furniturebits_texture.png"
+            "uri": "../common/furniturebits_texture.png"
         }
     ],
     "accessors": [
