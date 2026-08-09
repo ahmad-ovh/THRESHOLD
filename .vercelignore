@@ -1,4 +1,9 @@
 # Vercel deployment ignore rules
+.codebuddy/
+.codebuddy
+.agent/
+.agents/
+.vscode/
 client/
 .git/
 .godot/
@@ -11,3 +16,4 @@ pytest.ini
 run_tests.py
 demo_flow.py
 demo_out.txt
+
