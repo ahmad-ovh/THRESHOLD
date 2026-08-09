@@ -34,60 +34,60 @@ material = SubResource("StandardMaterial3D_road")
 [node name="Architecture" type="Node3D" parent="."]
 
 [node name="Building_Adler" parent="Architecture" instance=ExtResource("6_b1")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -18, 0, -3.5)
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, -18, 0, -3.5)
 
 [node name="Building_Cafe" parent="Architecture" instance=ExtResource("8_b3")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -6, 0, -3.5)
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, -6, 0, -3.5)
 
 [node name="Building_Apartment" parent="Architecture" instance=ExtResource("9_b4")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 6, 0, -3.5)
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 6, 0, -3.5)
 
 [node name="Building_Campus" parent="Architecture" instance=ExtResource("6_b1")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 14, 0, -3.5)
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 14, 0, -3.5)
 
 [node name="Building_Office" parent="Architecture" instance=ExtResource("7_b2")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 22, 0, -3.5)
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 22, 0, -3.5)
 
 [node name="EnvironmentProps" type="Node3D" parent="."]
 
 [node name="Bench_Stranger" parent="EnvironmentProps" instance=ExtResource("12_bench")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -1.2)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -12, 0, -1.2)
 
 [node name="Bench_East" parent="EnvironmentProps" instance=ExtResource("12_bench")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -1.2)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 10, 0, -1.2)
 
 [node name="StreetLamp_1" parent="EnvironmentProps" instance=ExtResource("13_lamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -1.5)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -24, 0, -1.5)
 
 [node name="StreetLamp_2" parent="EnvironmentProps" instance=ExtResource("13_lamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -1.5)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -8, 0, -1.5)
 
 [node name="StreetLamp_3" parent="EnvironmentProps" instance=ExtResource("13_lamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -1.5)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 8, 0, -1.5)
 
 [node name="StreetLamp_4" parent="EnvironmentProps" instance=ExtResource("13_lamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, -1.5)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 24, 0, -1.5)
 
 [node name="Dumpster" parent="EnvironmentProps" instance=ExtResource("14_dumpster")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 0, -2.5)
+transform = Transform3D(3.8, 0, 0, 0, 3.8, 0, 0, 0, 3.8, -34, 0, -2.5)
 
 [node name="Hydrant" parent="EnvironmentProps" instance=ExtResource("15_hydrant")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, -1.0)
+transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, -16, 0, -1.0)
 
 [node name="Bush_1" parent="EnvironmentProps" instance=ExtResource("16_bush")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -22, 0, -1.8)
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, -22, 0, -1.8)
 
 [node name="Bush_2" parent="EnvironmentProps" instance=ExtResource("16_bush")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 2, 0, -1.8)
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 2, 0, -1.8)
 
 [node name="Bush_3" parent="EnvironmentProps" instance=ExtResource("16_bush")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 18, 0, -1.8)
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 18, 0, -1.8)
 
 [node name="TrafficLight" parent="EnvironmentProps" instance=ExtResource("17_traffic")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -1.5)
+transform = Transform3D(3.8, 0, 0, 0, 3.8, 0, 0, 0, 3.8, -2, 0, -1.5)
 
 [node name="TrashBin" parent="EnvironmentProps" instance=ExtResource("18_trash")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -1.0)
+transform = Transform3D(12.0, 0, 0, 0, 12.0, 0, 0, 0, 12.0, -4, 0, -1.0)
 
 [node name="Lighting" type="Node3D" parent="."]
 

@@ -56,53 +56,53 @@ transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 
 [node name="Furniture" type="Node3D" parent="."]
 
 [node name="CounterBar" type="CSGBox3D" parent="Furniture"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, -3.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.475, -3.5)
 use_collision = true
-size = Vector3(4.0, 1.0, 0.8)
+size = Vector3(4.0, 0.95, 0.8)
 
 [node name="Stool1" parent="Furniture" instance=ExtResource("9_stool")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 0, -2.6)
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -5.2, 0, -2.6)
 
 [node name="Stool2" parent="Furniture" instance=ExtResource("9_stool")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0, -2.6)
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -3.8, 0, -2.6)
 
 [node name="CenterTable" parent="Furniture" instance=ExtResource("5_table1")]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, -1.0)
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 0, 0, -1.0)
 
 [node name="ChairFelix" parent="Furniture" instance=ExtResource("7_chair1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0, 0, -1.8)
 
 [node name="ChairFelixFacing" parent="Furniture" instance=ExtResource("8_chair2")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -0.2)
+transform = Transform3D(-0.65, 0, 0, 0, 0.65, 0, 0, 0, -0.65, 0, 0, -0.2)
 
 [node name="WindowTable" parent="Furniture" instance=ExtResource("6_table2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -2.5)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 4.5, 0, -2.5)
 
 [node name="ChairDaria" parent="Furniture" instance=ExtResource("7_chair1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -3.3)
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 4.5, 0, -3.3)
 
 [node name="SideTable" parent="Furniture" instance=ExtResource("5_table1")]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -1.5, 0, 1.0)
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, -1.5, 0, 1.0)
 
 [node name="ChairPriya" parent="Furniture" instance=ExtResource("8_chair2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, 1.0)
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, -2.2, 0, 1.0)
 
 [node name="WallShelf" parent="Furniture" instance=ExtResource("10_shelf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 1.6, -4.7)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, -4.0, 1.5, -4.7)
 
 [node name="CornerLamp" parent="Furniture" instance=ExtResource("14_lamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8, 0, -4.2)
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 6.8, 0, -4.2)
 
 [node name="Props" type="Node3D" parent="."]
 
 [node name="RugCenter" parent="Props" instance=ExtResource("11_rug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -1.0)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.01, -1.0)
 
 [node name="PottedPlant" parent="Props" instance=ExtResource("12_plant")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 1.1, -3.5)
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -4.0, 0.95, -3.5)
 
 [node name="BookOnTable" parent="Props" instance=ExtResource("13_book")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.5, -2.5)
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 4.5, 0.44, -2.5)
 
 [node name="Lighting" type="Node3D" parent="."]
 

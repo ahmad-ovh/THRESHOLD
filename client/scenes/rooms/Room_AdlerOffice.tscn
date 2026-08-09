@@ -56,47 +56,47 @@ transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 
 [node name="Furniture" type="Node3D" parent="."]
 
 [node name="ExecutiveDesk" parent="Furniture" instance=ExtResource("5_desk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, -2.5)
 
 [node name="AdlerChair" parent="Furniture" instance=ExtResource("6_chair")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4)
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0, 0, -3.3)
 
 [node name="VisitorArmchairLeft" parent="Furniture" instance=ExtResource("7_armchair")]
-transform = Transform3D(0.966, 0, 0.258, 0, 1, 0, -0.258, 0, 0.966, -1.2, 0, -1.2)
+transform = Transform3D(0.58, 0, 0.15, 0, 0.6, 0, -0.15, 0, 0.58, -1.2, 0, -1.2)
 
 [node name="VisitorArmchairRight" parent="Furniture" instance=ExtResource("7_armchair")]
-transform = Transform3D(0.966, 0, -0.258, 0, 1, 0, 0.258, 0, 0.966, 1.2, 0, -1.2)
+transform = Transform3D(0.58, 0, -0.15, 0, 0.6, 0, 0.15, 0, 0.58, 1.2, 0, -1.2)
 
 [node name="BookshelfLeft" parent="Furniture" instance=ExtResource("8_bookshelf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -3.6)
+transform = Transform3D(0, 0, -2.2, 2.2, 0, 0, 0, 2.2, 0, -4.5, 0, -3.6)
 
 [node name="BookshelfRight" parent="Furniture" instance=ExtResource("8_bookshelf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -3.6)
+transform = Transform3D(0, 0, -2.2, 2.2, 0, 0, 0, 2.2, 0, 4.5, 0, -3.6)
 
 [node name="SideCabinet" parent="Furniture" instance=ExtResource("9_cabinet")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -5.5, 0, -1.5)
+transform = Transform3D(0, 0, -0.75, 0, 0.75, 0, 0.75, 0, 0, -5.5, 0, -1.5)
 
 [node name="Props" type="Node3D" parent="."]
 
 [node name="RugVisitor" parent="Props" instance=ExtResource("13_rug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -1.2)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.01, -1.2)
 
 [node name="DeskLamp" parent="Props" instance=ExtResource("14_desklamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 1.0, -2.5)
+transform = Transform3D(0.38, 0, 0, 0, 0.38, 0, 0, 0, 0.38, -0.9, 0.75, -2.5)
 
 [node name="DeskBookStack" parent="Props" instance=ExtResource("11_book2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 1.0, -2.5)
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0.8, 0.84, -2.5)
 
 [node name="SingleBook" parent="Props" instance=ExtResource("10_book1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.0, -2.2)
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, -0.4, 0.84, -2.2)
 
 [node name="DeskFrame" parent="Props" instance=ExtResource("12_frame")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.0, -2.2)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.6, 0.75, -2.2)
 
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="WarmDeskLight" type="OmniLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 2.2, -2.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.8, -2.5)
 light_color = Color(1.0, 0.88, 0.65, 1)
 light_energy = 2.0
 
@@ -119,5 +119,5 @@ target_room_scene = "res://scenes/rooms/Street.tscn"
 target_spawn_id = "from_adler"
 
 [node name="NPC_ProfAdler" parent="." instance=ExtResource("4_npc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3)
 npc_id = "prof_adler"

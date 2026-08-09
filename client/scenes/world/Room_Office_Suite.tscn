@@ -56,41 +56,41 @@ transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 
 [node name="Furniture" type="Node3D" parent="."]
 
 [node name="ExecutiveDesk" parent="Furniture" instance=ExtResource("5_execdesk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.8)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, -2.8)
 
 [node name="HartwellChair" parent="Furniture" instance=ExtResource("6_execchair")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0, 0, -3.6)
 
 [node name="VisitorArmchairLeft" parent="Furniture" instance=ExtResource("7_armchair")]
-transform = Transform3D(0.966, 0, 0.258, 0, 1, 0, -0.258, 0, 0.966, -1.5, 0, -1.5)
+transform = Transform3D(0.58, 0, 0.15, 0, 0.6, 0, -0.15, 0, 0.58, -1.5, 0, -1.5)
 
 [node name="VisitorArmchairRight" parent="Furniture" instance=ExtResource("7_armchair")]
-transform = Transform3D(0.966, 0, -0.258, 0, 1, 0, 0.258, 0, 0.966, 1.5, 0, -1.5)
+transform = Transform3D(0.58, 0, -0.15, 0, 0.6, 0, 0.15, 0, 0.58, 1.5, 0, -1.5)
 
 [node name="ExecutiveCouch" parent="Furniture" instance=ExtResource("8_couch")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -2.5)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -4.5, 0, -2.5)
 
 [node name="ExecutiveLoungeTable" parent="Furniture" instance=ExtResource("9_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -1.2)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -4.5, 0, -1.2)
 
 [node name="SideCredenza" parent="Furniture" instance=ExtResource("10_credenza")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -3.6)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 4.5, 0, -3.6)
 
 [node name="Props" type="Node3D" parent="."]
 
 [node name="ExecutiveFicus" parent="Props" instance=ExtResource("11_ficus")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, -1.5)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 5.5, 0, -1.5)
 
 [node name="DeskFrame" parent="Props" instance=ExtResource("12_frame")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.0, -2.5)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.8, 0.75, -2.5)
 
 [node name="ExecutiveRug" parent="Props" instance=ExtResource("13_rug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, -1.5)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.01, -1.5)
 
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="GoldenDeskLight" type="OmniLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 2.2, -2.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.8, -2.8)
 light_color = Color(1.0, 0.9, 0.7, 1)
 light_energy = 2.0
 
@@ -113,7 +113,7 @@ target_room_scene = "res://scenes/rooms/Room_OfficeLobby.tscn"
 target_spawn_id = "from_suite"
 
 [node name="NPC_MsHartwell" parent="." instance=ExtResource("4_npc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3)
 npc_id = "ms_hartwell"
 
 [node name="NPC_MrOsei" parent="." instance=ExtResource("4_npc")]

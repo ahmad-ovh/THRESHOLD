@@ -57,39 +57,39 @@ transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 
 [node name="Furniture" type="Node3D" parent="."]
 
 [node name="LivingCouch" parent="Furniture" instance=ExtResource("5_couch")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -2.5)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -1.5, 0, -2.5)
 
 [node name="CoffeeTable" parent="Furniture" instance=ExtResource("6_coffeetable")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.2)
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -1.5, 0, -1.2)
 
 [node name="Armchair" parent="Furniture" instance=ExtResource("7_armchair")]
-transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, 1.8, 0, -1.8)
+transform = Transform3D(0.52, 0, -0.3, 0, 0.6, 0, 0.3, 0, 0.52, 1.8, 0, -1.8)
 
 [node name="TVCredenza" parent="Furniture" instance=ExtResource("8_credenza")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -3.6)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -4.5, 0, -3.6)
 
 [node name="WallShelf" parent="Furniture" instance=ExtResource("9_shelf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1.6, -3.7)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 2.5, 1.6, -3.7)
 
 [node name="FloorLamp" parent="Furniture" instance=ExtResource("15_floorlamp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0, -2.5)
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, -3.8, 0, -2.5)
 
 [node name="Props" type="Node3D" parent="."]
 
 [node name="PillowOnCouch" parent="Props" instance=ExtResource("10_pillow")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.5, -2.5)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -2.2, 0.43, -2.5)
 
 [node name="LivingRug" parent="Props" instance=ExtResource("11_rug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.01, -1.5)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -1.5, 0.01, -1.5)
 
 [node name="DeskPlant" parent="Props" instance=ExtResource("12_plant1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.8, -3.5)
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -4.5, 0.75, -3.5)
 
 [node name="FloorFicus" parent="Props" instance=ExtResource("13_plant2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -3.5)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 4.5, 0, -3.5)
 
 [node name="FamilyFrame" parent="Props" instance=ExtResource("14_frame")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 1.2, -3.5)
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 2.5, 1.2, -3.5)
 
 [node name="Lighting" type="Node3D" parent="."]
 

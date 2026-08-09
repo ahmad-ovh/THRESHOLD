@@ -39,9 +39,9 @@ size = Vector3(14, 5, 0.4)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="Chalkboard" type="CSGBox3D" parent="RoomBounds"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0, 2.2, -3.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0, 2.0, -3.75)
 use_collision = true
-size = Vector3(5.0, 2.0, 0.05)
+size = Vector3(4.5, 1.8, 0.05)
 material = SubResource("StandardMaterial3D_board")
 
 [node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
@@ -62,33 +62,33 @@ transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 
 [node name="Furniture" type="Node3D" parent="."]
 
 [node name="TeacherDesk" parent="Furniture" instance=ExtResource("5_desk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0, 0, -2.5)
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -3.0, 0, -2.5)
 
 [node name="TeacherChair" parent="Furniture" instance=ExtResource("7_chair1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0, 0, -3.2)
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, -3.0, 0, -3.2)
 
 [node name="StudentDesk1" parent="Furniture" instance=ExtResource("6_demo_table")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 2.0, 0, -1.5)
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 2.0, 0, -1.5)
 
 [node name="StudentChair1" parent="Furniture" instance=ExtResource("8_chair2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0, -2.2)
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 2.0, 0, -2.2)
 
 [node name="StudentDesk2" parent="Furniture" instance=ExtResource("6_demo_table")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 2.0, 0, 0.8)
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 2.0, 0, 0.8)
 
 [node name="StudentChair2" parent="Furniture" instance=ExtResource("8_chair2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0, 0.1)
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 2.0, 0, 0.1)
 
 [node name="ClassBookshelf" parent="Furniture" instance=ExtResource("9_shelf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, -3.6)
+transform = Transform3D(0, 0, -2.2, 2.2, 0, 0, 0, 2.2, 0, 5.5, 0, -3.6)
 
 [node name="Props" type="Node3D" parent="."]
 
 [node name="TextbookStack" parent="Props" instance=ExtResource("10_books")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0, 1.0, -2.5)
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, -3.0, 0.84, -2.5)
 
 [node name="TrashBin" parent="Props" instance=ExtResource("11_trash")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, -3.2)
+transform = Transform3D(12.0, 0, 0, 0, 12.0, 0, 0, 0, 12.0, -5.5, 0, -3.2)
 
 [node name="Lighting" type="Node3D" parent="."]
 
