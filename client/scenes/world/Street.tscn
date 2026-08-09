@@ -34,19 +34,19 @@ material = SubResource("StandardMaterial3D_road")
 [node name="Architecture" type="Node3D" parent="."]
 
 [node name="Building_Adler" parent="Architecture" instance=ExtResource("6_b1")]
-transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, -18, 0, -3.5)
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -18, 0, -3.5)
 
 [node name="Building_Cafe" parent="Architecture" instance=ExtResource("8_b3")]
-transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, -6, 0, -3.5)
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -6, 0, -3.5)
 
 [node name="Building_Apartment" parent="Architecture" instance=ExtResource("9_b4")]
-transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 6, 0, -3.5)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 6, 0, -3.5)
 
 [node name="Building_Campus" parent="Architecture" instance=ExtResource("6_b1")]
-transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 14, 0, -3.5)
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 14, 0, -3.5)
 
 [node name="Building_Office" parent="Architecture" instance=ExtResource("7_b2")]
-transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 22, 0, -3.5)
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 22, 0, -3.5)
 
 [node name="EnvironmentProps" type="Node3D" parent="."]
 
@@ -57,16 +57,16 @@ transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -12, 0, -1.2)
 transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 10, 0, -1.2)
 
 [node name="StreetLamp_1" parent="EnvironmentProps" instance=ExtResource("13_lamp")]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -24, 0, -1.5)
+transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, -24, 0, -1.5)
 
 [node name="StreetLamp_2" parent="EnvironmentProps" instance=ExtResource("13_lamp")]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -8, 0, -1.5)
+transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, -8, 0, -1.5)
 
 [node name="StreetLamp_3" parent="EnvironmentProps" instance=ExtResource("13_lamp")]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 8, 0, -1.5)
+transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, 8, 0, -1.5)
 
 [node name="StreetLamp_4" parent="EnvironmentProps" instance=ExtResource("13_lamp")]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 24, 0, -1.5)
+transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, 24, 0, -1.5)
 
 [node name="Dumpster" parent="EnvironmentProps" instance=ExtResource("14_dumpster")]
 transform = Transform3D(3.8, 0, 0, 0, 3.8, 0, 0, 0, 3.8, -34, 0, -2.5)
@@ -84,7 +84,7 @@ transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 2, 0, -1.8)
 transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 18, 0, -1.8)
 
 [node name="TrafficLight" parent="EnvironmentProps" instance=ExtResource("17_traffic")]
-transform = Transform3D(3.8, 0, 0, 0, 3.8, 0, 0, 0, 3.8, -2, 0, -1.5)
+transform = Transform3D(4.0, 0, 0, 0, 4.0, 0, 0, 0, 4.0, -2, 0, -1.5)
 
 [node name="TrashBin" parent="EnvironmentProps" instance=ExtResource("18_trash")]
 transform = Transform3D(12.0, 0, 0, 0, 12.0, 0, 0, 0, 12.0, -4, 0, -1.0)
@@ -93,8 +93,10 @@ transform = Transform3D(12.0, 0, 0, 0, 12.0, 0, 0, 0, 12.0, -4, 0, -1.0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
 transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 10, 10)
-light_color = Color(0.98, 0.92, 0.82, 1)
+light_color = Color(1.0, 0.92, 0.82, 1)
+light_energy = 0.65
 shadow_enabled = true
+shadow_opacity = 0.85
 
 [node name="Player3D" parent="." instance=ExtResource("2_player")]
 
