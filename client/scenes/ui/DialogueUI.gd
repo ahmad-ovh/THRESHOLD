@@ -11,8 +11,8 @@ extends CanvasLayer
 @onready var chat_scroll_container: ScrollContainer = $OverlayRoot/ChatScrollContainer
 @onready var bubbles_container: VBoxContainer = $OverlayRoot/ChatScrollContainer/BubblesContainer
 
-@onready var message_input: LineEdit = $OverlayRoot/BottomInputPanel/InputContainer/MessageInput
-@onready var send_button: Button = $OverlayRoot/SendButton
+@onready var message_input: LineEdit = $OverlayRoot/InputRow/BottomInputPanel/InputContainer/MessageInput
+@onready var send_button: Button = $OverlayRoot/InputRow/SendButton
 @onready var conversation_end_banner: Button = $OverlayRoot/ConversationEndBanner
 
 @onready var overall_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/OverallContainer/OverallLabel
@@ -231,6 +231,7 @@ func display_reply(text: String) -> void:
 	stop_thinking()
 	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("convert_to_npc_reply"):
 		active_npc_bubble.convert_to_npc_reply(active_npc_name, text)
+		_enforce_max_messages()
 	else:
 		_spawn_npc_bubble(text)
 		
@@ -244,6 +245,7 @@ func display_error(error_msg: String) -> void:
 	stop_thinking()
 	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("convert_to_npc_reply"):
 		active_npc_bubble.convert_to_npc_reply(active_npc_name, "Error: " + error_msg)
+		_enforce_max_messages()
 	else:
 		_spawn_npc_bubble("Error: " + error_msg)
 	message_input.editable = true
@@ -298,14 +300,20 @@ func _spawn_player_bubble(text: String) -> void:
 	_scroll_to_bottom()
 
 func _enforce_max_messages() -> void:
-	while bubbles_container.get_child_count() > MAX_CHAT_MESSAGES:
-		var oldest = bubbles_container.get_child(0)
-		if oldest == active_npc_bubble:
-			active_npc_bubble = null
-		if oldest == active_player_bubble:
-			active_player_bubble = null
-		bubbles_container.remove_child(oldest)
-		oldest.queue_free()
+	var dialogue_bubbles: Array[Node] = []
+	for child in bubbles_container.get_children():
+		if child != active_npc_bubble or not is_thinking:
+			dialogue_bubbles.append(child)
+			
+	while dialogue_bubbles.size() > MAX_CHAT_MESSAGES:
+		var oldest = dialogue_bubbles.pop_front()
+		if oldest and is_instance_valid(oldest):
+			if oldest == active_npc_bubble:
+				active_npc_bubble = null
+			if oldest == active_player_bubble:
+				active_player_bubble = null
+			bubbles_container.remove_child(oldest)
+			oldest.queue_free()
 
 func _scroll_to_bottom() -> void:
 	await get_tree().process_frame

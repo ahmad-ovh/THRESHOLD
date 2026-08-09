@@ -177,7 +177,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.38, 0.28, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 12
-text = "[Peer 👤 Tier: 🧑 Stranger Mood: 😐 neutral]"
+text = "[Role: Peer 👤 Tier: 🧑 Stranger Mood: 😐 neutral]"
 
 [node name="LoadingLabel" type="Label" parent="OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/VBoxContainer"]
 visible = false
@@ -198,48 +198,50 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
 text = "✕"
 
 [node name="ChatScrollContainer" type="ScrollContainer" parent="OverlayRoot"]
-custom_minimum_size = Vector2(350, 380)
+custom_minimum_size = Vector2(360, 390)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = -460.0
-offset_right = 366.0
-offset_bottom = -80.0
+offset_left = 20.0
+offset_top = -470.0
+offset_right = 380.0
+offset_bottom = -76.0
 grow_vertical = 0
 horizontal_scroll_mode = 0
 
 [node name="BubblesContainer" type="VBoxContainer" parent="OverlayRoot/ChatScrollContainer"]
-custom_minimum_size = Vector2(340, 0)
+custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 2
 theme_override_constants/separation = 12
 
-[node name="BottomInputPanel" type="PanelContainer" parent="OverlayRoot"]
-custom_minimum_size = Vector2(460, 52)
-anchors_preset = 7
-anchor_left = 0.5
+[node name="InputRow" type="HBoxContainer" parent="OverlayRoot"]
+custom_minimum_size = Vector2(0, 52)
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -290.0
+offset_left = 20.0
 offset_top = -68.0
-offset_right = 170.0
+offset_right = 720.0
 offset_bottom = -16.0
-grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="BottomInputPanel" type="PanelContainer" parent="OverlayRoot/InputRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_input_panel")
 
-[node name="InputContainer" type="MarginContainer" parent="OverlayRoot/BottomInputPanel"]
+[node name="InputContainer" type="MarginContainer" parent="OverlayRoot/InputRow/BottomInputPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 8
+theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 8
+theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 6
 
-[node name="MessageInput" type="LineEdit" parent="OverlayRoot/BottomInputPanel/InputContainer"]
+[node name="MessageInput" type="LineEdit" parent="OverlayRoot/InputRow/BottomInputPanel/InputContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
@@ -249,19 +251,9 @@ theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_input_lineedit")
 placeholder_text = "[Character Count] Type your message..."
 
-[node name="SendButton" type="Button" parent="OverlayRoot"]
+[node name="SendButton" type="Button" parent="OverlayRoot/InputRow"]
 custom_minimum_size = Vector2(90, 52)
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 180.0
-offset_top = -68.0
-offset_right = 270.0
-offset_bottom = -16.0
-grow_horizontal = 2
-grow_vertical = 0
+layout_mode = 2
 theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
