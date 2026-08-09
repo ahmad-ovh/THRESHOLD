@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var camera: Camera3D = $Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld/PreviewCamera
 @onready var model_pivot: Node3D = $Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
 
-@onready var category_header: HBoxContainer = $Control/TabHBox
+@onready var category_header: Control = $Control/TabsContainer
 @onready var category_title: Label = $Control/CategoryTitle
 @onready var workspace_vbox: VBoxContainer = $Control/WorkspaceArea/ScrollContainer/WorkspaceVBox
 
@@ -61,13 +61,12 @@ const LIP_PALETTE: Array[Color] = [
 ]
 
 
-const GLASSES_ENABLED := false  # Feature flag – flip to true to re-enable glasses
+const GLASSES_ENABLED := false
 const CATEGORIES: Array[Dictionary] = [
 	{"name": "Skin Tone", "icon": "😊", "mode": "SKIN"},
 	{"name": "Hairstyle", "icon": "💇", "mode": "HAIR"},
 	{"name": "Eyes", "icon": "👀", "mode": "EYES"},
 	{"name": "Nose & Mouth", "icon": "👃", "mode": "NOSE_MOUTH"},
-	# {"name": "Glasses", "icon": "👓", "mode": "GLASSES"}  # DISABLED – glasses system off
 ]
 
 @export var is_development_mode: bool = false

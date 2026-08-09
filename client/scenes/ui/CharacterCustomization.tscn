@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://centbyp1oiykv"]
+[gd_scene format=3 uid="uid://centbyp1oiykv"]
 
 [ext_resource type="Script" uid="uid://0ae511psj2ei" path="res://scenes/ui/CharacterCustomization.gd" id="1_customization_script"]
 [ext_resource type="Theme" uid="uid://cyxi2trp6esvr" path="res://resources/theme/main_theme.tres" id="2_main_theme"]
@@ -42,6 +42,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = 48.0
+offset_right = -4.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
@@ -63,19 +67,89 @@ transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.43
 
 [node name="ModelPivot" type="Node3D" parent="Control/PolaroidArea/SubViewportContainer/SubViewport/PreviewWorld" unique_id=1393049140]
 
-[node name="TabHBox" type="HBoxContainer" parent="Control" unique_id=2134956646]
+[node name="TabsContainer" type="Control" parent="Control" unique_id=2134956646]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 546.0
-offset_top = 126.0
-offset_right = 1176.0
-offset_bottom = 176.0
-theme_override_constants/separation = 12
+offset_left = 500.0
+offset_top = 120.0
+offset_right = 1180.0
+offset_bottom = 180.0
+
+[node name="TabSkinTone" type="Button" parent="Control/TabsContainer" unique_id=101001]
+layout_mode = 1
+offset_left = 48.0
+offset_top = 6.0
+offset_right = 172.0
+offset_bottom = 56.0
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.08, 0.26, 0.48, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("4_font_hitchcut")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
+text = "Skin Tone"
+
+[node name="TabHairstyle" type="Button" parent="Control/TabsContainer" unique_id=101002]
+layout_mode = 1
+offset_left = 188.0
+offset_top = 6.0
+offset_right = 324.0
+offset_bottom = 56.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.85, 0.93, 1, 0.9)
+theme_override_colors/font_outline_color = Color(0.12, 0.32, 0.55, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("4_font_hitchcut")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
+text = "Hairstyle"
+
+[node name="TabEyes" type="Button" parent="Control/TabsContainer" unique_id=101003]
+layout_mode = 1
+offset_left = 338.0
+offset_top = 6.0
+offset_right = 470.0
+offset_bottom = 56.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.85, 0.93, 1, 0.9)
+theme_override_colors/font_outline_color = Color(0.12, 0.32, 0.55, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("4_font_hitchcut")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
+text = "Eyes"
+
+[node name="TabNoseMouth" type="Button" parent="Control/TabsContainer" unique_id=101004]
+layout_mode = 1
+offset_left = 484.0
+offset_top = 6.0
+offset_right = 656.0
+offset_bottom = 56.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.85, 0.93, 1, 0.9)
+theme_override_colors/font_outline_color = Color(0.12, 0.32, 0.55, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("4_font_hitchcut")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
+text = "Nose & Mouth"
 
 [node name="CategoryTitle" type="Label" parent="Control" unique_id=295405481]
 visible = false
 layout_mode = 1
-anchors_preset = 0
 offset_left = 546.0
 offset_top = 70.0
 offset_right = 800.0
@@ -112,7 +186,6 @@ theme_override_constants/separation = 16
 
 [node name="BackButton" type="Button" parent="Control" unique_id=1021514350]
 layout_mode = 1
-anchors_preset = 0
 offset_left = 54.0
 offset_top = 632.0
 offset_right = 204.0
@@ -124,14 +197,13 @@ theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_font_hitchcut")
 theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
 text = "< Back"
 
 [node name="SaveButton" type="Button" parent="Control" unique_id=1812573760]
 layout_mode = 1
-anchors_preset = 0
 offset_left = 1020.0
 offset_top = 612.0
 offset_right = 1215.0
@@ -143,14 +215,13 @@ theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("4_font_hitchcut")
 theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
 text = "Save & Apply"
 
 [node name="ActionHintsLabel" type="Label" parent="Control" unique_id=152585270]
 layout_mode = 1
-anchors_preset = 0
 offset_left = 420.0
 offset_top = 644.0
 offset_right = 860.0
