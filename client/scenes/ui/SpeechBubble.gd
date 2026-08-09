@@ -62,23 +62,19 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 		speaker_badge_panel.visible = true
 		_position_speaker_badge()
 		
-		# Format with speaker prefix matching mockup (e.g. "You: hi" or "Stranger: [...]")
 		var color_hex = badge_color.to_html(false)
 		var prefix = "[color=#" + color_hex + "][b]" + speaker + ":[/b][/color] "
-		message_text.text = prefix + text
+		message_text.text = prefix + clean_text
 		
 	active_camera = get_viewport().get_camera_3d()
 	continue_arrow.visible = false
 	
-	# Position update
 	_update_screen_position()
 	
-	# Scale animation
 	scale = Vector2(0.8, 0.8)
 	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "scale", Vector2.ONE, 0.25)
 	
-	# Typewriter text effect
 	message_text.visible_ratio = 0.0
 	var text_tween = create_tween()
 	text_tween.tween_property(message_text, "visible_ratio", 1.0, 0.5)
@@ -94,7 +90,12 @@ func update_text_only(new_text: String) -> void:
 		speaker_badge_panel.visible = false
 		message_text.text = "[center][b]" + clean_text + "[/b][/center]"
 	else:
-		message_text.text = new_text
+		speaker_badge_panel.visible = true
+		var badge_style = speaker_badge_panel.get_theme_stylebox("panel") as StyleBoxFlat
+		var badge_color = badge_style.bg_color if badge_style else Color(0.85, 0.45, 0.08)
+		var color_hex = badge_color.to_html(false)
+		var prefix = "[color=#" + color_hex + "][b]" + speaker_label.text + ":[/b][/color] "
+		message_text.text = prefix + clean_text
 	message_text.visible_ratio = 1.0
 	continue_arrow.visible = false
 
@@ -107,13 +108,11 @@ func _process(delta: float) -> void:
 
 func _position_speaker_badge() -> void:
 	if speaker_badge_panel:
-		# Position badge so it overlaps top-left edge of the message bubble
 		speaker_badge_panel.position = Vector2(16, -14)
 
 func _update_screen_position() -> void:
 	_position_speaker_badge()
 	if not target_3d_node or not is_instance_valid(target_3d_node):
-		# If no 3D target, retain standard Control container placement (bottom-left stack)
 		return
 	if not active_camera or not is_instance_valid(active_camera):
 		active_camera = get_viewport().get_camera_3d()

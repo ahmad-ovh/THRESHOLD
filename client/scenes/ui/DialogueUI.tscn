@@ -214,6 +214,7 @@ custom_minimum_size = Vector2(340, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+alignment = 2
 theme_override_constants/separation = 12
 
 [node name="BottomInputPanel" type="PanelContainer" parent="OverlayRoot"]

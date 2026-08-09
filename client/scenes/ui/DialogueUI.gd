@@ -48,6 +48,8 @@ var dot_count: int = 1
 var turn_history_scores: Array[Dictionary] = []
 var previous_overall_score: float = 50.0
 
+const MAX_CHAT_MESSAGES: int = 3
+
 func _ready() -> void:
 	visible = false
 	loading_label.visible = false
@@ -61,13 +63,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if is_thinking:
 		thinking_timer += delta
-		if thinking_timer >= 0.35:
+		if thinking_timer >= 0.3:
 			thinking_timer = 0.0
 			dot_count = (dot_count % 3) + 1
 			var dots = ".".repeat(dot_count)
-			loading_label.text = active_npc_name + " pauses" + dots
-			if active_npc_bubble and active_npc_bubble.has_method("update_text_only"):
-				active_npc_bubble.update_text_only("[ " + active_npc_name + " considers your words" + dots + " ]")
+			if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("update_text_only"):
+				active_npc_bubble.update_text_only(dots)
 
 func _reset_encounter_metrics() -> void:
 	turn_history_scores.clear()
@@ -88,7 +89,7 @@ func set_spatial_targets(npc_node: Node3D, player_node: Node3D) -> void:
 	active_npc_node = npc_node
 	active_player_node = player_node
 
-func set_scenario_context(role: String, goal_text: String) -> void:
+func set_scenario_context(role: String, _goal_text: String) -> void:
 	current_role = role.capitalize()
 	_update_npc_sub_info()
 
@@ -102,9 +103,6 @@ func show_connecting_state(npc_name: String) -> void:
 	visible = true
 	_clear_bubbles()
 	_reset_encounter_metrics()
-	
-	# Spawn system action message in bottom-left stack
-	_spawn_npc_bubble("[ Walking over to " + active_npc_name + "... ]")
 	
 	message_input.editable = false
 	send_button.disabled = true
@@ -124,7 +122,7 @@ func open_dialogue(npc_name: String, opening_line: String) -> void:
 	message_input.editable = true
 	send_button.disabled = false
 	leave_button.disabled = false
-	message_input.placeholder_text = "[Character Count] Type your message to " + active_npc_name + "..."
+	message_input.placeholder_text = "[Character Count] Type your message..."
 	message_input.grab_focus()
 
 func append_player_message(text: String) -> void:
@@ -210,10 +208,12 @@ func start_thinking() -> void:
 	loading_label.visible = true
 	loading_label.text = active_npc_name + " pauses."
 	message_input.editable = false
-	message_input.placeholder_text = active_npc_name + " considers your words..."
+	message_input.placeholder_text = active_npc_name + " is typing..."
 	send_button.disabled = true
 	leave_button.disabled = false
-	_spawn_npc_bubble("[ " + active_npc_name + " considers your words ]")
+	
+	# Spawn temporary animated dots bubble for NPC reply
+	_spawn_npc_bubble(".")
 
 func stop_thinking() -> void:
 	is_thinking = false
@@ -221,8 +221,11 @@ func stop_thinking() -> void:
 
 func display_reply(text: String) -> void:
 	stop_thinking()
-	_spawn_npc_bubble(text)
-	
+	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("update_text_only"):
+		active_npc_bubble.update_text_only(text)
+	else:
+		_spawn_npc_bubble(text)
+		
 	message_input.editable = true
 	message_input.placeholder_text = "[Character Count] Type your message..."
 	send_button.disabled = false
@@ -231,7 +234,10 @@ func display_reply(text: String) -> void:
 
 func display_error(error_msg: String) -> void:
 	stop_thinking()
-	_spawn_npc_bubble("[ " + error_msg + " ]")
+	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("update_text_only"):
+		active_npc_bubble.update_text_only("Error: " + error_msg)
+	else:
+		_spawn_npc_bubble("Error: " + error_msg)
 	message_input.editable = true
 	send_button.disabled = false
 	leave_button.disabled = false
@@ -272,6 +278,7 @@ func _spawn_npc_bubble(text: String) -> void:
 	active_npc_bubble = scene.instantiate()
 	bubbles_container.add_child(active_npc_bubble)
 	active_npc_bubble.setup(active_npc_name, text, null, false)
+	_enforce_max_messages()
 	_scroll_to_bottom()
 
 func _spawn_player_bubble(text: String) -> void:
@@ -279,7 +286,18 @@ func _spawn_player_bubble(text: String) -> void:
 	active_player_bubble = scene.instantiate()
 	bubbles_container.add_child(active_player_bubble)
 	active_player_bubble.setup("You", text, null, true)
+	_enforce_max_messages()
 	_scroll_to_bottom()
+
+func _enforce_max_messages() -> void:
+	while bubbles_container.get_child_count() > MAX_CHAT_MESSAGES:
+		var oldest = bubbles_container.get_child(0)
+		if oldest == active_npc_bubble:
+			active_npc_bubble = null
+		if oldest == active_player_bubble:
+			active_player_bubble = null
+		bubbles_container.remove_child(oldest)
+		oldest.queue_free()
 
 func _scroll_to_bottom() -> void:
 	await get_tree().process_frame
