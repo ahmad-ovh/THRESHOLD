@@ -1,43 +1,36 @@
-# THRESHOLD — Documentation Index
+# THRESHOLD — Documentation Source of Truth Index
 
-## Contents
+> **Notice**: This directory has been completely reconstructed to reflect the **actual current codebase** (`src/` backend engine and `client/` Godot 4 frontend). Legacy files have been consolidated into these implementation-grounded documents.
 
-| File | What It Covers |
+---
+
+## Documentation Sitemap
+
+| Document | Description & Scope |
 |---|---|
-| [01_game_overview.md](./01_game_overview.md) | What THRESHOLD is, core gameplay loop, player experience, characters, relationship tiers, major systems overview, memory and consequences, AI role, intentional scope |
-| [02_backend_architecture.md](./02_backend_architecture.md) | Project structure, tech stack, startup sequence, request flows for start/message/end, module responsibilities, data ownership, persistence, runtime notes |
-| [03_api_reference.md](./03_api_reference.md) | Every endpoint: method, route, request schema, response schema, field descriptions, enums, error conditions, examples. Also: all ORM table schemas. |
-| [04_game_content.md](./04_game_content.md) | All NPCs (metrics, update rules, state rules), relationship tier config, all scenario seeds (context, scoring focus, outcomes, overrides), distribution bands, interpretation vocabulary, expression enum |
-| [05_systems.md](./05_systems.md) | How each system works: player, NPC, memory, scoring, relationship/metric update formula, state engine, scenario selection, progression (XP/level/outcome formulas), observer, all 5 LLM pipelines, AI vs. deterministic boundary table |
-| [06_setup_and_operations.md](./06_setup_and_operations.md) | Environment variables, local setup, running the server, running tests, running the demo, database files, deployment notes, content extension guide |
-| [07_frontend_integration.md](./07_frontend_integration.md) | Godot 4 Web & Game Engine Integration Guide (Modular room architecture, SceneManager, reusable NPC template & resource registry, floating billboard mood emojis, GDScript Autoloads, API mapping, HUD & Journal overlay, build roadmap) |
-| [08_godot_setup_step_by_step.md](./08_godot_setup_step_by_step.md) | Dummy-proof Godot 4 project creation & setup guide (Project settings, Input Map, Window stretch, step-by-step scene creation, GDScript copy-paste snippets, Web export instructions) |
+| 📄 **[GAME_DIRECTION.md](./GAME_DIRECTION.md)** | **Highest-Level Source of Truth**: Game identity, core player fantasy, main loop, social simulation model, system implementation status, and core constraints. |
+| 📄 **[GAMEPLAY_ARCHITECTURE.md](./GAMEPLAY_ARCHITECTURE.md)** | **Backend Architecture**: Authoritative FastAPI engine, SQLite database schemas, state engine, deterministic relationship/progression math, and deterministic vs. AI boundaries. |
+| 📄 **[BACKEND_FRONTEND_CONTRACT.md](./BACKEND_FRONTEND_CONTRACT.md)** | **API Contract & Client Integration**: Complete REST API specification (endpoints, request/response JSON schemas), HTTP singleton flows, and Godot UI singletons. |
+| 📄 **[WORLD_SPECIFICATION.md](./WORLD_SPECIFICATION.md)** | **Physical World Design**: Room specifications (Street Hub, Café, Study, Classroom, Apartment, Office), NPC mapping, and element categorization (Gameplay-Critical, Identity-Critical, Decorative). |
+| 📄 **[ART_DIRECTION.md](./ART_DIRECTION.md)** | **Visual Language & Constraints**: Warm 2.5D dollhouse diorama aesthetic, color palette, camera framing, character proportions, and lighting. |
+| 📄 **[ASSET_STRATEGY.md](./ASSET_STRATEGY.md)** | **Modular Kit-of-Parts Strategy**: Reusable asset categories, variation guidelines, collision requirements, and fallback rules for automated world builders. |
+| 📄 **[WORLD_BUILDING_RULES.md](./WORLD_BUILDING_RULES.md)** | **Operational Constraints**: Rules for automated world-generation and asset-import agents to ensure gameplay and camera integrity. |
 
-## Quick Reference
+---
 
-**Start a server locally:**
+## Quick Reference Commands
+
+### Start Backend Locally
 ```powershell
-pip install -r requirements.txt
-# Create .env with LLM_KEY=your_key
 uvicorn src.main:app --reload --port 8000
 ```
 
-**Run tests:**
+### Run Test Suite
 ```powershell
-pytest tests/ -v
+python run_tests.py
 ```
 
-**Full lifecycle demo:**
+### End-to-End Demo Flow
 ```powershell
 python demo_flow.py
 ```
-
-**Available Archetypes & NPCs:** 16 NPCs across 6 archetypes — `teacher` (`prof_adler`, `ms_okoro`, `mr_vance`), `friend` (`daria`, `felix`, `priya`), `colleague` (`nadia`, `tomas`, `seren`), `client` (`ms_hartwell`, `mr_osei`, `ms_vidal`), `family` (`parent`, `sibling`), `stranger` (`barista`, `recurring_stranger`).
-
-
-**Encounter lifecycle:**
-```
-POST /interaction/start  →  POST /interaction/message (×N)  →  POST /interaction/end
-```
-
-**Other endpoints:** `POST /interaction/report`, `GET /interaction/daily`, `GET /player/status`, `POST /player/reset`, `GET /health`
