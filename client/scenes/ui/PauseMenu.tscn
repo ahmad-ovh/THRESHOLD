@@ -1,56 +1,43 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/PauseMenu.gd" id="1_pause_menu_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
+[ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_bg"]
-bg_color = Color(0.98, 0.96, 0.91, 0.98)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper_card"]
+bg_color = Color(0.96, 0.93, 0.85, 0.96)
 border_width_left = 3
 border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.88, 0.82, 0.72, 1)
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.82, 0.75, 0.60, 1)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
-shadow_color = Color(0, 0, 0, 0.30)
-shadow_size = 16
+shadow_color = Color(0.10, 0.08, 0.04, 0.25)
+shadow_size = 12
 shadow_offset = Vector2(0, 6)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_normal"]
 texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
-modulate_color = Color(1, 1, 1, 1)
+region_rect = Rect2(0, 0, 1666, 568)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_hover"]
 texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
-modulate_color = Color(1.12, 1.05, 0.95, 1)
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(1.15, 1.15, 1.15, 1)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_paper_pressed"]
 texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
 axis_stretch_horizontal = 2
 axis_stretch_vertical = 2
-modulate_color = Color(0.82, 0.78, 0.72, 1)
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(0.85, 0.85, 0.85, 1)
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 3
@@ -74,65 +61,73 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.10, 0.08, 0.06, 0.62)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-custom_minimum_size = Vector2(280, 220)
+[node name="PanelContainer" type="PanelContainer" parent="Control"]
+custom_minimum_size = Vector2(400, 360)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -110.0
-offset_right = 140.0
-offset_bottom = 110.0
+offset_left = -200.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 14
+theme_override_styles/panel = SubResource("StyleBoxFlat_paper_card")
 
-[node name="PanelContainer" type="PanelContainer" parent="Control/VBoxContainer"]
+[node name="ContentArea" type="Control" parent="Control/PanelContainer"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_pause_bg")
 
-[node name="Margin" type="MarginContainer" parent="Control/VBoxContainer/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="TitleLabel" type="Label" parent="Control/VBoxContainer/PanelContainer/Margin"]
-layout_mode = 2
+[node name="TitleLabel" type="Label" parent="Control/PanelContainer/ContentArea"]
+layout_mode = 1
+offset_left = 30.0
+offset_top = 28.0
+offset_right = 370.0
+offset_bottom = 75.0
 theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
 theme_override_colors/font_outline_color = Color(0.55, 0.22, 0.02, 1)
-theme_override_constants/outline_size = 4
+theme_override_constants/outline_size = 6
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 28
-text = "PAUSED"
+theme_override_font_sizes/font_size = 36
+text = "GAME PAUSED"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="Control/VBoxContainer"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
+[node name="ResumeButton" type="Button" parent="Control/PanelContainer/ContentArea"]
+custom_minimum_size = Vector2(320, 68)
+layout_mode = 1
+offset_left = 40.0
+offset_top = 110.0
+offset_right = 360.0
+offset_bottom = 178.0
+rotation = -0.04
+focus_mode = 0
 theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
 theme_override_colors/font_outline_color = Color(0.10, 0.28, 0.52, 1)
-theme_override_constants/outline_size = 6
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_paper_pressed")
 text = "Resume Game"
 
-[node name="MainMenuButton" type="Button" parent="Control/VBoxContainer"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
+[node name="MainMenuButton" type="Button" parent="Control/PanelContainer/ContentArea"]
+custom_minimum_size = Vector2(320, 68)
+layout_mode = 1
+offset_left = 40.0
+offset_top = 215.0
+offset_right = 360.0
+offset_bottom = 283.0
+rotation = -0.04
+focus_mode = 0
 theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
 theme_override_colors/font_outline_color = Color(0.10, 0.28, 0.52, 1)
-theme_override_constants/outline_size = 6
+theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_paper_pressed")
 text = "Main Menu"

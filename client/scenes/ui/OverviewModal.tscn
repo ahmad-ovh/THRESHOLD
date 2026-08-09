@@ -1,23 +1,12 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/OverviewModal.gd" id="1_overview_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://noilg75j72wq" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
+[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/popup.png" id="3_bg_popup"]
+[ext_resource type="FontFile" path="res://assets/fonts/SpecialElite-Regular.ttf" id="4_font_special_elite"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.98, 0.96, 0.91, 0.99)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-shadow_color = Color(0, 0, 0, 0.28)
-shadow_size = 16
-shadow_offset = Vector2(0, 6)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_card_bg"]
+texture = ExtResource("3_bg_popup")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge_stamp"]
 bg_color = Color(0.90, 0.45, 0.08, 1)
@@ -43,50 +32,7 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_levelup"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.70, 0.30, 0.04, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(1.12, 1.05, 0.95, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
-texture = ExtResource("3_bg_button")
-region_rect = Rect2(0, 0, 1666, 568)
-texture_margin_left = 60.0
-texture_margin_right = 60.0
-texture_margin_top = 30.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-modulate_color = Color(0.82, 0.78, 0.72, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_btn"]
 
 [node name="OverviewModal" type="CanvasLayer"]
 layer = 60
@@ -101,118 +47,131 @@ grow_vertical = 2
 color = Color(0.10, 0.08, 0.06, 0.62)
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(580, 420)
+custom_minimum_size = Vector2(510, 680)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -290.0
-offset_top = -210.0
-offset_right = 290.0
-offset_bottom = 210.0
+offset_left = -255.0
+offset_top = -340.0
+offset_right = 255.0
+offset_bottom = 340.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = SubResource("StyleBoxTexture_card_bg")
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer"]
+[node name="ContentArea" type="Control" parent="PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="TitleLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer"]
-layout_mode = 2
+[node name="TitleLabel" type="Label" parent="PanelContainer/ContentArea"]
+layout_mode = 1
+offset_left = 48.0
+offset_top = 70.0
+offset_right = 462.0
+offset_bottom = 110.0
 theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 24
 text = "Conversation Reflection"
 horizontal_alignment = 1
 
-[node name="OutcomeBadge" type="Label" parent="PanelContainer/Margin/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
+[node name="OutcomeBadge" type="Label" parent="PanelContainer/ContentArea"]
+layout_mode = 1
+offset_left = 130.0
+offset_top = 118.0
+offset_right = 380.0
+offset_bottom = 152.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.55, 0.22, 0.02, 1)
 theme_override_constants/outline_size = 3
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 theme_override_styles/normal = SubResource("StyleBoxFlat_badge_stamp")
 text = " PERFORMANCE: GOOD "
 horizontal_alignment = 1
 
-[node name="NarrativeText" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer"]
-custom_minimum_size = Vector2(0, 90)
-layout_mode = 2
-size_flags_vertical = 3
+[node name="NarrativeText" type="RichTextLabel" parent="PanelContainer/ContentArea"]
+layout_mode = 1
+offset_left = 48.0
+offset_top = 168.0
+offset_right = 462.0
+offset_bottom = 340.0
 theme_override_colors/default_color = Color(0.22, 0.18, 0.13, 1)
-theme_override_font_sizes/normal_font_size = 15
+theme_override_fonts/normal_font = ExtResource("4_font_special_elite")
+theme_override_fonts/bold_font = ExtResource("4_font_special_elite")
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 17
 bbcode_enabled = true
-text = "Narrative outcome summary..."
+text = "[b]Outcome:[/b]
+The encounter reached a conclusion."
 
-[node name="ObserverCard" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer"]
+[node name="ObserverCard" type="PanelContainer" parent="PanelContainer/ContentArea"]
 visible = false
-layout_mode = 2
+layout_mode = 1
+offset_left = 48.0
+offset_top = 350.0
+offset_right = 462.0
+offset_bottom = 440.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_observer_note")
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/ObserverCard"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer/ContentArea/ObserverCard"]
 layout_mode = 2
 theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/ObserverCard/Margin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ContentArea/ObserverCard/Margin"]
 layout_mode = 2
 
-[node name="HeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/ObserverCard/Margin/VBoxContainer"]
+[node name="HeaderLabel" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.30, 0.05, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "📋 Observer Pattern Insight"
 
-[node name="ObserverText" type="Label" parent="PanelContainer/Margin/VBoxContainer/ObserverCard/Margin/VBoxContainer"]
+[node name="ObserverText" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.25, 0.20, 0.14, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_fonts/font = ExtResource("4_font_special_elite")
+theme_override_font_sizes/font_size = 14
 text = "Pattern text..."
 autowrap_mode = 3
 
-[node name="LevelUpBanner" type="PanelContainer" parent="PanelContainer/Margin/VBoxContainer"]
+[node name="LevelUpBanner" type="PanelContainer" parent="PanelContainer/ContentArea"]
 visible = false
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_levelup")
+layout_mode = 1
+offset_left = 48.0
+offset_top = 450.0
+offset_right = 462.0
+offset_bottom = 510.0
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer/Margin/VBoxContainer/LevelUpBanner"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer/ContentArea/LevelUpBanner"]
 layout_mode = 2
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_bottom = 8
 
-[node name="LevelUpText" type="Label" parent="PanelContainer/Margin/VBoxContainer/LevelUpBanner/Margin"]
+[node name="LevelUpText" type="Label" parent="PanelContainer/ContentArea/LevelUpBanner/Margin"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0.55, 0.22, 0.02, 1)
-theme_override_constants/outline_size = 5
+theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 20
 text = "LEVEL UP! Level 2"
 horizontal_alignment = 1
 
-[node name="CloseButton" type="Button" parent="PanelContainer/Margin/VBoxContainer"]
-custom_minimum_size = Vector2(0, 52)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_outline_color = Color(0.10, 0.28, 0.52, 1)
-theme_override_constants/outline_size = 6
+[node name="CloseButton" type="Button" parent="PanelContainer/ContentArea"]
+layout_mode = 1
+offset_left = 60.0
+offset_top = 562.0
+offset_right = 450.0
+offset_bottom = 620.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.08, 0.28, 0.52, 1)
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_btn")
 text = "Step Away"
