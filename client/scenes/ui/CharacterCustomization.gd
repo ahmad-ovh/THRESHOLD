@@ -156,46 +156,46 @@ func _process(delta: float) -> void:
 func _setup_category_tabs() -> void:
 	if not category_header:
 		return
-	for child in category_header.get_children():
-		child.queue_free()
 
-	for i in range(CATEGORIES.size()):
-		var cat = CATEGORIES[i]
-		var btn = Button.new()
-		btn.text = cat["name"]
-		btn.focus_mode = Control.FOCUS_NONE
-		btn.custom_minimum_size = Vector2(105, 42)
-		btn.pivot_offset = Vector2(52, 21)
+	var tab_buttons: Array[Button] = _get_tab_buttons()
+	for i in range(tab_buttons.size()):
+		var btn = tab_buttons[i]
+		if not btn:
+			continue
 
-		var empty_sb = StyleBoxEmpty.new()
-		btn.add_theme_stylebox_override("normal", empty_sb)
-		btn.add_theme_stylebox_override("hover", empty_sb)
-		btn.add_theme_stylebox_override("pressed", empty_sb)
-		btn.add_theme_stylebox_override("focus", empty_sb)
+		btn.pivot_offset = btn.size / 2.0
 
-		var hitchcut_font = preload("res://assets/fonts/Hitchcut-Regular.ttf")
-		if hitchcut_font:
-			btn.add_theme_font_override("font", hitchcut_font)
-		btn.add_theme_font_size_override("font_size", 18)
+		if not btn.mouse_entered.is_connected(_on_tab_btn_hover):
+			btn.mouse_entered.connect(_on_tab_btn_hover)
 
-		btn.mouse_entered.connect(func():
-			if AudioManager and AudioManager.has_method("play_hover"):
-				AudioManager.play_hover()
-		)
-		btn.pressed.connect(func():
-			if AudioManager and AudioManager.has_method("play_click"):
-				AudioManager.play_click()
-			_switch_tab(i)
-		)
-		category_header.add_child(btn)
+		var cb = Callable(self, "_on_tab_btn_pressed").bind(i)
+		if not btn.pressed.is_connected(cb):
+			btn.pressed.connect(cb)
 
 	_update_tab_styles()
 
-func _update_tab_styles() -> void:
+func _on_tab_btn_hover() -> void:
+	if AudioManager and AudioManager.has_method("play_hover"):
+		AudioManager.play_hover()
+
+func _on_tab_btn_pressed(i: int) -> void:
+	if AudioManager and AudioManager.has_method("play_click"):
+		AudioManager.play_click()
+	_switch_tab(i)
+
+func _get_tab_buttons() -> Array[Button]:
 	if not category_header:
-		return
-	for i in range(category_header.get_child_count()):
-		var btn = category_header.get_child(i) as Button
+		return []
+	var buttons: Array[Button] = []
+	for child in category_header.get_children():
+		if child is Button:
+			buttons.append(child as Button)
+	return buttons
+
+func _update_tab_styles() -> void:
+	var tab_buttons: Array[Button] = _get_tab_buttons()
+	for i in range(tab_buttons.size()):
+		var btn = tab_buttons[i]
 		if btn:
 			var is_active = (i == active_tab_index)
 			var tw = btn.create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
