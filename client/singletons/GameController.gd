@@ -45,7 +45,7 @@ func set_paused(paused_state: bool) -> void:
 	get_tree().paused = is_paused
 	
 	if not pause_menu_ref:
-		var scene = preload("res://scenes/ui/PauseMenu.tscn")
+		var scene = load("res://scenes/ui/PauseMenu.tscn")
 		pause_menu_ref = scene.instantiate()
 		get_tree().root.add_child(pause_menu_ref)
 		
@@ -78,6 +78,6 @@ func return_to_main_menu() -> void:
 
 func _ensure_hud() -> void:
 	if not hud_ref:
-		var scene = preload("res://scenes/ui/HUD.tscn")
+		var scene = load("res://scenes/ui/HUD.tscn")
 		hud_ref = scene.instantiate()
 		get_tree().root.add_child(hud_ref)
