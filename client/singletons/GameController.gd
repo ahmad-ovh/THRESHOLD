@@ -66,6 +66,7 @@ func start_new_game(p_id: String) -> void:
 	set_phase(Phase.EXPLORING)
 	_ensure_hud()
 	hud_ref.visible = true
+	SceneManager.clear_saved_positions()
 	SceneManager.change_room("res://scenes/rooms/Street.tscn")
 
 func return_to_main_menu() -> void:
@@ -74,6 +75,7 @@ func return_to_main_menu() -> void:
 	if hud_ref:
 		hud_ref.visible = false
 	set_phase(Phase.MAIN_MENU)
+	SceneManager.clear_saved_positions()
 	SceneManager.change_room("res://scenes/main_menu/MainMenu.tscn")
 
 func _ensure_hud() -> void:
