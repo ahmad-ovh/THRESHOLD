@@ -25,6 +25,9 @@ var speaker_colors: Dictionary = {
 	"you": Color(0.18, 0.65, 0.3)          # Leaf Green (Player)
 }
 
+const MIN_BUBBLE_WIDTH: float = 100.0
+const MAX_BUBBLE_WIDTH: float = 340.0
+
 func _ready() -> void:
 	pivot_offset = Vector2(180, 50)
 	continue_arrow.visible = false
@@ -68,6 +71,7 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	active_camera = get_viewport().get_camera_3d()
 	continue_arrow.visible = false
 	_update_screen_position()
+	_recalculate_dynamic_size()
 	
 	scale = Vector2(0.8, 0.8)
 	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -76,7 +80,7 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	message_text.visible_ratio = 0.0
 	var text_tween = create_tween()
 	text_tween.tween_property(message_text, "visible_ratio", 1.0, 0.5)
-	text_tween.finished.connect(func(): if continue_arrow: continue_arrow.visible = not is_system_bubble)
+	text_tween.finished.connect(func(): if continue_arrow and target_3d_node != null: continue_arrow.visible = not is_system_bubble)
 
 func setup_typing_indicator(npc_name: String) -> void:
 	is_system_bubble = true
@@ -86,6 +90,8 @@ func setup_typing_indicator(npc_name: String) -> void:
 	target_3d_node = null
 	active_camera = null
 	continue_arrow.visible = false
+	_recalculate_dynamic_size()
+	
 	scale = Vector2(0.8, 0.8)
 	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "scale", Vector2.ONE, 0.2)
@@ -94,6 +100,7 @@ func update_typing_dots(dots: String) -> void:
 	speaker_badge_panel.visible = false
 	message_text.text = "[center][b]" + dots + "[/b][/center]"
 	message_text.visible_ratio = 1.0
+	_recalculate_dynamic_size()
 
 func convert_to_npc_reply(npc_name: String, text: String) -> void:
 	is_system_bubble = false
@@ -113,6 +120,9 @@ func convert_to_npc_reply(npc_name: String, text: String) -> void:
 	var prefix = "[color=#" + color_hex + "][b]" + npc_name + ":[/b][/color] "
 	message_text.text = prefix + clean_text
 	message_text.visible_ratio = 0.0
+	
+	_recalculate_dynamic_size()
+	
 	var text_tween = create_tween()
 	text_tween.tween_property(message_text, "visible_ratio", 1.0, 0.4)
 
@@ -131,10 +141,43 @@ func update_text_only(new_text: String) -> void:
 		message_text.text = prefix + clean_text
 	message_text.visible_ratio = 1.0
 	continue_arrow.visible = false
+	_recalculate_dynamic_size()
+
+func _recalculate_dynamic_size() -> void:
+	if not message_text:
+		return
+		
+	var font = message_text.get_theme_font("normal_font")
+	var font_size = message_text.get_theme_font_size("normal_font_size")
+	var raw_text = message_text.get_parsed_text()
+	
+	var text_width: float = 0.0
+	if font:
+		text_width = font.get_string_size(raw_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	else:
+		text_width = float(raw_text.length() * 9)
+		
+	var content_width = text_width + 42.0
+	if speaker_badge_panel and speaker_badge_panel.visible:
+		var badge_width = speaker_badge_panel.size.x + 36.0
+		content_width = max(content_width, badge_width)
+		
+	var target_width = clamp(content_width, MIN_BUBBLE_WIDTH, MAX_BUBBLE_WIDTH)
+	
+	bubble_panel.custom_minimum_size.x = target_width
+	custom_minimum_size.x = target_width
+	
+	if continue_arrow and not target_3d_node:
+		continue_arrow.visible = false
+		
+	await get_tree().process_frame
+	if bubble_panel:
+		var required_height = max(48.0, bubble_panel.size.y + 4.0)
+		custom_minimum_size.y = required_height
 
 func _process(delta: float) -> void:
 	_update_screen_position()
-	if continue_arrow and continue_arrow.visible:
+	if continue_arrow and continue_arrow.visible and target_3d_node != null:
 		arrow_bounce_timer += delta * 8.0
 		var bounce_y = sin(arrow_bounce_timer) * 3.0
 		continue_arrow.position.y = (bubble_panel.position.y + bubble_panel.size.y - 12.0) + bounce_y

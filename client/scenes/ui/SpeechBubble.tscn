@@ -34,15 +34,14 @@ shadow_size = 3
 shadow_offset = Vector2(0, 1)
 
 [node name="SpeechBubble" type="Control" unique_id=926908382]
-custom_minimum_size = Vector2(320, 60)
+custom_minimum_size = Vector2(100, 52)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 320.0
-offset_bottom = 60.0
+size_flags_horizontal = 0
 script = ExtResource("1_bubble_script")
 
 [node name="BubblePanel" type="PanelContainer" parent="." unique_id=1949593922]
-custom_minimum_size = Vector2(310, 52)
+custom_minimum_size = Vector2(100, 48)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -60,7 +59,7 @@ theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 10
 
 [node name="MessageText" type="RichTextLabel" parent="BubblePanel/Margin" unique_id=1922246490]
-custom_minimum_size = Vector2(0, 26)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.18, 0.15, 0.1, 1)
@@ -71,6 +70,7 @@ bbcode_enabled = true
 text = "Stranger: [...]"
 fit_content = true
 scroll_active = false
+autowrap_mode = 2
 
 [node name="SpeakerBadgePanel" type="PanelContainer" parent="." unique_id=649075847]
 layout_mode = 0
