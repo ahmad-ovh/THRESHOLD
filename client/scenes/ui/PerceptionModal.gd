@@ -3,19 +3,34 @@ extends CanvasLayer
 
 signal acknowledged
 
-@onready var location_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/Header/LocationLabel
-@onready var npc_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/Header/NpcLabel
-@onready var relationship_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/RelationshipPill/RelationshipLabel
-@onready var situation_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/SituationLabel
-@onready var focus_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/FocusLabel
-@onready var facts_label: RichTextLabel = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/FactsText
-@onready var enter_button: Button = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/EnterButton
+@onready var location_label: Label = $OverlayRoot/CardPanel/ContentArea/LocationLabel
+@onready var npc_label: Label = $OverlayRoot/CardPanel/ContentArea/NpcLabel
+@onready var relationship_label: Label = $OverlayRoot/CardPanel/ContentArea/RelationshipPill/RelationshipLabel
+@onready var situation_label: Label = $OverlayRoot/CardPanel/ContentArea/SituationLabel
+@onready var focus_label: Label = $OverlayRoot/CardPanel/ContentArea/FocusLabel
+@onready var facts_label: RichTextLabel = $OverlayRoot/CardPanel/ContentArea/FactsText
+@onready var enter_button: Button = $OverlayRoot/CardPanel/ContentArea/EnterButton
 
 var perception_data: Dictionary = {}
 
 func _ready() -> void:
 	visible = false
 	enter_button.pressed.connect(_on_enter_pressed)
+	_setup_button_animations(enter_button)
+
+func _setup_button_animations(btn: Button) -> void:
+	if not btn:
+		return
+	btn.pivot_offset = btn.size / 2.0
+	btn.resized.connect(func(): btn.pivot_offset = btn.size / 2.0)
+	btn.mouse_entered.connect(func():
+		var tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.05, 1.05), 0.12)
+	)
+	btn.mouse_exited.connect(func():
+		var tw = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+	)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and (event.is_action_pressed("interact") or event.is_action_pressed("ui_accept")):
