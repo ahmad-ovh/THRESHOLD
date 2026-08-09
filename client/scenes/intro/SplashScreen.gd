@@ -7,6 +7,7 @@ extends CanvasLayer
 
 const MAIN_MENU_PATH := "res://scenes/main_menu/MainMenu.tscn"
 const STREET_PATH := "res://scenes/rooms/Street.tscn"
+const CUSTOMIZATION_PATH := "res://scenes/ui/CharacterCustomization.tscn"
 
 @onready var root: Control = $Root
 @onready var paper_bg: TextureRect = $Root/PaperBg
@@ -23,9 +24,10 @@ var _skippable := false
 var _transitioning := false
 
 func _ready() -> void:
-	# Start background loading immediately for main menu & initial gameplay room
-	ResourceLoader.load_threaded_request(MAIN_MENU_PATH)
-	ResourceLoader.load_threaded_request(STREET_PATH)
+	# Start background preloading for Main Menu, Street, and Character Customization scenes
+	SceneManager.preload_scene(MAIN_MENU_PATH)
+	SceneManager.preload_scene(STREET_PATH)
+	SceneManager.preload_scene(CUSTOMIZATION_PATH)
 	
 	# Paper bg starts at FULL opacity — seamless transition from boot splash
 	# (boot splash shows the same splash.png, so no visual seam)
@@ -45,9 +47,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if not _loading_done:
-		var status_menu = ResourceLoader.load_threaded_get_status(MAIN_MENU_PATH)
-		var status_street = ResourceLoader.load_threaded_get_status(STREET_PATH)
-		if status_menu == ResourceLoader.THREAD_LOAD_LOADED and status_street == ResourceLoader.THREAD_LOAD_LOADED:
+		if SceneManager.is_scene_loaded(MAIN_MENU_PATH) and SceneManager.is_scene_loaded(STREET_PATH):
 			_loading_done = true
 			_check_ready_to_skip()
 
@@ -126,5 +126,8 @@ func _transition_to_menu() -> void:
 	await fade.finished
 	
 	# Switch to the preloaded MainMenu
-	var packed_scene = ResourceLoader.load_threaded_get(MAIN_MENU_PATH)
-	get_tree().change_scene_to_packed(packed_scene)
+	var packed_scene = SceneManager.get_preloaded_scene(MAIN_MENU_PATH)
+	if packed_scene:
+		get_tree().change_scene_to_packed(packed_scene)
+	else:
+		get_tree().change_scene_to_file(MAIN_MENU_PATH)

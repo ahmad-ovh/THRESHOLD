@@ -3,6 +3,7 @@ extends CanvasLayer
 
 var color_rect: ColorRect
 var target_spawn_id: String = ""
+var _preloaded_paths: Dictionary = {}
 
 func _ready() -> void:
 	layer = 100 # Keep transition color rect above all UI
@@ -12,9 +13,34 @@ func _ready() -> void:
 	color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(color_rect)
 
+func preload_scene(scene_path: String) -> void:
+	if not _preloaded_paths.has(scene_path):
+		_preloaded_paths[scene_path] = true
+		ResourceLoader.load_threaded_request(scene_path, "", true)
+
+func is_scene_loaded(scene_path: String) -> bool:
+	if not _preloaded_paths.has(scene_path):
+		return false
+	var status = ResourceLoader.load_threaded_get_status(scene_path)
+	return status == ResourceLoader.THREAD_LOAD_LOADED
+
+func get_preloaded_scene(scene_path: String) -> PackedScene:
+	if is_scene_loaded(scene_path):
+		return ResourceLoader.load_threaded_get(scene_path) as PackedScene
+	return null
+
+func _switch_to_scene(scene_path: String) -> void:
+	var packed = get_preloaded_scene(scene_path)
+	if packed:
+		get_tree().change_scene_to_packed(packed)
+	else:
+		get_tree().change_scene_to_file(scene_path)
+
 func change_room(scene_path: String, spawn_id: String = "default") -> void:
 	target_spawn_id = spawn_id
 	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
+	
+	preload_scene(scene_path)
 	
 	# Fade to Black
 	var tween = create_tween()
@@ -22,7 +48,7 @@ func change_room(scene_path: String, spawn_id: String = "default") -> void:
 	await tween.finished
 	
 	# Change Scene
-	get_tree().change_scene_to_file(scene_path)
+	_switch_to_scene(scene_path)
 	await get_tree().process_frame
 	
 	# Position Player at matching Marker3D node
@@ -33,6 +59,30 @@ func change_room(scene_path: String, spawn_id: String = "default") -> void:
 	fade_in.tween_property(color_rect, "color:a", 0.0, 0.4)
 	await fade_in.finished
 	color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+func change_room_async(scene_path: String, spawn_id: String = "default", show_storyboard: bool = false) -> void:
+	target_spawn_id = spawn_id
+	preload_scene(scene_path)
+	
+	if show_storyboard:
+		var storyboard_scene = preload("res://scenes/ui/StoryboardLoading.tscn")
+		var storyboard_instance = storyboard_scene.instantiate()
+		storyboard_instance.set("target_scene_path", scene_path)
+		get_tree().root.add_child(storyboard_instance)
+		
+		if storyboard_instance.has_signal("storyboard_completed"):
+			await storyboard_instance.storyboard_completed
+			
+		_switch_to_scene(scene_path)
+		await get_tree().process_frame
+		_position_player()
+		
+		if storyboard_instance.has_method("fade_out_and_close"):
+			await storyboard_instance.fade_out_and_close()
+		else:
+			storyboard_instance.queue_free()
+	else:
+		await change_room(scene_path, spawn_id)
 
 func _position_player() -> void:
 	var player = get_tree().get_first_node_in_group("player")

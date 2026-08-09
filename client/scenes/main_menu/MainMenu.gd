@@ -84,7 +84,7 @@ func _on_start_pressed() -> void:
 func _on_customize_pressed() -> void:
 	if AudioManager:
 		AudioManager.play_click()
-	get_tree().change_scene_to_file("res://scenes/ui/CharacterCustomization.tscn")
+	SceneManager.change_room("res://scenes/ui/CharacterCustomization.tscn")
 
 func _on_settings_pressed() -> void:
 	if AudioManager:
