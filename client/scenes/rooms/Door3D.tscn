@@ -26,4 +26,5 @@ billboard = 1
 text = "Press [E] to Enter"
 
 [node name="door" parent="." unique_id=858987098 instance=ExtResource("2_7uncb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4171586, 0.17433596, 0.46311712)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
