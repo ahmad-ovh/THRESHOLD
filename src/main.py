@@ -68,11 +68,19 @@ app.include_router(interaction.router)
 app.include_router(player.router)
 
 
+from fastapi import FastAPI, Response
+
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok", "service": "THRESHOLD Backend"}
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon() -> Response:
+    return Response(status_code=204)
+
+
 if os.path.exists("public/game"):
     app.mount("/game", StaticFiles(directory="public/game", html=True), name="game")
+
 

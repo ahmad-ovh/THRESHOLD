@@ -20,6 +20,10 @@
       "dest": "/game/index.html"
     },
     {
+      "src": "/favicon.ico",
+      "dest": "/game/index.icon.png"
+    },
+    {
       "src": "/(.*)",
       "dest": "api/index.py"
     }
