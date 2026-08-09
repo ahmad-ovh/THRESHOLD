@@ -49,7 +49,6 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	else:
 		offset_3d = Vector3(0.7, 2.3, 0)
 		
-	# Apply speaker badge pill stylebox color
 	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
 	if style:
 		style.bg_color = badge_color
@@ -68,7 +67,6 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 		
 	active_camera = get_viewport().get_camera_3d()
 	continue_arrow.visible = false
-	
 	_update_screen_position()
 	
 	scale = Vector2(0.8, 0.8)
@@ -79,9 +77,44 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	var text_tween = create_tween()
 	text_tween.tween_property(message_text, "visible_ratio", 1.0, 0.5)
 	text_tween.finished.connect(func(): if continue_arrow: continue_arrow.visible = not is_system_bubble)
+
+func setup_typing_indicator(npc_name: String) -> void:
+	is_system_bubble = true
+	speaker_label.text = npc_name
+	speaker_badge_panel.visible = false
+	message_text.text = "[center][b]. . .[/b][/center]"
+	target_3d_node = null
+	active_camera = null
+	continue_arrow.visible = false
+	scale = Vector2(0.8, 0.8)
+	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector2.ONE, 0.2)
+
+func update_typing_dots(dots: String) -> void:
+	speaker_badge_panel.visible = false
+	message_text.text = "[center][b]" + dots + "[/b][/center]"
+	message_text.visible_ratio = 1.0
+
+func convert_to_npc_reply(npc_name: String, text: String) -> void:
+	is_system_bubble = false
+	speaker_label.text = npc_name
+	speaker_badge_panel.visible = true
+	_position_speaker_badge()
 	
-	if AudioManager:
-		AudioManager.play_typewriter_tick()
+	var key = npc_name.to_lower()
+	var badge_color = speaker_colors.get(key, Color(0.85, 0.45, 0.08))
+	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	if style:
+		style.bg_color = badge_color
+		speaker_badge_panel.add_theme_stylebox_override("panel", style)
+		
+	var color_hex = badge_color.to_html(false)
+	var clean_text = text.strip_edges()
+	var prefix = "[color=#" + color_hex + "][b]" + npc_name + ":[/b][/color] "
+	message_text.text = prefix + clean_text
+	message_text.visible_ratio = 0.0
+	var text_tween = create_tween()
+	text_tween.tween_property(message_text, "visible_ratio", 1.0, 0.4)
 
 func update_text_only(new_text: String) -> void:
 	var clean_text = new_text.strip_edges()

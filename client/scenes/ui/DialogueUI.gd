@@ -63,12 +63,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if is_thinking:
 		thinking_timer += delta
-		if thinking_timer >= 0.3:
+		if thinking_timer >= 0.25:
 			thinking_timer = 0.0
 			dot_count = (dot_count % 3) + 1
-			var dots = ".".repeat(dot_count)
-			if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("update_text_only"):
-				active_npc_bubble.update_text_only(dots)
+			var dots = ". ".repeat(dot_count).strip_edges()
+			if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("update_typing_dots"):
+				active_npc_bubble.update_typing_dots(dots)
 
 func _reset_encounter_metrics() -> void:
 	turn_history_scores.clear()
@@ -212,8 +212,16 @@ func start_thinking() -> void:
 	send_button.disabled = true
 	leave_button.disabled = false
 	
-	# Spawn temporary animated dots bubble for NPC reply
-	_spawn_npc_bubble(".")
+	_spawn_thinking_bubble()
+
+func _spawn_thinking_bubble() -> void:
+	var scene = preload("res://scenes/ui/SpeechBubble.tscn")
+	active_npc_bubble = scene.instantiate()
+	bubbles_container.add_child(active_npc_bubble)
+	if active_npc_bubble.has_method("setup_typing_indicator"):
+		active_npc_bubble.setup_typing_indicator(active_npc_name)
+	_enforce_max_messages()
+	_scroll_to_bottom()
 
 func stop_thinking() -> void:
 	is_thinking = false
@@ -221,8 +229,8 @@ func stop_thinking() -> void:
 
 func display_reply(text: String) -> void:
 	stop_thinking()
-	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("update_text_only"):
-		active_npc_bubble.update_text_only(text)
+	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("convert_to_npc_reply"):
+		active_npc_bubble.convert_to_npc_reply(active_npc_name, text)
 	else:
 		_spawn_npc_bubble(text)
 		
@@ -234,8 +242,8 @@ func display_reply(text: String) -> void:
 
 func display_error(error_msg: String) -> void:
 	stop_thinking()
-	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("update_text_only"):
-		active_npc_bubble.update_text_only("Error: " + error_msg)
+	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("convert_to_npc_reply"):
+		active_npc_bubble.convert_to_npc_reply(active_npc_name, "Error: " + error_msg)
 	else:
 		_spawn_npc_bubble("Error: " + error_msg)
 	message_input.editable = true
