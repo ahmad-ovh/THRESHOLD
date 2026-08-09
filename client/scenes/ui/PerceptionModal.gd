@@ -3,13 +3,13 @@ extends CanvasLayer
 
 signal acknowledged
 
-@onready var location_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/Header/LocationLabel
-@onready var npc_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/Header/NpcLabel
-@onready var relationship_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/RelationshipPill/RelationshipLabel
-@onready var situation_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/SituationLabel
-@onready var focus_label: Label = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/FocusLabel
-@onready var facts_label: RichTextLabel = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/FactsText
-@onready var enter_button: Button = $OverlayRoot/CardPanel/MarginContainer/VBoxContainer/EnterButton
+@onready var location_label: Label = $OverlayRoot/CardPanel/ContentArea/LocationLabel
+@onready var npc_label: Label = $OverlayRoot/CardPanel/ContentArea/NpcLabel
+@onready var relationship_label: Label = $OverlayRoot/CardPanel/ContentArea/RelationshipPill/RelationshipLabel
+@onready var situation_label: Label = $OverlayRoot/CardPanel/ContentArea/SituationLabel
+@onready var focus_label: Label = $OverlayRoot/CardPanel/ContentArea/FocusLabel
+@onready var facts_label: RichTextLabel = $OverlayRoot/CardPanel/ContentArea/FactsText
+@onready var enter_button: Button = $OverlayRoot/CardPanel/ContentArea/EnterButton
 
 var perception_data: Dictionary = {}
 
