@@ -101,28 +101,28 @@ theme_override_font_sizes/font_size = 14
 text = "Streak: 0"
 
 [node name="IdCardButton" type="TextureButton" parent="." unique_id=982192999]
-custom_minimum_size = Vector2(96, 74)
+custom_minimum_size = Vector2(130, 90)
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -116.0
-offset_top = 260.0
-offset_right = -20.0
-offset_bottom = 334.0
+offset_left = -166.88892
+offset_top = 208.0
+offset_right = -8.000122
+offset_bottom = 318.0
 grow_horizontal = 0
 texture_normal = ExtResource("5_idcard_tex")
 ignore_texture_size = true
 stretch_mode = 5
 
 [node name="JournalButton" type="TextureButton" parent="." unique_id=1574889082]
-custom_minimum_size = Vector2(76, 78)
+custom_minimum_size = Vector2(130, 90)
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -106.0
-offset_top = 350.0
-offset_right = -30.0
-offset_bottom = 428.0
+offset_left = -163.0
+offset_top = 338.0
+offset_right = -1.222168
+offset_bottom = 450.0
 grow_horizontal = 0
 texture_normal = ExtResource("4_journal_tex")
 ignore_texture_size = true
