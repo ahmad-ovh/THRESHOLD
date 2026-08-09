@@ -69,10 +69,18 @@ app.include_router(player.router)
 
 
 from fastapi import FastAPI, Response
+from fastapi.responses import RedirectResponse
+
+
+@app.get("/")
+async def root() -> RedirectResponse:
+    return RedirectResponse(url="/game/")
+
 
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok", "service": "THRESHOLD Backend"}
+
 
 
 @app.get("/favicon.ico", include_in_schema=False)
