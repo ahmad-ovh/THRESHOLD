@@ -39,43 +39,42 @@ func _position_player() -> void:
 	if not player:
 		return
 
+	var current_scene = get_tree().current_scene
+	if not current_scene:
+		return
+
+	var target_id_clean = target_spawn_id.strip_edges().to_lower().replace("_", "").replace(" ", "")
 	var target_marker: Node3D = null
-	var target_id_clean = target_spawn_id.strip_edges().to_lower()
 
-	# 1. Search nodes in group "spawn_markers"
-	var spawn_markers = get_tree().get_nodes_in_group("spawn_markers")
+	# Collect all Marker3D nodes in the active scene hierarchy
+	var all_markers: Array[Node3D] = []
+	_collect_markers(current_scene, all_markers)
+
+	# 1. Search for exact or fuzzy name match
 	if target_id_clean != "":
-		for marker in spawn_markers:
-			if marker is Node3D:
-				var m_name = marker.name.to_lower()
-				var m_spawn_id = str(marker.get("spawn_id")).to_lower() if marker.get("spawn_id") else ""
-				if m_name == target_id_clean or m_spawn_id == target_id_clean or m_name == "spawn_" + target_id_clean:
-					target_marker = marker as Node3D
-					break
-
-	# 2. Fallback: Search all Marker3D nodes in the active scene tree
-	if not target_marker and target_id_clean != "":
-		var all_markers = get_tree().root.find_children("*", "Marker3D", true, false)
 		for marker in all_markers:
-			if marker is Node3D:
-				var m_name = marker.name.to_lower()
-				if m_name == target_id_clean or m_name == "spawn_" + target_id_clean:
-					target_marker = marker as Node3D
-					break
+			var m_name = marker.name.to_lower().replace("_", "").replace(" ", "")
+			var m_spawn_id = str(marker.get("spawn_id")).to_lower().replace("_", "").replace(" ", "") if marker.get("spawn_id") else ""
+			if m_name == target_id_clean or m_spawn_id == target_id_clean or m_name == "spawn" + target_id_clean or m_name == "from" + target_id_clean:
+				target_marker = marker
+				break
 
-	# 3. Fallback to default spawn markers if specific target marker is not found
+	# 2. Fallback to default markers if specific target marker is not found
 	if not target_marker:
-		for marker in spawn_markers:
-			if marker is Node3D:
-				var m_name = marker.name.to_lower()
-				if m_name == "spawn_default" or m_name == "default" or m_name == "from_street":
-					target_marker = marker as Node3D
-					break
-		if not target_marker and spawn_markers.size() > 0:
-			target_marker = spawn_markers[0] as Node3D
+		for marker in all_markers:
+			var m_name = marker.name.to_lower().replace("_", "").replace(" ", "")
+			if m_name == "spawndefault" or m_name == "default" or m_name == "fromstreet" or m_name == "spawn":
+				target_marker = marker
+				break
+
+	# 3. Final fallback to first marker found in scene
+	if not target_marker and all_markers.size() > 0:
+		target_marker = all_markers[0]
 
 	# Apply Marker3D global transform directly to Player
 	if target_marker:
+		if player.has_method("set_velocity"):
+			player.velocity = Vector3.ZERO
 		player.global_transform = target_marker.global_transform
 
 	# Snap camera pivot position immediately to match player position
@@ -84,8 +83,15 @@ func _position_player() -> void:
 		var target_x = clamp(player.global_position.x, -38.0, 38.0)
 		camera_pivot.global_position.x = target_x
 
+func _collect_markers(node: Node, result: Array[Node3D]) -> void:
+	if node is Marker3D or (node is Node3D and node.is_in_group("spawn_markers")):
+		result.append(node as Node3D)
+	for child in node.get_children():
+		_collect_markers(child, result)
+
 func clear_saved_positions() -> void:
 	pass
+
 
 
 
