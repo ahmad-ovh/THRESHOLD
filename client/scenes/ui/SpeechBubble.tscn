@@ -1,8 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://vga4k2kdqgiw"]
+[gd_scene format=3 uid="uid://vga4k2kdqgiw"]
 
-[ext_resource type="Script" path="res://scenes/ui/SpeechBubble.gd" id="1_bubble_script"]
+[ext_resource type="Script" uid="uid://ch4h6aimtp0aa" path="res://scenes/ui/SpeechBubble.gd" id="1_bubble_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="FontFile" path="res://assets/fonts/SpecialElite-Regular.ttf" id="3_font_special_elite"]
+[ext_resource type="FontFile" uid="uid://uiu0c2c8i80c" path="res://assets/fonts/SpecialElite-Regular.ttf" id="3_font_special_elite"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
 bg_color = Color(0.99, 0.97, 0.93, 0.97)
@@ -76,10 +76,9 @@ autowrap_mode = 2
 
 [node name="SpeakerBadgePanel" type="PanelContainer" parent="." unique_id=649075847]
 layout_mode = 0
-offset_left = 16.0
-offset_top = -12.0
-offset_right = 110.0
-offset_bottom = 14.0
+offset_top = -17.0
+offset_right = 94.0
+offset_bottom = 9.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_speaker_badge")
 
 [node name="Margin" type="MarginContainer" parent="SpeakerBadgePanel" unique_id=1391802277]
