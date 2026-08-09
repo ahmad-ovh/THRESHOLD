@@ -3,12 +3,12 @@
 [ext_resource type="Script" path="res://scenes/templates/NPC.gd" id="1_npc_script"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_npc"]
-radius = 0.4
-height = 1.8
+radius = 0.35
+height = 1.4
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]
-radius = 0.4
-height = 1.8
+radius = 0.35
+height = 1.4
 
 [sub_resource type="TorusMesh" id="TorusMesh_ring"]
 inner_radius = 1.2
@@ -24,12 +24,12 @@ script = ExtResource("1_npc_script")
 transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0)
 
 [node name="GroundRing" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
 visible = false
 mesh = SubResource("TorusMesh_ring")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0.9, 0)
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0.875, 0)
 shape = SubResource("CapsuleShape3D_npc")
 
 [node name="HeadMarker" type="Marker3D" parent="."]

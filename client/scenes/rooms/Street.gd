@@ -8,7 +8,7 @@ func _ready() -> void:
 		player.room_camera_rot = Vector3(-15.0, 0.0, 0.0)
 	_setup_visual_environment()
 	_ensure_street_boundary_colliders()
-	_generate_model_collisions(self)
+	_process_street_models(self)
 
 func _setup_visual_environment() -> void:
 	var world_env: WorldEnvironment = null
@@ -59,15 +59,24 @@ func _ensure_street_boundary_colliders() -> void:
 	right_wall.position = Vector3(40.0, 2.5, 0.0)
 	boundaries.add_child(right_wall)
 
-func _generate_model_collisions(node: Node) -> void:
+func _process_street_models(node: Node) -> void:
 	for child in node.get_children():
 		if child is Area3D or child is CharacterBody3D or child.name.begins_with("Door") or child.name.begins_with("NPC_") or child.name == "Player3D":
 			continue
 			
 		if child is MeshInstance3D and child.mesh:
+			_align_mesh_to_floor(child)
 			_ensure_mesh_collision(child)
 			
-		_generate_model_collisions(child)
+		_process_street_models(child)
+
+func _align_mesh_to_floor(mi: MeshInstance3D) -> void:
+	if not mi or not mi.mesh:
+		return
+	var aabb = mi.mesh.get_aabb()
+	var bottom_y = aabb.position.y * mi.scale.y
+	if abs(bottom_y) > 0.001:
+		mi.position.y -= bottom_y
 
 func _ensure_mesh_collision(mi: MeshInstance3D) -> void:
 	for sibling in mi.get_children():
