@@ -30,6 +30,7 @@ signal conversation_end_confirmed
 signal leave_requested
 
 var active_npc_name: String = "Stranger"
+var active_npc_id: String = "stranger"
 var active_npc_node: Node3D = null
 var active_player_node: Node3D = null
 
@@ -129,6 +130,7 @@ func set_scenario_context(role: String, _goal_text: String) -> void:
 	_update_npc_sub_info()
 
 func show_connecting_state(npc_name: String) -> void:
+	active_npc_id = npc_name.to_lower()
 	active_npc_name = npc_name.capitalize()
 	speaker_label.text = active_npc_name
 	current_role = "Peer"
@@ -146,6 +148,7 @@ func show_connecting_state(npc_name: String) -> void:
 	loading_label.text = "Walking over..."
 
 func open_dialogue(npc_name: String, opening_line: String) -> void:
+	active_npc_id = npc_name.to_lower()
 	active_npc_name = npc_name.capitalize()
 	speaker_label.text = active_npc_name
 	_update_npc_sub_info()
@@ -265,7 +268,7 @@ func stop_thinking() -> void:
 func display_reply(text: String) -> void:
 	stop_thinking()
 	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("convert_to_npc_reply"):
-		active_npc_bubble.convert_to_npc_reply(active_npc_name, text)
+		active_npc_bubble.convert_to_npc_reply(active_npc_name, text, active_npc_id)
 		_enforce_max_messages()
 	else:
 		_spawn_npc_bubble(text)
@@ -279,7 +282,7 @@ func display_reply(text: String) -> void:
 func display_error(error_msg: String) -> void:
 	stop_thinking()
 	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("convert_to_npc_reply"):
-		active_npc_bubble.convert_to_npc_reply(active_npc_name, "Error: " + error_msg)
+		active_npc_bubble.convert_to_npc_reply(active_npc_name, "Error: " + error_msg, active_npc_id)
 		_enforce_max_messages()
 	else:
 		_spawn_npc_bubble("Error: " + error_msg)
@@ -317,12 +320,14 @@ func close_dialogue() -> void:
 	_hide_end_banner()
 	_clear_bubbles()
 	visible = false
+	if AudioManager:
+		AudioManager.stop_voice_playback()
 
 func _spawn_npc_bubble(text: String) -> void:
 	var scene = preload("res://scenes/ui/SpeechBubble.tscn")
 	active_npc_bubble = scene.instantiate()
 	bubbles_container.add_child(active_npc_bubble)
-	active_npc_bubble.setup(active_npc_name, text, null, false)
+	active_npc_bubble.setup(active_npc_name, text, null, false, active_npc_id)
 	_enforce_max_messages()
 	_scroll_to_bottom()
 

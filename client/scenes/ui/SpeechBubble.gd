@@ -14,6 +14,13 @@ var arrow_bounce_timer: float = 0.0
 var is_player_bubble: bool = false
 var is_system_bubble: bool = false
 
+var active_timeline: NPCVoiceGenerator.DialogueTimeline = null
+var voice_profile: NPCVoiceGenerator.NPCVoiceProfile = null
+var timeline_elapsed_ms: float = 0.0
+var is_timeline_active: bool = false
+var next_voice_event_idx: int = 0
+var prefix_char_count: int = 0
+
 var speaker_colors: Dictionary = {
 	"teddy": Color(1.0, 0.49, 0.15),       # Vibrant Orange
 	"blathers": Color(0.48, 0.35, 0.25),    # Earthy Warm Brown
@@ -33,7 +40,7 @@ func _ready() -> void:
 	continue_arrow.visible = false
 	_position_speaker_badge()
 
-func setup(speaker: String, text: String, target_node: Node3D = null, is_player: bool = false) -> void:
+func setup(speaker: String, text: String, target_node: Node3D = null, is_player: bool = false, npc_id: String = "") -> void:
 	is_player_bubble = is_player
 	speaker_label.text = speaker
 	target_3d_node = target_node
@@ -60,6 +67,7 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	if is_system_bubble:
 		speaker_badge_panel.visible = false
 		message_text.text = "[center][b]" + clean_text + "[/b][/center]"
+		prefix_char_count = 0
 	else:
 		speaker_badge_panel.visible = true
 		_position_speaker_badge()
@@ -67,6 +75,7 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 		var color_hex = badge_color.to_html(false)
 		var prefix = "[color=#" + color_hex + "][b]" + speaker + ":[/b][/color] "
 		message_text.text = prefix + clean_text
+		prefix_char_count = speaker.length() + 2
 		
 	active_camera = get_viewport().get_camera_3d()
 	continue_arrow.visible = false
@@ -77,10 +86,8 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "scale", Vector2.ONE, 0.25)
 	
-	message_text.visible_ratio = 0.0
-	var text_tween = create_tween()
-	text_tween.tween_property(message_text, "visible_ratio", 1.0, 0.5)
-	text_tween.finished.connect(func(): if continue_arrow and target_3d_node != null: continue_arrow.visible = not is_system_bubble)
+	# Timeline initialization
+	_start_dialogue_timeline(npc_id if npc_id != "" else key, clean_text)
 
 func setup_typing_indicator(npc_name: String) -> void:
 	is_system_bubble = true
@@ -90,6 +97,8 @@ func setup_typing_indicator(npc_name: String) -> void:
 	target_3d_node = null
 	active_camera = null
 	continue_arrow.visible = false
+	is_timeline_active = false
+	message_text.visible_characters = -1
 	_recalculate_dynamic_size()
 	
 	scale = Vector2(0.8, 0.8)
@@ -99,10 +108,11 @@ func setup_typing_indicator(npc_name: String) -> void:
 func update_typing_dots(dots: String) -> void:
 	speaker_badge_panel.visible = false
 	message_text.text = "[center][b]" + dots + "[/b][/center]"
-	message_text.visible_ratio = 1.0
+	is_timeline_active = false
+	message_text.visible_characters = -1
 	_recalculate_dynamic_size()
 
-func convert_to_npc_reply(npc_name: String, text: String) -> void:
+func convert_to_npc_reply(npc_name: String, text: String, npc_id: String = "") -> void:
 	is_system_bubble = false
 	speaker_label.text = npc_name
 	speaker_badge_panel.visible = true
@@ -118,13 +128,13 @@ func convert_to_npc_reply(npc_name: String, text: String) -> void:
 	var color_hex = badge_color.to_html(false)
 	var clean_text = text.strip_edges()
 	var prefix = "[color=#" + color_hex + "][b]" + npc_name + ":[/b][/color] "
-	message_text.text = clean_text
-	message_text.visible_ratio = 0.0
+	message_text.text = prefix + clean_text
+	prefix_char_count = npc_name.length() + 2
 	
 	_recalculate_dynamic_size()
 	
-	var text_tween = create_tween()
-	text_tween.tween_property(message_text, "visible_ratio", 1.0, 0.4)
+	# Start timeline for NPC reply
+	_start_dialogue_timeline(npc_id if npc_id != "" else key, clean_text)
 
 func update_text_only(new_text: String) -> void:
 	var clean_text = new_text.strip_edges()
@@ -132,6 +142,7 @@ func update_text_only(new_text: String) -> void:
 	if is_system_bubble:
 		speaker_badge_panel.visible = false
 		message_text.text = "[center][b]" + clean_text + "[/b][/center]"
+		prefix_char_count = 0
 	else:
 		speaker_badge_panel.visible = true
 		var badge_style = speaker_badge_panel.get_theme_stylebox("panel") as StyleBoxFlat
@@ -139,9 +150,39 @@ func update_text_only(new_text: String) -> void:
 		var color_hex = badge_color.to_html(false)
 		var prefix = "[color=#" + color_hex + "][b]" + speaker_label.text + ":[/b][/color] "
 		message_text.text = prefix + clean_text
-	message_text.visible_ratio = 1.0
+		prefix_char_count = speaker_label.text.length() + 2
+	
+	is_timeline_active = false
+	message_text.visible_characters = -1
 	continue_arrow.visible = false
 	_recalculate_dynamic_size()
+
+func _start_dialogue_timeline(speaker_id: String, text_to_speak: String) -> void:
+	if is_player_bubble or is_system_bubble:
+		# Player/System bubbles reveal without voice blips
+		voice_profile = null
+	else:
+		voice_profile = NPCVoiceGenerator.NPCVoiceProfile.create_from_id(speaker_id)
+		
+	active_timeline = NPCVoiceGenerator.DialogueTimeline.build(text_to_speak, voice_profile if voice_profile else NPCVoiceGenerator.NPCVoiceProfile.new())
+	
+	if is_player_bubble:
+		# Player bubble voice events are cleared
+		active_timeline.voice_events.clear()
+		
+	timeline_elapsed_ms = 0.0
+	next_voice_event_idx = 0
+	is_timeline_active = true
+	message_text.visible_characters = prefix_char_count
+
+func skip_reveal() -> void:
+	if is_timeline_active:
+		is_timeline_active = false
+		message_text.visible_characters = -1
+		if AudioManager:
+			AudioManager.stop_voice_playback()
+		if continue_arrow and target_3d_node != null:
+			continue_arrow.visible = not is_system_bubble
 
 func _recalculate_dynamic_size() -> void:
 	if not message_text:
@@ -177,6 +218,37 @@ func _recalculate_dynamic_size() -> void:
 
 func _process(delta: float) -> void:
 	_update_screen_position()
+	
+	# Dialogue Timeline Clock Driver
+	if is_timeline_active and active_timeline:
+		timeline_elapsed_ms += delta * 1000.0
+		
+		# Update character reveal step
+		var target_visible = prefix_char_count
+		for step in active_timeline.text_steps:
+			if step.timestamp_ms <= timeline_elapsed_ms:
+				target_visible = prefix_char_count + step.visible_character_count
+			else:
+				break
+		message_text.visible_characters = target_visible
+		
+		# Dispatch due voice events to AudioManager
+		while next_voice_event_idx < active_timeline.voice_events.size():
+			var evt = active_timeline.voice_events[next_voice_event_idx]
+			if evt.timestamp_ms <= timeline_elapsed_ms:
+				if AudioManager:
+					AudioManager.play_procedural_blip(evt.pitch, evt.duration, evt.volume, evt.waveform)
+				next_voice_event_idx += 1
+			else:
+				break
+				
+		# Check timeline completion
+		if timeline_elapsed_ms >= active_timeline.total_duration_ms:
+			is_timeline_active = false
+			message_text.visible_characters = -1
+			if continue_arrow and target_3d_node != null:
+				continue_arrow.visible = not is_system_bubble
+				
 	if continue_arrow and continue_arrow.visible and target_3d_node != null:
 		arrow_bounce_timer += delta * 8.0
 		var bounce_y = sin(arrow_bounce_timer) * 3.0
@@ -203,3 +275,4 @@ func _update_screen_position() -> void:
 	visible = true
 	var screen_pos = active_camera.unproject_position(world_pos)
 	position = screen_pos - Vector2(180, 50)
+
