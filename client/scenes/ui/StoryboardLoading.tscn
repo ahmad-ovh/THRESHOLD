@@ -94,49 +94,34 @@ grow_horizontal = 0
 texture = ExtResource("6_thumbtack")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Root/PanelCard"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 130
-theme_override_constants/margin_top = 35
-theme_override_constants/margin_right = 130
-theme_override_constants/margin_bottom = 25
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Root/PanelCard/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="ChapterLabel" type="Label" parent="Root/PanelCard/MarginContainer/VBoxContainer"]
-layout_mode = 2
+[node name="ChapterLabel" type="Label" parent="Root/PanelCard"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 35.0
+offset_right = 630.0
+offset_bottom = 70.0
 theme_override_colors/font_color = Color(0.75, 0.45, 0.2, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 22
 text = "CHAPTER I • THE THRESHOLD"
 horizontal_alignment = 1
 
-[node name="ImageContainer" type="Control" parent="Root/PanelCard/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 190)
-layout_mode = 2
-
-[node name="PanelImage" type="TextureRect" parent="Root/PanelCard/MarginContainer/VBoxContainer/ImageContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="PanelImage" type="TextureRect" parent="Root/PanelCard"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 75.0
+offset_right = 630.0
+offset_bottom = 270.0
 texture = ExtResource("7_splash")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NarrativeLabel" type="RichTextLabel" parent="Root/PanelCard/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 85)
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="NarrativeLabel" type="RichTextLabel" parent="Root/PanelCard"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 280.0
+offset_right = 630.0
+offset_bottom = 385.0
 theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/normal_font_size = 18
 bbcode_enabled = true
@@ -158,35 +143,32 @@ offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Root/BottomBar"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 50.0
-grow_horizontal = 2
-theme_override_constants/separation = 6
-
-[node name="ProgressBar" type="ProgressBar" parent="Root/BottomBar/VBoxContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="Root/BottomBar"]
 custom_minimum_size = Vector2(0, 16)
-layout_mode = 2
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 600.0
+offset_bottom = 20.0
 value = 25.0
 
-[node name="StatusLabel" type="Label" parent="Root/BottomBar/VBoxContainer"]
-layout_mode = 2
+[node name="StatusLabel" type="Label" parent="Root/BottomBar"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 26.0
+offset_right = 600.0
+offset_bottom = 50.0
 theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
 theme_override_font_sizes/font_size = 14
 text = "Loading World... 25%"
 horizontal_alignment = 1
 
 [node name="PromptLabel" type="Label" parent="Root/BottomBar"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -26.0
-grow_horizontal = 2
-grow_vertical = 0
+layout_mode = 0
+offset_left = 0.0
+offset_top = 65.0
+offset_right = 600.0
+offset_bottom = 95.0
 theme_override_colors/font_color = Color(0.2, 0.5, 0.3, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 18
