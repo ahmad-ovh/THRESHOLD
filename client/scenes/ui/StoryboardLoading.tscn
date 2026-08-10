@@ -101,14 +101,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 60
+theme_override_constants/margin_left = 130
 theme_override_constants/margin_top = 35
-theme_override_constants/margin_right = 60
+theme_override_constants/margin_right = 130
 theme_override_constants/margin_bottom = 25
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Root/PanelCard/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 10
 
 [node name="ChapterLabel" type="Label" parent="Root/PanelCard/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -119,7 +119,7 @@ text = "CHAPTER I • THE THRESHOLD"
 horizontal_alignment = 1
 
 [node name="ImageContainer" type="Control" parent="Root/PanelCard/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 150)
+custom_minimum_size = Vector2(0, 190)
 layout_mode = 2
 
 [node name="PanelImage" type="TextureRect" parent="Root/PanelCard/MarginContainer/VBoxContainer/ImageContainer"]
@@ -134,7 +134,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="NarrativeLabel" type="RichTextLabel" parent="Root/PanelCard/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 85)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
