@@ -4,7 +4,7 @@
 
 [ext_resource type="Texture2D" path="res://assets/ui/paper_craft/title_paper_strip.png" id="3_title_strip"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="4_font"]
-[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/popup.png" id="5_popup"]
+[ext_resource type="Texture2D" uid="uid://bptc2tpk6ki24" path="res://assets/ui/paper_craft/popuphori.png" id="5_popup"]
 [ext_resource type="Texture2D" path="res://assets/ui/paper_craft/thumbtack_orange.png" id="6_thumbtack"]
 [ext_resource type="Texture2D" path="res://assets/ui/paper_craft/splash.png" id="7_splash"]
 [ext_resource type="Theme" uid="uid://cyxi2trp6esvr" path="res://resources/theme/main_theme.tres" id="8_theme"]
