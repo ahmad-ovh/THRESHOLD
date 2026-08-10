@@ -2,12 +2,18 @@
 class_name CharacterFactory
 extends Object
 
+static var _material_cache: Dictionary = {}
+
 static func _mat(color: Color, roughness: float = 0.95, metallic: float = 0.0) -> StandardMaterial3D:
+	var key = str(color.to_html(true)) + "_" + str(roughness) + "_" + str(metallic)
+	if _material_cache.has(key):
+		return _material_cache[key]
 	var mat = StandardMaterial3D.new()
 	mat.albedo_color = color
 	mat.roughness = roughness
 	mat.metallic = metallic
 	mat.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
+	_material_cache[key] = mat
 	return mat
 
 static func _box(size: Vector3, pos: Vector3, mat: Material, rot: Vector3 = Vector3.ZERO) -> MeshInstance3D:
