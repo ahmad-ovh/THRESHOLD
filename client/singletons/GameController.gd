@@ -24,7 +24,7 @@ var hud_ref: CanvasLayer = null
 var has_shown_storyboard: bool = false
 
 @export_group("Storyboard Options")
-@export var enable_storyboard: bool = true
+@export var enable_storyboard: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS # Run even when get_tree().paused is true
