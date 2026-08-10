@@ -95,13 +95,23 @@ func change_room_async(scene_path: String, spawn_id: String = "default", show_st
 		is_transitioning = false
 		await change_room(scene_path, spawn_id)
 
-func _position_player() -> void:
-	var player = get_tree().get_first_node_in_group("player")
-	if not player:
+func position_player_in_scene(scene_node: Node = null) -> void:
+	var root_scene = scene_node
+	if not root_scene or not is_instance_valid(root_scene):
+		root_scene = get_tree().current_scene
+	if not root_scene or not is_instance_valid(root_scene):
+		# Fallback to last root child if current_scene is not updated yet by engine
+		var root = get_tree().root
+		if root and root.get_child_count() > 0:
+			root_scene = root.get_child(root.get_child_count() - 1)
+			
+	if not root_scene or not is_instance_valid(root_scene):
 		return
 
-	var current_scene = get_tree().current_scene
-	if not current_scene:
+	var player = root_scene.find_child("Player3D", true, false) as Node3D
+	if not player:
+		player = get_tree().get_first_node_in_group("player") as Node3D
+	if not player:
 		return
 
 	var target_id_clean = target_spawn_id.strip_edges().to_lower().replace("_", "").replace(" ", "")
@@ -109,7 +119,7 @@ func _position_player() -> void:
 
 	# Collect all Marker3D nodes in the active scene hierarchy
 	var all_markers: Array[Node3D] = []
-	_collect_markers(current_scene, all_markers)
+	_collect_markers(root_scene, all_markers)
 
 	if all_markers.size() == 0:
 		return
@@ -156,6 +166,9 @@ func _position_player() -> void:
 		if camera_pivot and not player.get("is_fixed_diorama_room"):
 			var target_x = clamp(player.global_position.x, -38.0, 38.0)
 			camera_pivot.global_position.x = target_x
+
+func _position_player() -> void:
+	position_player_in_scene()
 
 func _collect_markers(node: Node, result: Array[Node3D]) -> void:
 	if node is Marker3D or (node is Node3D and node.is_in_group("spawn_markers")):

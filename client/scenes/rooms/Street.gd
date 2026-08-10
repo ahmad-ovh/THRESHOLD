@@ -9,6 +9,9 @@ func _ready() -> void:
 	_setup_visual_environment()
 	_ensure_street_boundary_colliders()
 	_process_street_models(self)
+	
+	if SceneManager:
+		SceneManager.position_player_in_scene(self)
 
 func _setup_visual_environment() -> void:
 	var world_env: WorldEnvironment = null
