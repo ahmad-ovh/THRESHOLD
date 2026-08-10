@@ -13,7 +13,10 @@ extends CanvasLayer
 
 @onready var message_input: LineEdit = $OverlayRoot/InputRow/BottomInputPanel/InputContainer/MessageInput
 @onready var send_button: Button = $OverlayRoot/InputRow/SendButton
-@onready var conversation_end_banner: Button = $OverlayRoot/ConversationEndBanner
+@onready var leave_confirm_modal: Control = $OverlayRoot/LeaveConfirmModal
+@onready var leave_confirm_card: PanelContainer = $OverlayRoot/LeaveConfirmModal/CardPanel
+@onready var leave_yes_button: Button = $OverlayRoot/LeaveConfirmModal/CardPanel/ContentArea/HBoxContainer/YesButton
+@onready var leave_no_button: Button = $OverlayRoot/LeaveConfirmModal/CardPanel/ContentArea/HBoxContainer/NoButton
 
 @onready var overall_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/OverallContainer/OverallLabel
 @onready var delta_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/OverallContainer/DeltaLabel
@@ -54,15 +57,17 @@ const MAX_CHAT_MESSAGES: int = 3
 func _ready() -> void:
 	visible = false
 	loading_label.visible = false
-	conversation_end_banner.visible = false
+	leave_confirm_modal.visible = false
 	send_button.pressed.connect(_on_send_pressed)
 	leave_button.pressed.connect(_on_leave_pressed)
 	message_input.text_submitted.connect(_on_text_submitted)
-	conversation_end_banner.pressed.connect(_on_end_banner_pressed)
+	leave_yes_button.pressed.connect(_on_leave_yes_pressed)
+	leave_no_button.pressed.connect(_on_leave_no_pressed)
 	
 	_setup_button_hover_effects(send_button)
 	_setup_button_hover_effects(leave_button)
-	_setup_button_hover_effects(conversation_end_banner)
+	_setup_button_hover_effects(leave_yes_button)
+	_setup_button_hover_effects(leave_no_button)
 
 func _setup_button_hover_effects(btn: Button) -> void:
 	btn.pivot_offset = btn.size / 2.0
@@ -291,33 +296,12 @@ func display_error(error_msg: String) -> void:
 	leave_button.disabled = false
 
 func close_dialogue_gracefully() -> void:
-	message_input.editable = false
-	send_button.disabled = true
-	leave_button.disabled = true
-	_show_end_banner()
-	await conversation_end_confirmed
 	close_dialogue()
-
-func _show_end_banner() -> void:
-	conversation_end_banner.modulate.a = 0.0
-	conversation_end_banner.visible = true
-	var tween = create_tween()
-	tween.tween_property(conversation_end_banner, "modulate:a", 1.0, 0.5)
-	await tween.finished
-	var pulse = create_tween().set_loops()
-	pulse.tween_property(conversation_end_banner, "modulate:a", 0.6, 0.8)
-	pulse.tween_property(conversation_end_banner, "modulate:a", 1.0, 0.8)
-
-func _hide_end_banner() -> void:
-	conversation_end_banner.visible = false
-
-func _on_end_banner_pressed() -> void:
-	_hide_end_banner()
-	conversation_end_confirmed.emit()
 
 func close_dialogue() -> void:
 	stop_thinking()
-	_hide_end_banner()
+	if leave_confirm_modal:
+		leave_confirm_modal.visible = false
 	_clear_bubbles()
 	visible = false
 	if AnimalesePlayer:
@@ -385,4 +369,36 @@ func _on_send_pressed() -> void:
 func _on_leave_pressed() -> void:
 	if AudioManager:
 		AudioManager.play_click()
+	_show_leave_confirm_modal()
+
+func _show_leave_confirm_modal() -> void:
+	if not leave_confirm_modal:
+		leave_requested.emit()
+		return
+	leave_confirm_modal.modulate.a = 1.0
+	leave_confirm_modal.visible = true
+	leave_confirm_card.pivot_offset = leave_confirm_card.size / 2.0
+	leave_confirm_card.scale = Vector2(0.7, 0.7)
+	
+	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(leave_confirm_card, "scale", Vector2.ONE, 0.25)
+
+func _on_leave_no_pressed() -> void:
+	if AudioManager:
+		AudioManager.play_click()
+	if not leave_confirm_modal:
+		return
+	var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(leave_confirm_card, "scale", Vector2(0.8, 0.8), 0.12)
+	tween.tween_property(leave_confirm_modal, "modulate:a", 0.0, 0.12)
+	await tween.finished
+	leave_confirm_modal.visible = false
+	leave_confirm_modal.modulate.a = 1.0
+
+func _on_leave_yes_pressed() -> void:
+	if AudioManager:
+		AudioManager.play_click()
+	if leave_confirm_modal:
+		leave_confirm_modal.visible = false
+	close_dialogue()
 	leave_requested.emit()

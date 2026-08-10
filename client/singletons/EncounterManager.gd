@@ -126,9 +126,9 @@ func _finalize_encounter() -> void:
 	# so player experiences zero latency when they confirm dialogue exit
 	_start_prefetch.call(PlayerStore.player_id, active_npc_id)
 	
-	# Allow final closing line to rest gracefully before closing window
+	# Close Dialogue UI immediately (no banner)
 	if dialogue_ui_ref:
-		await dialogue_ui_ref.close_dialogue_gracefully()
+		dialogue_ui_ref.close_dialogue()
 		
 	# If background prefetch is still in flight, wait for it to complete
 	if _is_prefetching:
