@@ -114,6 +114,32 @@ func update_typing_dots(dots: String) -> void:
 	message_text.visible_characters = -1
 	_recalculate_dynamic_size()
 
+func setup_coach_hint(hint_text: String) -> void:
+	is_system_bubble = true
+	speaker_label.text = "Coach Hint"
+	speaker_badge_panel.visible = true
+	_position_speaker_badge()
+	
+	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	if style:
+		style.bg_color = Color(0.12, 0.45, 0.85) # Blue badge for Coach Hint
+		speaker_badge_panel.add_theme_stylebox_override("panel", style)
+		
+	var clean_text = hint_text.strip_edges()
+	message_text.text = "[color=#1F4785][b]💡 Coach Hint:[/b][/color] " + clean_text
+	prefix_char_count = 0
+	
+	target_3d_node = null
+	active_camera = null
+	continue_arrow.visible = false
+	is_timeline_active = false
+	message_text.visible_characters = -1
+	_recalculate_dynamic_size()
+	
+	scale = Vector2(0.85, 0.85)
+	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector2.ONE, 0.25)
+
 func convert_to_npc_reply(npc_name: String, text: String, npc_id: String = "") -> void:
 	is_system_bubble = false
 	speaker_label.text = npc_name

@@ -51,8 +51,9 @@ var dot_count: int = 1
 # Cumulative Encounter Performance Tracking
 var turn_history_scores: Array[Dictionary] = []
 var previous_overall_score: float = 50.0
+var pending_coach_hint: String = ""
 
-const MAX_CHAT_MESSAGES: int = 3
+const MAX_CHAT_MESSAGES: int = 5
 
 func _ready() -> void:
 	visible = false
@@ -186,6 +187,13 @@ func update_turn_data(data: Dictionary) -> void:
 	if turn_scores is Dictionary and turn_scores.size() > 0:
 		turn_history_scores.append(turn_scores)
 		_recalculate_cumulative_performance()
+		
+	var coach_hint_data = data.get("coach_hint", {})
+	if coach_hint_data is Dictionary:
+		var shown = coach_hint_data.get("shown", false)
+		var line = str(coach_hint_data.get("line", "")).strip_edges()
+		if shown and line != "":
+			pending_coach_hint = line
 
 func _update_npc_sub_info() -> void:
 	if npc_sub_info_label:
@@ -279,6 +287,10 @@ func display_reply(text: String) -> void:
 	else:
 		_spawn_npc_bubble(text)
 		
+	if pending_coach_hint != "":
+		_spawn_coach_hint_bubble(pending_coach_hint)
+		pending_coach_hint = ""
+		
 	message_input.editable = true
 	message_input.placeholder_text = "[Character Count] Type your message..."
 	send_button.disabled = false
@@ -315,6 +327,17 @@ func _spawn_npc_bubble(text: String) -> void:
 	active_npc_bubble = scene.instantiate()
 	bubbles_container.add_child(active_npc_bubble)
 	active_npc_bubble.setup(active_npc_name, text, null, false, active_npc_id)
+	_enforce_max_messages()
+	_scroll_to_bottom()
+
+func _spawn_coach_hint_bubble(hint_text: String) -> void:
+	var scene = preload("res://scenes/ui/SpeechBubble.tscn")
+	var bubble = scene.instantiate()
+	bubbles_container.add_child(bubble)
+	if bubble.has_method("setup_coach_hint"):
+		bubble.setup_coach_hint(hint_text)
+	else:
+		bubble.setup("Coach Hint", "💡 " + hint_text, null, false)
 	_enforce_max_messages()
 	_scroll_to_bottom()
 
