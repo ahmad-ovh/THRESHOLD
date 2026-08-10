@@ -25,23 +25,30 @@ func start_encounter(npc_id: String) -> void:
 			target_npc = npc
 			break
 
-	# Calculate parallel side-by-side standing position (2.4m natural distance) relative to dollhouse camera
+	# Keep player at current standing position (no movement lerp)
+	# Smoothly rotate player and NPC to face each other from current positions
 	if target_npc and player:
-		var standing_offset = Vector3(-2.4, 0.0, 0.0)
-		var target_pos = target_npc.global_position + standing_offset
-		
-		# Smoothly glide player to parallel standing spot
-		var tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tween.tween_property(player, "global_position:x", target_pos.x, 0.4)
-		tween.tween_property(player, "global_position:z", target_pos.z, 0.4)
-		
-		# Rotate both characters sideways to face each other across the camera view
-		if player.has_node("CharacterMesh"):
-			var p_mesh = player.get_node("CharacterMesh")
-			p_mesh.rotation_degrees.y = 90.0 # Facing right toward NPC
-		if target_npc.has_node("MeshContainer"):
-			var npc_mesh = target_npc.get_node("MeshContainer")
-			npc_mesh.rotation_degrees.y = -90.0 # Facing left toward Player
+		# 1. Rotate Player toward NPC
+		var p_mesh = player.get_node_or_null("CharacterMesh") if player.has_node("CharacterMesh") else player
+		if p_mesh:
+			var dir_to_npc = (target_npc.global_position - player.global_position).normalized()
+			if dir_to_npc.length_squared() > 0.001:
+				var p_target_angle = atan2(dir_to_npc.x, dir_to_npc.z)
+				var current_angle = p_mesh.rotation.y
+				var diff = fmod((p_target_angle - current_angle + PI), TAU) - PI
+				var tween_p = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+				tween_p.tween_property(p_mesh, "rotation:y", current_angle + diff, 0.35)
+
+		# 2. Rotate NPC toward Player
+		var npc_mesh = target_npc.get_node_or_null("MeshContainer") if target_npc.has_node("MeshContainer") else target_npc
+		if npc_mesh:
+			var dir_to_player = (player.global_position - target_npc.global_position).normalized()
+			if dir_to_player.length_squared() > 0.001:
+				var npc_target_angle = atan2(dir_to_player.x, dir_to_player.z)
+				var current_angle = npc_mesh.rotation.y
+				var diff = fmod((npc_target_angle - current_angle + PI), TAU) - PI
+				var tween_npc = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+				tween_npc.tween_property(npc_mesh, "rotation:y", current_angle + diff, 0.35)
 
 	# Instantly show Dialogue UI in Connecting mode
 	_ensure_dialogue_ui()
