@@ -1,6 +1,9 @@
 # res://scenes/main_menu/MainMenu.gd
 extends CanvasLayer
 
+@export_group("Game Settings")
+@export var enable_storyboard: bool = true
+
 @export_group("Development Mode")
 @export var is_development_mode: bool = false
 @export var enable_dev_tools: bool = false
@@ -113,6 +116,8 @@ func _on_start_pressed() -> void:
 	_set_buttons_disabled(true)
 	if AudioManager:
 		AudioManager.play_click()
+	if GameController:
+		GameController.enable_storyboard = enable_storyboard
 	await GameController.start_new_game(name_txt)
 	if is_instance_valid(self):
 		_is_transitioning = false

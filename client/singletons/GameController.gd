@@ -23,6 +23,9 @@ var pause_menu_ref: CanvasLayer = null
 var hud_ref: CanvasLayer = null
 var has_shown_storyboard: bool = false
 
+@export_group("Storyboard Options")
+@export var enable_storyboard: bool = true
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS # Run even when get_tree().paused is true
 
@@ -68,7 +71,7 @@ func start_new_game(p_id: String) -> void:
 	_ensure_hud()
 	hud_ref.visible = true
 
-	var show_sb: bool = not has_shown_storyboard
+	var show_sb: bool = enable_storyboard and not has_shown_storyboard
 	if show_sb:
 		has_shown_storyboard = true
 
