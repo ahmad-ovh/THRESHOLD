@@ -111,25 +111,37 @@ func _position_player() -> void:
 	var all_markers: Array[Node3D] = []
 	_collect_markers(current_scene, all_markers)
 
+	if all_markers.size() == 0:
+		return
+
 	# 1. Search for exact or fuzzy name match
 	if target_id_clean != "":
 		for marker in all_markers:
 			var m_name = marker.name.to_lower().replace("_", "").replace(" ", "")
 			var m_spawn_id = str(marker.get("spawn_id")).to_lower().replace("_", "").replace(" ", "") if marker.get("spawn_id") else ""
-			if m_name == target_id_clean or m_spawn_id == target_id_clean or m_name == "spawn" + target_id_clean or m_name == "from" + target_id_clean:
+			if m_name == target_id_clean \
+				or m_spawn_id == target_id_clean \
+				or m_name == "spawn" + target_id_clean \
+				or m_name == "from" + target_id_clean \
+				or m_name == target_id_clean + "spawn":
 				target_marker = marker
 				break
 
-	# 2. Fallback to default markers if specific target marker is not found
+	# 2. Fallback search for default start markers
 	if not target_marker:
+		var default_names = [
+			"spawndefault", "default", "playerspawn", "startspawn", 
+			"start", "playerstart", "spawnpoint", "startpoint", 
+			"spawn", "initialspawn", "fromstreet"
+		]
 		for marker in all_markers:
 			var m_name = marker.name.to_lower().replace("_", "").replace(" ", "")
-			if m_name == "spawndefault" or m_name == "default" or m_name == "fromstreet" or m_name == "spawn":
+			if m_name in default_names:
 				target_marker = marker
 				break
 
-	# 3. Final fallback to first marker found in scene
-	if not target_marker and all_markers.size() > 0:
+	# 3. Final fallback: use first Marker3D found in scene
+	if not target_marker:
 		target_marker = all_markers[0]
 
 	# Apply Marker3D global transform directly to Player
@@ -137,12 +149,13 @@ func _position_player() -> void:
 		if player.has_method("set_velocity"):
 			player.velocity = Vector3.ZERO
 		player.global_transform = target_marker.global_transform
+		player.global_position = target_marker.global_position
+		player.global_rotation = target_marker.global_rotation
 
-	# Snap camera pivot position immediately to match player position
-	var camera_pivot = player.get_node_or_null("CameraPivot")
-	if camera_pivot and not player.get("is_fixed_diorama_room"):
-		var target_x = clamp(player.global_position.x, -38.0, 38.0)
-		camera_pivot.global_position.x = target_x
+		var camera_pivot = player.get_node_or_null("CameraPivot")
+		if camera_pivot and not player.get("is_fixed_diorama_room"):
+			var target_x = clamp(player.global_position.x, -38.0, 38.0)
+			camera_pivot.global_position.x = target_x
 
 func _collect_markers(node: Node, result: Array[Node3D]) -> void:
 	if node is Marker3D or (node is Node3D and node.is_in_group("spawn_markers")):

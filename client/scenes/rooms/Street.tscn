@@ -57,7 +57,7 @@ transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 10, 0, -1.2)
 transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, -24, 0, -1.5)
 
 [node name="StreetLamp_2" parent="EnvironmentProps" unique_id=740752410 instance=ExtResource("13_lamp")]
-transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, -8, 0, -1.5)
+transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, -8.422417, 0, -1.5)
 
 [node name="StreetLamp_3" parent="EnvironmentProps" unique_id=1017471677 instance=ExtResource("13_lamp")]
 transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, 8, 0, -1.5)
@@ -98,21 +98,27 @@ shadow_opacity = 0.85
 [node name="Player3D" parent="." unique_id=853987593 instance=ExtResource("2_player")]
 
 [node name="Spawn_Default" type="Marker3D" parent="." unique_id=2091109140 groups=["spawn_markers"]]
+gizmo_extents = 1.5
 
 [node name="from_cafe" type="Marker3D" parent="." unique_id=72270044 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.15, 0, -0.5)
+gizmo_extents = 1.5
 
 [node name="from_adler" type="Marker3D" parent="." unique_id=352337060 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.84, 0, -0.5)
+gizmo_extents = 1.5
 
 [node name="from_campus" type="Marker3D" parent="." unique_id=725775701 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.28, 0, -0.5)
+gizmo_extents = 1.5
 
 [node name="from_apartment" type="Marker3D" parent="." unique_id=2077303770 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -0.5)
+gizmo_extents = 1.5
 
 [node name="from_office" type="Marker3D" parent="." unique_id=1988210565 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.71, 0, -0.5)
+gizmo_extents = 1.5
 
 [node name="Doors" type="Node3D" parent="." unique_id=994811552]
 
@@ -121,30 +127,60 @@ transform = Transform3D(0.21307385, 0, 0, 0, 1, 0, 0, 0, 1, -19.840374, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_AdlerOffice.tscn"
 target_spawn_id = "from_street"
 
+[node name="PromptLabel3D2" type="Label3D" parent="Doors/DoorToAdler" unique_id=532493617]
+transform = Transform3D(3.8982701, 0, 0, 0, 1, 0, 0, 0, 0.10621929, 2.3893127, 0.9858128, 0.6166465)
+billboard = 1
+text = "Press [E] to Enter
+Adler's Office"
+
 [node name="DoorToCafe" parent="Doors" unique_id=1601142617 instance=ExtResource("3_door")]
 transform = Transform3D(0.20653105, 0, 0, 0, 1, 0, 0, 0, 1, -8.151184, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_Cafe.tscn"
 target_spawn_id = "from_street"
 
+[node name="PromptLabel3D2" type="Label3D" parent="Doors/DoorToCafe" unique_id=1875580896]
+transform = Transform3D(3.8982697, 0, 0, 0, 1, 0, 0, 0, 0.10621929, 3.7905235, 0.9858128, 0.6166465)
+billboard = 1
+text = "Press [E] to Enter
+Cafe"
+
 [node name="DoorToApartment" parent="Doors" unique_id=23026039 instance=ExtResource("3_door")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -2)
+transform = Transform3D(0.20602179, 0, 0, 0, 1, 0, 0, 0, 1, 3.1700487, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_ApartmentLiving.tscn"
 target_spawn_id = "from_street"
+
+[node name="PromptLabel3D2" type="Label3D" parent="Doors/DoorToApartment" unique_id=1689005060]
+transform = Transform3D(3.8982697, 0, 0, 0, 1, 0, 0, 0, 0.10621929, 3.334219, 0.9858128, 0.7370086)
+billboard = 1
+text = "Press [E] to Enter
+Your House"
 
 [node name="DoorToCampus" parent="Doors" unique_id=1650252353 instance=ExtResource("3_door")]
 transform = Transform3D(0.18632203, 0, 0, 0, 1, 0, 0, 0, 1, 12.284576, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_CampusHallway.tscn"
 target_spawn_id = "from_street"
 
+[node name="PromptLabel3D2" type="Label3D" parent="Doors/DoorToCampus" unique_id=1071232278]
+transform = Transform3D(3.8982694, 0, 0, 0, 0.9999998, 0, 0, 0, 0.10621927, 2.4213638, 0.9858126, 0.6166465)
+billboard = 1
+text = "Press [E] to Enter
+Campus"
+
 [node name="DoorToOffice" parent="Doors" unique_id=177944950 instance=ExtResource("3_door")]
 transform = Transform3D(0.21699333, 0, 0, 0, 1, 0, 0, 0, 1, 19.715841, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_OfficeLobby.tscn"
 target_spawn_id = "from_street"
+
+[node name="PromptLabel3D2" type="Label3D" parent="Doors/DoorToOffice" unique_id=1960813077]
+transform = Transform3D(3.8982697, 0, 0, 0, 1, 0, 0, 0, 0.10621929, 1.9128647, 0.9858128, 0.6166465)
+billboard = 1
+text = "Press [E] to Enter
+Work Office"
 
 [node name="NPC_Stranger" parent="." unique_id=1651454714 instance=ExtResource("4_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -0.5)
 npc_id = "recurring_stranger"
 
 [node name="NPC_MrVance" parent="." unique_id=1832933346 instance=ExtResource("4_npc")]
-transform = Transform3D(0.82756895, 0, -0.56136405, 0, 1, 0, 0.56136405, 0, 0.82756895, 16.910383, 0, -0.5)
+transform = Transform3D(0.82756895, 0, -0.56136405, 0, 1, 0, 0.56136405, 0, 0.82756895, 16.910383, 0, 2.2802548)
 npc_id = "mr_vance"
