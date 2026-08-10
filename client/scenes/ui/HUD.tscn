@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bet1vfub6jybq" path="res://scenes/ui/HUD.gd" id="1_hud_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://nfee8lb8f5th" path="res://assets/ui/paper_craft/journal.png" id="4_journal_tex"]
-[ext_resource type="Texture2D" uid="uid://bvvn7ku54t5qs" path="res://assets/ui/paper_craft/IDCard.png" id="5_idcard_tex"]
+[ext_resource type="Texture2D" uid="uid://bmi1hbannpp3b" path="res://assets/ui/paper_craft/journal.png" id="4_journal_tex"]
+[ext_resource type="Texture2D" uid="uid://d3nxxs5ebejh0" path="res://assets/ui/paper_craft/IDCard.png" id="5_idcard_tex"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_card"]
 bg_color = Color(0.99, 0.97, 0.93, 0.96)
@@ -133,10 +133,10 @@ custom_minimum_size = Vector2(400, 0)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -200.0
-offset_top = 80.0
-offset_right = 200.0
-offset_bottom = 112.0
+offset_left = -214.0
+offset_top = 93.0
+offset_right = 214.0
+offset_bottom = 125.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_obj_banner")
 
