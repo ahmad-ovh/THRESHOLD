@@ -84,6 +84,7 @@ target_spawn_id = "from_balcony"
 [node name="NPC_Sibling" parent="." unique_id=278380718 instance=ExtResource("4_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -0.920857)
 npc_id = "sibling"
+interaction_radius = 5.0
 
 [node name="door" parent="." unique_id=1502637223 instance=ExtResource("9_38ltc")]
 transform = Transform3D(-0.9723699, 0, 0.23344538, 0, 1, 0, -0.23344538, 0, -0.9723699, 3.941207, 0.06913674, 0.61158276)
