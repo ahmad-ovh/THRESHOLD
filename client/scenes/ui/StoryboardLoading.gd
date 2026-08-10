@@ -42,7 +42,7 @@ func _ready() -> void:
 	layer = 95
 	root.modulate.a = 0.0
 	prompt_label.modulate.a = 0.0
-	prompt_label.text = "Press [Space / Click] to continue"
+	prompt_label.text = "Press [Space / Esc / Click] to continue"
 	
 	# Fade in overlay
 	var fade_in = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
@@ -76,10 +76,27 @@ func _process(_delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventKey or event is InputEventMouseButton) and event.pressed:
-		if _sequence_finished:
+		var is_escape = false
+		if event is InputEventKey:
+			var key_event = event as InputEventKey
+			if key_event.keycode == KEY_ESCAPE or event.is_action_pressed("ui_cancel"):
+				is_escape = true
+				
+		if is_escape:
+			_skip_to_end()
+		elif _sequence_finished:
 			_complete()
 		elif _can_advance:
 			_advance_panel()
+
+func _skip_to_end() -> void:
+	_sequence_finished = true
+	_current_panel_index = _narrative_panels.size() - 1
+	if _scene_loaded:
+		_complete()
+	else:
+		status_label.text = "Finalizing world generation..."
+		prompt_label.text = "Loading World..."
 
 func _show_panel(index: int) -> void:
 	_current_panel_index = index
