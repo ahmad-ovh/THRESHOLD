@@ -103,8 +103,8 @@ func _show_panel(index: int) -> void:
 	if AudioManager and AudioManager.has_method("play_hover"):
 		AudioManager.play_hover()
 		
-	# Unlock advance after short delay
-	get_tree().create_timer(1.2).timeout.connect(func():
+	# Unlock advance after brief delay
+	get_tree().create_timer(0.2).timeout.connect(func():
 		_can_advance = true
 	)
 
