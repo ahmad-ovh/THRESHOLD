@@ -5,6 +5,8 @@ var color_rect: ColorRect
 var target_spawn_id: String = ""
 var _preloaded_paths: Dictionary = {}
 
+var is_transitioning: bool = false
+
 func _ready() -> void:
 	layer = 100 # Keep transition color rect above all UI
 	color_rect = ColorRect.new()
@@ -37,6 +39,9 @@ func _switch_to_scene(scene_path: String) -> void:
 		get_tree().change_scene_to_file(scene_path)
 
 func change_room(scene_path: String, spawn_id: String = "default") -> void:
+	if is_transitioning:
+		return
+	is_transitioning = true
 	target_spawn_id = spawn_id
 	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
 	
@@ -59,8 +64,12 @@ func change_room(scene_path: String, spawn_id: String = "default") -> void:
 	fade_in.tween_property(color_rect, "color:a", 0.0, 0.4)
 	await fade_in.finished
 	color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	is_transitioning = false
 
 func change_room_async(scene_path: String, spawn_id: String = "default", show_storyboard: bool = false) -> void:
+	if is_transitioning:
+		return
+	is_transitioning = true
 	target_spawn_id = spawn_id
 	preload_scene(scene_path)
 	
@@ -81,7 +90,9 @@ func change_room_async(scene_path: String, spawn_id: String = "default", show_st
 			await storyboard_instance.fade_out_and_close()
 		else:
 			storyboard_instance.queue_free()
+		is_transitioning = false
 	else:
+		is_transitioning = false
 		await change_room(scene_path, spawn_id)
 
 func _position_player() -> void:
