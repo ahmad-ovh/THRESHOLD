@@ -374,13 +374,17 @@ func _enforce_max_messages() -> void:
 			bubbles_container.remove_child(oldest)
 			oldest.queue_free()
 
+var active_scroll_tween: Tween = null
+
 func _scroll_to_bottom() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if chat_scroll_container:
 		var target_scroll = int(chat_scroll_container.get_v_scroll_bar().max_value)
-		var tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tween.tween_property(chat_scroll_container, "scroll_vertical", target_scroll, 0.18)
+		if active_scroll_tween and active_scroll_tween.is_running():
+			active_scroll_tween.kill()
+		active_scroll_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		active_scroll_tween.tween_property(chat_scroll_container, "scroll_vertical", target_scroll, 0.45)
 
 func _clear_bubbles() -> void:
 	for child in bubbles_container.get_children():
