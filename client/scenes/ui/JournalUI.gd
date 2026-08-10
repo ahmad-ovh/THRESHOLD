@@ -1,14 +1,14 @@
 # res://scenes/ui/JournalUI.gd
 extends CanvasLayer
 
-@onready var close_button: Button = $BookContainer/Margin/VBox/Header/CloseButton
-@onready var prev_button: Button = $BookContainer/Margin/VBox/Footer/PrevButton
-@onready var next_button: Button = $BookContainer/Margin/VBox/Footer/NextButton
-@onready var page_indicator: Label = $BookContainer/Margin/VBox/Footer/PageIndicator
+@onready var close_button: Button = $BookContainer/CloseButton
+@onready var prev_button: Button = $BookContainer/PrevButton
+@onready var next_button: Button = $BookContainer/NextButton
+@onready var page_indicator: Label = $BookContainer/PageIndicator
 
-@onready var book_spread: HBoxContainer = $BookContainer/Margin/VBox/BookSpread
-@onready var left_page_text: RichTextLabel = $BookContainer/Margin/VBox/BookSpread/LeftPage/Margin/LeftText
-@onready var right_page_text: RichTextLabel = $BookContainer/Margin/VBox/BookSpread/RightPage/Margin/RightText
+@onready var book_spread: Control = $BookContainer/BookSpread
+@onready var left_page_text: RichTextLabel = $BookContainer/BookSpread/LeftPage/Margin/LeftText
+@onready var right_page_text: RichTextLabel = $BookContainer/BookSpread/RightPage/Margin/RightText
 
 var _journal_entries: Array = []
 var _current_pair_index: int = 0

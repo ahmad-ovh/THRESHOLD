@@ -44,33 +44,12 @@ texture = ExtResource("2_journal_bg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Margin" type="MarginContainer" parent="BookContainer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 62
-theme_override_constants/margin_top = 35
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 35
-
-[node name="VBox" type="VBoxContainer" parent="BookContainer/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Header" type="HBoxContainer" parent="BookContainer/Margin/VBox"]
-custom_minimum_size = Vector2(0, 55)
-layout_mode = 2
-
-[node name="HeaderSpacer" type="Control" parent="BookContainer/Margin/VBox/Header"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CloseButton" type="Button" parent="BookContainer/Margin/VBox/Header"]
-custom_minimum_size = Vector2(110, 48)
-layout_mode = 2
+[node name="CloseButton" type="Button" parent="BookContainer"]
+layout_mode = 0
+offset_left = 872.0
+offset_top = 35.0
+offset_right = 990.0
+offset_bottom = 85.0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
@@ -78,25 +57,30 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
 
-[node name="BookSpread" type="HBoxContainer" parent="BookContainer/Margin/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 26
-pivot_offset = Vector2(483, 209)
+[node name="BookSpread" type="Control" parent="BookContainer"]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 117.0
+offset_right = 1028.0
+offset_bottom = 488.0
+pivot_offset = Vector2(483, 185)
 
-[node name="LeftPage" type="PanelContainer" parent="BookContainer/Margin/VBox/BookSpread"]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="LeftPage" type="PanelContainer" parent="BookContainer/BookSpread"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 470.0
+offset_bottom = 371.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_transparent")
 
-[node name="Margin" type="MarginContainer" parent="BookContainer/Margin/VBox/BookSpread/LeftPage"]
+[node name="Margin" type="MarginContainer" parent="BookContainer/BookSpread/LeftPage"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="LeftText" type="RichTextLabel" parent="BookContainer/Margin/VBox/BookSpread/LeftPage/Margin"]
+[node name="LeftText" type="RichTextLabel" parent="BookContainer/BookSpread/LeftPage/Margin"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.18, 0.13, 0.08, 1)
@@ -104,23 +88,22 @@ theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "Left Page NPC"
 
-[node name="SpineLine" type="Control" parent="BookContainer/Margin/VBox/BookSpread"]
-custom_minimum_size = Vector2(26, 0)
-layout_mode = 2
-
-[node name="RightPage" type="PanelContainer" parent="BookContainer/Margin/VBox/BookSpread"]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="RightPage" type="PanelContainer" parent="BookContainer/BookSpread"]
+layout_mode = 0
+offset_left = 496.0
+offset_top = 0.0
+offset_right = 966.0
+offset_bottom = 371.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_transparent")
 
-[node name="Margin" type="MarginContainer" parent="BookContainer/Margin/VBox/BookSpread/RightPage"]
+[node name="Margin" type="MarginContainer" parent="BookContainer/BookSpread/RightPage"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="RightText" type="RichTextLabel" parent="BookContainer/Margin/VBox/BookSpread/RightPage/Margin"]
+[node name="RightText" type="RichTextLabel" parent="BookContainer/BookSpread/RightPage/Margin"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.18, 0.13, 0.08, 1)
@@ -128,14 +111,12 @@ theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "Right Page NPC"
 
-[node name="Footer" type="HBoxContainer" parent="BookContainer/Margin/VBox"]
-custom_minimum_size = Vector2(0, 65)
-layout_mode = 2
-alignment = 1
-
-[node name="PrevButton" type="Button" parent="BookContainer/Margin/VBox/Footer"]
-custom_minimum_size = Vector2(170, 52)
-layout_mode = 2
+[node name="PrevButton" type="Button" parent="BookContainer"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 515.0
+offset_right = 280.0
+offset_bottom = 570.0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
@@ -143,9 +124,12 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
 
-[node name="PageIndicator" type="Label" parent="BookContainer/Margin/VBox/Footer"]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="PageIndicator" type="Label" parent="BookContainer"]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 525.0
+offset_right = 708.0
+offset_bottom = 560.0
 theme_override_colors/font_color = Color(0.24, 0.17, 0.10, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 16
@@ -153,9 +137,12 @@ text = "Pages 1-2 of 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="NextButton" type="Button" parent="BookContainer/Margin/VBox/Footer"]
-custom_minimum_size = Vector2(170, 52)
-layout_mode = 2
+[node name="NextButton" type="Button" parent="BookContainer"]
+layout_mode = 0
+offset_left = 808.0
+offset_top = 515.0
+offset_right = 978.0
+offset_bottom = 570.0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
