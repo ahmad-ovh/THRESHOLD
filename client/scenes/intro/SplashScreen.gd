@@ -24,10 +24,8 @@ var _skippable := false
 var _transitioning := false
 
 func _ready() -> void:
-	# Start background preloading for Main Menu, Street, and Character Customization scenes
+	# Start background preloading for Main Menu
 	SceneManager.preload_scene(MAIN_MENU_PATH)
-	SceneManager.preload_scene(STREET_PATH)
-	SceneManager.preload_scene(CUSTOMIZATION_PATH)
 	
 	# Paper bg starts at FULL opacity — seamless transition from boot splash
 	# (boot splash shows the same splash.png, so no visual seam)
@@ -47,7 +45,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if not _loading_done:
-		if SceneManager.is_scene_loaded(MAIN_MENU_PATH) and SceneManager.is_scene_loaded(STREET_PATH):
+		if SceneManager.is_scene_loaded(MAIN_MENU_PATH):
 			_loading_done = true
 			_check_ready_to_skip()
 
@@ -59,13 +57,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			_transition_to_menu()
 
 func _check_ready_to_skip() -> void:
-	if _loading_done and _animation_done:
+	if _loading_done:
 		_skippable = true
-		press_any_key.visible = true
-		# Blink loop
-		var blink_tween = create_tween().set_loops()
-		blink_tween.tween_property(press_any_key, "modulate:a", 1.0, 0.5)
-		blink_tween.tween_property(press_any_key, "modulate:a", 0.2, 0.5)
+		if _animation_done:
+			press_any_key.visible = true
+			if not press_any_key.has_meta("blinking"):
+				press_any_key.set_meta("blinking", true)
+				var blink_tween = create_tween().set_loops()
+				blink_tween.tween_property(press_any_key, "modulate:a", 1.0, 0.5)
+				blink_tween.tween_property(press_any_key, "modulate:a", 0.2, 0.5)
 
 func _play_intro_sequence() -> void:
 	var seq = create_tween()
