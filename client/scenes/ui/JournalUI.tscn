@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/JournalUI.gd" id="1_journal_script"]
-[ext_resource type="Texture2D" uid="uid://bmi1hbannpp3b" path="res://assets/ui/paper_craft/journal.png" id="2_journal_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/journalui.png" id="2_journal_bg"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="3_font_hitchcut"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_transparent"]
