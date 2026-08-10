@@ -1,81 +1,89 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene format=3 uid="uid://dt40xn5hrqvo4"]
 
-[ext_resource type="Script" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="2_player"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
-[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="4_npc"]
-[ext_resource type="PackedScene" path="res://assets/threshold/environment/bench_01.gltf" id="5_bench"]
-[ext_resource type="PackedScene" path="res://assets/threshold/furniture/chair_03.gltf" id="6_stool"]
-[ext_resource type="PackedScene" path="res://assets/threshold/props/plant_01.gltf" id="7_plant"]
-[ext_resource type="PackedScene" path="res://assets/threshold/nature/bush_01.gltf" id="8_bush"]
-[ext_resource type="PackedScene" path="res://assets/threshold/architecture/building_04.gltf" id="9_building"]
+[ext_resource type="Script" uid="uid://8d1u56vhj4g1" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://cplayer3d001" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://cdoor3d001" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" uid="uid://cnpc001" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+[ext_resource type="PackedScene" uid="uid://dvyg55gbdej2h" path="res://assets/threshold/environment/bench_01.gltf" id="5_bench"]
+[ext_resource type="PackedScene" uid="uid://bagaljs0e3o6m" path="res://assets/threshold/furniture/chair_03.gltf" id="6_stool"]
+[ext_resource type="PackedScene" uid="uid://dv4l7i7nkfj0j" path="res://assets/threshold/props/plant_01.gltf" id="7_plant"]
+[ext_resource type="PackedScene" uid="uid://chwjdgkbqa7fl" path="res://assets/threshold/nature/bush_01.gltf" id="8_bush"]
+[ext_resource type="PackedScene" uid="uid://da0bestoajpk3" path="res://assets/rooms/door.glb" id="9_38ltc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.4, 0.42, 0.45, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
-albedo_color = Color(0.9, 0.86, 0.8, 1)
-
-[node name="Room_ApartmentBalcony" type="Node3D"]
+[node name="Room_ApartmentBalcony" type="Node3D" unique_id=601028273]
 script = ExtResource("1_script")
 lighting_mood = "balcony"
 
-[node name="RoomBounds" type="Node3D" parent="."]
+[node name="RoomBounds" type="Node3D" parent="." unique_id=1863707079]
 
-[node name="Floor" type="CSGBox3D" parent="RoomBounds"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+[node name="Floor" type="CSGBox3D" parent="RoomBounds" unique_id=631212584]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.1549315, 2.354004)
 use_collision = true
-size = Vector3(8, 0.4, 4)
+size = Vector3(8, 10.309863, 8.708008)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="InteriorWall" parent="RoomBounds" instance=ExtResource("9_building")]
-transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, -4.5, 0, 0)
-
-[node name="Railing" type="CSGBox3D" parent="RoomBounds"]
+[node name="Railing" type="CSGBox3D" parent="RoomBounds" unique_id=445500241]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -2)
 use_collision = true
-size = Vector3(8, 1.0, 0.1)
+size = Vector3(8, 1, 0.1)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="CameraAnchor" type="Marker3D" parent="."]
+[node name="Floor2" type="CSGBox3D" parent="RoomBounds" unique_id=1658656508]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -4.0859723, -0.2, 3.0596924)
+use_collision = true
+size = Vector3(8, 0.4, 10.229736)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="Railing2" type="CSGBox3D" parent="RoomBounds" unique_id=1778730832]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 3.9641674, 0.5, 2.0342212)
+use_collision = true
+size = Vector3(8, 1, 0.1)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="CameraAnchor" type="Marker3D" parent="." unique_id=1083547904]
 transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 2.5, 4.5)
 
-[node name="Furniture" type="Node3D" parent="."]
+[node name="Furniture" type="Node3D" parent="." unique_id=2105909742]
 
-[node name="BalconyBench" parent="Furniture" instance=ExtResource("5_bench")]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -2.0, 0, -1.2)
+[node name="BalconyBench" parent="Furniture" unique_id=1342955236 instance=ExtResource("5_bench")]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -2, 0, -1.2)
 
-[node name="BalconyStool" parent="Furniture" instance=ExtResource("6_stool")]
+[node name="BalconyStool" parent="Furniture" unique_id=266372005 instance=ExtResource("6_stool")]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 2.5, 0, -1.2)
 
-[node name="Props" type="Node3D" parent="."]
+[node name="Props" type="Node3D" parent="." unique_id=1894540415]
 
-[node name="PottedPlant" parent="Props" instance=ExtResource("7_plant")]
-transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -3.2, 0, -1.2)
+[node name="PottedPlant" parent="Props" unique_id=144855470 instance=ExtResource("7_plant")]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, -1.5018063, 0.35537046, -1.2976503)
 
-[node name="PlanterBush" parent="Props" instance=ExtResource("8_bush")]
+[node name="PlanterBush" parent="Props" unique_id=1762648294 instance=ExtResource("8_bush")]
 transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 3.2, 0, -1.2)
 
-[node name="Lighting" type="Node3D" parent="."]
+[node name="Lighting" type="Node3D" parent="." unique_id=96657662]
 
-[node name="CoolNightLight" type="OmniLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0, 0)
-light_color = Color(0.7, 0.8, 1.0, 1)
+[node name="CoolNightLight" type="OmniLight3D" parent="Lighting" unique_id=1179597728]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+light_color = Color(0.7, 0.8, 1, 1)
 light_energy = 1.4
 
-[node name="Player3D" parent="." instance=ExtResource("2_player")]
+[node name="Player3D" parent="." unique_id=85140170 instance=ExtResource("2_player")]
 
-[node name="Spawn_Default" type="Marker3D" parent="." groups=["spawn_markers"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="Spawn_Default" type="Marker3D" parent="." unique_id=500909018 groups=["spawn_markers"]]
 
-[node name="from_living" type="Marker3D" parent="." groups=["spawn_markers"]]
+[node name="from_living" type="Marker3D" parent="." unique_id=789179424 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
 
-[node name="DoorToLiving" parent="." instance=ExtResource("3_door")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 0)
+[node name="DoorToLiving" parent="." unique_id=843554383 instance=ExtResource("3_door")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.5, 0, 0)
 target_room_scene = "res://scenes/rooms/Room_ApartmentLiving.tscn"
 target_spawn_id = "from_balcony"
 
-[node name="NPC_Sibling" parent="." instance=ExtResource("4_npc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0, -1.8)
+[node name="NPC_Sibling" parent="." unique_id=278380718 instance=ExtResource("4_npc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -0.920857)
 npc_id = "sibling"
+
+[node name="door" parent="." unique_id=1502637223 instance=ExtResource("9_38ltc")]
+transform = Transform3D(-0.9723699, 0, 0.23344538, 0, 1, 0, -0.23344538, 0, -0.9723699, 3.941207, 0.06913674, 0.61158276)

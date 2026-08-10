@@ -1,19 +1,19 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene format=3 uid="uid://grau1u03posg"]
 
-[ext_resource type="Script" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://scenes/player/Player3D.tscn" id="2_player"]
-[ext_resource type="PackedScene" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
-[ext_resource type="PackedScene" path="res://scenes/templates/NPC.tscn" id="4_npc"]
-[ext_resource type="PackedScene" path="res://assets/threshold/furniture/table_03.gltf" id="5_desk"]
-[ext_resource type="PackedScene" path="res://assets/threshold/furniture/chair_01.gltf" id="6_chair"]
-[ext_resource type="PackedScene" path="res://assets/threshold/furniture/armchair_01.gltf" id="7_armchair"]
-[ext_resource type="PackedScene" path="res://assets/threshold/furniture/shelf_01.gltf" id="8_bookshelf"]
-[ext_resource type="PackedScene" path="res://assets/threshold/furniture/cabinet_01.gltf" id="9_cabinet"]
-[ext_resource type="PackedScene" path="res://assets/threshold/props/book_01.gltf" id="10_book1"]
-[ext_resource type="PackedScene" path="res://assets/threshold/props/book_02.gltf" id="11_book2"]
-[ext_resource type="PackedScene" path="res://assets/threshold/props/picture_frame_02.gltf" id="12_frame"]
-[ext_resource type="PackedScene" path="res://assets/threshold/props/rug_01.gltf" id="13_rug"]
-[ext_resource type="PackedScene" path="res://assets/threshold/lighting/lamp_table_01.gltf" id="14_desklamp"]
+[ext_resource type="Script" uid="uid://8d1u56vhj4g1" path="res://scenes/rooms/RoomTemplate.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://cplayer3d001" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://cdoor3d001" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
+[ext_resource type="PackedScene" uid="uid://cnpc001" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+[ext_resource type="PackedScene" uid="uid://qwmfkf2o1ich" path="res://assets/threshold/furniture/table_03.gltf" id="5_desk"]
+[ext_resource type="PackedScene" uid="uid://n05anm6i4k4a" path="res://assets/threshold/furniture/chair_01.gltf" id="6_chair"]
+[ext_resource type="PackedScene" uid="uid://j8tlk65iggvy" path="res://assets/threshold/furniture/armchair_01.gltf" id="7_armchair"]
+[ext_resource type="PackedScene" uid="uid://bgu6f8vnnhgon" path="res://assets/threshold/furniture/shelf_01.gltf" id="8_bookshelf"]
+[ext_resource type="PackedScene" uid="uid://cj7oel14qko3x" path="res://assets/threshold/furniture/cabinet_01.gltf" id="9_cabinet"]
+[ext_resource type="PackedScene" uid="uid://dmp56adujwnub" path="res://assets/threshold/props/book_01.gltf" id="10_book1"]
+[ext_resource type="PackedScene" uid="uid://dmpncwdlh3lxr" path="res://assets/threshold/props/book_02.gltf" id="11_book2"]
+[ext_resource type="PackedScene" uid="uid://d05dh4aiolbfd" path="res://assets/threshold/props/picture_frame_02.gltf" id="12_frame"]
+[ext_resource type="PackedScene" uid="uid://d071t58fd1twb" path="res://assets/threshold/props/rug_01.gltf" id="13_rug"]
+[ext_resource type="PackedScene" uid="uid://b4wgbayvdcoad" path="res://assets/threshold/lighting/lamp_table_01.gltf" id="14_desklamp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.28, 0.18, 0.12, 1)
@@ -21,105 +21,105 @@ albedo_color = Color(0.28, 0.18, 0.12, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
 albedo_color = Color(0.68, 0.62, 0.55, 1)
 
-[node name="Room_AdlerOffice" type="Node3D"]
+[node name="Room_AdlerOffice" type="Node3D" unique_id=2052602301]
 script = ExtResource("1_script")
 lighting_mood = "cozy_study"
 
-[node name="RoomBounds" type="Node3D" parent="."]
+[node name="RoomBounds" type="Node3D" parent="." unique_id=240409978]
 
-[node name="Floor" type="CSGBox3D" parent="RoomBounds"]
+[node name="Floor" type="CSGBox3D" parent="RoomBounds" unique_id=916624641]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 use_collision = true
 size = Vector3(12, 0.4, 8)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="BackWall" type="CSGBox3D" parent="RoomBounds"]
+[node name="BackWall" type="CSGBox3D" parent="RoomBounds" unique_id=1471758370]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -4)
 use_collision = true
 size = Vector3(12, 5, 0.4)
 material = SubResource("StandardMaterial3D_wall")
 
-[node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
+[node name="LeftWall" type="CSGBox3D" parent="RoomBounds" unique_id=765927209]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.5, 0)
 use_collision = true
 size = Vector3(0.4, 5, 8)
 material = SubResource("StandardMaterial3D_wall")
 
-[node name="RightWall" type="CSGBox3D" parent="RoomBounds"]
+[node name="RightWall" type="CSGBox3D" parent="RoomBounds" unique_id=743241640]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.5, 0)
 use_collision = true
 size = Vector3(0.4, 5, 8)
 material = SubResource("StandardMaterial3D_wall")
 
-[node name="CameraAnchor" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 2.8, 6.0)
+[node name="CameraAnchor" type="Marker3D" parent="." unique_id=51911719]
+transform = Transform3D(1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0, 2.8, 6)
 
-[node name="Furniture" type="Node3D" parent="."]
+[node name="Furniture" type="Node3D" parent="." unique_id=85377021]
 
-[node name="ExecutiveDesk" parent="Furniture" instance=ExtResource("5_desk")]
+[node name="ExecutiveDesk" parent="Furniture" unique_id=205415043 instance=ExtResource("5_desk")]
 transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, -2.5)
 
-[node name="AdlerChair" parent="Furniture" instance=ExtResource("6_chair")]
+[node name="AdlerChair" parent="Furniture" unique_id=19477232 instance=ExtResource("6_chair")]
 transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0, 0, -3.3)
 
-[node name="VisitorArmchairLeft" parent="Furniture" instance=ExtResource("7_armchair")]
+[node name="VisitorArmchairLeft" parent="Furniture" unique_id=1955579284 instance=ExtResource("7_armchair")]
 transform = Transform3D(0.58, 0, 0.15, 0, 0.6, 0, -0.15, 0, 0.58, -1.2, 0, -1.2)
 
-[node name="VisitorArmchairRight" parent="Furniture" instance=ExtResource("7_armchair")]
+[node name="VisitorArmchairRight" parent="Furniture" unique_id=264293174 instance=ExtResource("7_armchair")]
 transform = Transform3D(0.58, 0, -0.15, 0, 0.6, 0, 0.15, 0, 0.58, 1.2, 0, -1.2)
 
-[node name="BookshelfLeft" parent="Furniture" instance=ExtResource("8_bookshelf")]
+[node name="BookshelfLeft" parent="Furniture" unique_id=245300982 instance=ExtResource("8_bookshelf")]
 transform = Transform3D(0, 0, -2.2, 2.2, 0, 0, 0, 2.2, 0, -4.5, 0, -3.6)
 
-[node name="BookshelfRight" parent="Furniture" instance=ExtResource("8_bookshelf")]
+[node name="BookshelfRight" parent="Furniture" unique_id=702836736 instance=ExtResource("8_bookshelf")]
 transform = Transform3D(0, 0, -2.2, 2.2, 0, 0, 0, 2.2, 0, 4.5, 0, -3.6)
 
-[node name="SideCabinet" parent="Furniture" instance=ExtResource("9_cabinet")]
+[node name="SideCabinet" parent="Furniture" unique_id=723960170 instance=ExtResource("9_cabinet")]
 transform = Transform3D(0, 0, -0.75, 0, 0.75, 0, 0.75, 0, 0, -5.5, 0, -1.5)
 
-[node name="Props" type="Node3D" parent="."]
+[node name="Props" type="Node3D" parent="." unique_id=636773085]
 
-[node name="RugVisitor" parent="Props" instance=ExtResource("13_rug")]
+[node name="RugVisitor" parent="Props" unique_id=1386207705 instance=ExtResource("13_rug")]
 transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.01, -1.2)
 
-[node name="DeskLamp" parent="Props" instance=ExtResource("14_desklamp")]
+[node name="DeskLamp" parent="Props" unique_id=856060719 instance=ExtResource("14_desklamp")]
 transform = Transform3D(0.38, 0, 0, 0, 0.38, 0, 0, 0, 0.38, -0.9, 0.75, -2.5)
 
-[node name="DeskBookStack" parent="Props" instance=ExtResource("11_book2")]
+[node name="DeskBookStack" parent="Props" unique_id=693531295 instance=ExtResource("11_book2")]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0.8, 0.84, -2.5)
 
-[node name="SingleBook" parent="Props" instance=ExtResource("10_book1")]
+[node name="SingleBook" parent="Props" unique_id=1818315777 instance=ExtResource("10_book1")]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, -0.4, 0.84, -2.2)
 
-[node name="DeskFrame" parent="Props" instance=ExtResource("12_frame")]
+[node name="DeskFrame" parent="Props" unique_id=1925341904 instance=ExtResource("12_frame")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.6, 0.75, -2.2)
 
-[node name="Lighting" type="Node3D" parent="."]
+[node name="Lighting" type="Node3D" parent="." unique_id=689534348]
 
-[node name="WarmDeskLight" type="OmniLight3D" parent="Lighting"]
+[node name="WarmDeskLight" type="OmniLight3D" parent="Lighting" unique_id=62154570]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.6, -2.5)
-light_color = Color(1.0, 0.85, 0.62, 1)
+light_color = Color(1, 0.85, 0.62, 1)
 light_energy = 1.2
 shadow_enabled = true
 
-[node name="AmbientLight" type="OmniLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0, 0)
+[node name="AmbientLight" type="OmniLight3D" parent="Lighting" unique_id=1281966398]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 light_color = Color(0.72, 0.62, 0.52, 1)
 light_energy = 0.25
 
-[node name="Player3D" parent="." instance=ExtResource("2_player")]
+[node name="Player3D" parent="." unique_id=2139002166 instance=ExtResource("2_player")]
 
-[node name="Spawn_Default" type="Marker3D" parent="." groups=["spawn_markers"]]
+[node name="Spawn_Default" type="Marker3D" parent="." unique_id=1342444159 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
 
-[node name="from_street" type="Marker3D" parent="." groups=["spawn_markers"]]
+[node name="from_street" type="Marker3D" parent="." unique_id=1524522231 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 
-[node name="DoorToStreet" parent="." instance=ExtResource("3_door")]
+[node name="DoorToStreet" parent="." unique_id=1390145733 instance=ExtResource("3_door")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5)
 target_room_scene = "res://scenes/rooms/Street.tscn"
 target_spawn_id = "from_adler"
 
-[node name="NPC_ProfAdler" parent="." instance=ExtResource("4_npc")]
+[node name="NPC_ProfAdler" parent="." unique_id=1729838781 instance=ExtResource("4_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3)
 npc_id = "prof_adler"
