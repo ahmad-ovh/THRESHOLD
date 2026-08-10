@@ -110,9 +110,9 @@ The encounter reached a conclusion."
 visible = false
 layout_mode = 1
 offset_left = 48.0
-offset_top = 350.0
+offset_top = 345.0
 offset_right = 462.0
-offset_bottom = 440.0
+offset_bottom = 545.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_observer_note")
 
 [node name="Margin" type="MarginContainer" parent="PanelContainer/ContentArea/ObserverCard"]
@@ -133,12 +133,15 @@ theme_override_font_sizes/font_size = 14
 text = "📋 Observer Pattern Insight"
 
 [node name="ObserverText" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer"]
+custom_minimum_size = Vector2(370, 130)
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.25, 0.20, 0.14, 1)
 theme_override_fonts/font = ExtResource("4_font_special_elite")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "Pattern text..."
 autowrap_mode = 3
+text_overrun_behavior = 3
 
 [node name="LevelUpBanner" type="PanelContainer" parent="PanelContainer/ContentArea"]
 visible = false
