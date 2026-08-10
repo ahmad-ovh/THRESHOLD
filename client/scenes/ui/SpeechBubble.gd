@@ -13,13 +13,15 @@ var active_camera: Camera3D = null
 var arrow_bounce_timer: float = 0.0
 var is_player_bubble: bool = false
 var is_system_bubble: bool = false
-
 var active_timeline: NPCVoiceGenerator.DialogueTimeline = null
 var voice_profile: NPCVoiceGenerator.NPCVoiceProfile = null
 var timeline_elapsed_ms: float = 0.0
 var is_timeline_active: bool = false
 var next_voice_event_idx: int = 0
 var prefix_char_count: int = 0
+var active_speaker_id: String = "stranger"
+var clean_text_to_speak: String = ""
+var last_revealed_char_index: int = 0
 
 var speaker_colors: Dictionary = {
 	"teddy": Color(1.0, 0.49, 0.15),       # Vibrant Orange
@@ -158,16 +160,18 @@ func update_text_only(new_text: String) -> void:
 	_recalculate_dynamic_size()
 
 func _start_dialogue_timeline(speaker_id: String, text_to_speak: String) -> void:
+	active_speaker_id = speaker_id if speaker_id != "" else "stranger"
+	clean_text_to_speak = NPCVoiceGenerator.strip_bbcode(text_to_speak)
+	last_revealed_char_index = 0
+	
 	if is_player_bubble or is_system_bubble:
-		# Player/System bubbles reveal without voice blips
 		voice_profile = null
 	else:
-		voice_profile = NPCVoiceGenerator.NPCVoiceProfile.create_from_id(speaker_id)
+		voice_profile = NPCVoiceGenerator.NPCVoiceProfile.create_from_id(active_speaker_id)
 		
 	active_timeline = NPCVoiceGenerator.DialogueTimeline.build(text_to_speak, voice_profile if voice_profile else NPCVoiceGenerator.NPCVoiceProfile.new())
 	
 	if is_player_bubble:
-		# Player bubble voice events are cleared
 		active_timeline.voice_events.clear()
 		
 	timeline_elapsed_ms = 0.0
@@ -179,8 +183,8 @@ func skip_reveal() -> void:
 	if is_timeline_active:
 		is_timeline_active = false
 		message_text.visible_characters = -1
-		if AudioManager:
-			AudioManager.stop_voice_playback()
+		if AnimalesePlayer:
+			AnimalesePlayer.stop_all()
 		if continue_arrow and target_3d_node != null:
 			continue_arrow.visible = not is_system_bubble
 
@@ -230,17 +234,18 @@ func _process(delta: float) -> void:
 				target_visible = prefix_char_count + step.visible_character_count
 			else:
 				break
+				
+		var new_char_count = target_visible - prefix_char_count
+		if new_char_count > last_revealed_char_index:
+			# Play letter sounds for newly revealed characters
+			if not is_player_bubble and not is_system_bubble and AnimalesePlayer:
+				for i in range(last_revealed_char_index, new_char_count):
+					if i >= 0 and i < clean_text_to_speak.length():
+						var c = clean_text_to_speak[i]
+						AnimalesePlayer.play_letter(active_speaker_id, c)
+			last_revealed_char_index = new_char_count
+			
 		message_text.visible_characters = target_visible
-		
-		# Dispatch due voice events to AudioManager
-		while next_voice_event_idx < active_timeline.voice_events.size():
-			var evt = active_timeline.voice_events[next_voice_event_idx]
-			if evt.timestamp_ms <= timeline_elapsed_ms:
-				if AudioManager:
-					AudioManager.play_procedural_blip(evt.pitch, evt.duration, evt.volume, evt.waveform)
-				next_voice_event_idx += 1
-			else:
-				break
 				
 		# Check timeline completion
 		if timeline_elapsed_ms >= active_timeline.total_duration_ms:
@@ -275,4 +280,3 @@ func _update_screen_position() -> void:
 	visible = true
 	var screen_pos = active_camera.unproject_position(world_pos)
 	position = screen_pos - Vector2(180, 50)
-

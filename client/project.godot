@@ -26,6 +26,7 @@ EncounterManager="*res://singletons/EncounterManager.gd"
 GameController="*res://singletons/GameController.gd"
 ToastManager="*res://singletons/ToastManager.gd"
 AudioManager="*res://singletons/AudioManager.gd"
+AnimalesePlayer="*res://singletons/AnimalesePlayer.gd"
 
 [display]
 

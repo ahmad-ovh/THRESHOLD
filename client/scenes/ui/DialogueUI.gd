@@ -320,6 +320,8 @@ func close_dialogue() -> void:
 	_hide_end_banner()
 	_clear_bubbles()
 	visible = false
+	if AnimalesePlayer:
+		AnimalesePlayer.stop_all()
 	if AudioManager:
 		AudioManager.stop_voice_playback()
 
