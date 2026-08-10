@@ -3,36 +3,27 @@
 [ext_resource type="Script" uid="uid://ch4h6aimtp0aa" path="res://scenes/ui/SpeechBubble.gd" id="1_bubble_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
 [ext_resource type="FontFile" uid="uid://uiu0c2c8i80c" path="res://assets/fonts/SpecialElite-Regular.ttf" id="3_font_special_elite"]
+[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/popup.png" id="4_popup"]
+[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/title_paper_strip.png" id="5_title_strip"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bubble"]
-bg_color = Color(0.99, 0.97, 0.93, 0.97)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0, 0, 0, 0.08)
-shadow_size = 4
-shadow_offset = Vector2(0, 2)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bubble"]
+texture = ExtResource("4_popup")
+texture_margin_left = 80.0
+texture_margin_top = 80.0
+texture_margin_right = 80.0
+texture_margin_bottom = 80.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_speaker_badge"]
-bg_color = Color(0.9, 0.45, 0.08, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.7, 0.3, 0.04, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.12)
-shadow_size = 3
-shadow_offset = Vector2(0, 1)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_speaker_badge"]
+texture = ExtResource("5_title_strip")
+texture_margin_left = 30.0
+texture_margin_top = 20.0
+texture_margin_right = 30.0
+texture_margin_bottom = 20.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+modulate_color = Color(0.9, 0.45, 0.08, 1)
 
 [node name="SpeechBubble" type="Control" unique_id=926908382]
 custom_minimum_size = Vector2(100, 52)
@@ -50,14 +41,14 @@ anchor_bottom = 1.0
 offset_top = 4.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bubble")
+theme_override_styles/panel = SubResource("StyleBoxTexture_bubble")
 
 [node name="Margin" type="MarginContainer" parent="BubblePanel" unique_id=638433844]
 layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 14
 
 [node name="MessageText" type="RichTextLabel" parent="BubblePanel/Margin" unique_id=1922246490]
 custom_minimum_size = Vector2(0, 24)
@@ -77,22 +68,22 @@ autowrap_mode = 2
 [node name="SpeakerBadgePanel" type="PanelContainer" parent="." unique_id=649075847]
 layout_mode = 0
 offset_top = -17.0
-offset_right = 94.0
+offset_right = 100.0
 offset_bottom = 9.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_speaker_badge")
+theme_override_styles/panel = SubResource("StyleBoxTexture_speaker_badge")
 
 [node name="Margin" type="MarginContainer" parent="SpeakerBadgePanel" unique_id=1391802277]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 1
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 1
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 2
 
 [node name="SpeakerLabel" type="Label" parent="SpeakerBadgePanel/Margin" unique_id=849302048]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0.35, 0.15, 0.02, 1)
-theme_override_constants/outline_size = 2
+theme_override_colors/font_color = Color(0.18, 0.12, 0.06, 1)
+theme_override_colors/font_outline_color = Color(1, 0.95, 0.85, 0.4)
+theme_override_constants/outline_size = 1
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 text = "Stranger"

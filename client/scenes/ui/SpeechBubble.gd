@@ -61,8 +61,11 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	else:
 		offset_3d = Vector3(0.7, 2.3, 0)
 		
-	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-	if style:
+	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate()
+	if style is StyleBoxTexture:
+		style.modulate_color = badge_color
+		speaker_badge_panel.add_theme_stylebox_override("panel", style)
+	elif style is StyleBoxFlat:
 		style.bg_color = badge_color
 		speaker_badge_panel.add_theme_stylebox_override("panel", style)
 
@@ -122,8 +125,11 @@ func convert_to_npc_reply(npc_name: String, text: String, npc_id: String = "") -
 	
 	var key = npc_name.to_lower()
 	var badge_color = speaker_colors.get(key, Color(0.85, 0.45, 0.08))
-	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-	if style:
+	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate()
+	if style is StyleBoxTexture:
+		style.modulate_color = badge_color
+		speaker_badge_panel.add_theme_stylebox_override("panel", style)
+	elif style is StyleBoxFlat:
 		style.bg_color = badge_color
 		speaker_badge_panel.add_theme_stylebox_override("panel", style)
 		
@@ -147,8 +153,14 @@ func update_text_only(new_text: String) -> void:
 		prefix_char_count = 0
 	else:
 		speaker_badge_panel.visible = true
-		var badge_style = speaker_badge_panel.get_theme_stylebox("panel") as StyleBoxFlat
-		var badge_color = badge_style.bg_color if badge_style else Color(0.85, 0.45, 0.08)
+		var badge_style_raw = speaker_badge_panel.get_theme_stylebox("panel")
+		var badge_color: Color
+		if badge_style_raw is StyleBoxTexture:
+			badge_color = badge_style_raw.modulate_color
+		elif badge_style_raw is StyleBoxFlat:
+			badge_color = badge_style_raw.bg_color
+		else:
+			badge_color = Color(0.85, 0.45, 0.08)
 		var color_hex = badge_color.to_html(false)
 		var prefix = "[color=#" + color_hex + "][b]" + speaker_label.text + ":[/b][/color] "
 		message_text.text = prefix + clean_text

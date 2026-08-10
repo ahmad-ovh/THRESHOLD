@@ -4,21 +4,17 @@
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
 [ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
 [ext_resource type="FontFile" uid="uid://uiu0c2c8i80c" path="res://assets/fonts/SpecialElite-Regular.ttf" id="4_font_special_elite"]
+[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/popup.png" id="5_popup"]
+[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/title_paper_strip.png" id="6_title_strip"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npc_card"]
-bg_color = Color(0.99, 0.97, 0.93, 0.96)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.08)
-shadow_size = 4
-shadow_offset = Vector2(0, 2)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_npc_card"]
+texture = ExtResource("5_popup")
+texture_margin_left = 80.0
+texture_margin_top = 80.0
+texture_margin_right = 80.0
+texture_margin_bottom = 80.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar_bg"]
 bg_color = Color(0.25, 0.25, 0.28, 1)
@@ -64,57 +60,45 @@ axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 1666, 568)
 modulate_color = Color(0.82, 0.82, 0.82, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_panel"]
-bg_color = Color(0.99, 0.97, 0.93, 0.97)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_color = Color(0, 0, 0, 0.08)
-shadow_size = 4
-shadow_offset = Vector2(0, 2)
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_input_panel"]
+texture = ExtResource("5_popup")
+texture_margin_left = 80.0
+texture_margin_top = 80.0
+texture_margin_right = 80.0
+texture_margin_bottom = 80.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_lineedit"]
-bg_color = Color(1, 0.99, 0.95, 0.97)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_reflection_card"]
-bg_color = Color(0.99, 0.97, 0.93, 0.96)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
+bg_color = Color(1, 0.99, 0.95, 0.0)
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
 border_width_bottom = 2
-border_color = Color(0.88, 0.82, 0.72, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.08)
-shadow_size = 4
-shadow_offset = Vector2(0, 2)
+border_color = Color(0.75, 0.62, 0.46, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_reflection_card"]
+texture = ExtResource("5_popup")
+texture_margin_left = 80.0
+texture_margin_top = 80.0
+texture_margin_right = 80.0
+texture_margin_bottom = 80.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
-bg_color = Color(0.88, 0.82, 0.72, 1)
+bg_color = Color(0.82, 0.74, 0.60, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
-bg_color = Color(0.9, 0.45, 0.08, 1)
+bg_color = Color(0.75, 0.35, 0.04, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -154,16 +138,16 @@ anchor_right = 1.0
 offset_left = -316.0
 offset_top = 64.0
 offset_right = -16.0
-offset_bottom = 120.0
+offset_bottom = 128.0
 grow_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_npc_card")
+theme_override_styles/panel = SubResource("StyleBoxTexture_npc_card")
 
 [node name="MarginContainer" type="MarginContainer" parent="OverlayRoot/NPCInfoCard" unique_id=1864744708]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="OverlayRoot/NPCInfoCard/MarginContainer" unique_id=1103755334]
 layout_mode = 2
@@ -197,7 +181,7 @@ text = "Stranger"
 
 [node name="NPCSubInfoLabel" type="Label" parent="OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1962706671]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.38, 0.28, 0.16, 1)
+theme_override_colors/font_color = Color(0.45, 0.32, 0.18, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 12
 text = "[Role: Peer 👤 Tier: 🧑 Stranger Mood: 😐 neutral]"
@@ -205,18 +189,18 @@ text = "[Role: Peer 👤 Tier: 🧑 Stranger Mood: 😐 neutral]"
 [node name="LoadingLabel" type="Label" parent="OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/VBoxContainer" unique_id=2094266151]
 visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 0.45, 0.3, 1)
+theme_override_colors/font_color = Color(0.65, 0.45, 0.22, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 11
 text = "Walking over..."
 
 [node name="LeaveButton" type="Button" parent="OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer" unique_id=1082827118]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.80, 0.78, 0.70, 1)
+theme_override_colors/font_color = Color(0.18, 0.12, 0.06, 1)
+theme_override_colors/font_hover_color = Color(0.75, 0.25, 0.10, 1)
+theme_override_colors/font_pressed_color = Color(0.50, 0.18, 0.04, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
@@ -259,14 +243,14 @@ theme_override_constants/separation = 10
 [node name="BottomInputPanel" type="PanelContainer" parent="OverlayRoot/InputRow" unique_id=744280629]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_input_panel")
+theme_override_styles/panel = SubResource("StyleBoxTexture_input_panel")
 
 [node name="InputContainer" type="MarginContainer" parent="OverlayRoot/InputRow/BottomInputPanel" unique_id=1537942046]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 8
 
 [node name="MessageInput" type="LineEdit" parent="OverlayRoot/InputRow/BottomInputPanel/InputContainer" unique_id=216831135]
 layout_mode = 2
@@ -281,9 +265,9 @@ placeholder_text = "[Character Count] Type your message..."
 [node name="SendButton" type="Button" parent="OverlayRoot/InputRow" unique_id=332395997]
 custom_minimum_size = Vector2(90, 52)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
-theme_override_colors/font_hover_color = Color(0.90, 0.45, 0.08, 1)
-theme_override_colors/font_pressed_color = Color(0.60, 0.28, 0.04, 1)
+theme_override_colors/font_color = Color(0.18, 0.12, 0.06, 1)
+theme_override_colors/font_hover_color = Color(0.75, 0.30, 0.04, 1)
+theme_override_colors/font_pressed_color = Color(0.50, 0.20, 0.04, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
@@ -304,14 +288,14 @@ offset_right = -16.0
 offset_bottom = -16.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_reflection_card")
+theme_override_styles/panel = SubResource("StyleBoxTexture_reflection_card")
 
 [node name="Margin" type="MarginContainer" parent="OverlayRoot/FeedbackPanel" unique_id=1030354022]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OverlayRoot/FeedbackPanel/Margin" unique_id=1338041769]
 layout_mode = 2
@@ -340,7 +324,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.45, 0.3, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-text = "[Sleek Bar]"
+text = "—"
 
 [node name="OverallProgressBar" type="ProgressBar" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer" unique_id=751152384]
 custom_minimum_size = Vector2(0, 14)
@@ -405,8 +389,11 @@ offset_bottom = -88.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.38, 0.28, 0.16, 1)
-theme_override_colors/font_hover_color = Color(0.90, 0.45, 0.08, 1)
-theme_override_colors/font_pressed_color = Color(0.60, 0.28, 0.04, 1)
+theme_override_colors/font_hover_color = Color(0.75, 0.30, 0.04, 1)
+theme_override_colors/font_pressed_color = Color(0.50, 0.20, 0.04, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
 text = "✦ Conversation ended — click to continue"
