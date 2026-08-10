@@ -323,6 +323,8 @@ func close_dialogue() -> void:
 		leave_confirm_modal.visible = false
 	_clear_bubbles()
 	visible = false
+	if GameController and GameController.hud_ref and GameController.hud_ref.has_method("show_buttons"):
+		GameController.hud_ref.show_buttons()
 	if AnimalesePlayer:
 		AnimalesePlayer.stop_all()
 	if AudioManager:

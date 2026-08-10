@@ -14,8 +14,11 @@ func start_encounter(npc_id: String) -> void:
 	if player:
 		player.set_physics_process(false)
 		
-	if GameController and GameController.hud_ref and GameController.hud_ref.has_method("hide_objective"):
-		GameController.hud_ref.hide_objective()
+	if GameController and GameController.hud_ref:
+		if GameController.hud_ref.has_method("hide_objective"):
+			GameController.hud_ref.hide_objective()
+		if GameController.hud_ref.has_method("hide_buttons"):
+			GameController.hud_ref.hide_buttons()
 		
 	# Find target NPC node
 	var target_npc: Node3D = null
@@ -153,6 +156,11 @@ func _finalize_encounter() -> void:
 		player.set_physics_process(true)
 		
 	current_state = State.LOBBY
+	if GameController and GameController.hud_ref:
+		if GameController.hud_ref.has_method("show_buttons"):
+			GameController.hud_ref.show_buttons()
+		if GameController.hud_ref.has_method("set_objective"):
+			GameController.hud_ref.set_objective("Objective: Approach an NPC and press [E] to talk")
 
 func _ensure_dialogue_ui() -> void:
 	if not dialogue_ui_ref:

@@ -60,6 +60,8 @@ func _setup_hover_effect(btn: Control, tilt_angle: float) -> void:
 		)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if id_card_button and not id_card_button.visible:
+		return
 	if event.is_action_pressed("toggle_id_card"):
 		_toggle_id_card()
 	elif event.is_action_pressed("toggle_journal"):
@@ -71,6 +73,18 @@ func set_objective(text: String) -> void:
 
 func hide_objective() -> void:
 	objective_banner.visible = false
+
+func hide_buttons() -> void:
+	if id_card_button:
+		id_card_button.visible = false
+	if journal_button:
+		journal_button.visible = false
+
+func show_buttons() -> void:
+	if id_card_button:
+		id_card_button.visible = true
+	if journal_button:
+		journal_button.visible = true
 
 func _update_hud() -> void:
 	player_id_label.text = "PLAYER: " + PlayerStore.player_id
