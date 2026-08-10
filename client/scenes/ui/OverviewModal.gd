@@ -16,6 +16,24 @@ signal closed
 func _ready() -> void:
 	visible = false
 	close_button.pressed.connect(_on_close_pressed)
+	_setup_button_hover_effects(close_button)
+
+func _setup_button_hover_effects(btn: Button) -> void:
+	btn.pivot_offset = btn.size / 2.0
+	btn.mouse_entered.connect(func():
+		if btn.disabled:
+			return
+		if AudioManager and AudioManager.has_method("play_hover"):
+			AudioManager.play_hover()
+		var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.06, 1.06), 0.15)
+	)
+	btn.mouse_exited.connect(func():
+		if btn.disabled:
+			return
+		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.15)
+	)
 
 func show_settlement(end_data: Dictionary, level_data: Dictionary = {}) -> void:
 	visible = true

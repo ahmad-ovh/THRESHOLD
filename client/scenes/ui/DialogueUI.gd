@@ -58,6 +58,28 @@ func _ready() -> void:
 	leave_button.pressed.connect(_on_leave_pressed)
 	message_input.text_submitted.connect(_on_text_submitted)
 	conversation_end_banner.pressed.connect(_on_end_banner_pressed)
+	
+	_setup_button_hover_effects(send_button)
+	_setup_button_hover_effects(leave_button)
+	_setup_button_hover_effects(conversation_end_banner)
+
+func _setup_button_hover_effects(btn: Button) -> void:
+	btn.pivot_offset = btn.size / 2.0
+	btn.resized.connect(func(): btn.pivot_offset = btn.size / 2.0)
+	btn.mouse_entered.connect(func():
+		if btn.disabled:
+			return
+		if AudioManager and AudioManager.has_method("play_hover"):
+			AudioManager.play_hover()
+		var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.05, 1.05), 0.12)
+	)
+	btn.mouse_exited.connect(func():
+		if btn.disabled:
+			return
+		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.12)
+	)
 	_reset_encounter_metrics()
 
 func _process(delta: float) -> void:

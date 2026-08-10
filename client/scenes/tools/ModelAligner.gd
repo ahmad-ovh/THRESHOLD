@@ -436,6 +436,13 @@ func _connect_signals() -> void:
 	if redo_btn: redo_btn.pressed.connect(redo)
 	if focus_btn: focus_btn.pressed.connect(_focus_camera_on_selected_part)
 
+	var aligner_btns: Array[Button] = [
+		save_preset_btn, save_catalog_btn, focus_btn, save_face_offsets_btn,
+		undo_btn, redo_btn, copy_btn, back_btn
+	]
+	for b in aligner_btns:
+		_setup_button_hover_effects(b)
+
 	if check_head: check_head.toggled.connect(func(_t): _update_part_visibilities())
 	if check_hair: check_hair.toggled.connect(func(_t): _update_part_visibilities())
 	if check_glasses: check_glasses.toggled.connect(func(_t): _update_part_visibilities())
@@ -988,3 +995,23 @@ func _take_debug_screenshot(file_name: String) -> void:
 			var scratch_dir = "c:/Users/User/Documents/THRESHOLD/scratch"
 			DirAccess.make_dir_absolute(scratch_dir)
 			img.save_png(scratch_dir + "/" + file_name + ".png")
+
+func _setup_button_hover_effects(btn: Button) -> void:
+	if not btn:
+		return
+	btn.pivot_offset = btn.size / 2.0
+	btn.resized.connect(func(): btn.pivot_offset = btn.size / 2.0)
+	btn.mouse_entered.connect(func():
+		if btn.disabled:
+			return
+		if AudioManager and AudioManager.has_method("play_hover"):
+			AudioManager.play_hover()
+		var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.04, 1.04), 0.1)
+	)
+	btn.mouse_exited.connect(func():
+		if btn.disabled:
+			return
+		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+	)

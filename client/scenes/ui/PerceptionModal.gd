@@ -24,6 +24,8 @@ func _setup_button_animations(btn: Button) -> void:
 	btn.pivot_offset = btn.size / 2.0
 	btn.resized.connect(func(): btn.pivot_offset = btn.size / 2.0)
 	btn.mouse_entered.connect(func():
+		if AudioManager and AudioManager.has_method("play_hover"):
+			AudioManager.play_hover()
 		var tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		tw.tween_property(btn, "scale", Vector2(1.05, 1.05), 0.12)
 	)
