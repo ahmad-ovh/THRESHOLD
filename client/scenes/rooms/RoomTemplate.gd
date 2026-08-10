@@ -53,8 +53,8 @@ func _ensure_front_wall_collider() -> void:
 	front_wall.name = "FrontWallCollider"
 	front_wall.use_collision = true
 	front_wall.visible = false
-	front_wall.size = Vector3(floor_size.x, 5.0, 0.4)
-	front_wall.position = Vector3(floor_pos.x, 2.5, front_z)
+	front_wall.size = Vector3(floor_size.x, 7.5, 0.4)
+	front_wall.position = Vector3(floor_pos.x, 3.75, front_z)
 	bounds.add_child(front_wall)
 
 func _process_room_models(node: Node) -> void:

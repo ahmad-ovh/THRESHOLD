@@ -26,21 +26,21 @@ size = Vector3(16, 0.4, 10)
 material = SubResource("StandardMaterial3D_floor")
 
 [node name="BackWall" type="CSGBox3D" parent="RoomBounds"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.75, -5)
 use_collision = true
-size = Vector3(16, 5, 0.4)
+size = Vector3(16, 7.5, 0.4)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="LeftWall" type="CSGBox3D" parent="RoomBounds"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.75, 0)
 use_collision = true
-size = Vector3(0.4, 5, 10)
+size = Vector3(0.4, 7.5, 10)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="RightWall" type="CSGBox3D" parent="RoomBounds"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.75, 0)
 use_collision = true
-size = Vector3(0.4, 5, 10)
+size = Vector3(0.4, 7.5, 10)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="CameraAnchor" type="Marker3D" parent="."]
