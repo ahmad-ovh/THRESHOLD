@@ -1,16 +1,16 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://2ndauslk4we4"]
 
-[ext_resource type="Script" path="res://scenes/ui/JournalUI.gd" id="1_journal_script"]
-[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/journalui.png" id="2_journal_bg"]
+[ext_resource type="Script" uid="uid://bk605s81h1t4s" path="res://scenes/ui/JournalUI.gd" id="1_journal_script"]
+[ext_resource type="Texture2D" uid="uid://b8xq4xyp5yndw" path="res://assets/ui/paper_craft/journalui.png" id="2_journal_bg"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="3_font_hitchcut"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_transparent"]
 
-[node name="JournalUI" type="CanvasLayer"]
+[node name="JournalUI" type="CanvasLayer" unique_id=1954761711]
 layer = 90
 script = ExtResource("1_journal_script")
 
-[node name="ColorRectBackdrop" type="ColorRect" parent="."]
+[node name="ColorRectBackdrop" type="ColorRect" parent="." unique_id=1622562873]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -18,7 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.08, 0.06, 0.04, 0.65)
 
-[node name="BookContainer" type="Control" parent="."]
+[node name="BookContainer" type="Control" parent="." unique_id=622918819]
 custom_minimum_size = Vector2(1088, 608)
 layout_mode = 3
 anchors_preset = 8
@@ -33,7 +33,7 @@ offset_bottom = 304.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackgroundTexture" type="TextureRect" parent="BookContainer"]
+[node name="BackgroundTexture" type="TextureRect" parent="BookContainer" unique_id=829378925]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,43 +44,41 @@ texture = ExtResource("2_journal_bg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CloseButton" type="Button" parent="BookContainer"]
+[node name="CloseButton" type="Button" parent="BookContainer" unique_id=1645989693]
 layout_mode = 0
-offset_left = 872.0
-offset_top = 35.0
-offset_right = 990.0
-offset_bottom = 85.0
+offset_left = 897.0
+offset_top = 40.0
+offset_right = 1015.0
+offset_bottom = 90.0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
 
-[node name="BookSpread" type="Control" parent="BookContainer"]
-layout_mode = 0
+[node name="BookSpread" type="Control" parent="BookContainer" unique_id=1129607736]
+anchors_preset = 0
 offset_left = 62.0
 offset_top = 117.0
 offset_right = 1028.0
 offset_bottom = 488.0
 pivot_offset = Vector2(483, 185)
 
-[node name="LeftPage" type="PanelContainer" parent="BookContainer/BookSpread"]
+[node name="LeftPage" type="PanelContainer" parent="BookContainer/BookSpread" unique_id=1426382981]
 layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
 offset_right = 470.0
 offset_bottom = 371.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_transparent")
 
-[node name="Margin" type="MarginContainer" parent="BookContainer/BookSpread/LeftPage"]
+[node name="Margin" type="MarginContainer" parent="BookContainer/BookSpread/LeftPage" unique_id=611801547]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="LeftText" type="RichTextLabel" parent="BookContainer/BookSpread/LeftPage/Margin"]
+[node name="LeftText" type="RichTextLabel" parent="BookContainer/BookSpread/LeftPage/Margin" unique_id=1138609332]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.18, 0.13, 0.08, 1)
@@ -88,22 +86,21 @@ theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "Left Page NPC"
 
-[node name="RightPage" type="PanelContainer" parent="BookContainer/BookSpread"]
+[node name="RightPage" type="PanelContainer" parent="BookContainer/BookSpread" unique_id=39960647]
 layout_mode = 0
 offset_left = 496.0
-offset_top = 0.0
 offset_right = 966.0
 offset_bottom = 371.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_transparent")
 
-[node name="Margin" type="MarginContainer" parent="BookContainer/BookSpread/RightPage"]
+[node name="Margin" type="MarginContainer" parent="BookContainer/BookSpread/RightPage" unique_id=2071485499]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="RightText" type="RichTextLabel" parent="BookContainer/BookSpread/RightPage/Margin"]
+[node name="RightText" type="RichTextLabel" parent="BookContainer/BookSpread/RightPage/Margin" unique_id=1443702441]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.18, 0.13, 0.08, 1)
@@ -111,7 +108,7 @@ theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "Right Page NPC"
 
-[node name="PrevButton" type="Button" parent="BookContainer"]
+[node name="PrevButton" type="Button" parent="BookContainer" unique_id=64144065]
 layout_mode = 0
 offset_left = 110.0
 offset_top = 515.0
@@ -119,25 +116,25 @@ offset_right = 280.0
 offset_bottom = 570.0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
 
-[node name="PageIndicator" type="Label" parent="BookContainer"]
+[node name="PageIndicator" type="Label" parent="BookContainer" unique_id=761054286]
 layout_mode = 0
-offset_left = 380.0
-offset_top = 525.0
-offset_right = 708.0
-offset_bottom = 560.0
-theme_override_colors/font_color = Color(0.24, 0.17, 0.10, 1)
+offset_left = 382.0
+offset_top = 69.0
+offset_right = 710.0
+offset_bottom = 104.0
+theme_override_colors/font_color = Color(0.9195912, 0.8292917, 0.7491491, 1)
 theme_override_fonts/font = ExtResource("3_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 text = "Pages 1-2 of 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="NextButton" type="Button" parent="BookContainer"]
+[node name="NextButton" type="Button" parent="BookContainer" unique_id=620304535]
 layout_mode = 0
 offset_left = 808.0
 offset_top = 515.0
@@ -145,7 +142,7 @@ offset_right = 978.0
 offset_bottom = 570.0
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_transparent")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_transparent")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_transparent")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_transparent")
