@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scenes/ui/StoryboardLoading.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/bg_paper.png" id="2_bg_paper"]
+
 [ext_resource type="Texture2D" path="res://assets/ui/paper_craft/title_paper_strip.png" id="3_title_strip"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="4_font"]
 [ext_resource type="Texture2D" path="res://assets/ui/paper_craft/popup.png" id="5_popup"]
@@ -29,7 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_bg_paper")
+texture = ExtResource("7_splash")
 expand_mode = 1
 stretch_mode = 6
 
