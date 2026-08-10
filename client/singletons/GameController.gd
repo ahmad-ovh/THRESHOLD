@@ -45,16 +45,16 @@ func set_paused(paused_state: bool) -> void:
 	get_tree().paused = is_paused
 	
 	if not pause_menu_ref:
-		var scene = preload("res://scenes/ui/PauseMenu.tscn")
+		var scene = load("res://scenes/ui/PauseMenu.tscn")
 		pause_menu_ref = scene.instantiate()
 		get_tree().root.add_child(pause_menu_ref)
-		
+
 	pause_menu_ref.visible = is_paused
 	if is_paused:
 		set_phase(Phase.PAUSED)
 	else:
 		set_phase(Phase.EXPLORING)
-		
+
 	game_paused_changed.emit(is_paused)
 
 func start_new_game(p_id: String) -> void:
@@ -62,7 +62,7 @@ func start_new_game(p_id: String) -> void:
 	var status = await ApiClient.get_player_status(p_id)
 	if not status.has("error"):
 		PlayerStore.update_from_status(status)
-		
+
 	set_phase(Phase.EXPLORING)
 	_ensure_hud()
 	hud_ref.visible = true
@@ -78,6 +78,6 @@ func return_to_main_menu() -> void:
 
 func _ensure_hud() -> void:
 	if not hud_ref:
-		var scene = preload("res://scenes/ui/HUD.tscn")
+		var scene = load("res://scenes/ui/HUD.tscn")
 		hud_ref = scene.instantiate()
 		get_tree().root.add_child(hud_ref)
