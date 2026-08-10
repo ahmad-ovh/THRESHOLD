@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://taflknabuho8" path="res://scenes/ui/DialogueUI.gd" id="1_dialogue_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
+
 [ext_resource type="FontFile" uid="uid://uiu0c2c8i80c" path="res://assets/fonts/SpecialElite-Regular.ttf" id="4_font_special_elite"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npc_card"]
@@ -32,37 +32,47 @@ corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_normal"]
-texture = ExtResource("3_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-region_rect = Rect2(0, 0, 1666, 568)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.12, 0.28, 0.52, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.6, 1.0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 3
+shadow_offset = Vector2(0, 2)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_hover"]
-texture = ExtResource("3_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-region_rect = Rect2(0, 0, 1666, 568)
-modulate_color = Color(1.15, 1.15, 1.15, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.18, 0.38, 0.68, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.72, 1.0, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 3
+shadow_offset = Vector2(0, 2)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
-texture = ExtResource("3_bg_button")
-texture_margin_left = 60.0
-texture_margin_top = 30.0
-texture_margin_right = 60.0
-texture_margin_bottom = 30.0
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 2
-region_rect = Rect2(0, 0, 1666, 568)
-modulate_color = Color(0.82, 0.82, 0.82, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.08, 0.18, 0.38, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.48, 0.9, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_panel"]
 bg_color = Color(0.99, 0.97, 0.93, 0.97)
@@ -214,14 +224,14 @@ text = "Walking over..."
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.80, 0.78, 0.70, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.88, 1.0, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "✕"
 
 [node name="ChatScrollContainer" type="ScrollContainer" parent="OverlayRoot" unique_id=656882669]
@@ -281,14 +291,14 @@ placeholder_text = "[Character Count] Type your message..."
 [node name="SendButton" type="Button" parent="OverlayRoot/InputRow" unique_id=332395997]
 custom_minimum_size = Vector2(90, 52)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
-theme_override_colors/font_hover_color = Color(0.90, 0.45, 0.08, 1)
-theme_override_colors/font_pressed_color = Color(0.60, 0.28, 0.04, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.88, 1.0, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "SEND"
 
 [node name="FeedbackPanel" type="PanelContainer" parent="OverlayRoot" unique_id=814802721]
@@ -404,9 +414,12 @@ offset_right = -296.0
 offset_bottom = -88.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.38, 0.28, 0.16, 1)
-theme_override_colors/font_hover_color = Color(0.90, 0.45, 0.08, 1)
-theme_override_colors/font_pressed_color = Color(0.60, 0.28, 0.04, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.88, 1.0, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "✦ Conversation ended — click to continue"

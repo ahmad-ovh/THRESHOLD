@@ -8,11 +8,11 @@ signal storyboard_completed
 @onready var root: Control = $Root
 @onready var paper_bg: TextureRect = $Root/PaperBg
 @onready var panel_card: Control = $Root/PanelCard
-@onready var panel_image: TextureRect = $Root/PanelCard/MarginContainer/VBoxContainer/ImageContainer/PanelImage
-@onready var chapter_label: Label = $Root/PanelCard/MarginContainer/VBoxContainer/ChapterLabel
-@onready var narrative_label: RichTextLabel = $Root/PanelCard/MarginContainer/VBoxContainer/NarrativeLabel
-@onready var progress_bar: ProgressBar = $Root/BottomBar/VBoxContainer/ProgressBar
-@onready var status_label: Label = $Root/BottomBar/VBoxContainer/StatusLabel
+@onready var panel_image: TextureRect = $Root/PanelCard/PanelImage
+@onready var chapter_label: Label = $Root/PanelCard/ChapterLabel
+@onready var narrative_label: RichTextLabel = $Root/PanelCard/NarrativeLabel
+@onready var progress_bar: ProgressBar = $Root/BottomBar/ProgressBar
+@onready var status_label: Label = $Root/BottomBar/StatusLabel
 @onready var prompt_label: Label = $Root/BottomBar/PromptLabel
 
 var _current_panel_index := 0
@@ -104,7 +104,7 @@ func _show_panel(index: int) -> void:
 	var p = _narrative_panels[index]
 	
 	chapter_label.text = p.get("chapter", "")
-	narrative_label.text = p.get("text", "")
+	narrative_label.text = "[center]" + p.get("text", "") + "[/center]"
 	
 	var img_path = p.get("image", "")
 	if ResourceLoader.exists(img_path):
@@ -120,10 +120,8 @@ func _show_panel(index: int) -> void:
 	if AudioManager and AudioManager.has_method("play_hover"):
 		AudioManager.play_hover()
 		
-	# Unlock advance after short delay
-	get_tree().create_timer(1.2).timeout.connect(func():
-		_can_advance = true
-	)
+	# Unlock advance movement immediately
+	_can_advance = true
 
 func _start_panel_timer() -> void:
 	# Auto advance panels every 4 seconds if user doesn't click
