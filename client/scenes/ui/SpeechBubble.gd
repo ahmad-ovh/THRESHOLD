@@ -23,6 +23,10 @@ var active_speaker_id: String = "stranger"
 var clean_text_to_speak: String = ""
 var last_revealed_char_index: int = 0
 
+var is_scrambling: bool = false
+var scramble_timer: float = 0.0
+const SCRAMBLE_CHARS: String = "!@#$%^&*()_+-=[]{}|;:,.<>?/~░▒▓█"
+
 var speaker_colors: Dictionary = {
 	"teddy": Color(1.0, 0.49, 0.15),       # Vibrant Orange
 	"blathers": Color(0.48, 0.35, 0.25),    # Earthy Warm Brown
@@ -37,12 +41,23 @@ var speaker_colors: Dictionary = {
 const MIN_BUBBLE_WIDTH: float = 100.0
 const MAX_BUBBLE_WIDTH: float = 340.0
 
+func _generate_scramble_text(length: int = 24) -> String:
+	var res := ""
+	var n_chars = SCRAMBLE_CHARS.length()
+	for i in range(length):
+		if i > 0 and i % 6 == 0:
+			res += " "
+		else:
+			res += SCRAMBLE_CHARS[randi() % n_chars]
+	return res
+
 func _ready() -> void:
 	pivot_offset = Vector2(180, 50)
 	continue_arrow.visible = false
 	_position_speaker_badge()
 
 func setup(speaker: String, text: String, target_node: Node3D = null, is_player: bool = false, npc_id: String = "") -> void:
+	is_scrambling = false
 	is_player_bubble = is_player
 	speaker_label.text = speaker
 	target_3d_node = target_node
@@ -92,29 +107,40 @@ func setup(speaker: String, text: String, target_node: Node3D = null, is_player:
 	_start_dialogue_timeline(npc_id if npc_id != "" else key, clean_text)
 
 func setup_typing_indicator(npc_name: String) -> void:
-	is_system_bubble = true
+	is_system_bubble = false
+	is_scrambling = true
+	scramble_timer = 0.0
 	speaker_label.text = npc_name
-	speaker_badge_panel.visible = false
-	message_text.text = "[center][b]. . .[/b][/center]"
+	speaker_badge_panel.visible = true
+	_position_speaker_badge()
+	
+	var key = npc_name.to_lower()
+	var badge_color = speaker_colors.get(key, Color(0.85, 0.45, 0.08))
+	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	if style:
+		style.bg_color = badge_color
+		speaker_badge_panel.add_theme_stylebox_override("panel", style)
+		
 	target_3d_node = null
 	active_camera = null
 	continue_arrow.visible = false
 	is_timeline_active = false
 	message_text.visible_characters = -1
+	message_text.text = "[center][color=#888888]" + _generate_scramble_text(24) + "[/color][/center]"
 	_recalculate_dynamic_size()
 	
-	scale = Vector2(0.8, 0.8)
+	# Immediate scale spring pop-up animation
+	scale = Vector2(0.75, 0.75)
 	var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(self, "scale", Vector2.ONE, 0.2)
+	tween.tween_property(self, "scale", Vector2.ONE, 0.22)
 
-func update_typing_dots(dots: String) -> void:
-	speaker_badge_panel.visible = false
-	message_text.text = "[center][b]" + dots + "[/b][/center]"
+func update_typing_dots(_dots: String) -> void:
+	is_scrambling = true
 	is_timeline_active = false
 	message_text.visible_characters = -1
-	_recalculate_dynamic_size()
 
 func convert_to_npc_reply(npc_name: String, text: String, npc_id: String = "") -> void:
+	is_scrambling = false
 	is_system_bubble = false
 	speaker_label.text = npc_name
 	speaker_badge_panel.visible = true
@@ -139,6 +165,7 @@ func convert_to_npc_reply(npc_name: String, text: String, npc_id: String = "") -
 	_start_dialogue_timeline(npc_id if npc_id != "" else key, clean_text)
 
 func update_text_only(new_text: String) -> void:
+	is_scrambling = false
 	var clean_text = new_text.strip_edges()
 	is_system_bubble = clean_text.begins_with("[") and clean_text.ends_with("]")
 	if is_system_bubble:
@@ -160,6 +187,7 @@ func update_text_only(new_text: String) -> void:
 	_recalculate_dynamic_size()
 
 func _start_dialogue_timeline(speaker_id: String, text_to_speak: String) -> void:
+	is_scrambling = false
 	active_speaker_id = speaker_id if speaker_id != "" else "stranger"
 	clean_text_to_speak = NPCVoiceGenerator.strip_bbcode(text_to_speak)
 	last_revealed_char_index = 0
@@ -180,6 +208,7 @@ func _start_dialogue_timeline(speaker_id: String, text_to_speak: String) -> void
 	message_text.visible_characters = prefix_char_count
 
 func skip_reveal() -> void:
+	is_scrambling = false
 	if is_timeline_active:
 		is_timeline_active = false
 		message_text.visible_characters = -1
@@ -222,6 +251,12 @@ func _recalculate_dynamic_size() -> void:
 
 func _process(delta: float) -> void:
 	_update_screen_position()
+	
+	if is_scrambling:
+		scramble_timer += delta
+		if scramble_timer >= 0.04:
+			scramble_timer = 0.0
+			message_text.text = "[center][color=#888888]" + _generate_scramble_text(24) + "[/color][/center]"
 	
 	# Dialogue Timeline Clock Driver
 	if is_timeline_active and active_timeline:
