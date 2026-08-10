@@ -2,22 +2,21 @@
 extends CharacterBody3D
 
 @export var npc_id: String = ""
-@export var npc_data_registry: Dictionary = {
-	"daria": preload("res://resources/npc_data/daria_data.tres"),
-	"prof_adler": preload("res://resources/npc_data/prof_adler_data.tres"),
-	"ms_hartwell": preload("res://resources/npc_data/ms_hartwell_data.tres"),
-	"barista": preload("res://resources/npc_data/barista_data.tres"),
-	"ms_okoro": preload("res://resources/npc_data/ms_okoro_data.tres"),
-	"mr_vance": preload("res://resources/npc_data/mr_vance_data.tres"),
-	"felix": preload("res://resources/npc_data/felix_data.tres"),
-	"priya": preload("res://resources/npc_data/priya_data.tres"),
-	"nadia": preload("res://resources/npc_data/nadia_data.tres"),
-	"tomas": preload("res://resources/npc_data/tomas_data.tres"),
-	"seren": preload("res://resources/npc_data/seren_data.tres"),
-	"sibling": preload("res://resources/npc_data/sibling_data.tres"),
-	"parent": preload("res://resources/npc_data/parent_data.tres"),
-	"recurring_stranger": preload("res://resources/npc_data/recurring_stranger_data.tres")
-}
+
+static var _npc_resource_cache: Dictionary = {}
+
+static func get_npc_data(id: String) -> NPCData:
+	if id == "":
+		return null
+	if _npc_resource_cache.has(id):
+		return _npc_resource_cache[id]
+	var res_path = "res://resources/npc_data/" + id + "_data.tres"
+	if ResourceLoader.exists(res_path):
+		var res = load(res_path) as NPCData
+		if res:
+			_npc_resource_cache[id] = res
+			return res
+	return null
 
 @onready var mesh_container: Node3D = $MeshContainer
 @onready var mood_sprite: Sprite3D = $HeadMarker/MoodSprite3D
@@ -35,8 +34,8 @@ func _ready() -> void:
 	add_to_group("npcs")
 	if ground_ring:
 		ground_ring.visible = false
-	if npc_data_registry.has(npc_id):
-		active_data = npc_data_registry[npc_id]
+	if not active_data and npc_id != "":
+		active_data = get_npc_data(npc_id)
 	_setup_visuals()
 
 func _setup_visuals() -> void:
