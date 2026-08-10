@@ -69,6 +69,12 @@ func _ready() -> void:
 	_setup_button_hover_effects(leave_button)
 	_setup_button_hover_effects(leave_yes_button)
 	_setup_button_hover_effects(leave_no_button)
+	
+	if chat_scroll_container:
+		chat_scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+		var vbar = chat_scroll_container.get_v_scroll_bar()
+		if vbar:
+			vbar.visible = false
 
 func _setup_button_hover_effects(btn: Button) -> void:
 	btn.pivot_offset = btn.size / 2.0

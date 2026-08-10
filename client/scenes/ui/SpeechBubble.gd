@@ -120,13 +120,19 @@ func setup_coach_hint(hint_text: String) -> void:
 	speaker_badge_panel.visible = true
 	_position_speaker_badge()
 	
-	var style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-	if style:
-		style.bg_color = Color(0.12, 0.45, 0.85) # Blue badge for Coach Hint
-		speaker_badge_panel.add_theme_stylebox_override("panel", style)
+	var badge_style = speaker_badge_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	if badge_style:
+		badge_style.bg_color = Color(0.12, 0.45, 0.85) # Blue badge for Coach Hint
+		speaker_badge_panel.add_theme_stylebox_override("panel", badge_style)
+
+	var bubble_style = bubble_panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	if bubble_style:
+		bubble_style.bg_color = Color(0.90, 0.94, 0.99, 0.97) # Soft light blue paper background
+		bubble_style.border_color = Color(0.35, 0.60, 0.90, 1.0) # Sleek blue border outline
+		bubble_panel.add_theme_stylebox_override("panel", bubble_style)
 		
 	var clean_text = hint_text.strip_edges()
-	message_text.text = "[color=#1F4785][b]💡 Coach Hint:[/b][/color] " + clean_text
+	message_text.text = "[color=#0D3875][b]💡 Coach Hint:[/b][/color] " + clean_text
 	prefix_char_count = 0
 	
 	target_3d_node = null
@@ -248,6 +254,7 @@ func _recalculate_dynamic_size() -> void:
 
 func _process(delta: float) -> void:
 	_update_screen_position()
+	_update_top_fade()
 	
 	# Dialogue Timeline Clock Driver
 	if is_timeline_active and active_timeline:
@@ -306,3 +313,24 @@ func _update_screen_position() -> void:
 	visible = true
 	var screen_pos = active_camera.unproject_position(world_pos)
 	position = screen_pos - Vector2(180, 50)
+
+func _update_top_fade() -> void:
+	if target_3d_node != null:
+		return
+		
+	var parent_node = get_parent()
+	while parent_node and not (parent_node is ScrollContainer):
+		parent_node = parent_node.get_parent()
+		
+	if parent_node and parent_node is ScrollContainer:
+		var scroll_top_y = parent_node.global_position.y
+		var bubble_top_y = global_position.y
+		var fade_zone_height: float = 100.0
+		var dist_from_top = bubble_top_y - scroll_top_y
+		
+		if dist_from_top <= 0.0:
+			modulate.a = 0.0
+		elif dist_from_top < fade_zone_height:
+			modulate.a = dist_from_top / fade_zone_height
+		else:
+			modulate.a = 1.0
