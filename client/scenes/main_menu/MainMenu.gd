@@ -13,6 +13,8 @@ extends CanvasLayer
 @onready var aligner_wrapper: Control = $Control/LeftPanel/ButtonsVBox/DevAlignerWrapper
 @onready var aligner_button: Button = $Control/LeftPanel/ButtonsVBox/DevAlignerWrapper/DevAlignerButton
 
+var _is_transitioning: bool = false
+
 func _ready() -> void:
 	start_button.pressed.connect(_on_start_pressed)
 	customize_button.pressed.connect(_on_customize_pressed)
@@ -43,12 +45,16 @@ func _update_dev_ui(dev_enabled: bool) -> void:
 func _setup_button_hover_effects(btn: Button) -> void:
 	btn.pivot_offset = btn.size / 2.0
 	btn.mouse_entered.connect(func():
+		if btn.disabled:
+			return
 		if AudioManager and AudioManager.has_method("play_hover"):
 			AudioManager.play_hover()
 		var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		tween.tween_property(btn, "scale", Vector2(1.05, 1.05), 0.15)
 	)
 	btn.mouse_exited.connect(func():
+		if btn.disabled:
+			return
 		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.15)
 	)
@@ -74,25 +80,56 @@ func _fetch_daily(p_id: String) -> void:
 	txt += "[b]🔥 Daily Streak:[/b] " + str(streak) + " Days"
 	daily_details.text = txt
 
+func _set_buttons_disabled(disabled_state: bool) -> void:
+	if is_instance_valid(start_button):
+		start_button.disabled = disabled_state
+	if is_instance_valid(customize_button):
+		customize_button.disabled = disabled_state
+	if is_instance_valid(settings_button):
+		settings_button.disabled = disabled_state
+	if is_instance_valid(aligner_button):
+		aligner_button.disabled = disabled_state
+
 func _on_start_pressed() -> void:
+	if _is_transitioning or (SceneManager and SceneManager.is_transitioning):
+		return
+	var name_txt = username_input.text.strip_edges()
+	if name_txt == "":
+		return
+	_is_transitioning = true
+	_set_buttons_disabled(true)
 	if AudioManager:
 		AudioManager.play_click()
-	var name_txt = username_input.text.strip_edges()
-	if name_txt != "":
-		GameController.start_new_game(name_txt)
+	await GameController.start_new_game(name_txt)
+	if is_instance_valid(self):
+		_is_transitioning = false
+		_set_buttons_disabled(false)
 
 func _on_customize_pressed() -> void:
+	if _is_transitioning or (SceneManager and SceneManager.is_transitioning):
+		return
+	_is_transitioning = true
+	_set_buttons_disabled(true)
 	if AudioManager:
 		AudioManager.play_click()
-	SceneManager.change_room("res://scenes/ui/CharacterCustomization.tscn")
+	await SceneManager.change_room("res://scenes/ui/CharacterCustomization.tscn")
+	if is_instance_valid(self):
+		_is_transitioning = false
+		_set_buttons_disabled(false)
 
 func _on_settings_pressed() -> void:
+	if _is_transitioning:
+		return
 	if AudioManager:
 		AudioManager.play_click()
 	if ToastManager:
 		ToastManager.show_info("⚙️ Game Settings coming soon!")
 
 func _on_aligner_pressed() -> void:
+	if _is_transitioning or (SceneManager and SceneManager.is_transitioning):
+		return
+	_is_transitioning = true
+	_set_buttons_disabled(true)
 	if AudioManager:
 		AudioManager.play_click()
 	get_tree().change_scene_to_file("res://scenes/tools/ModelAligner.tscn")
