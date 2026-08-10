@@ -1,20 +1,20 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://cx52t7frf37n5"]
 
-[ext_resource type="Script" path="res://scenes/ui/OverviewModal.gd" id="1_overview_script"]
+[ext_resource type="Script" uid="uid://gbmgxvdrpd21" path="res://scenes/ui/OverviewModal.gd" id="1_overview_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/popup.png" id="3_bg_popup"]
-[ext_resource type="FontFile" path="res://assets/fonts/SpecialElite-Regular.ttf" id="4_font_special_elite"]
+[ext_resource type="Texture2D" uid="uid://bxirg3dhjshc8" path="res://assets/ui/paper_craft/popup.png" id="3_bg_popup"]
+[ext_resource type="FontFile" uid="uid://uiu0c2c8i80c" path="res://assets/fonts/SpecialElite-Regular.ttf" id="4_font_special_elite"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_card_bg"]
 texture = ExtResource("3_bg_popup")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge_stamp"]
-bg_color = Color(0.90, 0.45, 0.08, 1)
+bg_color = Color(0.9, 0.45, 0.08, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.70, 0.30, 0.04, 1)
+border_color = Color(0.7, 0.3, 0.04, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -22,19 +22,19 @@ corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_btn"]
 
-[node name="OverviewModal" type="CanvasLayer"]
+[node name="OverviewModal" type="CanvasLayer" unique_id=1076519243]
 layer = 60
 script = ExtResource("1_overview_script")
 
-[node name="ColorRectBackdrop" type="ColorRect" parent="."]
+[node name="ColorRectBackdrop" type="ColorRect" parent="." unique_id=136397146]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.10, 0.08, 0.06, 0.62)
+color = Color(0.1, 0.08, 0.06, 0.62)
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=862401795]
 custom_minimum_size = Vector2(510, 680)
 anchors_preset = 8
 anchor_left = 0.5
@@ -49,22 +49,22 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_card_bg")
 
-[node name="ContentArea" type="Control" parent="PanelContainer"]
+[node name="ContentArea" type="Control" parent="PanelContainer" unique_id=1892605409]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/ContentArea"]
+[node name="TitleLabel" type="Label" parent="PanelContainer/ContentArea" unique_id=794814509]
 layout_mode = 1
 offset_left = 48.0
 offset_top = 70.0
 offset_right = 462.0
 offset_bottom = 110.0
-theme_override_colors/font_color = Color(0.18, 0.15, 0.10, 1)
+theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 24
 text = "Conversation Reflection"
 horizontal_alignment = 1
 
-[node name="OutcomeBadge" type="Label" parent="PanelContainer/ContentArea"]
+[node name="OutcomeBadge" type="Label" parent="PanelContainer/ContentArea" unique_id=116700345]
 layout_mode = 1
 offset_left = 130.0
 offset_top = 118.0
@@ -79,7 +79,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_badge_stamp")
 text = " PERFORMANCE: GOOD "
 horizontal_alignment = 1
 
-[node name="NarrativeText" type="RichTextLabel" parent="PanelContainer/ContentArea"]
+[node name="NarrativeText" type="RichTextLabel" parent="PanelContainer/ContentArea" unique_id=13993064]
 layout_mode = 1
 offset_left = 48.0
 offset_top = 168.0
@@ -94,7 +94,7 @@ bbcode_enabled = true
 text = "[b]Outcome:[/b]
 The encounter reached a conclusion."
 
-[node name="ObserverCard" type="PanelContainer" parent="PanelContainer/ContentArea"]
+[node name="ObserverCard" type="PanelContainer" parent="PanelContainer/ContentArea" unique_id=698708564]
 visible = false
 layout_mode = 1
 offset_left = 48.0
@@ -103,32 +103,32 @@ offset_right = 462.0
 offset_bottom = 440.0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_btn")
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer/ContentArea/ObserverCard"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer/ContentArea/ObserverCard" unique_id=1056979034]
 layout_mode = 2
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ContentArea/ObserverCard/Margin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ContentArea/ObserverCard/Margin" unique_id=1093732552]
 layout_mode = 2
 
-[node name="HeaderLabel" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer"]
+[node name="HeaderLabel" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer" unique_id=836519110]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 0.30, 0.05, 1)
+theme_override_colors/font_color = Color(0.55, 0.3, 0.05, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
 text = "📋 Observer Pattern Insight"
 
-[node name="ObserverText" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer"]
+[node name="ObserverText" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer" unique_id=1867544843]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.25, 0.20, 0.14, 1)
+theme_override_colors/font_color = Color(0.25, 0.2, 0.14, 1)
 theme_override_fonts/font = ExtResource("4_font_special_elite")
 theme_override_font_sizes/font_size = 14
 text = "Pattern text..."
 autowrap_mode = 3
 
-[node name="LevelUpBanner" type="PanelContainer" parent="PanelContainer/ContentArea"]
+[node name="LevelUpBanner" type="PanelContainer" parent="PanelContainer/ContentArea" unique_id=926429541]
 visible = false
 layout_mode = 1
 offset_left = 48.0
@@ -136,32 +136,32 @@ offset_top = 450.0
 offset_right = 462.0
 offset_bottom = 510.0
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer/ContentArea/LevelUpBanner"]
+[node name="Margin" type="MarginContainer" parent="PanelContainer/ContentArea/LevelUpBanner" unique_id=658622143]
 layout_mode = 2
 
-[node name="LevelUpText" type="Label" parent="PanelContainer/ContentArea/LevelUpBanner/Margin"]
+[node name="LevelUpText" type="Label" parent="PanelContainer/ContentArea/LevelUpBanner/Margin" unique_id=1632151319]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.90, 0.45, 0.08, 1)
+theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 20
 text = "LEVEL UP! Level 2"
 horizontal_alignment = 1
 
-[node name="CloseButton" type="Button" parent="PanelContainer/ContentArea"]
+[node name="CloseButton" type="Button" parent="PanelContainer/ContentArea" unique_id=280037844]
 layout_mode = 1
-offset_left = 60.0
-offset_top = 562.0
-offset_right = 450.0
-offset_bottom = 620.0
+offset_left = 67.0
+offset_top = 551.0
+offset_right = 457.0
+offset_bottom = 609.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.85, 0.75, 0.3, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9, 0.4, 1)
-theme_override_colors/font_pressed_color = Color(0.85, 0.75, 0.30, 1)
 theme_override_colors/font_outline_color = Color(0.08, 0.28, 0.52, 1)
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxEmpty_btn")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_btn")
 text = "Step Away"
