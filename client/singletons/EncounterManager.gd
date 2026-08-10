@@ -50,15 +50,15 @@ func start_encounter(npc_id: String) -> void:
 				var tween_npc = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 				tween_npc.tween_property(npc_mesh, "rotation:y", current_angle + diff, 0.35)
 
-	# Instantly show Dialogue UI in Connecting mode
 	_ensure_dialogue_ui()
 	if dialogue_ui_ref.has_method("set_spatial_targets"):
 		dialogue_ui_ref.set_spatial_targets(target_npc, player)
-	dialogue_ui_ref.show_connecting_state(npc_id)
 	
-	# Fetch opening line from backend
+	# Keep dialogue UI hidden during initial fetch so it does not flash before Perception/Overview Modal
+	dialogue_ui_ref.visible = false
 	var res = await ApiClient.start_interaction(PlayerStore.player_id, npc_id)
 	if res.has("error"):
+		dialogue_ui_ref.show_connecting_state(npc_id)
 		var detail = res.get("detail", "Could not connect to server.")
 		dialogue_ui_ref.display_error(detail)
 		if player:
@@ -68,7 +68,6 @@ func start_encounter(npc_id: String) -> void:
 	# Check Perception Layer for Social Context Onboarding
 	var perception = res.get("perception_layer", {})
 	if perception is Dictionary and perception.get("show_modal", true):
-		dialogue_ui_ref.visible = false
 		var modal_scene = preload("res://scenes/ui/PerceptionModal.tscn")
 		var perception_modal = modal_scene.instantiate()
 		get_tree().root.add_child(perception_modal)

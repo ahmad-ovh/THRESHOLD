@@ -1,17 +1,17 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://cd7of32wgsn77"]
 
-[ext_resource type="Script" path="res://scenes/ui/StoryboardLoading.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dx8u2m4u762ok" path="res://scenes/ui/StoryboardLoading.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="4_font"]
 [ext_resource type="Texture2D" uid="uid://bptc2tpk6ki24" path="res://assets/ui/paper_craft/popuphori.png" id="5_popup"]
-[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/thumbtack_orange.png" id="6_thumbtack"]
-[ext_resource type="Texture2D" path="res://assets/ui/paper_craft/splash.png" id="7_splash"]
+[ext_resource type="Texture2D" uid="uid://bhoisbqagxkwk" path="res://assets/ui/paper_craft/thumbtack_orange.png" id="6_thumbtack"]
+[ext_resource type="Texture2D" uid="uid://cv6ke0b6guvkf" path="res://assets/ui/paper_craft/splash.png" id="7_splash"]
 [ext_resource type="Theme" uid="uid://cyxi2trp6esvr" path="res://resources/theme/main_theme.tres" id="8_theme"]
 
-[node name="StoryboardLoading" type="CanvasLayer"]
+[node name="StoryboardLoading" type="CanvasLayer" unique_id=2046609989]
 layer = 95
 script = ExtResource("1_script")
 
-[node name="Root" type="Control" parent="."]
+[node name="Root" type="Control" parent="." unique_id=1145153105]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("8_theme")
 
-[node name="PaperBg" type="TextureRect" parent="Root"]
+[node name="PaperBg" type="TextureRect" parent="Root" unique_id=915428791]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,15 +31,15 @@ texture = ExtResource("7_splash")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="TitleLabel" type="Label" parent="Root"]
+[node name="TitleLabel" type="Label" parent="Root" unique_id=505657571]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -250.0
-offset_top = 20.0
-offset_right = 250.0
-offset_bottom = 80.0
+offset_left = -245.0
+offset_top = 43.0
+offset_right = 255.0
+offset_bottom = 104.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.18, 0.15, 0.12, 1)
 theme_override_fonts/font = ExtResource("4_font")
@@ -48,7 +48,7 @@ text = "LOADING..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelCard" type="Control" parent="Root"]
+[node name="PanelCard" type="Control" parent="Root" unique_id=492948985]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -62,7 +62,7 @@ offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CardBg" type="TextureRect" parent="Root/PanelCard"]
+[node name="CardBg" type="TextureRect" parent="Root/PanelCard" unique_id=851211022]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -72,7 +72,7 @@ grow_vertical = 2
 texture = ExtResource("5_popup")
 expand_mode = 1
 
-[node name="ThumbtackLeft" type="TextureRect" parent="Root/PanelCard"]
+[node name="ThumbtackLeft" type="TextureRect" parent="Root/PanelCard" unique_id=1659595037]
 layout_mode = 0
 offset_left = 25.0
 offset_top = 15.0
@@ -81,7 +81,7 @@ offset_bottom = 55.0
 texture = ExtResource("6_thumbtack")
 expand_mode = 1
 
-[node name="ThumbtackRight" type="TextureRect" parent="Root/PanelCard"]
+[node name="ThumbtackRight" type="TextureRect" parent="Root/PanelCard" unique_id=520268651]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -94,34 +94,34 @@ grow_horizontal = 0
 texture = ExtResource("6_thumbtack")
 expand_mode = 1
 
-[node name="ChapterLabel" type="Label" parent="Root/PanelCard"]
+[node name="ChapterLabel" type="Label" parent="Root/PanelCard" unique_id=1068820069]
 layout_mode = 0
-offset_left = 130.0
-offset_top = 35.0
-offset_right = 630.0
-offset_bottom = 70.0
+offset_left = 132.0
+offset_top = 39.0
+offset_right = 632.0
+offset_bottom = 74.0
 theme_override_colors/font_color = Color(0.75, 0.45, 0.2, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 22
 text = "CHAPTER I • THE THRESHOLD"
 horizontal_alignment = 1
 
-[node name="PanelImage" type="TextureRect" parent="Root/PanelCard"]
+[node name="PanelImage" type="TextureRect" parent="Root/PanelCard" unique_id=1914576220]
 layout_mode = 0
-offset_left = 130.0
-offset_top = 75.0
-offset_right = 630.0
-offset_bottom = 270.0
+offset_left = 131.0
+offset_top = 87.0
+offset_right = 631.0
+offset_bottom = 282.0
 texture = ExtResource("7_splash")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NarrativeLabel" type="RichTextLabel" parent="Root/PanelCard"]
+[node name="NarrativeLabel" type="RichTextLabel" parent="Root/PanelCard" unique_id=19494790]
 layout_mode = 0
-offset_left = 130.0
-offset_top = 280.0
-offset_right = 630.0
-offset_bottom = 385.0
+offset_left = 133.0
+offset_top = 305.0
+offset_right = 633.0
+offset_bottom = 410.0
 theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/normal_font_size = 18
 bbcode_enabled = true
@@ -129,7 +129,7 @@ text = "[center]Beyond the fog lies THRESHOLD — a city where words shape reali
 fit_content = true
 autowrap_mode = 2
 
-[node name="BottomBar" type="Control" parent="Root"]
+[node name="BottomBar" type="Control" parent="Root" unique_id=1575993515]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -143,18 +143,15 @@ offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="ProgressBar" type="ProgressBar" parent="Root/BottomBar"]
+[node name="ProgressBar" type="ProgressBar" parent="Root/BottomBar" unique_id=1285448623]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
 offset_right = 600.0
 offset_bottom = 20.0
 value = 25.0
 
-[node name="StatusLabel" type="Label" parent="Root/BottomBar"]
+[node name="StatusLabel" type="Label" parent="Root/BottomBar" unique_id=79569168]
 layout_mode = 0
-offset_left = 0.0
 offset_top = 26.0
 offset_right = 600.0
 offset_bottom = 50.0
@@ -163,9 +160,8 @@ theme_override_font_sizes/font_size = 14
 text = "Loading World... 25%"
 horizontal_alignment = 1
 
-[node name="PromptLabel" type="Label" parent="Root/BottomBar"]
+[node name="PromptLabel" type="Label" parent="Root/BottomBar" unique_id=450170160]
 layout_mode = 0
-offset_left = 0.0
 offset_top = 65.0
 offset_right = 600.0
 offset_bottom = 95.0
