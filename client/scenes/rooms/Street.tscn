@@ -17,7 +17,9 @@
 [ext_resource type="PackedScene" uid="uid://ccuryb20euba3" path="res://assets/threshold/environment/trash_bin_01.gltf" id="18_trash"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_road"]
-albedo_color = Color(0.2, 0.22, 0.25, 1)
+albedo_color = Color(0.26, 0.28, 0.32, 1)
+metallic = 0.05
+roughness = 0.85
 
 [node name="Street" type="Node3D" unique_id=961492616]
 script = ExtResource("1_script")
