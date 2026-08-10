@@ -33,6 +33,15 @@ func _setup_button_animations(btn: Button) -> void:
 		var tw = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
 	)
+	btn.button_down.connect(func():
+		var tw = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(0.95, 0.95), 0.08)
+	)
+	btn.button_up.connect(func():
+		var target_s = Vector2(1.05, 1.05) if btn.is_hovered() else Vector2(1.0, 1.0)
+		var tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", target_s, 0.1)
+	)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and (event.is_action_pressed("interact") or event.is_action_pressed("ui_accept")):

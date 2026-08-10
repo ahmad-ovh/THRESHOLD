@@ -53,6 +53,17 @@ axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 1666, 568)
 modulate_color = Color(1.15, 1.15, 1.15, 1)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_btn_pressed"]
+texture = ExtResource("3_bg_button")
+texture_margin_left = 60.0
+texture_margin_top = 30.0
+texture_margin_right = 60.0
+texture_margin_bottom = 30.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+region_rect = Rect2(0, 0, 1666, 568)
+modulate_color = Color(0.82, 0.82, 0.82, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_panel"]
 bg_color = Color(0.99, 0.97, 0.93, 0.97)
 border_width_left = 2
@@ -205,10 +216,12 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_colors/font_color = Color(0.96, 0.94, 0.88, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.80, 0.78, 0.70, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
 text = "✕"
 
 [node name="ChatScrollContainer" type="ScrollContainer" parent="OverlayRoot" unique_id=656882669]
@@ -270,10 +283,12 @@ custom_minimum_size = Vector2(90, 52)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_colors/font_hover_color = Color(0.90, 0.45, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.60, 0.28, 0.04, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxTexture_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_pressed")
 text = "SEND"
 
 [node name="FeedbackPanel" type="PanelContainer" parent="OverlayRoot" unique_id=814802721]
@@ -391,6 +406,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.38, 0.28, 0.16, 1)
 theme_override_colors/font_hover_color = Color(0.90, 0.45, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.60, 0.28, 0.04, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 text = "✦ Conversation ended — click to continue"

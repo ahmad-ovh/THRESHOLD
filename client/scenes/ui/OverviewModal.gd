@@ -34,6 +34,19 @@ func _setup_button_hover_effects(btn: Button) -> void:
 		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.15)
 	)
+	btn.button_down.connect(func():
+		if btn.disabled:
+			return
+		var tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(0.95, 0.95), 0.08)
+	)
+	btn.button_up.connect(func():
+		if btn.disabled:
+			return
+		var target_s = Vector2(1.06, 1.06) if btn.is_hovered() else Vector2(1.0, 1.0)
+		var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", target_s, 0.1)
+	)
 
 func show_settlement(end_data: Dictionary, level_data: Dictionary = {}) -> void:
 	visible = true

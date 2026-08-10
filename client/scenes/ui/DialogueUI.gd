@@ -80,6 +80,19 @@ func _setup_button_hover_effects(btn: Button) -> void:
 		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.12)
 	)
+	btn.button_down.connect(func():
+		if btn.disabled:
+			return
+		var tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", Vector2(0.95, 0.95), 0.08)
+	)
+	btn.button_up.connect(func():
+		if btn.disabled:
+			return
+		var target_s = Vector2(1.05, 1.05) if btn.is_hovered() else Vector2(1.0, 1.0)
+		var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(btn, "scale", target_s, 0.1)
+	)
 	_reset_encounter_metrics()
 
 func _process(delta: float) -> void:

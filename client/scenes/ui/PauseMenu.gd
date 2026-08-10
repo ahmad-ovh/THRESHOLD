@@ -18,12 +18,23 @@ func _setup_button_animations(btn: Button) -> void:
 	btn.pivot_offset = btn.size / 2.0
 	btn.resized.connect(func(): btn.pivot_offset = btn.size / 2.0)
 	btn.mouse_entered.connect(func():
+		if AudioManager and AudioManager.has_method("play_hover"):
+			AudioManager.play_hover()
 		var tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		tw.tween_property(btn, "scale", Vector2(1.06, 1.06), 0.12)
 	)
 	btn.mouse_exited.connect(func():
 		var tw = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1)
+	)
+	btn.button_down.connect(func():
+		var tw = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", Vector2(0.95, 0.95), 0.08)
+	)
+	btn.button_up.connect(func():
+		var target_s = Vector2(1.06, 1.06) if btn.is_hovered() else Vector2(1.0, 1.0)
+		var tw = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.tween_property(btn, "scale", target_s, 0.1)
 	)
 
 func _on_resume_pressed() -> void:
