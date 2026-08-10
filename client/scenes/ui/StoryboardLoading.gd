@@ -87,7 +87,7 @@ func _show_panel(index: int) -> void:
 	var p = _narrative_panels[index]
 	
 	chapter_label.text = p.get("chapter", "")
-	narrative_label.text = p.get("text", "")
+	narrative_label.text = "[center]" + p.get("text", "") + "[/center]"
 	
 	var img_path = p.get("image", "")
 	if ResourceLoader.exists(img_path):
@@ -103,10 +103,8 @@ func _show_panel(index: int) -> void:
 	if AudioManager and AudioManager.has_method("play_hover"):
 		AudioManager.play_hover()
 		
-	# Unlock advance after brief delay
-	get_tree().create_timer(0.2).timeout.connect(func():
-		_can_advance = true
-	)
+	# Unlock advance movement immediately
+	_can_advance = true
 
 func _start_panel_timer() -> void:
 	# Auto advance panels every 4 seconds if user doesn't click
