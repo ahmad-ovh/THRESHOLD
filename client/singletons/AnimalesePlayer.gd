@@ -4,8 +4,8 @@ extends Node
 class NPCVoiceProfile extends RefCounted:
 	var npc_id: String = ""
 	var voice_set: String = "voice_1"
-	var pitch_scale: float = 1.0
-	var letter_delay_ms: float = 100.0
+	var pitch_scale: float = 0.7
+	var letter_delay_ms: float = 110.0
 
 	static func create_from_id(p_npc_id: String) -> NPCVoiceProfile:
 		var prof = NPCVoiceProfile.new()
@@ -16,14 +16,17 @@ class NPCVoiceProfile extends RefCounted:
 		var set_idx = 1 + (h % 4)
 		prof.voice_set = "voice_" + str(set_idx)
 		
-		# Deterministic pitch scale range: 0.82x (deep) to 1.22x (high/cheerful)
-		prof.pitch_scale = 0.82 + float((h >> 3) % 40) / 100.0
-		prof.letter_delay_ms = 95.0 + float((h >> 6) % 30)
+		# Cozy, warm pitch scale range: 0.55x (deep/smooth) to 0.88x (warm/cheerful)
+		# Lower pitch eliminates harsh high-frequency treble ("bee buzzing")
+		prof.pitch_scale = 0.55 + float((h >> 3) % 34) / 100.0
+		prof.letter_delay_ms = 100.0 + float((h >> 6) % 30)
 		return prof
 
 const POOL_SIZE: int = 8
 var _players: Array[AudioStreamPlayer] = []
 var _pool_index: int = 0
+var _last_play_time_msec: int = 0
+const MIN_SOUND_INTERVAL_MS: int = 80 # Enforces max ~12 vocal sounds/sec to prevent buzzing swarm effect
 
 # Cached audio streams: [voice_set][name] -> AudioStream
 var _samples: Dictionary = {}
@@ -38,6 +41,7 @@ func _setup_audio_pool() -> void:
 	for i in range(POOL_SIZE):
 		var p = AudioStreamPlayer.new()
 		p.bus = &"Master"
+		p.volume_db = -6.5 # Soft pleasant background dialogue level
 		add_child(p)
 		_players.append(p)
 
@@ -76,11 +80,17 @@ func play_letter(npc_id: String, letter: String) -> void:
 	if clean_char < "a" or clean_char > "z":
 		return
 		
+	# Minimum interval check to prevent rapid overlapping audio swarm
+	var now = Time.get_ticks_msec()
+	if now - _last_play_time_msec < MIN_SOUND_INTERVAL_MS:
+		return
+		
 	var prof = get_profile_for_npc(npc_id)
 	var set_dict = _samples.get(prof.voice_set, {})
 	var stream = set_dict.get(clean_char, null)
 	
 	if stream:
+		_last_play_time_msec = now
 		_play_stream_from_pool(stream, prof.pitch_scale)
 
 func play_reaction(npc_id: String, reaction_name: String) -> void:
@@ -96,6 +106,7 @@ func play_reaction(npc_id: String, reaction_name: String) -> void:
 		
 	var stream = set_dict.get(r_key, null)
 	if stream:
+		_last_play_time_msec = Time.get_ticks_msec()
 		_play_stream_from_pool(stream, prof.pitch_scale)
 
 func _play_stream_from_pool(stream: AudioStream, pitch: float) -> void:
@@ -121,3 +132,4 @@ static func stable_hash(text: String) -> int:
 		h = (h ^ b) * 16777619
 		h = h & 0x7FFFFFFF
 	return h
+

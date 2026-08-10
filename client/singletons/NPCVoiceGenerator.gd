@@ -72,10 +72,10 @@ class DialogueTimeline extends RefCounted:
 			var c = clean_text[i]
 			
 			# Determine character reveal step duration
-			var step_dur: float = 35.0 # Base ~28 chars/sec
+			var step_dur: float = 50.0 # Cozy ~20 chars/sec
 			
 			if c == ' ':
-				step_dur = 20.0
+				step_dur = 30.0
 			elif c == ',':
 				step_dur = 140.0
 			elif c in ['.', '!', '?', ':', ';']:
