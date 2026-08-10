@@ -1,7 +1,19 @@
+@tool
 # res://scenes/templates/NPC.gd
 extends CharacterBody3D
 
 @export var npc_id: String = ""
+
+@export_group("Interaction Trigger Bounds")
+@export var interaction_radius: float = 2.5:
+	set(value):
+		interaction_radius = max(0.1, value)
+		_update_interaction_bounds()
+
+@export var interaction_offset: Vector3 = Vector3(0, 0.9, 0):
+	set(value):
+		interaction_offset = value
+		_update_interaction_bounds()
 
 static var _npc_resource_cache: Dictionary = {}
 
@@ -32,11 +44,32 @@ var idle_anim_time: float = 0.0
 
 func _ready() -> void:
 	add_to_group("npcs")
+	_update_interaction_bounds()
 	if ground_ring:
 		ground_ring.visible = false
-	if not active_data and npc_id != "":
-		active_data = get_npc_data(npc_id)
-	_setup_visuals()
+	if not Engine.is_editor_hint():
+		if not active_data and npc_id != "":
+			active_data = get_npc_data(npc_id)
+		_setup_visuals()
+
+func _update_interaction_bounds() -> void:
+	var area_shape = get_node_or_null("InteractionArea/CollisionShape3D")
+	if not area_shape:
+		return
+		
+	area_shape.position = interaction_offset
+	
+	var sphere: SphereShape3D = null
+	if area_shape.shape:
+		if not area_shape.shape.is_local_to_scene():
+			area_shape.shape = area_shape.shape.duplicate()
+		sphere = area_shape.shape as SphereShape3D
+	else:
+		sphere = SphereShape3D.new()
+		area_shape.shape = sphere
+		
+	if sphere:
+		sphere.radius = interaction_radius
 
 func _setup_visuals() -> void:
 	for child in mesh_container.get_children():
@@ -62,6 +95,8 @@ func _setup_visuals() -> void:
 		set_mood_emoji(active_data.default_expression)
 
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	idle_anim_time += delta * 2.0
 	_update_idle_animation(delta)
 
