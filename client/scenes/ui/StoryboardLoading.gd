@@ -8,11 +8,11 @@ signal storyboard_completed
 @onready var root: Control = $Root
 @onready var paper_bg: TextureRect = $Root/PaperBg
 @onready var panel_card: Control = $Root/PanelCard
-@onready var panel_image: TextureRect = $Root/PanelCard/MarginContainer/VBoxContainer/ImageContainer/PanelImage
-@onready var chapter_label: Label = $Root/PanelCard/MarginContainer/VBoxContainer/ChapterLabel
-@onready var narrative_label: RichTextLabel = $Root/PanelCard/MarginContainer/VBoxContainer/NarrativeLabel
-@onready var progress_bar: ProgressBar = $Root/BottomBar/VBoxContainer/ProgressBar
-@onready var status_label: Label = $Root/BottomBar/VBoxContainer/StatusLabel
+@onready var panel_image: TextureRect = $Root/PanelCard/PanelImage
+@onready var chapter_label: Label = $Root/PanelCard/ChapterLabel
+@onready var narrative_label: RichTextLabel = $Root/PanelCard/NarrativeLabel
+@onready var progress_bar: ProgressBar = $Root/BottomBar/ProgressBar
+@onready var status_label: Label = $Root/BottomBar/StatusLabel
 @onready var prompt_label: Label = $Root/BottomBar/PromptLabel
 
 var _current_panel_index := 0
