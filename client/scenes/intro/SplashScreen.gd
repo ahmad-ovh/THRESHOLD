@@ -47,7 +47,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if not _loading_done:
-		if SceneManager.is_scene_loaded(MAIN_MENU_PATH):
+		if SceneManager.is_scene_loaded(MAIN_MENU_PATH) and SceneManager.is_scene_loaded(STREET_PATH):
 			_loading_done = true
 			_check_ready_to_skip()
 

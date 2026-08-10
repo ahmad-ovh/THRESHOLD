@@ -62,7 +62,7 @@ func start_encounter(npc_id: String) -> void:
 	var perception = res.get("perception_layer", {})
 	if perception is Dictionary and perception.get("show_modal", true):
 		dialogue_ui_ref.visible = false
-		var modal_scene = load("res://scenes/ui/PerceptionModal.tscn")
+		var modal_scene = preload("res://scenes/ui/PerceptionModal.tscn")
 		var perception_modal = modal_scene.instantiate()
 		get_tree().root.add_child(perception_modal)
 		perception_modal.setup_and_show(perception)
@@ -150,7 +150,7 @@ func _finalize_encounter() -> void:
 
 func _ensure_dialogue_ui() -> void:
 	if not dialogue_ui_ref:
-		var ui_scene = load("res://scenes/ui/DialogueUI.tscn")
+		var ui_scene = preload("res://scenes/ui/DialogueUI.tscn")
 		dialogue_ui_ref = ui_scene.instantiate()
 		get_tree().root.add_child(dialogue_ui_ref)
 		dialogue_ui_ref.message_submitted.connect(_on_player_message_submitted)
@@ -158,6 +158,6 @@ func _ensure_dialogue_ui() -> void:
 
 func _ensure_overview_modal() -> void:
 	if not overview_modal_ref:
-		var scene = load("res://scenes/ui/OverviewModal.tscn")
+		var scene = preload("res://scenes/ui/OverviewModal.tscn")
 		overview_modal_ref = scene.instantiate()
 		get_tree().root.add_child(overview_modal_ref)
