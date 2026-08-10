@@ -290,6 +290,7 @@ func display_reply(text: String) -> void:
 	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("convert_to_npc_reply"):
 		active_npc_bubble.convert_to_npc_reply(active_npc_name, text, active_npc_id)
 		_enforce_max_messages()
+		_scroll_to_bottom()
 	else:
 		_spawn_npc_bubble(text)
 		
@@ -375,8 +376,11 @@ func _enforce_max_messages() -> void:
 
 func _scroll_to_bottom() -> void:
 	await get_tree().process_frame
+	await get_tree().process_frame
 	if chat_scroll_container:
-		chat_scroll_container.scroll_vertical = int(chat_scroll_container.get_v_scroll_bar().max_value)
+		var target_scroll = int(chat_scroll_container.get_v_scroll_bar().max_value)
+		var tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(chat_scroll_container, "scroll_vertical", target_scroll, 0.18)
 
 func _clear_bubbles() -> void:
 	for child in bubbles_container.get_children():
