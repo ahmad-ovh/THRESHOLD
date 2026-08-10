@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://taflknabuho8" path="res://scenes/ui/DialogueUI.gd" id="1_dialogue_script"]
 [ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="2_font_hitchcut"]
-
 [ext_resource type="Texture2D" uid="uid://bphaibmdoobfb" path="res://assets/ui/paper_craft/bg_button.png" id="3_bg_button"]
 [ext_resource type="FontFile" uid="uid://uiu0c2c8i80c" path="res://assets/fonts/SpecialElite-Regular.ttf" id="4_font_special_elite"]
 
@@ -39,22 +38,7 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.3, 0.6, 1.0, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color(0, 0, 0, 0.2)
-shadow_size = 3
-shadow_offset = Vector2(0, 2)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
-bg_color = Color(0.18, 0.38, 0.68, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.45, 0.72, 1.0, 1)
+border_color = Color(0.3, 0.6, 1, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -74,6 +58,21 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.18, 0.38, 0.68, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.72, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 3
+shadow_offset = Vector2(0, 2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_panel"]
 bg_color = Color(0.99, 0.97, 0.93, 0.97)
@@ -152,6 +151,13 @@ axis_stretch_vertical = 2
 region_rect = Rect2(0, 0, 1666, 568)
 modulate_color = Color(0.85, 0.85, 0.85, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
+bg_color = Color(0.88, 0.82, 0.72, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
 bg_color = Color(0.9, 0.45, 0.08, 1)
 corner_radius_top_left = 6
@@ -171,13 +177,14 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MainTitleLabel" type="Label" parent="OverlayRoot" unique_id=1221552768]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -220.0
-offset_top = 18.0
-offset_right = 220.0
-offset_bottom = 44.0
+offset_left = -244.0
+offset_top = 29.0
+offset_right = 196.0
+offset_bottom = 55.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.18, 0.15, 0.1, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
@@ -187,13 +194,14 @@ horizontal_alignment = 1
 
 [node name="NPCInfoCard" type="PanelContainer" parent="OverlayRoot" unique_id=1299804376]
 custom_minimum_size = Vector2(300, 56)
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -316.0
-offset_top = 64.0
-offset_right = -16.0
-offset_bottom = 120.0
+offset_left = -439.0
+offset_top = 14.0
+offset_right = -12.0
+offset_bottom = 70.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_npc_card")
 
@@ -254,13 +262,13 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.88, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.8, 0.88, 1.0, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "✕"
 
 [node name="ChatScrollContainer" type="ScrollContainer" parent="OverlayRoot" unique_id=656882669]
@@ -321,13 +329,13 @@ placeholder_text = "[Character Count] Type your message..."
 custom_minimum_size = Vector2(90, 52)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.88, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.8, 0.88, 1.0, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "SEND"
 
 [node name="FeedbackPanel" type="PanelContainer" parent="OverlayRoot" unique_id=814802721]

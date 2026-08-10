@@ -99,7 +99,6 @@ func _setup_button_hover_effects(btn: Button) -> void:
 		var tween = create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		tween.tween_property(btn, "scale", target_s, 0.1)
 	)
-	_reset_encounter_metrics()
 
 func _process(delta: float) -> void:
 	if is_thinking:
@@ -157,6 +156,8 @@ func open_dialogue(npc_name: String, opening_line: String) -> void:
 	active_npc_name = npc_name.capitalize()
 	speaker_label.text = active_npc_name
 	_update_npc_sub_info()
+	_clear_bubbles()
+	_reset_encounter_metrics()
 	visible = true
 	stop_thinking()
 	
