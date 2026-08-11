@@ -8,7 +8,6 @@ func _ready() -> void:
 	_setup_street_lights()
 	_populate_urban_street_decor()
 	_ensure_street_boundary_colliders()
-	_setup_street_physics_colliders()
 	
 	if SceneManager:
 		SceneManager.position_player_in_scene(self)
@@ -153,59 +152,6 @@ func _ensure_street_boundary_colliders() -> void:
 	right_wall.size = Vector3(0.4, 5.0, 12.0)
 	right_wall.position = Vector3(40.0, 2.5, 0.0)
 	boundaries.add_child(right_wall)
-
-func _setup_street_physics_colliders() -> void:
-	var col_root = get_node_or_null("AutoStreetColliders")
-	if col_root:
-		col_root.queue_free()
-		
-	col_root = Node3D.new()
-	col_root.name = "AutoStreetColliders"
-	add_child(col_root)
-
-	var process_node = func(node: Node, self_ref: Callable) -> void:
-		for child in node.get_children():
-			if child is Area3D or child is CharacterBody3D or child.name.begins_with("Door") or child.name.begins_with("NPC_") or child.name == "Player3D":
-				continue
-			if child is MeshInstance3D and child.mesh:
-				var mesh_name = child.name.to_lower()
-				if not (mesh_name.contains("rug") or mesh_name.contains("floor") or mesh_name.contains("ground")):
-					_add_world_collider_for_mesh(child, col_root)
-			self_ref.call(child, self_ref)
-
-	var root_groups = ["Architecture", "EnvironmentProps", "UrbanDecor"]
-	for group_name in root_groups:
-		var root_node = get_node_or_null(group_name)
-		if root_node:
-			process_node.call(root_node, process_node)
-
-func _add_world_collider_for_mesh(mi: MeshInstance3D, col_root: Node3D) -> void:
-	if not mi or not mi.mesh:
-		return
-
-	var aabb = mi.mesh.get_aabb()
-	if aabb.size.length() < 0.05:
-		return
-
-	var global_scale = mi.global_transform.basis.get_scale()
-	var box = BoxShape3D.new()
-	box.size = aabb.size * global_scale
-
-	if box.size.x < 0.05 or box.size.y < 0.05 or box.size.z < 0.05:
-		return
-
-	var sb = StaticBody3D.new()
-	sb.name = mi.name + "_AutoCol"
-
-	var cs = CollisionShape3D.new()
-	cs.shape = box
-
-	sb.add_child(cs)
-	col_root.add_child(sb)
-
-	var center_offset = mi.global_transform.basis * aabb.get_center()
-	sb.global_position = mi.global_position + center_offset
-	sb.global_rotation = mi.global_rotation
 
 func _process(delta: float) -> void:
 	var player = get_node_or_null("Player3D")
