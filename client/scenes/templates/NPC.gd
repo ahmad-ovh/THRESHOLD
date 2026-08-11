@@ -63,9 +63,11 @@ func _update_interaction_bounds() -> void:
 	if area_shape.shape:
 		if not area_shape.shape.is_local_to_scene():
 			area_shape.shape = area_shape.shape.duplicate()
+			area_shape.shape.resource_local_to_scene = true
 		sphere = area_shape.shape as SphereShape3D
 	else:
 		sphere = SphereShape3D.new()
+		sphere.resource_local_to_scene = true
 		area_shape.shape = sphere
 		
 	if sphere:

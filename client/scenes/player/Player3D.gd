@@ -37,6 +37,7 @@ extends CharacterBody3D
 @onready var interaction_detector: Area3D = $InteractionDetector
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
+var nearby_targets: Array[Node3D] = []
 var current_target: Node3D = null
 
 var anim_left_leg: Node3D
@@ -499,6 +500,7 @@ func _physics_process(delta: float) -> void:
 		_apply_friction(delta)
 
 	_update_procedural_animations(delta, can_move)
+	_update_interaction_target()
 	move_and_slide()
 
 func _update_procedural_animations(delta: float, can_move: bool) -> void:
@@ -601,15 +603,34 @@ func _apply_friction(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0, friction * delta)
 	velocity.z = move_toward(velocity.z, 0, friction * delta)
 
+func _update_interaction_target() -> void:
+	nearby_targets = nearby_targets.filter(func(t): return is_instance_valid(t))
+
+	var best_target: Node3D = null
+	var min_dist: float = INF
+	for target in nearby_targets:
+		var dist = global_position.distance_to(target.global_position)
+		if dist < min_dist:
+			min_dist = dist
+			best_target = target
+
+	if best_target != current_target:
+		if current_target and is_instance_valid(current_target) and current_target.has_method("show_prompt"):
+			current_target.show_prompt(false)
+		current_target = best_target
+		if current_target and current_target.has_method("show_prompt"):
+			current_target.show_prompt(true)
+
 func _on_area_entered(area: Area3D) -> void:
 	var parent = area.get_parent()
-	if parent.has_method("show_prompt"):
-		current_target = parent
-		parent.show_prompt(true)
+	if parent and parent.has_method("show_prompt") and not nearby_targets.has(parent):
+		nearby_targets.append(parent)
+		_update_interaction_target()
 
 func _on_area_exited(area: Area3D) -> void:
 	var parent = area.get_parent()
-	if parent == current_target:
+	if parent and nearby_targets.has(parent):
+		nearby_targets.erase(parent)
 		if parent.has_method("show_prompt"):
 			parent.show_prompt(false)
-		current_target = null
+		_update_interaction_target()

@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://da0bestoajpk3" path="res://assets/rooms/door.glb" id="2_7uncb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_door"]
+resource_local_to_scene = true
 size = Vector3(2, 2.5, 2)
 
 [node name="Door3D" type="Node3D" unique_id=920156274]
