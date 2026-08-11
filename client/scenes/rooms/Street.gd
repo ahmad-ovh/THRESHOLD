@@ -8,10 +8,62 @@ func _ready() -> void:
 	_setup_street_lights()
 	_populate_urban_street_decor()
 	_ensure_street_boundary_colliders()
-	_process_street_models(self)
+	_setup_street_physics_colliders()
 	
 	if SceneManager:
 		SceneManager.position_player_in_scene(self)
+
+func _setup_street_physics_colliders() -> void:
+	var root_groups = ["Architecture", "EnvironmentProps", "UrbanDecor"]
+	for group_name in root_groups:
+		var root_node = get_node_or_null(group_name)
+		if root_node:
+			for child in root_node.get_children():
+				if child is Node3D and not child.name.to_lower().contains("rug"):
+					_create_global_collider_for_object(child)
+
+func _get_node_global_aabb(node: Node) -> AABB:
+	var global_aabb := AABB()
+	var first := true
+
+	var _gather_mesh_aabbs: Callable
+	_gather_mesh_aabbs = func(n: Node) -> void:
+		if n is MeshInstance3D and n.mesh:
+			var local_aabb = n.mesh.get_aabb()
+			var global_xform = n.global_transform
+			for i in range(8):
+				var corner = local_aabb.get_endpoint(i)
+				var world_corner = global_xform * corner
+				if first:
+					global_aabb = AABB(world_corner, Vector3.ZERO)
+					first = false
+				else:
+					global_aabb = global_aabb.expand(world_corner)
+		for child in n.get_children():
+			_gather_mesh_aabbs.call(child)
+
+	_gather_mesh_aabbs.call(node)
+	return global_aabb
+
+func _create_global_collider_for_object(parent_node: Node3D) -> void:
+	var col_name = parent_node.name + "_street_col"
+	if has_node(col_name):
+		return
+
+	var global_aabb = _get_node_global_aabb(parent_node)
+	if global_aabb.size.length() < 0.1:
+		return
+
+	var sb = StaticBody3D.new()
+	sb.name = col_name
+	var cs = CollisionShape3D.new()
+	var box = BoxShape3D.new()
+	box.size = global_aabb.size
+	cs.shape = box
+	sb.add_child(cs)
+	
+	add_child(sb)
+	sb.global_position = global_aabb.get_center()
 
 func _setup_visual_environment() -> void:
 	var world_env: WorldEnvironment = null
@@ -154,36 +206,7 @@ func _ensure_street_boundary_colliders() -> void:
 	right_wall.position = Vector3(40.0, 2.5, 0.0)
 	boundaries.add_child(right_wall)
 
-func _process_street_models(node: Node) -> void:
-	for child in node.get_children():
-		if child is Area3D or child is CharacterBody3D or child.name.begins_with("Door") or child.name.begins_with("NPC_") or child.name == "Player3D":
-			continue
-			
-		if child is MeshInstance3D and child.mesh:
-			_ensure_mesh_collision(child)
-			
-		_process_street_models(child)
 
-func _ensure_mesh_collision(mi: MeshInstance3D) -> void:
-	for sibling in mi.get_children():
-		if sibling is StaticBody3D or sibling is CollisionShape3D:
-			return
-	if mi.get_parent() is StaticBody3D:
-		return
-	if mi.name.to_lower().contains("rug") or mi.name.to_lower().contains("floor") or mi.name.to_lower().contains("ground"):
-		return
-
-	var aabb = mi.mesh.get_aabb()
-	if aabb.size.length() > 0.01:
-		var sb = StaticBody3D.new()
-		sb.name = mi.name + "_col"
-		var cs = CollisionShape3D.new()
-		var box = BoxShape3D.new()
-		box.size = aabb.size
-		cs.shape = box
-		cs.position = aabb.get_center()
-		sb.add_child(cs)
-		mi.add_child(sb)
 
 func _process(delta: float) -> void:
 	var player = get_node_or_null("Player3D")
