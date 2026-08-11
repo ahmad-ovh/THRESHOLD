@@ -123,4 +123,4 @@ target_spawn_id = "from_adler"
 [node name="NPC_ProfAdler" parent="." unique_id=1729838781 instance=ExtResource("4_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3)
 npc_id = "prof_adler"
-interaction_offset = Vector3(2, 3, 3)
+interaction_radius = 4.5

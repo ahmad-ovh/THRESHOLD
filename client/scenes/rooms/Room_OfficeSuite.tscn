@@ -115,6 +115,7 @@ target_spawn_id = "from_suite"
 [node name="NPC_MsHartwell" parent="." unique_id=634860644 instance=ExtResource("4_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3)
 npc_id = "ms_hartwell"
+interaction_radius = 5.0
 
 [node name="NPC_MrOsei" parent="." unique_id=801594018 instance=ExtResource("4_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.5)

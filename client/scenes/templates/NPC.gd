@@ -5,7 +5,7 @@ extends CharacterBody3D
 @export var npc_id: String = ""
 
 @export_group("Interaction Trigger Bounds")
-@export var interaction_radius: float = 2.5:
+@export var interaction_radius: float = 4.5:
 	set(value):
 		interaction_radius = max(0.1, value)
 		_update_interaction_bounds()

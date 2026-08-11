@@ -142,6 +142,7 @@ target_spawn_id = "from_cafe"
 [node name="NPC_Barista" parent="." unique_id=49454557 instance=ExtResource("4_npc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -4)
 npc_id = "barista"
+interaction_radius = 5.0
 
 [node name="NPC_Daria" parent="." unique_id=209030276 instance=ExtResource("4_npc")]
 transform = Transform3D(0.7043519, 0, -0.70985097, 0, 1, 0, 0.70985097, 0, 0.7043519, 6.0243645, 0, -2.5540032)

@@ -10,7 +10,7 @@ height = 1.4
 length = 4.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_detector"]
-radius = 2.5
+radius = 3.5
 
 [node name="Player3D" type="CharacterBody3D" unique_id=1460460607]
 script = ExtResource("1_player_script")
