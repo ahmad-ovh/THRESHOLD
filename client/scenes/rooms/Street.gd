@@ -1,6 +1,3 @@
-# res://scenes/rooms/Street.gd
-extends Node3D
-
 func _ready() -> void:
 	var player = get_node_or_null("Player3D")
 	if player:
@@ -15,51 +12,6 @@ func _ready() -> void:
 	
 	if SceneManager:
 		SceneManager.position_player_in_scene(self)
-
-func _setup_street_physics_colliders() -> void:
-	var root_groups = ["Architecture", "EnvironmentProps", "UrbanDecor"]
-	for group_name in root_groups:
-		var root_node = get_node_or_null(group_name)
-		if root_node:
-			for child in root_node.get_children():
-				if child is Node3D and not child.name.to_lower().contains("rug"):
-					_add_collider_to_instance(child)
-
-func _add_collider_to_instance(inst: Node3D) -> void:
-	if inst.has_node("Collision_Auto"):
-		return
-
-	var mesh_node = _find_first_mesh_instance(inst)
-	if not mesh_node or not mesh_node.mesh:
-		return
-
-	var local_aabb = mesh_node.mesh.get_aabb()
-	if local_aabb.size.length() < 0.05:
-		return
-
-	var sb = StaticBody3D.new()
-	sb.name = "Collision_Auto"
-	var cs = CollisionShape3D.new()
-	var box = BoxShape3D.new()
-	box.size = local_aabb.size
-	cs.shape = box
-	cs.position = local_aabb.get_center()
-
-	if mesh_node != inst:
-		cs.position = mesh_node.position + local_aabb.get_center()
-		cs.rotation = mesh_node.rotation
-
-	sb.add_child(cs)
-	inst.add_child(sb)
-
-func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
-	if node is MeshInstance3D and node.mesh:
-		return node
-	for child in node.get_children():
-		var found = _find_first_mesh_instance(child)
-		if found:
-			return found
-	return null
 
 func _setup_visual_environment() -> void:
 	var world_env: WorldEnvironment = null
@@ -202,7 +154,45 @@ func _ensure_street_boundary_colliders() -> void:
 	right_wall.position = Vector3(40.0, 2.5, 0.0)
 	boundaries.add_child(right_wall)
 
+func _setup_street_physics_colliders() -> void:
+	var root_groups = ["Architecture", "EnvironmentProps", "UrbanDecor"]
+	for group_name in root_groups:
+		var root_node = get_node_or_null(group_name)
+		if root_node:
+			for child in root_node.get_children():
+				if child is Node3D and not child.name.to_lower().contains("rug"):
+					_add_collider_to_instance(child)
 
+func _add_collider_to_instance(inst: Node3D) -> void:
+	if inst.has_node("Collision_Auto"):
+		return
+	var mesh_node = _find_first_mesh_instance(inst)
+	if not mesh_node or not mesh_node.mesh:
+		return
+	var local_aabb = mesh_node.mesh.get_aabb()
+	if local_aabb.size.length() < 0.05:
+		return
+	var sb = StaticBody3D.new()
+	sb.name = "Collision_Auto"
+	var cs = CollisionShape3D.new()
+	var box = BoxShape3D.new()
+	box.size = local_aabb.size
+	cs.shape = box
+	cs.position = local_aabb.get_center()
+	if mesh_node != inst:
+		cs.position = mesh_node.position + local_aabb.get_center()
+		cs.rotation = mesh_node.rotation
+	sb.add_child(cs)
+	inst.add_child(sb)
+
+func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
+	if node is MeshInstance3D and node.mesh:
+		return node
+	for child in node.get_children():
+		var found = _find_first_mesh_instance(child)
+		if found:
+			return found
+	return null
 
 func _process(delta: float) -> void:
 	var player = get_node_or_null("Player3D")
