@@ -1,3 +1,6 @@
+# res://scenes/rooms/Street.gd
+extends Node3D
+
 func _ready() -> void:
 	var player = get_node_or_null("Player3D")
 	if player:
@@ -23,27 +26,25 @@ func _setup_street_physics_colliders() -> void:
 					_create_global_collider_for_object(child)
 
 func _get_node_global_aabb(node: Node) -> AABB:
-	var global_aabb := AABB()
-	var first := true
+	var state = {"aabb": AABB(), "first": true}
+	_collect_node_aabbs(node, state)
+	return state.aabb
 
-	var _gather_mesh_aabbs: Callable
-	_gather_mesh_aabbs = func(n: Node) -> void:
-		if n is MeshInstance3D and n.mesh:
-			var local_aabb = n.mesh.get_aabb()
-			var global_xform = n.global_transform
-			for i in range(8):
-				var corner = local_aabb.get_endpoint(i)
-				var world_corner = global_xform * corner
-				if first:
-					global_aabb = AABB(world_corner, Vector3.ZERO)
-					first = false
-				else:
-					global_aabb = global_aabb.expand(world_corner)
-		for child in n.get_children():
-			_gather_mesh_aabbs.call(child)
+func _collect_node_aabbs(n: Node, state: Dictionary) -> void:
+	if n is MeshInstance3D and n.mesh:
+		var local_aabb = n.mesh.get_aabb()
+		var global_xform = n.global_transform
+		for i in range(8):
+			var corner = local_aabb.get_endpoint(i)
+			var world_corner = global_xform * corner
+			if state.first:
+				state.aabb = AABB(world_corner, Vector3.ZERO)
+				state.first = false
+			else:
+				state.aabb = state.aabb.expand(world_corner)
 
-	_gather_mesh_aabbs.call(node)
-	return global_aabb
+	for child in n.get_children():
+		_collect_node_aabbs(child, state)
 
 func _create_global_collider_for_object(parent_node: Node3D) -> void:
 	var col_name = parent_node.name + "_street_col"
