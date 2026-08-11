@@ -8,7 +8,7 @@ func _ready() -> void:
 	_setup_street_lights()
 	_populate_urban_street_decor()
 	_ensure_street_boundary_colliders()
-	_setup_street_physics_colliders()
+	_ensure_building_and_prop_csg_colliders()
 	
 	if SceneManager:
 		SceneManager.position_player_in_scene(self)
@@ -154,45 +154,42 @@ func _ensure_street_boundary_colliders() -> void:
 	right_wall.position = Vector3(40.0, 2.5, 0.0)
 	boundaries.add_child(right_wall)
 
-func _setup_street_physics_colliders() -> void:
-	var root_groups = ["Architecture", "EnvironmentProps", "UrbanDecor"]
-	for group_name in root_groups:
-		var root_node = get_node_or_null(group_name)
-		if root_node:
-			for child in root_node.get_children():
-				if child is Node3D and not child.name.to_lower().contains("rug"):
-					_add_collider_to_instance(child)
+func _ensure_building_and_prop_csg_colliders() -> void:
+	if has_node("StreetBuildingColliders"):
+		return
 
-func _add_collider_to_instance(inst: Node3D) -> void:
-	if inst.has_node("Collision_Auto"):
-		return
-	var mesh_node = _find_first_mesh_instance(inst)
-	if not mesh_node or not mesh_node.mesh:
-		return
-	var local_aabb = mesh_node.mesh.get_aabb()
-	if local_aabb.size.length() < 0.05:
-		return
-	var sb = StaticBody3D.new()
-	sb.name = "Collision_Auto"
-	var cs = CollisionShape3D.new()
-	var box = BoxShape3D.new()
-	box.size = local_aabb.size
-	cs.shape = box
-	cs.position = local_aabb.get_center()
-	if mesh_node != inst:
-		cs.position = mesh_node.position + local_aabb.get_center()
-		cs.rotation = mesh_node.rotation
-	sb.add_child(cs)
-	inst.add_child(sb)
+	var col_root = Node3D.new()
+	col_root.name = "StreetBuildingColliders"
+	add_child(col_root)
 
-func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
-	if node is MeshInstance3D and node.mesh:
-		return node
-	for child in node.get_children():
-		var found = _find_first_mesh_instance(child)
-		if found:
-			return found
-	return null
+	var spawn_csg = func(col_name: String, pos: Vector3, size_vec: Vector3) -> void:
+		var csg = CSGBox3D.new()
+		csg.name = col_name
+		csg.use_collision = true
+		csg.visible = false
+		csg.size = size_vec
+		csg.position = pos
+		col_root.add_child(csg)
+
+	# --- 1. Building Facade Barriers (Z = -3.8 behind doorway entrances) ---
+	# Adler Building (X = -18)
+	spawn_csg.call("Adler_Col", Vector3(-18.0, 3.5, -3.8), Vector3(7.5, 7.0, 2.5))
+	# Cafe Building (X = -6)
+	spawn_csg.call("Cafe_Col", Vector3(-6.0, 3.5, -3.8), Vector3(7.5, 7.0, 2.5))
+	# Apartment Building (X = +6)
+	spawn_csg.call("Apartment_Col", Vector3(6.0, 3.5, -3.8), Vector3(7.5, 7.0, 2.5))
+	# Campus Building (X = +14)
+	spawn_csg.call("Campus_Col", Vector3(14.0, 3.5, -3.8), Vector3(7.5, 7.0, 2.5))
+	# Office Building (X = +22)
+	spawn_csg.call("Office_Col", Vector3(22.0, 3.5, -3.8), Vector3(7.5, 7.0, 2.5))
+
+	# --- 2. Major Street Props ---
+	# Stranger Bench (X = -12)
+	spawn_csg.call("Bench_Stranger_Col", Vector3(-12.0, 0.4, -1.2), Vector3(2.2, 0.8, 0.8))
+	# East Park Bench (X = +10)
+	spawn_csg.call("Bench_East_Col", Vector3(10.0, 0.4, -1.2), Vector3(2.2, 0.8, 0.8))
+	# Dumpster (X = -34)
+	spawn_csg.call("Dumpster_Col", Vector3(-34.0, 0.9, -2.5), Vector3(3.2, 1.8, 1.8))
 
 func _process(delta: float) -> void:
 	var player = get_node_or_null("Player3D")
