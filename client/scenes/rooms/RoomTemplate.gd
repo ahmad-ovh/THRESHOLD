@@ -76,12 +76,4 @@ func _ensure_mesh_collision(mi: MeshInstance3D) -> void:
 
 	var aabb = mi.mesh.get_aabb()
 	if aabb.size.length() > 0.01:
-		var sb = StaticBody3D.new()
-		sb.name = mi.name + "_col"
-		var cs = CollisionShape3D.new()
-		var box = BoxShape3D.new()
-		box.size = aabb.size
-		cs.shape = box
-		cs.position = aabb.get_center()
-		sb.add_child(cs)
-		mi.add_child(sb)
+		mi.create_trimesh_collision()

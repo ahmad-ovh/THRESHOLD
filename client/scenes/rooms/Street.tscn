@@ -21,6 +21,12 @@ albedo_color = Color(0.26, 0.28, 0.32, 1)
 metallic = 0.05
 roughness = 0.85
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_1dvmp"]
+radius = 4.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0w4aj"]
+radius = 4.5
+
 [node name="Street" type="Node3D" unique_id=961492616]
 script = ExtResource("1_script")
 
@@ -99,6 +105,9 @@ shadow_opacity = 0.4
 
 [node name="Player3D" parent="." unique_id=853987593 instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.942701, 0, 0)
+
+[node name="CollisionShape3D" parent="Player3D/InteractionDetector" parent_id_path=PackedInt32Array(853987593, 1580836431) index="0" unique_id=903667425]
+transform = Transform3D(0.79346114, 0, 0, 0, 1, 0, 0, 0, 0.79346114, 0, 0.9, 0)
 
 [node name="Spawn_Default" type="Marker3D" parent="." unique_id=2091109140 groups=["spawn_markers"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.84971, 0, 0)
@@ -185,6 +194,17 @@ Work Office"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -0.5)
 npc_id = "recurring_stranger"
 
+[node name="CollisionShape3D" parent="NPC_Stranger/InteractionArea" parent_id_path=PackedInt32Array(1651454714, 838900147) index="0" unique_id=688564722]
+transform = Transform3D(0.34759966, 0, 0, 0, 0.43179154, 0, 0, 0, 0.34759966, 0, 0.9, 0)
+shape = SubResource("SphereShape3D_1dvmp")
+
 [node name="NPC_MrVance" parent="." unique_id=1832933346 instance=ExtResource("4_npc")]
 transform = Transform3D(0.82756895, 0, -0.56136405, 0, 1, 0, 0.56136405, 0, 0.82756895, 16.910383, 0, 2.2802548)
 npc_id = "mr_vance"
+
+[node name="CollisionShape3D" parent="NPC_MrVance/InteractionArea" parent_id_path=PackedInt32Array(1832933346, 838900147) index="0" unique_id=688564722]
+shape = SubResource("SphereShape3D_0w4aj")
+
+[editable path="Player3D"]
+[editable path="NPC_Stranger"]
+[editable path="NPC_MrVance"]

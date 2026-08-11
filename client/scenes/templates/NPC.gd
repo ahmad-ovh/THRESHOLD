@@ -44,13 +44,22 @@ var idle_anim_time: float = 0.0
 
 func _ready() -> void:
 	add_to_group("npcs")
-	_update_interaction_bounds()
+	_sync_editor_interaction_bounds()
 	if ground_ring:
 		ground_ring.visible = false
 	if not Engine.is_editor_hint():
 		if not active_data and npc_id != "":
 			active_data = get_npc_data(npc_id)
 		_setup_visuals()
+
+func _sync_editor_interaction_bounds() -> void:
+	var area_shape = get_node_or_null("InteractionArea/CollisionShape3D")
+	if area_shape and area_shape.shape is SphereShape3D:
+		var sphere = area_shape.shape as SphereShape3D
+		interaction_radius = sphere.radius
+		interaction_offset = area_shape.position
+	else:
+		_update_interaction_bounds()
 
 func _update_interaction_bounds() -> void:
 	var area_shape = get_node_or_null("InteractionArea/CollisionShape3D")

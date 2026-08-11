@@ -1,4 +1,3 @@
-@tool
 # res://scenes/rooms/Door3D.gd
 extends Node3D
 
@@ -21,9 +20,17 @@ extends Node3D
 func _ready() -> void:
 	if prompt_label:
 		prompt_label.visible = false
-	if not Engine.is_editor_hint():
-		_hide_door_visuals()
-	_update_trigger_bounds()
+	_hide_door_visuals()
+	_sync_editor_trigger_bounds()
+
+func _sync_editor_trigger_bounds() -> void:
+	var area_shape = get_node_or_null("TriggerArea/CollisionShape3D")
+	if area_shape and area_shape.shape is BoxShape3D:
+		var box = area_shape.shape as BoxShape3D
+		interaction_size = box.size
+		interaction_offset = area_shape.position
+	else:
+		_update_trigger_bounds()
 
 func _update_trigger_bounds() -> void:
 	var area_shape = get_node_or_null("TriggerArea/CollisionShape3D")
@@ -49,16 +56,12 @@ func _update_trigger_bounds() -> void:
 func _hide_door_visuals() -> void:
 	if has_node("DoorMesh"):
 		get_node("DoorMesh").visible = false
-		if get_node("DoorMesh").has_method("set_use_collision"):
-			get_node("DoorMesh").use_collision = false
 	if has_node("door"):
 		get_node("door").visible = false
 
 	for child in get_children():
-		if child is MeshInstance3D or child is CSGBox3D:
+		if (child is MeshInstance3D or child is CSGBox3D) and child.name != "TriggerArea":
 			child.visible = false
-			if child.has_method("set_use_collision"):
-				child.use_collision = false
 
 func show_prompt(visible_state: bool) -> void:
 	if prompt_label:
