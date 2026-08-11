@@ -23,48 +23,43 @@ func _setup_street_physics_colliders() -> void:
 		if root_node:
 			for child in root_node.get_children():
 				if child is Node3D and not child.name.to_lower().contains("rug"):
-					_create_global_collider_for_object(child)
+					_add_collider_to_instance(child)
 
-func _get_node_global_aabb(node: Node) -> AABB:
-	var state = {"aabb": AABB(), "first": true}
-	_collect_node_aabbs(node, state)
-	return state.aabb
-
-func _collect_node_aabbs(n: Node, state: Dictionary) -> void:
-	if n is MeshInstance3D and n.mesh:
-		var local_aabb = n.mesh.get_aabb()
-		var global_xform = n.global_transform
-		for i in range(8):
-			var corner = local_aabb.get_endpoint(i)
-			var world_corner = global_xform * corner
-			if state.first:
-				state.aabb = AABB(world_corner, Vector3.ZERO)
-				state.first = false
-			else:
-				state.aabb = state.aabb.expand(world_corner)
-
-	for child in n.get_children():
-		_collect_node_aabbs(child, state)
-
-func _create_global_collider_for_object(parent_node: Node3D) -> void:
-	var col_name = parent_node.name + "_street_col"
-	if has_node(col_name):
+func _add_collider_to_instance(inst: Node3D) -> void:
+	if inst.has_node("Collision_Auto"):
 		return
 
-	var global_aabb = _get_node_global_aabb(parent_node)
-	if global_aabb.size.length() < 0.1:
+	var mesh_node = _find_first_mesh_instance(inst)
+	if not mesh_node or not mesh_node.mesh:
+		return
+
+	var local_aabb = mesh_node.mesh.get_aabb()
+	if local_aabb.size.length() < 0.05:
 		return
 
 	var sb = StaticBody3D.new()
-	sb.name = col_name
+	sb.name = "Collision_Auto"
 	var cs = CollisionShape3D.new()
 	var box = BoxShape3D.new()
-	box.size = global_aabb.size
+	box.size = local_aabb.size
 	cs.shape = box
+	cs.position = local_aabb.get_center()
+
+	if mesh_node != inst:
+		cs.position = mesh_node.position + local_aabb.get_center()
+		cs.rotation = mesh_node.rotation
+
 	sb.add_child(cs)
-	
-	add_child(sb)
-	sb.global_position = global_aabb.get_center()
+	inst.add_child(sb)
+
+func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
+	if node is MeshInstance3D and node.mesh:
+		return node
+	for child in node.get_children():
+		var found = _find_first_mesh_instance(child)
+		if found:
+			return found
+	return null
 
 func _setup_visual_environment() -> void:
 	var world_env: WorldEnvironment = null
