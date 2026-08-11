@@ -170,10 +170,20 @@ func _ensure_mesh_collision(mi: MeshInstance3D) -> void:
 			return
 	if mi.get_parent() is StaticBody3D:
 		return
+	if mi.name.to_lower().contains("rug") or mi.name.to_lower().contains("floor") or mi.name.to_lower().contains("ground"):
+		return
 
 	var aabb = mi.mesh.get_aabb()
 	if aabb.size.length() > 0.01:
-		mi.create_trimesh_collision()
+		var sb = StaticBody3D.new()
+		sb.name = mi.name + "_col"
+		var cs = CollisionShape3D.new()
+		var box = BoxShape3D.new()
+		box.size = aabb.size
+		cs.shape = box
+		cs.position = aabb.get_center()
+		sb.add_child(cs)
+		mi.add_child(sb)
 
 func _process(delta: float) -> void:
 	var player = get_node_or_null("Player3D")
