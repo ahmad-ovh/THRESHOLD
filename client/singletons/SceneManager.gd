@@ -43,21 +43,36 @@ func _switch_to_scene(scene_path: String) -> void:
 	else:
 		get_tree().change_scene_to_file(scene_path)
 
+func _is_street_scene(scene_node: Node) -> bool:
+	if not scene_node or not is_instance_valid(scene_node):
+		return false
+	if scene_node.name == "Street" or (scene_node.scene_file_path and scene_node.scene_file_path.ends_with("Street.tscn")):
+		return true
+	if scene_node.find_child("Doors", false, false) and scene_node.find_child("StreetLamp_1", true, false):
+		return true
+	return false
+
 func _maybe_save_street_position() -> void:
-	var current_scene = get_tree().current_scene
-	if not current_scene or not is_instance_valid(current_scene):
+	var root_scene = get_tree().current_scene
+	if not root_scene or not is_instance_valid(root_scene):
+		var root = get_tree().root
+		if root and root.get_child_count() > 0:
+			root_scene = root.get_child(root.get_child_count() - 1)
+
+	if not root_scene or not is_instance_valid(root_scene):
 		return
 
-	var is_street = false
-	if current_scene.scene_file_path and current_scene.scene_file_path.ends_with("Street.tscn"):
-		is_street = true
-	elif current_scene.name == "Street":
-		is_street = true
+	var is_street = _is_street_scene(root_scene)
+	if not is_street:
+		var street_node = root_scene.find_child("Street", true, false)
+		if street_node and _is_street_scene(street_node):
+			is_street = true
+			root_scene = street_node
 
 	if not is_street:
 		return
 
-	var player = current_scene.find_child("Player3D", true, false) as Node3D
+	var player = root_scene.find_child("Player3D", true, false) as Node3D
 	if not player:
 		player = get_tree().get_first_node_in_group("player") as Node3D
 	if not player or not is_instance_valid(player):
@@ -150,11 +165,11 @@ func position_player_in_scene(scene_node: Node = null) -> void:
 	if not player:
 		return
 
-	var is_street = false
-	if root_scene.scene_file_path and root_scene.scene_file_path.ends_with("Street.tscn"):
-		is_street = true
-	elif root_scene.name == "Street":
-		is_street = true
+	var is_street = _is_street_scene(root_scene)
+	if not is_street:
+		var street_node = root_scene.find_child("Street", true, false)
+		if street_node and _is_street_scene(street_node):
+			is_street = true
 
 	if is_street and has_saved_street_position:
 		if player.has_method("set_velocity"):

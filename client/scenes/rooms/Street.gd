@@ -1,3 +1,5 @@
+extends Node3D
+
 func _ready() -> void:
 	var player = get_node_or_null("Player3D")
 	if player:
