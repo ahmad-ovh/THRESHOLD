@@ -8,7 +8,6 @@ func _ready() -> void:
 		player.room_camera_rot = Vector3(-15.0, 0.0, 0.0)
 	_setup_visual_environment()
 	_setup_street_lights()
-	_populate_urban_street_decor()
 	_ensure_street_boundary_colliders()
 	
 	if SceneManager:
