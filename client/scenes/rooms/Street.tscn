@@ -4,11 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://cplayer3d001" path="res://scenes/player/Player3D.tscn" id="2_player"]
 [ext_resource type="PackedScene" uid="uid://cdoor3d001" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
 [ext_resource type="PackedScene" uid="uid://cnpc001" path="res://scenes/templates/NPC.tscn" id="4_npc"]
+[ext_resource type="PackedScene" uid="uid://cph4e2txmk0fb" path="res://assets/threshold/buildings/BrownBuilding.fbx" id="6_8w67o"]
 [ext_resource type="PackedScene" uid="uid://ddg5nc7mb142x" path="res://assets/threshold/architecture/building_01.gltf" id="6_b1"]
 [ext_resource type="PackedScene" uid="uid://vxfyswqvg486" path="res://assets/threshold/architecture/building_02.gltf" id="7_b2"]
 [ext_resource type="PackedScene" uid="uid://dfjays6mfkgrm" path="res://assets/threshold/buildings/Building3_Big.fbx" id="7_uvcj6"]
 [ext_resource type="PackedScene" uid="uid://8ae3g06hprrn" path="res://assets/threshold/architecture/building_03.gltf" id="8_b3"]
+[ext_resource type="PackedScene" uid="uid://doofuyn4702wf" path="res://assets/threshold/buildings/BuildingGreen.fbx" id="8_em1ev"]
+[ext_resource type="PackedScene" uid="uid://dj0xe7v5g7n4r" path="res://assets/threshold/buildings/buildingRed1.fbx" id="9_7ji6u"]
 [ext_resource type="PackedScene" uid="uid://cvl180e7t2np3" path="res://assets/threshold/architecture/building_04.gltf" id="9_b4"]
+[ext_resource type="PackedScene" uid="uid://buwasy3rnikfa" path="res://assets/threshold/buildings/buildingRedCorner.fbx" id="10_y6j30"]
 [ext_resource type="PackedScene" uid="uid://dvyg55gbdej2h" path="res://assets/threshold/environment/bench_01.gltf" id="12_bench"]
 [ext_resource type="PackedScene" uid="uid://bb47vhmssmcly" path="res://assets/threshold/lighting/streetlamp_01.gltf" id="13_lamp"]
 [ext_resource type="PackedScene" uid="uid://ctp1poikw2h4n" path="res://assets/threshold/props/dumpster_01.gltf" id="14_dumpster"]
@@ -43,10 +47,76 @@ material = SubResource("StandardMaterial3D_road")
 
 [node name="Far" type="Node3D" parent="." unique_id=1575663602]
 
+[node name="BrownBuilding" parent="Far" unique_id=2064903426 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -42.16325, -0.12758815, -21.24432)
+
 [node name="Medium" type="Node3D" parent="Far" unique_id=526881995]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.252451)
 
+[node name="BrownBuilding" parent="Far/Medium" unique_id=1025518918 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -36.829845, -0.12758815, -21.24432)
+
+[node name="BuildingGreen" parent="Far/Medium" unique_id=841581754 instance=ExtResource("8_em1ev")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -31.430065, 0.012625694, -22.002216)
+
+[node name="buildingRed1" parent="Far/Medium" unique_id=1800605143 instance=ExtResource("9_7ji6u")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.9740524, 0.012624741, -21.895832)
+
+[node name="BrownBuilding2" parent="Far/Medium" unique_id=663295489 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -13.8987255, -0.12758815, -21.24432)
+
+[node name="buildingRed2" parent="Far/Medium" unique_id=563616221 instance=ExtResource("9_7ji6u")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 13.958868, 0.012624741, -21.895832)
+
+[node name="BrownBuilding3" parent="Far/Medium" unique_id=476228578 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 18.729628, -0.12758815, -21.24432)
+
+[node name="BrownBuilding4" parent="Far/Medium" unique_id=1255134408 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 38.1833, -0.12758815, -21.24432)
+
+[node name="buildingRedCorner" parent="Far/Medium" unique_id=1108160363 instance=ExtResource("10_y6j30")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.802994, -0.059470296, -21.235813)
+
+[node name="buildingRed1" parent="Far" unique_id=1408567390 instance=ExtResource("9_7ji6u")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -23.996355, 0.012624741, -21.895832)
+
+[node name="Building_Adler_" parent="Far" unique_id=1302676837 instance=ExtResource("6_b1")]
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -19.868303, -0.3521113, -22.695904)
+
+[node name="Old_Building_Campus_" parent="Far" unique_id=2045956972 instance=ExtResource("6_b1")]
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -4.160568, -0.35211155, -22.122372)
+
+[node name="BrownBuilding2" parent="Far" unique_id=2008401224 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.869018, -0.12758815, -21.24432)
+
+[node name="BuildingGreen" parent="Far" unique_id=1737515707 instance=ExtResource("8_em1ev")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -28.914173, 0.012625694, -22.002216)
+
+[node name="buildingRedCorner" parent="Far" unique_id=118273401 instance=ExtResource("10_y6j30")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 21.980257, -0.059470296, -21.235813)
+
+[node name="buildingRed2" parent="Far" unique_id=529103484 instance=ExtResource("9_7ji6u")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.232516, 0.012624741, -21.895832)
+
+[node name="BrownBuilding3" parent="Far" unique_id=1414239150 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 25.412155, -0.12758815, -21.24432)
+
+[node name="BrownBuilding4" parent="Far" unique_id=1131277920 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 29.48341, -0.12758815, -21.24432)
+
 [node name="Reuse" type="Node3D" parent="." unique_id=2072694821]
+
+[node name="BrownBuilding" parent="Reuse" unique_id=589966283 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -30.745632, -0.12758815, -6.9030914)
+
+[node name="buildingRedCorner" parent="Reuse" unique_id=1985897174 instance=ExtResource("10_y6j30")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -39.4268, 0.002261281, -6.5777097)
+
+[node name="buildingRed1" parent="Reuse" unique_id=2060337269 instance=ExtResource("9_7ji6u")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -23.996355, 0.012624741, -5.942483)
+
+[node name="BuildingGreen" parent="Reuse" unique_id=1682635684 instance=ExtResource("8_em1ev")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -37.12427, 0.012625694, -6.668909)
 
 [node name="Architecture" type="Node3D" parent="." unique_id=543437850]
 
