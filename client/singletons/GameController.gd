@@ -62,6 +62,8 @@ func set_paused(paused_state: bool) -> void:
 	game_paused_changed.emit(is_paused)
 
 func start_new_game(p_id: String) -> void:
+	if SceneManager and SceneManager.has_method("clear_saved_positions"):
+		SceneManager.clear_saved_positions()
 	PlayerStore.player_id = p_id
 	var status = await ApiClient.get_player_status(p_id)
 	if not status.has("error"):
@@ -83,6 +85,8 @@ func return_to_main_menu() -> void:
 	if hud_ref:
 		hud_ref.visible = false
 	set_phase(Phase.MAIN_MENU)
+	if SceneManager and SceneManager.has_method("clear_saved_positions"):
+		SceneManager.clear_saved_positions()
 	SceneManager.change_room("res://scenes/main_menu/MainMenu.tscn")
 
 func _ensure_hud() -> void:

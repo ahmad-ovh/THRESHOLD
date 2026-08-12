@@ -7,6 +7,11 @@ var _preloaded_paths: Dictionary = {}
 
 var is_transitioning: bool = false
 
+var saved_street_position: Vector3 = Vector3.ZERO
+var saved_street_rotation: Vector3 = Vector3.ZERO
+var saved_street_mesh_rotation_y: float = 0.0
+var has_saved_street_position: bool = false
+
 func _ready() -> void:
 	layer = 100 # Keep transition color rect above all UI
 	color_rect = ColorRect.new()
@@ -38,10 +43,40 @@ func _switch_to_scene(scene_path: String) -> void:
 	else:
 		get_tree().change_scene_to_file(scene_path)
 
+func _maybe_save_street_position() -> void:
+	var current_scene = get_tree().current_scene
+	if not current_scene or not is_instance_valid(current_scene):
+		return
+
+	var is_street = false
+	if current_scene.scene_file_path and current_scene.scene_file_path.ends_with("Street.tscn"):
+		is_street = true
+	elif current_scene.name == "Street":
+		is_street = true
+
+	if not is_street:
+		return
+
+	var player = current_scene.find_child("Player3D", true, false) as Node3D
+	if not player:
+		player = get_tree().get_first_node_in_group("player") as Node3D
+	if not player or not is_instance_valid(player):
+		return
+
+	saved_street_position = player.global_position
+	saved_street_rotation = player.global_rotation
+	var char_mesh = player.get_node_or_null("CharacterMesh")
+	if char_mesh:
+		saved_street_mesh_rotation_y = char_mesh.rotation.y
+	else:
+		saved_street_mesh_rotation_y = 0.0
+	has_saved_street_position = true
+
 func change_room(scene_path: String, spawn_id: String = "default") -> void:
 	if is_transitioning:
 		return
 	is_transitioning = true
+	_maybe_save_street_position()
 	target_spawn_id = spawn_id
 	color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
 	
@@ -70,6 +105,7 @@ func change_room_async(scene_path: String, spawn_id: String = "default", show_st
 	if is_transitioning:
 		return
 	is_transitioning = true
+	_maybe_save_street_position()
 	target_spawn_id = spawn_id
 	preload_scene(scene_path)
 	
@@ -112,6 +148,28 @@ func position_player_in_scene(scene_node: Node = null) -> void:
 	if not player:
 		player = get_tree().get_first_node_in_group("player") as Node3D
 	if not player:
+		return
+
+	var is_street = false
+	if root_scene.scene_file_path and root_scene.scene_file_path.ends_with("Street.tscn"):
+		is_street = true
+	elif root_scene.name == "Street":
+		is_street = true
+
+	if is_street and has_saved_street_position:
+		if player.has_method("set_velocity"):
+			player.velocity = Vector3.ZERO
+		player.global_position = saved_street_position
+		player.global_rotation = saved_street_rotation
+
+		var char_mesh = player.get_node_or_null("CharacterMesh")
+		if char_mesh:
+			char_mesh.rotation.y = saved_street_mesh_rotation_y
+
+		var camera_pivot = player.get_node_or_null("CameraPivot")
+		if camera_pivot and not player.get("is_fixed_diorama_room"):
+			var target_x = clamp(player.global_position.x, -38.0, 38.0)
+			camera_pivot.global_position.x = target_x
 		return
 
 	var target_id_clean = target_spawn_id.strip_edges().to_lower().replace("_", "").replace(" ", "")
@@ -177,7 +235,11 @@ func _collect_markers(node: Node, result: Array[Node3D]) -> void:
 		_collect_markers(child, result)
 
 func clear_saved_positions() -> void:
-	pass
+	has_saved_street_position = false
+	saved_street_position = Vector3.ZERO
+	saved_street_rotation = Vector3.ZERO
+	saved_street_mesh_rotation_y = 0.0
+
 
 
 
