@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cnpc001" path="res://scenes/templates/NPC.tscn" id="4_npc"]
 [ext_resource type="PackedScene" uid="uid://ddg5nc7mb142x" path="res://assets/threshold/architecture/building_01.gltf" id="6_b1"]
 [ext_resource type="PackedScene" uid="uid://vxfyswqvg486" path="res://assets/threshold/architecture/building_02.gltf" id="7_b2"]
+[ext_resource type="PackedScene" uid="uid://dfjays6mfkgrm" path="res://assets/threshold/buildings/Building3_Big.fbx" id="7_uvcj6"]
 [ext_resource type="PackedScene" uid="uid://8ae3g06hprrn" path="res://assets/threshold/architecture/building_03.gltf" id="8_b3"]
 [ext_resource type="PackedScene" uid="uid://cvl180e7t2np3" path="res://assets/threshold/architecture/building_04.gltf" id="9_b4"]
 [ext_resource type="PackedScene" uid="uid://dvyg55gbdej2h" path="res://assets/threshold/environment/bench_01.gltf" id="12_bench"]
@@ -22,21 +23,35 @@ metallic = 0.05
 roughness = 0.85
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1dvmp"]
+resource_local_to_scene = true
 radius = 4.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0w4aj"]
+resource_local_to_scene = true
 radius = 4.5
 
 [node name="Street" type="Node3D" unique_id=961492616]
 script = ExtResource("1_script")
 
 [node name="Ground" type="CSGBox3D" parent="." unique_id=1927305657]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+transform = Transform3D(1.0013778, 0, 0, 0, 1.0013778, 0, 0, 0, 1.0013778, 0, -0.2, 0)
 use_collision = true
 size = Vector3(80, 0.4, 12)
 material = SubResource("StandardMaterial3D_road")
 
+[node name="Near" type="Node3D" parent="." unique_id=2146446932]
+
+[node name="Far" type="Node3D" parent="." unique_id=1575663602]
+
+[node name="Medium" type="Node3D" parent="Far" unique_id=526881995]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.252451)
+
+[node name="Reuse" type="Node3D" parent="." unique_id=2072694821]
+
 [node name="Architecture" type="Node3D" parent="." unique_id=543437850]
+
+[node name="Building_Campus" parent="Architecture" unique_id=1315991624 instance=ExtResource("7_uvcj6")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 18.722807, 0.013662598, -4.8201084)
 
 [node name="Building_Adler" parent="Architecture" unique_id=2018060127 instance=ExtResource("6_b1")]
 transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -18, -0.35211155, -3.5)
@@ -47,11 +62,8 @@ transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -6, -0.35211155, -3.5)
 [node name="Building_Apartment" parent="Architecture" unique_id=1287693272 instance=ExtResource("9_b4")]
 transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 6, -0.35211155, -3.5)
 
-[node name="Building_Campus" parent="Architecture" unique_id=1527269890 instance=ExtResource("6_b1")]
-transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 14, -0.35211155, -3.5)
-
 [node name="Building_Office" parent="Architecture" unique_id=1181373274 instance=ExtResource("7_b2")]
-transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 22, -0.35211155, -3.5)
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 30.363197, -0.35211155, -3.5)
 
 [node name="EnvironmentProps" type="Node3D" parent="." unique_id=1933413997]
 
@@ -71,7 +83,7 @@ transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, -8.422417, 0, -1.5)
 transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, 8, 0, -1.5)
 
 [node name="StreetLamp_4" parent="EnvironmentProps" unique_id=1862234162 instance=ExtResource("13_lamp")]
-transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, 24, 0, -1.5)
+transform = Transform3D(4.2, 0, 0, 0, 4.2, 0, 0, 0, 4.2, 26.410011, 0, -1.5)
 
 [node name="Dumpster" parent="EnvironmentProps" unique_id=630666748 instance=ExtResource("14_dumpster")]
 transform = Transform3D(3.8, 0, 0, 0, 3.8, 0, 0, 0, 3.8, -34, 0, -2.5)
@@ -82,11 +94,29 @@ transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, -16, 0, -1)
 [node name="Bush_1" parent="EnvironmentProps" unique_id=948751135 instance=ExtResource("16_bush")]
 transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, -22, 0, -1.8)
 
+[node name="PlantPot1_Collider" type="CSGBox3D" parent="EnvironmentProps/Bush_1" unique_id=734137175]
+transform = Transform3D(0.18573457, 0, 0, 0, 1, 0, 0, 0, 0.21483308, 0.0017995834, 0.55, 0.0017839074)
+visible = false
+use_collision = true
+size = Vector3(0.9, 1.1, 0.9)
+
 [node name="Bush_2" parent="EnvironmentProps" unique_id=1835905852 instance=ExtResource("16_bush")]
 transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 2, 0, -1.8)
 
+[node name="PlantPot2_Collider" type="CSGBox3D" parent="EnvironmentProps/Bush_2" unique_id=336924323]
+transform = Transform3D(0.20123947, 0, 0, 0, 1, 0, 0, 0, 0.24276201, 0.005635798, 0.55, 0.012823164)
+visible = false
+use_collision = true
+size = Vector3(0.9, 1.1, 0.9)
+
 [node name="Bush_3" parent="EnvironmentProps" unique_id=270987548 instance=ExtResource("16_bush")]
 transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 18, 0, -1.8)
+
+[node name="PlantPot4_Collider" type="CSGBox3D" parent="EnvironmentProps/Bush_3" unique_id=818994143]
+transform = Transform3D(0.20406944, 0, 0, 0, 1, 0, 0, 0, 0.21451084, -0.0046691895, 0.55, -0.005800009)
+visible = false
+use_collision = true
+size = Vector3(0.9, 1.1, 0.9)
 
 [node name="TrafficLight" parent="EnvironmentProps" unique_id=2103129994 instance=ExtResource("17_traffic")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -2, 0, -1.5)
@@ -94,181 +124,103 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -2, 0, -1.5)
 [node name="TrashBin" parent="EnvironmentProps" unique_id=1465076770 instance=ExtResource("18_trash")]
 transform = Transform3D(12, 0, 0, 0, 12, 0, 0, 0, 12, -4, 0, -1)
 
-[node name="StaticColliders" type="Node3D" parent="."]
+[node name="StaticColliders" type="Node3D" parent="." unique_id=630904699]
 
-[node name="Building_Adler_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 3.5, -3.5)
-use_collision = true
+[node name="Building_Adler_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1634462643]
+transform = Transform3D(0.5028285, 0, 0, 0, 1, 0, 0, 0, 1, -18, 3.5, -3.5)
 visible = false
+use_collision = true
 size = Vector3(7.5, 7, 4)
 
-[node name="Building_Cafe_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.5, -3.5)
-use_collision = true
+[node name="Building_Cafe_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1576872906]
+transform = Transform3D(0.52800846, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.5, -3.5)
 visible = false
+use_collision = true
 size = Vector3(7.5, 7, 4)
 
-[node name="Building_Apartment_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.5, -3.5)
-use_collision = true
+[node name="Building_Apartment_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=925458802]
+transform = Transform3D(0.69318056, 0, 0, 0, 1, 0, 0, 0, 1.0838828, 6, 3.5, -3.5)
 visible = false
+use_collision = true
 size = Vector3(7.5, 7, 4)
 
-[node name="Building_Campus_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 3.5, -3.5)
-use_collision = true
+[node name="Building_Campus_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1565797177]
+transform = Transform3D(1.1777536, 0, 0, 0, 1, 0, 0, 0, 1.1507555, 18.686699, 3.5, -3.5)
 visible = false
+use_collision = true
 size = Vector3(7.5, 7, 4)
 
-[node name="Building_Office_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 3.5, -3.5)
-use_collision = true
+[node name="Building_Office_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1011586643]
+transform = Transform3D(0.6878238, 0, 0, 0, 1, 0, 0, 0, 1, 30.363197, 3.5, -3.5)
 visible = false
+use_collision = true
 size = Vector3(7.5, 7, 4)
 
-[node name="Bench_Stranger_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.5, -1.2)
-use_collision = true
+[node name="Bench_Stranger_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=284630097]
+transform = Transform3D(0.6005556, 0, 0, 0, 1, 0, 0, 0, 0.5727134, -12, 0.5, -1.2)
 visible = false
+use_collision = true
 size = Vector3(2.4, 1, 1)
 
-[node name="Bench_East_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, -1.2)
-use_collision = true
+[node name="Bench_East_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=49298260]
+transform = Transform3D(0.5894315, 0, 0, 0, 1, 0, 0, 0, 0.5381092, 10, 0.5, -1.2)
 visible = false
+use_collision = true
 size = Vector3(2.4, 1, 1)
 
-[node name="Dumpster_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 1, -2.5)
-use_collision = true
+[node name="Dumpster_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1510846011]
+transform = Transform3D(0.6127038, 0, 0, 0, 1, 0, 0, 0, 0.58587646, -34, 1, -2.5)
 visible = false
+use_collision = true
 size = Vector3(3.6, 2, 2.4)
 
-[node name="Hydrant_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0.5, -1)
-use_collision = true
+[node name="Hydrant_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=209220660]
+transform = Transform3D(0.6196359, 0, 0, 0, 1, 0, 0, 0, 0.68118715, -16, 0.5, -1)
 visible = false
+use_collision = true
 size = Vector3(0.7, 1, 0.7)
 
-[node name="TrafficLight_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.25, -1.5)
-use_collision = true
+[node name="TrafficLight_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1683110804]
+transform = Transform3D(0.47975415, 0, 0, 0, 1, 0, 0, 0, 0.5336199, -2, 2.25, -1.5)
 visible = false
+use_collision = true
 size = Vector3(0.6, 4.5, 0.6)
 
-[node name="TrashBin_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.6, -1)
-use_collision = true
+[node name="TrashBin_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1730732129]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8982143, 0.6, -1)
 visible = false
+use_collision = true
 size = Vector3(0.85, 1.2, 0.85)
 
-[node name="StreetLamp1_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 2.25, -1.5)
-use_collision = true
+[node name="StreetLamp1_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1140343854]
+transform = Transform3D(0.67656267, 0, 0, 0, 1, 0, 0, 0, 0.8284177, -24, 2.25, -1.5)
 visible = false
+use_collision = true
 size = Vector3(0.5, 4.5, 0.5)
 
-[node name="StreetLamp2_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.42, 2.25, -1.5)
-use_collision = true
+[node name="StreetLamp2_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1938836321]
+transform = Transform3D(0.7460589, 0, 0, 0, 1, 0, 0, 0, 0.6516098, -8.42, 2.25, -1.5)
 visible = false
+use_collision = true
 size = Vector3(0.5, 4.5, 0.5)
 
-[node name="StreetLamp3_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.25, -1.5)
-use_collision = true
+[node name="StreetLamp3_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1262280118]
+transform = Transform3D(0.79804397, 0, 0, 0, 1, 0, 0, 0, 0.7605045, 8, 2.25, -1.5)
 visible = false
+use_collision = true
 size = Vector3(0.5, 4.5, 0.5)
 
-[node name="StreetLamp4_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 2.25, -1.5)
-use_collision = true
+[node name="StreetLamp4_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=849776455]
+transform = Transform3D(0.8228453, 0, 0, 0, 1, 0, 0, 0, 0.77579963, 24, 2.25, -1.5)
 visible = false
+use_collision = true
 size = Vector3(0.5, 4.5, 0.5)
 
-[node name="CafeTable_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0.45, 1.2)
-use_collision = true
+[node name="Building_Campus_Collider2" type="CSGBox3D" parent="StaticColliders" unique_id=1291037965]
+transform = Transform3D(0.39789158, 0, 0, 0, 0.0765028, 0, 0, 0, 1.1507555, 18.732338, 0.18122435, -2.6997752)
 visible = false
-size = Vector3(1.4, 0.9, 1.4)
-
-[node name="CafeChair1_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 0.45, 1.2)
 use_collision = true
-visible = false
-size = Vector3(0.8, 0.9, 0.8)
-
-[node name="CafeChair2_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6, 0.45, 1.2)
-use_collision = true
-visible = false
-size = Vector3(0.8, 0.9, 0.8)
-
-[node name="PlantPot1_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 0.55, 0.8)
-use_collision = true
-visible = false
-size = Vector3(0.9, 1.1, 0.9)
-
-[node name="PlantPot2_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8, 0.55, 0.8)
-use_collision = true
-visible = false
-size = Vector3(0.9, 1.1, 0.9)
-
-[node name="PlazaTable_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.45, 1)
-use_collision = true
-visible = false
-size = Vector3(1.4, 0.9, 1.4)
-
-[node name="PlantPot3_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.55, 0.8)
-use_collision = true
-visible = false
-size = Vector3(0.9, 1.1, 0.9)
-
-[node name="PlantPot4_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.55, 0.8)
-use_collision = true
-visible = false
-size = Vector3(0.9, 1.1, 0.9)
-
-[node name="AdlerArmchair_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0.45, 1.2)
-use_collision = true
-visible = false
-size = Vector3(1.2, 0.9, 1.2)
-
-[node name="AdlerTable_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.8, 0.45, 1.2)
-use_collision = true
-visible = false
-size = Vector3(1.2, 0.9, 1.2)
-
-[node name="PlantPot5_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.2, 0.55, 0.8)
-use_collision = true
-visible = false
-size = Vector3(0.9, 1.1, 0.9)
-
-[node name="OfficeCouch_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.8, 0.45, 1.2)
-use_collision = true
-visible = false
-size = Vector3(2.2, 0.9, 1.2)
-
-[node name="OfficeTable_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.8, 0.45, 2.2)
-use_collision = true
-visible = false
-size = Vector3(1.6, 0.9, 1.2)
-
-[node name="PlantPot6_Collider" type="CSGBox3D" parent="StaticColliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.8, 0.55, 0.8)
-use_collision = true
-visible = false
-size = Vector3(0.9, 1.1, 0.9)
+size = Vector3(7.5, 7, 4)
 
 [node name="Lighting" type="Node3D" parent="." unique_id=1424192708]
 
@@ -345,18 +297,18 @@ text = "Press [E] to Enter
 Your House"
 
 [node name="DoorToCampus" parent="Doors" unique_id=1650252353 instance=ExtResource("3_door")]
-transform = Transform3D(0.18632203, 0, 0, 0, 1, 0, 0, 0, 1, 12.284576, 0, -2)
+transform = Transform3D(0.18632203, 0, 0, 0, 1, 0, 0, 0, 1, 18.464626, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_CampusHallway.tscn"
 target_spawn_id = "from_street"
 
 [node name="PromptLabel3D2" type="Label3D" parent="Doors/DoorToCampus" unique_id=1071232278]
-transform = Transform3D(3.8982694, 0, 0, 0, 0.9999998, 0, 0, 0, 0.10621927, 2.4213638, 0.9858126, 0.6166465)
+transform = Transform3D(3.8982694, 0, 0, 0, 0.99999964, 0, 0, 0, 0.10621925, 1.3127289, 0.9858124, 1.2989876)
 billboard = 1
 text = "Press [E] to Enter
 Campus"
 
 [node name="DoorToOffice" parent="Doors" unique_id=177944950 instance=ExtResource("3_door")]
-transform = Transform3D(0.21699333, 0, 0, 0, 1, 0, 0, 0, 1, 19.715841, 0, -2)
+transform = Transform3D(0.21699333, 0, 0, 0, 1, 0, 0, 0, 1, 28.079039, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_OfficeLobby.tscn"
 target_spawn_id = "from_street"
 

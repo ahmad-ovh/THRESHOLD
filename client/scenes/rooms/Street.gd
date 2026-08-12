@@ -161,4 +161,3 @@ func _process(delta: float) -> void:
 			var target_x = clamp(player.global_position.x, -38.0, 38.0)
 			# Force update the camera pivot position, overriding the player's own clamp if it happens earlier
 			camera_pivot.global_position.x = lerp(camera_pivot.global_position.x, target_x, 5.0 * delta)
-
