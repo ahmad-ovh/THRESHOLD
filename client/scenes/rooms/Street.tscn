@@ -21,18 +21,24 @@
 [ext_resource type="PackedScene" uid="uid://7186toi34j20" path="res://assets/threshold/nature/bush_01.gltf" id="16_bush"]
 [ext_resource type="PackedScene" uid="uid://02q1asgrta70" path="res://assets/threshold/environment/trafficlight_01.gltf" id="17_traffic"]
 [ext_resource type="PackedScene" uid="uid://c6utgendglfq7" path="res://assets/threshold/environment/trash_bin_01.gltf" id="18_trash"]
+[ext_resource type="PackedScene" uid="uid://cjg7bc42tenu5" path="res://assets/threshold/nature/tree_pineRoundB.fbx" id="19_uke0g"]
 [ext_resource type="PackedScene" uid="uid://xs2yujd3lvi5" path="res://assets/threshold/nature/fence_planksDouble.fbx" id="22_em1ev"]
+[ext_resource type="PackedScene" uid="uid://denlsfrxgc3lu" path="res://assets/threshold/nature/statue_head.fbx" id="23_7ji6u"]
+[ext_resource type="PackedScene" uid="uid://cvkxo1dxp2tbw" path="res://assets/threshold/nature/tree_default.glb" id="24_nfndx"]
+[ext_resource type="PackedScene" uid="uid://bxhrwyj7d13mj" path="res://assets/threshold/nature/tree_thin_dark.fbx" id="25_uke0g"]
+[ext_resource type="PackedScene" uid="uid://byr2v46x7mhya" path="res://assets/threshold/nature/tent_smallOpen.fbx" id="26_bxudf"]
+[ext_resource type="PackedScene" uid="uid://c00jdeab6h4et" path="res://assets/threshold/nature/path_woodCorner.fbx" id="27_e6l37"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_road"]
 albedo_color = Color(0.26, 0.28, 0.32, 1)
 metallic = 0.05
 roughness = 0.85
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_7ji6u"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_uke0g"]
 resource_local_to_scene = true
 radius = 4.5
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_y6j30"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_bxudf"]
 resource_local_to_scene = true
 radius = 4.5
 
@@ -53,78 +59,81 @@ material = SubResource("StandardMaterial3D_road")
 
 [node name="Far" type="Node3D" parent="." unique_id=1575663602]
 
-[node name="BrownBuilding" parent="Far" unique_id=2064903426 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -42.16325, -0.12758815, -21.24432)
-
 [node name="Medium" type="Node3D" parent="Far" unique_id=526881995]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.252451)
 
 [node name="BrownBuilding" parent="Far/Medium" unique_id=1025518918 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -36.829845, -0.12758815, -21.24432)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -36.829845, -0.12758815, -13.605101)
 
 [node name="BuildingGreen" parent="Far/Medium" unique_id=841581754 instance=ExtResource("8_em1ev")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -31.430065, 0.012625694, -22.002216)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -32.49719, 0.012625694, -13.614157)
 
 [node name="buildingRed1" parent="Far/Medium" unique_id=1800605143 instance=ExtResource("9_7ji6u")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.9740524, 0.012624741, -21.895832)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.9740524, 0.012624741, -32.35781)
 
 [node name="BrownBuilding2" parent="Far/Medium" unique_id=663295489 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -13.8987255, -0.12758815, -21.24432)
+transform = Transform3D(2, 0, 0, 0, 2.613659, 0, 0, 0, 2.1274016, -19.37275, -0.12758815, -13.605101)
 
 [node name="buildingRed2" parent="Far/Medium" unique_id=563616221 instance=ExtResource("9_7ji6u")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 13.958868, 0.012624741, -21.895832)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 13.958868, 0.012624741, -14.256613)
 
 [node name="BrownBuilding3" parent="Far/Medium" unique_id=476228578 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 18.729628, -0.12758815, -21.24432)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 18.729628, -0.12758815, -13.605101)
 
 [node name="BrownBuilding4" parent="Far/Medium" unique_id=1255134408 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 38.1833, -0.12758815, -21.24432)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 38.1833, -0.12758815, -13.605101)
 
 [node name="buildingRedCorner" parent="Far/Medium" unique_id=1108160363 instance=ExtResource("10_y6j30")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.802994, -0.059470296, -21.235813)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.802994, -0.059470296, -19.19637)
 
 [node name="buildingRed1" parent="Far" unique_id=1408567390 instance=ExtResource("9_7ji6u")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -23.996355, 0.012624741, -21.895832)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -23.996355, 0.012624741, -7.253252)
+
+[node name="buildingRed1" parent="Far/buildingRed1" unique_id=1436571341 instance=ExtResource("9_7ji6u")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.642207, -0.5039768, -0.26376438)
 
 [node name="Building_Adler_" parent="Far" unique_id=1302676837 instance=ExtResource("6_b1")]
-transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -19.868303, -0.3521113, -22.695904)
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -19.868303, -0.3521113, -15.0566845)
 
 [node name="Old_Building_Campus_" parent="Far" unique_id=2045956972 instance=ExtResource("6_b1")]
-transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -4.160568, -0.35211155, -22.122372)
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 1.1710496, -0.35211155, -7.34776)
 
 [node name="BrownBuilding2" parent="Far" unique_id=2008401224 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.869018, -0.12758815, -21.24432)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.869018, -0.12758815, -13.605101)
 
 [node name="BuildingGreen" parent="Far" unique_id=1737515707 instance=ExtResource("8_em1ev")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -28.914173, 0.012625694, -22.002216)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -28.914173, 0.012625694, -7.3596363)
 
 [node name="buildingRedCorner" parent="Far" unique_id=118273401 instance=ExtResource("10_y6j30")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 21.980257, -0.059470296, -21.235813)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 21.980257, -0.059470296, -13.596594)
 
 [node name="buildingRed2" parent="Far" unique_id=529103484 instance=ExtResource("9_7ji6u")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.232516, 0.012624741, -21.895832)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.232516, 0.012624741, -14.256613)
 
 [node name="BrownBuilding3" parent="Far" unique_id=1414239150 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 25.412155, -0.12758815, -21.24432)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 25.412155, -0.12758815, -13.605101)
 
 [node name="BrownBuilding4" parent="Far" unique_id=1131277920 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 29.48341, -0.12758815, -21.24432)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 29.48341, -0.12758815, -13.605101)
+
+[node name="BrownBuilding5" parent="Far" unique_id=1906313675 instance=ExtResource("6_8w67o")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -40.982735, -0.19567204, -7.394739)
 
 [node name="Reuse" type="Node3D" parent="." unique_id=2072694821]
 
 [node name="Architecture" type="Node3D" parent="." unique_id=543437850]
 
 [node name="Building_Campus" parent="Architecture" unique_id=1315991624 instance=ExtResource("7_uvcj6")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 18.722807, 0.013662598, -4.8201084)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.1705933, 0.013662598, -4.8201084)
 
 [node name="Building_Adler" parent="Architecture" unique_id=2018060127 instance=ExtResource("6_b1")]
 transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -18, -0.35211155, -3.5)
 
 [node name="Building_Cafe" parent="Architecture" unique_id=928739411 instance=ExtResource("8_b3")]
-transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, -6, -0.35211155, -3.5)
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 15.369692, -0.35211155, -3.5)
 
 [node name="Building_Apartment" parent="Architecture" unique_id=1287693272 instance=ExtResource("9_b4")]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 6, -0.35211155, -3.5)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -3.4462166, -0.35211155, -3.5)
 
 [node name="Building_Office" parent="Architecture" unique_id=1181373274 instance=ExtResource("7_b2")]
 transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 30.363197, -0.35211155, -3.5)
@@ -135,7 +144,7 @@ transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 30.363197, -0.35211155,
 transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -12, 0, -1.2)
 
 [node name="Bench_East" parent="EnvironmentProps" unique_id=1668629291 instance=ExtResource("12_bench")]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 10, 0, -1.2)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 1.1383209, 0, -1.2)
 
 [node name="StreetLamp_1" parent="EnvironmentProps" unique_id=1956340260 instance=ExtResource("13_lamp")]
 transform = Transform3D(0.048275217, 0, 4.1997223, 0, 4.1999993, 0, -4.1997223, 0, 0.048275217, -24, 0, -1.5)
@@ -177,7 +186,7 @@ use_collision = true
 size = Vector3(0.9, 1.1, 0.9)
 
 [node name="TrafficLight" parent="EnvironmentProps" unique_id=2103129994 instance=ExtResource("17_traffic")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -2, 0, -1.5)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -33.723442, 0, -0.27409792)
 
 [node name="TrashBin" parent="EnvironmentProps" unique_id=1465076770 instance=ExtResource("18_trash")]
 transform = Transform3D(12, 0, 0, 0, 12, 0, 0, 0, 12, -4, 0, -1)
@@ -203,6 +212,15 @@ transform = Transform3D(0.048275217, 0, 4.1997223, 0, 4.1999993, 0, -4.1997223, 
 [node name="StreetLamp_11" parent="EnvironmentProps" unique_id=230146530 instance=ExtResource("13_lamp")]
 transform = Transform3D(0.048275217, 0, 4.1997223, 0, 4.1999993, 0, -4.1997223, 0, 0.048275217, 37.348934, 0, -1.5)
 
+[node name="tree_pineRoundB" parent="EnvironmentProps" unique_id=1238500014 instance=ExtResource("19_uke0g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.067771, 0.05024414, -4.67504)
+
+[node name="tree_pineRoundB2" parent="EnvironmentProps" unique_id=9057319 instance=ExtResource("19_uke0g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.109294, 0.05024414, -2.8797488)
+
+[node name="tree_pineRoundB3" parent="EnvironmentProps" unique_id=430214976 instance=ExtResource("19_uke0g")]
+transform = Transform3D(0.73535347, 0, 0, 0, 0.70038533, 0, 0, 0, 1, -7.1172557, 0.05024414, -3.161388)
+
 [node name="StaticColliders" type="Node3D" parent="." unique_id=630904699]
 
 [node name="Building_Adler_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1634462643]
@@ -212,19 +230,19 @@ use_collision = true
 size = Vector3(7.5, 7, 4)
 
 [node name="Building_Cafe_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1576872906]
-transform = Transform3D(0.52800846, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.5, -3.5)
+transform = Transform3D(0.52800846, 0, 0, 0, 1, 0, 0, 0, 1, 15.369692, 3.5, -3.5)
 visible = false
 use_collision = true
 size = Vector3(7.5, 7, 4)
 
 [node name="Building_Apartment_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=925458802]
-transform = Transform3D(0.69318056, 0, 0, 0, 1, 0, 0, 0, 1.0838828, 6, 3.5, -3.5)
+transform = Transform3D(0.69318056, 0, 0, 0, 1, 0, 0, 0, 1.0838828, -3.4462166, 3.5, -3.5)
 visible = false
 use_collision = true
 size = Vector3(7.5, 7, 4)
 
 [node name="Building_Campus_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=1565797177]
-transform = Transform3D(1.1777536, 0, 0, 0, 1, 0, 0, 0, 1.1507555, 18.686699, 3.5, -3.5)
+transform = Transform3D(1.1777536, 0, 0, 0, 1, 0, 0, 0, 1.1507555, 7.1344852, 3.5, -3.5)
 visible = false
 use_collision = true
 size = Vector3(7.5, 7, 4)
@@ -242,7 +260,7 @@ use_collision = true
 size = Vector3(2.4, 1, 1)
 
 [node name="Bench_East_Collider" type="CSGBox3D" parent="StaticColliders" unique_id=49298260]
-transform = Transform3D(0.5894315, 0, 0, 0, 1, 0, 0, 0, 0.5381092, 10, 0.5, -1.2)
+transform = Transform3D(0.5894315, 0, 0, 0, 1, 0, 0, 0, 0.5381092, 1.1383209, 0.5, -1.2)
 visible = false
 use_collision = true
 size = Vector3(2.4, 1, 1)
@@ -304,14 +322,14 @@ size = Vector3(7.5, 7, 4)
 [node name="Lighting" type="Node3D" parent="." unique_id=1424192708]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting" unique_id=417089674]
-transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 10, 10)
+transform = Transform3D(0.8135958, -0.41099066, 0.4112772, -0.025267433, 0.6816926, 0.7312022, -0.5808819, -0.6052949, 0.5442375, 6.0858784, 12.770352, 10)
 light_color = Color(1, 0.92, 0.82, 1)
 light_energy = 0.65
 shadow_enabled = true
 shadow_opacity = 0.85
 
 [node name="Player3D" parent="." unique_id=853987593 instance=ExtResource("2_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.942701, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.757753, 0, 0)
 
 [node name="CollisionShape3D" parent="Player3D/InteractionDetector" parent_id_path=PackedInt32Array(853987593, 1580836431) index="0" unique_id=903667425]
 transform = Transform3D(0.79346114, 0, 0, 0, 1, 0, 0, 0, 0.79346114, 0, 0.9, 0)
@@ -354,7 +372,7 @@ text = "Press [E] to Enter
 Adler's Office"
 
 [node name="DoorToCafe" parent="Doors" unique_id=1601142617 instance=ExtResource("3_door")]
-transform = Transform3D(0.20653105, 0, 0, 0, 1, 0, 0, 0, 1, -8.151184, 0, -2)
+transform = Transform3D(0.20653105, 0, 0, 0, 1, 0, 0, 0, 1, 13.218508, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_Cafe.tscn"
 target_spawn_id = "from_street"
 
@@ -365,7 +383,7 @@ text = "Press [E] to Enter
 Cafe"
 
 [node name="DoorToApartment" parent="Doors" unique_id=23026039 instance=ExtResource("3_door")]
-transform = Transform3D(0.20602179, 0, 0, 0, 1, 0, 0, 0, 1, 3.1700487, 0, -2)
+transform = Transform3D(0.20602179, 0, 0, 0, 1, 0, 0, 0, 1, -6.276168, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_ApartmentLiving.tscn"
 target_spawn_id = "from_street"
 
@@ -376,7 +394,7 @@ text = "Press [E] to Enter
 Your House"
 
 [node name="DoorToCampus" parent="Doors" unique_id=1650252353 instance=ExtResource("3_door")]
-transform = Transform3D(0.18632203, 0, 0, 0, 1, 0, 0, 0, 1, 18.464626, 0, -2)
+transform = Transform3D(0.18632203, 0, 0, 0, 1, 0, 0, 0, 1, 6.9124126, 0, -2)
 target_room_scene = "res://scenes/rooms/Room_CampusHallway.tscn"
 target_spawn_id = "from_street"
 
@@ -403,14 +421,14 @@ npc_id = "recurring_stranger"
 
 [node name="CollisionShape3D" parent="NPC_Stranger/InteractionArea" parent_id_path=PackedInt32Array(1651454714, 838900147) index="0" unique_id=688564722]
 transform = Transform3D(0.34759966, 0, 0, 0, 0.43179154, 0, 0, 0, 0.34759966, 0, 0.9, 0)
-shape = SubResource("SphereShape3D_7ji6u")
+shape = SubResource("SphereShape3D_uke0g")
 
 [node name="NPC_MrVance" parent="." unique_id=1832933346 instance=ExtResource("4_npc")]
 transform = Transform3D(0.82756895, 0, -0.56136405, 0, 1, 0, 0.56136405, 0, 0.82756895, 16.910383, 0, 2.2802548)
 npc_id = "mr_vance"
 
 [node name="CollisionShape3D" parent="NPC_MrVance/InteractionArea" parent_id_path=PackedInt32Array(1832933346, 838900147) index="0" unique_id=688564722]
-shape = SubResource("SphereShape3D_y6j30")
+shape = SubResource("SphereShape3D_bxudf")
 
 [node name="Ground2" type="CSGBox3D" parent="." unique_id=1918849192]
 transform = Transform3D(1.0013778, 0, 0, 0, -4.3771614e-08, -1.0013778, 0, 1.0013778, -4.3771614e-08, 0, -0.2, 3.952919)
@@ -470,6 +488,30 @@ transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1, 6.390586, 0, 0)
 transform = Transform3D(0.86846566, 0, 0, 0, 1, 0, 0, 0, 1, -3.291069, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1167451147]
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="." unique_id=1178467120]
+transform = Transform3D(2.568437, 0, 0, 0, 3.24403, 0, 0, 0, 1.6755121, -26.534668, 0.05024414, -3.8580854)
+
+[node name="statue_head" parent="." unique_id=1322894715 instance=ExtResource("23_7ji6u")]
+transform = Transform3D(1.9765675, 0, 0, 0, 1.6980263, 0, 0, 0, 1.6755121, -26.534668, 0.05024414, -3.8580854)
+
+[node name="tree_default2" parent="." unique_id=1649526266 instance=ExtResource("24_nfndx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25923634, 0.05012207, -3.8578818)
+
+[node name="tree_thin_dark" parent="." unique_id=5360033 instance=ExtResource("25_uke0g")]
+transform = Transform3D(2.179648, 0, 0, 0, 1.9143021, 0, 0, 0, 1, -31.894268, 0.05012207, -0.8463486)
+
+[node name="tent_smallOpen" parent="." unique_id=1154520184 instance=ExtResource("26_bxudf")]
+transform = Transform3D(2.0647001, 0, -0.6244017, 0, 3.3874607, 0, 1.6504886, 0, 0.7811034, -10.486955, 0.05012207, -3.5107203)
+
+[node name="tent_smallOpen2" parent="." unique_id=708335459 instance=ExtResource("26_bxudf")]
+transform = Transform3D(2.5963337, 0, 0.47919497, 0, 3.2416024, 0, -1.4174978, 0, 0.8777085, -13.800309, 0.05012207, -3.5107203)
+
+[node name="path_woodCorner2" parent="." unique_id=1016021566 instance=ExtResource("27_e6l37")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.404507, 0.13615565, -2.372221)
+
+[node name="path_woodCorner" parent="." unique_id=1832875581 instance=ExtResource("27_e6l37")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.254468, 0.12992376, -2.449087)
 
 [editable path="Player3D"]
 [editable path="NPC_Stranger"]

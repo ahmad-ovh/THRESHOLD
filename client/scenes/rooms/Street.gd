@@ -9,6 +9,7 @@ func _ready() -> void:
 	_setup_visual_environment()
 	_setup_street_lights()
 	_ensure_street_boundary_colliders()
+	_setup_fences_multimesh()
 	
 	if SceneManager:
 		SceneManager.position_player_in_scene(self)
@@ -162,3 +163,56 @@ func _process(delta: float) -> void:
 			var target_x = clamp(player.global_position.x, -38.0, 38.0)
 			# Force update the camera pivot position, overriding the player's own clamp if it happens earlier
 			camera_pivot.global_position.x = lerp(camera_pivot.global_position.x, target_x, 5.0 * delta)
+
+func _setup_fences_multimesh() -> void:
+	var fences_parent = get_node_or_null("fences")
+	if not fences_parent:
+		return
+	
+	if fences_parent is MultiMeshInstance3D:
+		return
+	
+	var fence_mesh: Mesh = null
+	var child_transforms: Array[Transform3D] = []
+	
+	var fence_scene = load("res://assets/threshold/nature/fence_planksDouble.fbx") as PackedScene
+	if fence_scene:
+		var dummy = fence_scene.instantiate()
+		fence_mesh = _find_first_mesh(dummy)
+		dummy.free()
+	
+	for child in fences_parent.get_children():
+		child_transforms.append(child.transform)
+		if not fence_mesh:
+			fence_mesh = _find_first_mesh(child)
+	
+	if not fence_mesh or child_transforms.size() == 0:
+		return
+	
+	var parent_transform = fences_parent.transform
+	
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.mesh = fence_mesh
+	mm.instance_count = child_transforms.size()
+	
+	for i in range(child_transforms.size()):
+		mm.set_instance_transform(i, child_transforms[i])
+	
+	var mm_instance = MultiMeshInstance3D.new()
+	mm_instance.name = "fences"
+	mm_instance.transform = parent_transform
+	mm_instance.multimesh = mm
+	
+	var parent = fences_parent.get_parent()
+	fences_parent.free()
+	parent.add_child(mm_instance)
+
+func _find_first_mesh(node: Node) -> Mesh:
+	if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+		return (node as MeshInstance3D).mesh
+	for c in node.get_children():
+		var m = _find_first_mesh(c)
+		if m != null:
+			return m
+	return null

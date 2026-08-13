@@ -75,7 +75,7 @@ shadow_mesh = SubResource("ArrayMesh_1o5nl")
 [node name="Lowpoly_street" type="Node3D" unique_id=1611044894]
 
 [node name="Cube_001" type="MeshInstance3D" parent="." unique_id=1046354237]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.471237, -0.6691472, 2)
+transform = Transform3D(1.0433801, 0, 0, 0, 1, 0, 0, 0, 1, -33.6802, -0.6691472, 2)
 mesh = SubResource("ArrayMesh_nbgq2")
 
 [node name="Cube_002" type="MeshInstance3D" parent="." unique_id=817247736]
@@ -99,7 +99,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.737766, -0.6691472, 2)
 mesh = SubResource("ArrayMesh_nbgq2")
 
 [node name="Cube_005" type="MeshInstance3D" parent="." unique_id=1226207782]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -33.471237, -0.6691472, 15.9)
+transform = Transform3D(-1.0433801, 0, -8.742278e-08, 0, 1, 0, 9.121519e-08, 0, -1, -33.6802, -0.6691472, 15.9)
 mesh = SubResource("ArrayMesh_nbgq2")
 
 [node name="Cube_007" type="MeshInstance3D" parent="." unique_id=2120315495]
