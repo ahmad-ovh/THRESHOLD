@@ -10,6 +10,9 @@ var voice_generator: AudioStreamGenerator
 var voice_playback: AudioStreamGeneratorPlayback
 
 var sample_rate: float = 44100.0
+const CLICK_FREQUENCY: float = 800.0
+const CLICK_PITCH_MIN: float = 0.93
+const CLICK_PITCH_MAX: float = 1.07
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -35,7 +38,7 @@ func _ready() -> void:
 	voice_playback = voice_player.get_stream_playback()
 
 func play_click() -> void:
-	_generate_tone(800.0, 0.04, 0.2)
+	_generate_tone(CLICK_FREQUENCY * randf_range(CLICK_PITCH_MIN, CLICK_PITCH_MAX), 0.04, 0.2)
 
 func play_typewriter_tick() -> void:
 	_generate_tone(1200.0, 0.015, 0.05)
@@ -116,4 +119,3 @@ func _generate_tone(freq: float, duration: float, volume: float = 0.3) -> void:
 		phase += phase_inc
 		if phase >= TAU:
 			phase -= TAU
-
