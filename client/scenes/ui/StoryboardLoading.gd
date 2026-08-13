@@ -37,6 +37,8 @@ var _is_scene_loaded: bool = false
 var _is_complete_pending: bool = false
 var _is_finishing: bool = false
 var _panel_tween: Tween
+var _is_transitioning: bool = false
+var _next_panel: TextureRect
 
 func _ready() -> void:
 	layer = 95
@@ -47,7 +49,7 @@ func _ready() -> void:
 	if get_viewport():
 		get_viewport().size_changed.connect(_on_viewport_size_changed)
 
-	for frame in storyboard_frames:
+	for frame: TextureRect in storyboard_frames:
 		if frame:
 			frame.visible = false
 			frame.modulate.a = 0.0
@@ -86,6 +88,8 @@ func _on_next_button_pressed() -> void:
 func _advance_panel() -> void:
 	if _is_finishing:
 		return
+	if _is_transitioning:
+		return
 
 	if _current_panel_index >= storyboard_frames.size() - 1:
 		_is_complete_pending = true
@@ -97,9 +101,33 @@ func _advance_panel() -> void:
 		_show_current_panel()
 		return
 
+	var next_index: int = _current_panel_index + 1
+	if next_index < 0 or next_index >= storyboard_frames.size():
+		push_error("Storyboard next panel index out of range: " + str(next_index))
+		_is_complete_pending = true
+		_try_finish_storyboard()
+		return
+
+	var next_panel: TextureRect = storyboard_frames[next_index]
+	if next_panel == null:
+		push_error("Missing storyboard panel node at index: " + str(next_index))
+		_is_complete_pending = true
+		_try_finish_storyboard()
+		return
+	if next_panel.texture == null:
+		push_error("Storyboard frame has no texture for index: " + str(next_index))
+
 	_cancel_panel_tween()
+	_apply_letterbox_layout(next_panel)
+	next_panel.visible = true
+	next_panel.modulate.a = 0.0
+
+	_next_panel = next_panel
+	_is_transitioning = true
+
 	_panel_tween = create_tween()
 	_panel_tween.tween_property(_active_panel, "modulate:a", 0.0, PANEL_FADE_OUT_DURATION)
+	_panel_tween.parallel().tween_property(next_panel, "modulate:a", 1.0, PANEL_FADE_IN_DURATION)
 	_panel_tween.tween_callback(_on_active_panel_fade_out)
 
 func _skip_to_end() -> void:
@@ -116,7 +144,8 @@ func _skip_to_end() -> void:
 	_cancel_panel_tween()
 	_current_panel_index = final_panel_index
 
-	for panel in storyboard_frames:
+	_next_panel = null
+	for panel: TextureRect in storyboard_frames:
 		if panel:
 			panel.visible = false
 			panel.modulate.a = 0.0
@@ -170,9 +199,20 @@ func _on_active_panel_fade_out() -> void:
 		_active_panel.visible = false
 		_active_panel.modulate.a = 0.0
 
+	var next_panel: TextureRect = _next_panel
+	_next_panel = null
+	_is_transitioning = false
+
+	if next_panel == null or not is_instance_valid(next_panel):
+		push_error("Missing next storyboard panel at transition completion.")
+		_is_complete_pending = true
+		_try_finish_storyboard()
+		return
+
+	_active_panel = next_panel
+	_current_panel_index += 1
+
 	if _current_panel_index < storyboard_frames.size() - 1:
-		_current_panel_index += 1
-		_show_current_panel()
 		return
 
 	_is_complete_pending = true
@@ -191,6 +231,8 @@ func _try_finish_storyboard() -> void:
 func _cancel_panel_tween() -> void:
 	if _panel_tween:
 		_panel_tween.kill()
+	_is_transitioning = false
+	_next_panel = null
 
 func fade_out_and_close() -> void:
 	var fade_out: float = max(fade_duration, 0.0)
@@ -204,7 +246,7 @@ func fade_out_and_close() -> void:
 	queue_free()
 
 func _on_viewport_size_changed() -> void:
-	for panel in storyboard_frames:
+	for panel: TextureRect in storyboard_frames:
 		if panel and panel.visible and panel.texture:
 			_apply_letterbox_layout(panel)
 
