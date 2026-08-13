@@ -1,172 +1,146 @@
 [gd_scene format=3 uid="uid://cd7of32wgsn77"]
 
 [ext_resource type="Script" uid="uid://dx8u2m4u762ok" path="res://scenes/ui/StoryboardLoading.gd" id="1_script"]
-[ext_resource type="FontFile" uid="uid://b0swbv6bqrxu7" path="res://assets/fonts/Hitchcut-Regular.ttf" id="4_font"]
-[ext_resource type="Texture2D" uid="uid://bptc2tpk6ki24" path="res://assets/ui/paper_craft/popuphori.png" id="5_popup"]
-[ext_resource type="Texture2D" uid="uid://bhoisbqagxkwk" path="res://assets/ui/paper_craft/thumbtack_orange.png" id="6_thumbtack"]
+[ext_resource type="Texture2D" uid="uid://0h7o8rg1drq8" path="res://assets/storyboard/storyboard_00.png" id="2_stb_00"]
+[ext_resource type="Texture2D" uid="uid://naps558c1syb" path="res://assets/storyboard/storyboard_01.png" id="3_stb_01"]
+[ext_resource type="Texture2D" uid="uid://debs35r02o6kk" path="res://assets/storyboard/storyboard_02.png" id="4_stb_02"]
+[ext_resource type="Texture2D" uid="uid://cy2yg3vs5shnw" path="res://assets/storyboard/storyboard_03.png" id="5_stb_03"]
+[ext_resource type="Texture2D" uid="uid://8x3nxyjourcq" path="res://assets/storyboard/storyboard_04.png" id="6_stb_04"]
 [ext_resource type="Texture2D" uid="uid://cv6ke0b6guvkf" path="res://assets/ui/paper_craft/splash.png" id="7_splash"]
-[ext_resource type="Theme" uid="uid://cyxi2trp6esvr" path="res://resources/theme/main_theme.tres" id="8_theme"]
+[ext_resource type="Texture2D" uid="uid://d2kssm8lkna1s" path="res://assets/storyboard/storyboard_05.png" id="7_stb_05"]
+[ext_resource type="Texture2D" uid="uid://bjxifjryr7hv2" path="res://assets/storyboard/storyboard_06.png" id="8_stb_06"]
 
-[node name="StoryboardLoading" type="CanvasLayer" unique_id=2046609989]
+[node name="StoryboardLoading" type="CanvasLayer" unique_id=1853509409]
 layer = 95
 script = ExtResource("1_script")
 
-[node name="Root" type="Control" parent="." unique_id=1145153105]
+[node name="Root" type="Control" parent="." unique_id=1082220905]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("8_theme")
 
-[node name="PaperBg" type="TextureRect" parent="Root" unique_id=915428791]
+[node name="Backdrop" type="ColorRect" parent="Root" unique_id=2055610048]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BlackBg" type="ColorRect" parent="Root/Backdrop" unique_id=146172019]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.96, 0.93, 0.85, 1)
+
+[node name="PaperBg" type="TextureRect" parent="Root/Backdrop/BlackBg" unique_id=342363739]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 3.0
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_splash")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="TitleLabel" type="Label" parent="Root" unique_id=505657571]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -245.0
-offset_top = 43.0
-offset_right = 255.0
-offset_bottom = 104.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.18, 0.15, 0.12, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 50
-text = "LOADING..."
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PanelCard" type="Control" parent="Root" unique_id=492948985]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -380.0
-offset_top = -220.0
-offset_right = 380.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CardBg" type="TextureRect" parent="Root/PanelCard" unique_id=851211022]
+[node name="PanelImage00" type="TextureRect" parent="Root" unique_id=766983059]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("5_popup")
-expand_mode = 1
-
-[node name="ThumbtackLeft" type="TextureRect" parent="Root/PanelCard" unique_id=1659595037]
-layout_mode = 0
-offset_left = 25.0
-offset_top = 15.0
-offset_right = 65.0
-offset_bottom = 55.0
-texture = ExtResource("6_thumbtack")
-expand_mode = 1
-
-[node name="ThumbtackRight" type="TextureRect" parent="Root/PanelCard" unique_id=520268651]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -65.0
-offset_top = 15.0
-offset_right = -25.0
-offset_bottom = 55.0
-grow_horizontal = 0
-texture = ExtResource("6_thumbtack")
-expand_mode = 1
-
-[node name="ChapterLabel" type="Label" parent="Root/PanelCard" unique_id=1068820069]
-layout_mode = 0
-offset_left = 132.0
-offset_top = 39.0
-offset_right = 632.0
-offset_bottom = 74.0
-theme_override_colors/font_color = Color(0.75, 0.45, 0.2, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 22
-text = "CHAPTER I • THE THRESHOLD"
-horizontal_alignment = 1
-
-[node name="PanelImage" type="TextureRect" parent="Root/PanelCard" unique_id=1914576220]
-layout_mode = 0
-offset_left = 131.0
-offset_top = 87.0
-offset_right = 631.0
-offset_bottom = 282.0
-texture = ExtResource("7_splash")
-expand_mode = 1
+scale = Vector2(0.67, 0.67)
+texture = ExtResource("2_stb_00")
 stretch_mode = 5
 
-[node name="NarrativeLabel" type="RichTextLabel" parent="Root/PanelCard" unique_id=19494790]
-layout_mode = 0
-offset_left = 133.0
-offset_top = 305.0
-offset_right = 633.0
-offset_bottom = 410.0
-theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
-theme_override_font_sizes/normal_font_size = 18
-bbcode_enabled = true
-text = "[center]Beyond the fog lies THRESHOLD — a city where words shape reality.[/center]"
-fit_content = true
-autowrap_mode = 2
-
-[node name="BottomBar" type="Control" parent="Root" unique_id=1575993515]
+[node name="PanelImage01" type="TextureRect" parent="Root" unique_id=815528484]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -130.0
-offset_right = 300.0
-offset_bottom = -25.0
 grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.67, 0.67)
+texture = ExtResource("3_stb_01")
+stretch_mode = 5
+
+[node name="PanelImage02" type="TextureRect" parent="Root" unique_id=1993142767]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.67, 0.67)
+texture = ExtResource("4_stb_02")
+stretch_mode = 5
+
+[node name="PanelImage03" type="TextureRect" parent="Root" unique_id=1945183380]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.67, 0.67)
+texture = ExtResource("5_stb_03")
+stretch_mode = 5
+
+[node name="PanelImage04" type="TextureRect" parent="Root" unique_id=1060091482]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.67, 0.67)
+texture = ExtResource("6_stb_04")
+stretch_mode = 5
+
+[node name="PanelImage05" type="TextureRect" parent="Root" unique_id=777115794]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.67, 0.67)
+texture = ExtResource("7_stb_05")
+stretch_mode = 5
+
+[node name="PanelImage06" type="TextureRect" parent="Root" unique_id=1791317197]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.67, 0.67)
+texture = ExtResource("8_stb_06")
+stretch_mode = 5
+
+[node name="NextButton" type="Button" parent="Root" unique_id=670044603]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -48.0
+offset_right = -20.0
+offset_bottom = -12.0
+grow_horizontal = 0
 grow_vertical = 0
-
-[node name="ProgressBar" type="ProgressBar" parent="Root/BottomBar" unique_id=1285448623]
-custom_minimum_size = Vector2(0, 16)
-layout_mode = 0
-offset_right = 600.0
-offset_bottom = 20.0
-value = 25.0
-
-[node name="StatusLabel" type="Label" parent="Root/BottomBar" unique_id=79569168]
-layout_mode = 0
-offset_top = 26.0
-offset_right = 600.0
-offset_bottom = 50.0
-theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
-theme_override_font_sizes/font_size = 14
-text = "Loading World... 25%"
-horizontal_alignment = 1
-
-[node name="PromptLabel" type="Label" parent="Root/BottomBar" unique_id=450170160]
-layout_mode = 0
-offset_top = 65.0
-offset_right = 600.0
-offset_bottom = 95.0
-theme_override_colors/font_color = Color(0.2, 0.5, 0.3, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 18
-text = "Press [Space / Click] to continue"
-horizontal_alignment = 1
+text = "Next"
