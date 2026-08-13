@@ -38,7 +38,7 @@ func _update_id_card() -> void:
 	player_id_label.text = "ID: " + PlayerStore.player_id.to_upper()
 	level_num_label.text = "Lv. " + str(PlayerStore.level)
 	overall_bar.value = PlayerStore.xp_progress * 100.0
-	streak_label.text = "Daily Streak: " + str(PlayerStore.daily_streak) + " 🔥"
+	streak_label.text = "Daily Streak: " + str(PlayerStore.daily_streak) + " Days"
 	
 	var vec = PlayerStore.skill_vector
 	clarity_bar.value = vec.get("clarity", 0.5) * 100.0

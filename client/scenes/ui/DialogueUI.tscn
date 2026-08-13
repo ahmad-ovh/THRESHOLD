@@ -225,8 +225,8 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_avatar_bg")
 [node name="AvatarIcon" type="Label" parent="OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/AvatarFrame" unique_id=1459240986]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
-theme_override_font_sizes/font_size = 20
-text = "👤"
+theme_override_font_sizes/font_size = 14
+text = "NPC"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -247,7 +247,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.38, 0.28, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 12
-text = "[Role: Peer 👤 Tier: 🧑 Stranger Mood: 😐 neutral]"
+text = "[Role: Peer | Tier: Stranger | Mood: Neutral]"
 
 [node name="LoadingLabel" type="Label" parent="OverlayRoot/NPCInfoCard/MarginContainer/HBoxContainer/VBoxContainer" unique_id=2094266151]
 visible = false
@@ -416,28 +416,28 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-text = "🔍 Clarity: 50%"
+text = "Clarity: 50%"
 
 [node name="EmpathyLabel" type="Label" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1069466686]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-text = "❤️ Empathy: 50%"
+text = "Empathy: 50%"
 
 [node name="PolitenessLabel" type="Label" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1253872496]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-text = "👍 Politeness: 50%"
+text = "Politeness: 50%"
 
 [node name="ExpressionLabel" type="Label" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1894530080]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 13
-text = "😊 Expression: 50%"
+text = "Expression: 50%"
 
 [node name="LeaveConfirmModal" type="Control" parent="OverlayRoot"]
 visible = false

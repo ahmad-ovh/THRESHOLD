@@ -16,13 +16,13 @@ func _ready() -> void:
 		ApiClient.request_failed.connect(show_error)
 
 func show_error(message: String) -> void:
-	show_toast("⚠️ " + message, Color(0.9, 0.25, 0.25, 0.95))
+	show_toast(message, Color(0.9, 0.25, 0.25, 0.95))
 
 func show_info(message: String) -> void:
-	show_toast("ℹ️ " + message, Color(0.2, 0.6, 0.9, 0.95))
+	show_toast(message, Color(0.2, 0.6, 0.9, 0.95))
 
 func show_success(message: String) -> void:
-	show_toast("✅ " + message, Color(0.25, 0.8, 0.35, 0.95))
+	show_toast(message, Color(0.25, 0.8, 0.35, 0.95))
 
 func show_toast(text: String, bg_color: Color) -> void:
 	var panel = PanelContainer.new()

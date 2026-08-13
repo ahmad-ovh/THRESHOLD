@@ -69,12 +69,6 @@ func _ready() -> void:
 	_setup_button_hover_effects(leave_button)
 	_setup_button_hover_effects(leave_yes_button)
 	_setup_button_hover_effects(leave_no_button)
-	
-	if chat_scroll_container:
-		chat_scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-		var vbar = chat_scroll_container.get_v_scroll_bar()
-		if vbar:
-			vbar.visible = false
 
 func _setup_button_hover_effects(btn: Button) -> void:
 	btn.pivot_offset = btn.size / 2.0
@@ -127,10 +121,10 @@ func _reset_encounter_metrics() -> void:
 	status_badge_label.text = "Status: Baseline"
 	status_badge_label.remove_theme_color_override("font_color")
 	
-	clarity_label.text = "🔍 Clarity: 50%"
-	empathy_label.text = "❤️ Empathy: 50%"
-	politeness_label.text = "👍 Politeness: 50%"
-	expression_label.text = "😊 Expression: 50%"
+	clarity_label.text = "Clarity: 50%"
+	empathy_label.text = "Empathy: 50%"
+	politeness_label.text = "Politeness: 50%"
+	expression_label.text = "Expression: 50%"
 
 func set_spatial_targets(npc_node: Node3D, player_node: Node3D) -> void:
 	active_npc_node = npc_node
@@ -203,7 +197,7 @@ func update_turn_data(data: Dictionary) -> void:
 
 func _update_npc_sub_info() -> void:
 	if npc_sub_info_label:
-		npc_sub_info_label.text = "[Role: %s 👤 Tier: 🧑 %s Mood: 😐 %s]" % [current_role, current_tier, current_mood]
+		npc_sub_info_label.text = "[Role: %s | Tier: %s | Mood: %s]" % [current_role, current_tier, current_mood.capitalize()]
 
 func _recalculate_cumulative_performance() -> void:
 	if turn_history_scores.size() == 0:
@@ -234,10 +228,10 @@ func _recalculate_cumulative_performance() -> void:
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(overall_bar, "value", overall, 0.4)
 	
-	clarity_label.text = "🔍 Clarity: %d%%" % int(avg_c)
-	empathy_label.text = "❤️ Empathy: %d%%" % int(avg_e)
-	politeness_label.text = "👍 Politeness: %d%%" % int(avg_p)
-	expression_label.text = "😊 Expression: %d%%" % int(avg_x)
+	clarity_label.text = "Clarity: %d%%" % int(avg_c)
+	empathy_label.text = "Empathy: %d%%" % int(avg_e)
+	politeness_label.text = "Politeness: %d%%" % int(avg_p)
+	expression_label.text = "Expression: %d%%" % int(avg_x)
 	
 	if delta > 0.5:
 		delta_label.text = "+%d%% ↑" % int(delta)
@@ -290,7 +284,6 @@ func display_reply(text: String) -> void:
 	if active_npc_bubble and is_instance_valid(active_npc_bubble) and active_npc_bubble.has_method("convert_to_npc_reply"):
 		active_npc_bubble.convert_to_npc_reply(active_npc_name, text, active_npc_id)
 		_enforce_max_messages()
-		_scroll_to_bottom()
 	else:
 		_spawn_npc_bubble(text)
 		
@@ -324,8 +317,6 @@ func close_dialogue() -> void:
 		leave_confirm_modal.visible = false
 	_clear_bubbles()
 	visible = false
-	if GameController and GameController.hud_ref and GameController.hud_ref.has_method("show_buttons"):
-		GameController.hud_ref.show_buttons()
 	if AnimalesePlayer:
 		AnimalesePlayer.stop_all()
 	if AudioManager:
@@ -346,7 +337,7 @@ func _spawn_coach_hint_bubble(hint_text: String) -> void:
 	if bubble.has_method("setup_coach_hint"):
 		bubble.setup_coach_hint(hint_text)
 	else:
-		bubble.setup("Coach Hint", "💡 " + hint_text, null, false)
+		bubble.setup("Coach Hint", hint_text, null, false)
 	_enforce_max_messages()
 	_scroll_to_bottom()
 
@@ -374,17 +365,10 @@ func _enforce_max_messages() -> void:
 			bubbles_container.remove_child(oldest)
 			oldest.queue_free()
 
-var active_scroll_tween: Tween = null
-
 func _scroll_to_bottom() -> void:
 	await get_tree().process_frame
-	await get_tree().process_frame
 	if chat_scroll_container:
-		var target_scroll = int(chat_scroll_container.get_v_scroll_bar().max_value)
-		if active_scroll_tween and active_scroll_tween.is_running():
-			active_scroll_tween.kill()
-		active_scroll_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		active_scroll_tween.tween_property(chat_scroll_container, "scroll_vertical", target_scroll, 0.45)
+		chat_scroll_container.scroll_vertical = int(chat_scroll_container.get_v_scroll_bar().max_value)
 
 func _clear_bubbles() -> void:
 	for child in bubbles_container.get_children():
