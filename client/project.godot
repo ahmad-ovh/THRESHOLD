@@ -34,9 +34,11 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+mouse_cursor/custom_image="uid://bv5kdghtsacvw"
 
 [editor]
 
+movie_writer/movie_file="C:/Users/User/Documents/TencentVId/take1.avi"
 movie_writer/show_image=true
 
 [filesystem]
