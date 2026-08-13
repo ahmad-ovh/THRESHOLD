@@ -92,8 +92,17 @@ func _advance_panel() -> void:
 		return
 
 	if _current_panel_index >= storyboard_frames.size() - 1:
-		_is_complete_pending = true
-		_try_finish_storyboard()
+		if _active_panel == null or not is_instance_valid(_active_panel):
+			_is_complete_pending = true
+			_try_finish_storyboard()
+			return
+
+		_cancel_panel_tween()
+		_is_transitioning = true
+		_next_panel = null
+		_panel_tween = create_tween()
+		_panel_tween.tween_property(_active_panel, "modulate:a", 0.0, PANEL_FADE_OUT_DURATION)
+		_panel_tween.tween_callback(_on_last_panel_fade_out)
 		return
 
 	if _active_panel == null or not is_instance_valid(_active_panel):
@@ -215,6 +224,16 @@ func _on_active_panel_fade_out() -> void:
 	if _current_panel_index < storyboard_frames.size() - 1:
 		return
 
+	_is_complete_pending = true
+	_try_finish_storyboard()
+
+func _on_last_panel_fade_out() -> void:
+	if _active_panel and is_instance_valid(_active_panel):
+		_active_panel.visible = false
+		_active_panel.modulate.a = 0.0
+
+	_is_transitioning = false
+	_next_panel = null
 	_is_complete_pending = true
 	_try_finish_storyboard()
 
