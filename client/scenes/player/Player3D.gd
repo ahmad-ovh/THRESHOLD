@@ -111,7 +111,7 @@ func _setup_camera_dev_widget() -> void:
 
 	var toggle_btn = Button.new()
 	toggle_btn.name = "DevWidgetToggleButton"
-	toggle_btn.text = "🎥 Cam Dev (F1)"
+	toggle_btn.text = "Cam Dev (F1)"
 	toggle_btn.position = Vector2(20, 20)
 	toggle_btn.custom_minimum_size = Vector2(120, 32)
 	camera_dev_layer.add_child(toggle_btn)
@@ -132,7 +132,7 @@ func _setup_camera_dev_widget() -> void:
 	margin.add_child(vbox)
 
 	var header = Label.new()
-	header.text = "🎥 Runtime Camera Controller (F1)"
+	header.text = "Runtime Camera Controller (F1)"
 	header.add_theme_font_size_override("font_size", 13)
 	vbox.add_child(header)
 
@@ -207,7 +207,7 @@ func _setup_camera_dev_widget() -> void:
 	))
 
 	var copy_btn = Button.new()
-	copy_btn.text = "📋 COPY CAMERA JSON"
+	copy_btn.text = "COPY CAMERA JSON"
 	vbox.add_child(copy_btn)
 
 	copy_btn.pressed.connect(func():
@@ -220,7 +220,7 @@ func _setup_camera_dev_widget() -> void:
 		var json_str = JSON.stringify(dict, "  ")
 		DisplayServer.clipboard_set(json_str)
 		print("CAMERA_JSON_EXPORT:\n", json_str)
-		status_label.text = "✓ Copied JSON to Clipboard!"
+		status_label.text = "Copied JSON to Clipboard!"
 	)
 
 	camera_dev_layer.add_child(panel)
@@ -260,7 +260,7 @@ func _create_hair_dev_widget() -> void:
 	panel.add_child(vbox)
 
 	var title = Label.new()
-	title.text = "💇 Runtime Hair Aligner (F2)"
+	title.text = "Runtime Hair Aligner (F2)"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 15)
 	title.add_theme_color_override("font_color", Color(1.0, 0.65, 0.2))
@@ -370,7 +370,7 @@ func _create_hair_dev_widget() -> void:
 	))
 
 	var save_btn = Button.new()
-	save_btn.text = "💾 SAVE TO MODEL_PRESETS.JSON"
+	save_btn.text = "SAVE TO MODEL_PRESETS.JSON"
 	vbox.add_child(save_btn)
 
 	save_btn.pressed.connect(func():
@@ -409,7 +409,7 @@ func _create_hair_dev_widget() -> void:
 
 		CharacterFactory._presets_loaded = false
 		CharacterFactory._load_model_presets()
-		status_label.text = "✓ Saved Pos Y=%.4f to all 271 hair styles!" % live_pos.y
+		status_label.text = "Saved Pos Y=%.4f to all 271 hair styles!" % live_pos.y
 		print("SAVED_HAIR_PRESETS_TO_ALL: Pos Y=", live_pos.y)
 	)
 

@@ -61,7 +61,7 @@ offset_bottom = 92.0
 theme_override_colors/font_color = Color(0.35, 0.28, 0.18, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
-text = "📍 Location"
+text = "Location"
 
 [node name="NpcLabel" type="Label" parent="OverlayRoot/CardPanel/ContentArea" unique_id=1723306013]
 layout_mode = 1

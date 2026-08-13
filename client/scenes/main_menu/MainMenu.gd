@@ -93,7 +93,7 @@ func _fetch_daily(p_id: String) -> void:
 
 	var txt = "[b]Featured NPC:[/b] " + npc + "\n"
 	txt += "[b]Focus Skills:[/b] " + focus + "\n"
-	txt += "[b]🔥 Daily Streak:[/b] " + str(streak) + " Days"
+	txt += "[b]Daily Streak:[/b] " + str(streak) + " Days"
 	daily_details.text = txt
 
 func _set_buttons_disabled(disabled_state: bool) -> void:
@@ -141,7 +141,7 @@ func _on_settings_pressed() -> void:
 	if AudioManager:
 		AudioManager.play_click()
 	if ToastManager:
-		ToastManager.show_info("⚙️ Game Settings coming soon!")
+		ToastManager.show_info("Game Settings coming soon!")
 
 func _on_aligner_pressed() -> void:
 	if _is_transitioning or (SceneManager and SceneManager.is_transitioning):

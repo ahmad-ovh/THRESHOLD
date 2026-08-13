@@ -59,7 +59,7 @@ func setup_and_show(data: Dictionary) -> void:
 	var focus = str(data.get("encounter_focus", ""))
 	var facts = data.get("known_facts", [])
 
-	location_label.text = "📍 " + location_name
+	location_label.text = location_name
 	npc_label.text = npc_name + " (" + npc_role + ")"
 	relationship_label.text = "Status: " + (tier if tier != "" else "Stranger")
 	situation_label.text = situation

@@ -166,7 +166,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.4, 0.08, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 24
-text = "📋 DAILY MISSION BRIEFING"
+text = "DAILY MISSION BRIEFING"
 
 [node name="HSeparator" type="HSeparator" parent="Control/RightPanel/DailyCard/MarginContainer/VBoxContainer" unique_id=2128504264]
 layout_mode = 2
@@ -329,7 +329,7 @@ theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxTexture_btn_paper_normal")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_btn_paper_pressed")
 theme_override_styles/hover = SubResource("StyleBoxTexture_btn_paper_hover")
-text = "🛠️ Model Aligner"
+text = "Model Aligner"
 
 [node name="MenuThumbtack" type="TextureRect" parent="Control/LeftPanel" unique_id=274777868]
 layout_mode = 0

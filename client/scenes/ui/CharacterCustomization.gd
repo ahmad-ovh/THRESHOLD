@@ -63,10 +63,10 @@ const LIP_PALETTE: Array[Color] = [
 
 const GLASSES_ENABLED := false
 const CATEGORIES: Array[Dictionary] = [
-	{"name": "Skin Tone", "icon": "😊", "mode": "SKIN"},
-	{"name": "Hairstyle", "icon": "💇", "mode": "HAIR"},
-	{"name": "Eyes", "icon": "👀", "mode": "EYES"},
-	{"name": "Nose & Mouth", "icon": "👃", "mode": "NOSE_MOUTH"},
+	{"name": "Skin Tone", "icon": "", "mode": "SKIN"},
+	{"name": "Hairstyle", "icon": "", "mode": "HAIR"},
+	{"name": "Eyes", "icon": "", "mode": "EYES"},
+	{"name": "Nose & Mouth", "icon": "", "mode": "NOSE_MOUTH"},
 ]
 
 @export var is_development_mode: bool = false
@@ -767,7 +767,7 @@ func _setup_cam_tuner_widget() -> void:
 	panel.add_child(vbox)
 
 	var title = Label.new()
-	title.text = "🎥 Customization Camera Tuner"
+	title.text = "Customization Camera Tuner"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 14)
 	title.add_theme_color_override("font_color", Color(0.3, 0.8, 1.0))
@@ -890,12 +890,12 @@ func _setup_cam_tuner_widget() -> void:
 	rebuild_rows.call("SKIN")
 
 	var save_btn = Button.new()
-	save_btn.text = "💾 SAVE ALL STAGE CAMERAS TO JSON"
+	save_btn.text = "SAVE ALL STAGE CAMERAS TO JSON"
 	vbox.add_child(save_btn)
 
 	save_btn.pressed.connect(func():
 		_save_camera_presets()
-		status_label.text = "✓ Camera presets saved to JSON!"
+		status_label.text = "Camera presets saved to JSON!"
 		print("SAVED_CUSTOMIZATION_CAMERAS: ", camera_presets)
 	)
 

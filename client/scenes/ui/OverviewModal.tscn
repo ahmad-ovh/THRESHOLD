@@ -118,7 +118,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.3, 0.05, 1)
 theme_override_fonts/font = ExtResource("2_font_hitchcut")
 theme_override_font_sizes/font_size = 14
-text = "📋 Observer Pattern Insight"
+text = "Observer Pattern Insight"
 
 [node name="ObserverText" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer" unique_id=1867544843]
 layout_mode = 2

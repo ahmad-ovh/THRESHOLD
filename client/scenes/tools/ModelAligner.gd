@@ -681,7 +681,7 @@ func _on_save_current_item_preset() -> void:
 	_on_save_catalog_to_file()
 	_update_gizmo_spinboxes()
 	if preset_status_label:
-		preset_status_label.text = "✓ Saved " + item_key + " (Abs Pos: " + str(catalog_presets[cat][item_key]["position"]) + ")"
+		preset_status_label.text = "Saved " + item_key + " (Abs Pos: " + str(catalog_presets[cat][item_key]["position"]) + ")"
 
 func _on_save_catalog_to_file() -> void:
 	var json_text = JSON.stringify(catalog_presets, "  ")
@@ -702,7 +702,7 @@ func _on_save_catalog_to_file() -> void:
 
 	CharacterFactory._load_model_presets()
 	if preset_status_label:
-		preset_status_label.text = "✓ Presets saved to catalog & user data!"
+		preset_status_label.text = "Presets saved to catalog & user data!"
 
 func _on_save_face_offsets_pressed() -> void:
 	if not PlayerStore.customization.has("face_offsets"):
@@ -712,7 +712,7 @@ func _on_save_face_offsets_pressed() -> void:
 	# Also persist into customization.json so face_offsets survive without dev mode
 	PlayerStore.save_customization()
 	if preset_status_label:
-		preset_status_label.text = "✓ Face offsets saved to catalog & user data!"
+		preset_status_label.text = "Face offsets saved to catalog & user data!"
 
 func _update_face_offset_spinboxes() -> void:
 	if not PlayerStore.customization.has("face_offsets"):
@@ -983,7 +983,7 @@ func _on_copy_json_pressed() -> void:
 		f2.close()
 
 	print("ALIGNMENT_JSON_EXPORT:\n", json_text)
-	status_label.text = "✓ JSON Copied to Clipboard & Saved to user://alignment.json!"
+	status_label.text = "JSON Copied to Clipboard & Saved to user://alignment.json!"
 
 func _take_debug_screenshot(file_name: String) -> void:
 	await get_tree().process_frame

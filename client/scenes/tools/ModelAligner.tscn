@@ -83,7 +83,7 @@ theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=1940199864]
 layout_mode = 2
-text = "📦 Model Selectors"
+text = "Model Selectors"
 horizontal_alignment = 1
 
 [node name="HeadRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=1043210784]
@@ -178,12 +178,12 @@ popup/item_1/id = 1
 [node name="SavePresetBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=604469309]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-text = "💾 SAVE ITEM PRESET"
+text = "SAVE ITEM PRESET"
 
 [node name="SaveCatalogBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=258012746]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-text = "💾 SAVE CATALOG FILE"
+text = "SAVE CATALOG FILE"
 
 [node name="PresetStatusLabel" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=1316554282]
 layout_mode = 2
@@ -192,7 +192,7 @@ autowrap_mode = 2
 
 [node name="VisTitle" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=1479526665]
 layout_mode = 2
-text = "👁️ Part Visibility (Solo/Hide)"
+text = "Part Visibility (Solo/Hide)"
 
 [node name="CheckHead" type="CheckBox" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=949127021]
 layout_mode = 2
@@ -211,11 +211,11 @@ text = "Show Glasses Mesh"
 
 [node name="FocusBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=116631207]
 layout_mode = 2
-text = "🔍 Focus Camera on Part"
+text = "Focus Camera on Part"
 
 [node name="FaceTexTitle" type="Label" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=1581002974]
 layout_mode = 2
-text = "🎨 Face Texture UV Sliders"
+text = "Face Texture UV Sliders"
 horizontal_alignment = 1
 
 [node name="EyeXRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=2131145275]
@@ -565,7 +565,7 @@ max_value = 360.0
 [node name="SaveFaceOffsetsBtn" type="Button" parent="MarginContainer/HBoxContainer/LeftPanel/LeftScroll/VBoxContainer" unique_id=83339784]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-text = "💾 SAVE FACE OFFSETS"
+text = "SAVE FACE OFFSETS"
 
 [node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer" unique_id=583129302]
 layout_mode = 2
@@ -587,7 +587,7 @@ theme_override_constants/separation = 5
 
 [node name="Title" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer" unique_id=787105627]
 layout_mode = 2
-text = "🛠️ 3D Movement Gizmo & Controls"
+text = "3D Movement Gizmo & Controls"
 horizontal_alignment = 1
 
 [node name="AutoRotateCheck" type="CheckBox" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer" unique_id=1479820786]
@@ -831,7 +831,7 @@ text = "↪ Redo (Ctrl+Y)"
 [node name="CopyBtn" type="Button" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer" unique_id=765753412]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-text = "📋 COPY ALIGNMENT JSON"
+text = "COPY ALIGNMENT JSON"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/HBoxContainer/RightPanel/RightScroll/VBoxContainer" unique_id=898239856]
 layout_mode = 2
