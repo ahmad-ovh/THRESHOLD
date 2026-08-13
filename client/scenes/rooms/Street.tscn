@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d0gnhxprd73jx" path="res://scenes/rooms/Street.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://cplayer3d001" path="res://scenes/player/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://cb4trxk4vt74h" path="res://scenes/templates/lowpoly_street.tscn" id="2_uvcj6"]
 [ext_resource type="PackedScene" uid="uid://cdoor3d001" path="res://scenes/rooms/Door3D.tscn" id="3_door"]
 [ext_resource type="PackedScene" uid="uid://cnpc001" path="res://scenes/templates/NPC.tscn" id="4_npc"]
 [ext_resource type="PackedScene" uid="uid://cph4e2txmk0fb" path="res://assets/threshold/buildings/BrownBuilding.fbx" id="6_8w67o"]
@@ -26,19 +27,23 @@ albedo_color = Color(0.26, 0.28, 0.32, 1)
 metallic = 0.05
 roughness = 0.85
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_1dvmp"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_em1ev"]
 resource_local_to_scene = true
 radius = 4.5
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_0w4aj"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_7ji6u"]
 resource_local_to_scene = true
 radius = 4.5
 
 [node name="Street" type="Node3D" unique_id=961492616]
 script = ExtResource("1_script")
 
+[node name="Lowpoly_street" parent="." unique_id=1611044894 instance=ExtResource("2_uvcj6")]
+transform = Transform3D(0.96450406, 0, 0, 0, 1.0013772, 0, 0, 0, 0.6220924, 0, 0.072693154, -2.6076934)
+
 [node name="Ground" type="CSGBox3D" parent="." unique_id=1927305657]
 transform = Transform3D(1.0013778, 0, 0, 0, 1.0013778, 0, 0, 0, 1.0013778, 0, -0.2, 0)
+visible = false
 use_collision = true
 size = Vector3(80, 0.4, 12)
 material = SubResource("StandardMaterial3D_road")
@@ -105,18 +110,6 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 25.412155, -0.12758815, -21.2
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 29.48341, -0.12758815, -21.24432)
 
 [node name="Reuse" type="Node3D" parent="." unique_id=2072694821]
-
-[node name="BrownBuilding" parent="Reuse" unique_id=589966283 instance=ExtResource("6_8w67o")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -30.745632, -0.12758815, -6.9030914)
-
-[node name="buildingRedCorner" parent="Reuse" unique_id=1985897174 instance=ExtResource("10_y6j30")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -39.4268, 0.002261281, -6.5777097)
-
-[node name="buildingRed1" parent="Reuse" unique_id=2060337269 instance=ExtResource("9_7ji6u")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -23.996355, 0.012624741, -5.942483)
-
-[node name="BuildingGreen" parent="Reuse" unique_id=1682635684 instance=ExtResource("8_em1ev")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -37.12427, 0.012625694, -6.668909)
 
 [node name="Architecture" type="Node3D" parent="." unique_id=543437850]
 
@@ -394,14 +387,42 @@ npc_id = "recurring_stranger"
 
 [node name="CollisionShape3D" parent="NPC_Stranger/InteractionArea" parent_id_path=PackedInt32Array(1651454714, 838900147) index="0" unique_id=688564722]
 transform = Transform3D(0.34759966, 0, 0, 0, 0.43179154, 0, 0, 0, 0.34759966, 0, 0.9, 0)
-shape = SubResource("SphereShape3D_1dvmp")
+shape = SubResource("SphereShape3D_em1ev")
 
 [node name="NPC_MrVance" parent="." unique_id=1832933346 instance=ExtResource("4_npc")]
 transform = Transform3D(0.82756895, 0, -0.56136405, 0, 1, 0, 0.56136405, 0, 0.82756895, 16.910383, 0, 2.2802548)
 npc_id = "mr_vance"
 
 [node name="CollisionShape3D" parent="NPC_MrVance/InteractionArea" parent_id_path=PackedInt32Array(1832933346, 838900147) index="0" unique_id=688564722]
-shape = SubResource("SphereShape3D_0w4aj")
+shape = SubResource("SphereShape3D_7ji6u")
+
+[node name="Ground2" type="CSGBox3D" parent="." unique_id=1918849192]
+transform = Transform3D(1.0013778, 0, 0, 0, -4.3771614e-08, -1.0013778, 0, 1.0013778, -4.3771614e-08, 0, -0.2, 3.952919)
+visible = false
+use_collision = true
+size = Vector3(80, 0.4, 12)
+material = SubResource("StandardMaterial3D_road")
+
+[node name="Ground3" type="CSGBox3D" parent="." unique_id=1067749546]
+transform = Transform3D(1.0013778, 0, 0, 0, -4.3771614e-08, -1.0013778, 0, 1.0013778, -4.3771614e-08, 0, -0.2, -2.3710506)
+visible = false
+use_collision = true
+size = Vector3(80, 0.4, 12)
+material = SubResource("StandardMaterial3D_road")
+
+[node name="Ground4" type="CSGBox3D" parent="." unique_id=1206650349]
+transform = Transform3D(-1.7939977e-08, 1.0013778, -4.3771614e-08, 0, -4.3771614e-08, -1.0013778, -0.4104188, -4.3771614e-08, 1.913318e-15, -37.52214, -0.2, 2.137851)
+visible = false
+use_collision = true
+size = Vector3(80, 0.4, 12)
+material = SubResource("StandardMaterial3D_road")
+
+[node name="Ground5" type="CSGBox3D" parent="." unique_id=990630479]
+transform = Transform3D(-1.7939977e-08, 1.0013778, -4.3771614e-08, 0, -4.3771614e-08, -1.0013778, -0.4104188, -4.3771614e-08, 1.913318e-15, 35.070484, -0.2, 2.137851)
+visible = false
+use_collision = true
+size = Vector3(80, 0.4, 12)
+material = SubResource("StandardMaterial3D_road")
 
 [editable path="Player3D"]
 [editable path="NPC_Stranger"]
