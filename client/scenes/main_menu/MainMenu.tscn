@@ -161,12 +161,16 @@ theme_override_constants/margin_bottom = 18
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="DailyHeader" type="Label" parent="Control/RightPanel/DailyCard/MarginContainer/VBoxContainer" unique_id=1231423795]
+[node name="DailyHeader" type="RichTextLabel" parent="Control/RightPanel/DailyCard/MarginContainer/VBoxContainer" unique_id=1231423795]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.82, 0.4, 0.08, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 24
-text = "DAILY MISSION BRIEFING"
+theme_override_colors/default_color = Color(0.82, 0.4, 0.08, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[img=22x22]res://assets/ui/icons/icon_report.png[/img] DAILY MISSION BRIEFING"
+fit_content = true
+autowrap_mode = 0
 
 [node name="HSeparator" type="HSeparator" parent="Control/RightPanel/DailyCard/MarginContainer/VBoxContainer" unique_id=2128504264]
 layout_mode = 2

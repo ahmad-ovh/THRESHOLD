@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var player_id_label: Label = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/PlayerIdLabel
 @onready var level_num_label: Label = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/LevelHeader/LevelNumLabel
 @onready var overall_bar: ProgressBar = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/OverallProgressBar
-@onready var streak_label: Label = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/StreakLabel
+@onready var streak_label: Control = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/StreakLabel
 @onready var model_pivot: Node3D = $PanelContainer/Margin/VBoxContainer/Body/LeftCard/AvatarFrame/SubViewportContainer/SubViewport/PreviewWorld/ModelPivot
 
 @onready var clarity_bar: ProgressBar = $PanelContainer/Margin/VBoxContainer/Body/RightSection/SkillGrid/ClarityBar
@@ -38,7 +38,7 @@ func _update_id_card() -> void:
 	player_id_label.text = "ID: " + PlayerStore.player_id.to_upper()
 	level_num_label.text = "Lv. " + str(PlayerStore.level)
 	overall_bar.value = PlayerStore.xp_progress * 100.0
-	streak_label.text = "Daily Streak: " + str(PlayerStore.daily_streak) + " Days"
+	streak_label.text = "[img=16x16]res://assets/ui/icons/icon_fire.png[/img] Daily Streak: " + str(PlayerStore.daily_streak) + " Days"
 	
 	var vec = PlayerStore.skill_vector
 	clarity_bar.value = vec.get("clarity", 0.5) * 100.0

@@ -132,7 +132,7 @@ func setup_coach_hint(hint_text: String) -> void:
 		bubble_panel.add_theme_stylebox_override("panel", bubble_style)
 		
 	var clean_text = hint_text.strip_edges()
-	message_text.text = "[color=#0D3875][b]Coach Hint:[/b][/color] " + clean_text
+	message_text.text = "[img=20x20]res://assets/ui/icons/icon_lightbulb.png[/img] [color=#0D3875][b]Coach Hint:[/b][/color] " + clean_text
 	prefix_char_count = 0
 	
 	target_3d_node = null

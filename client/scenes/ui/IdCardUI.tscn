@@ -366,13 +366,16 @@ theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
 value = 50.0
 
-[node name="StreakLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard" unique_id=319656104]
+[node name="StreakLabel" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/LeftCard" unique_id=319656104]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
-theme_override_fonts/font = ExtResource("3_font_hitchcut")
-theme_override_font_sizes/font_size = 14
-text = "Daily Streak: 0 Days"
-horizontal_alignment = 1
+theme_override_colors/default_color = Color(0.9, 0.45, 0.08, 1)
+theme_override_fonts/normal_font = ExtResource("3_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[img=16x16]res://assets/ui/icons/icon_fire.png[/img] Daily Streak: 0 Days"
+fit_content = true
+autowrap_mode = 0
 
 [node name="RightSection" type="VBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body" unique_id=420396120]
 layout_mode = 2
@@ -463,13 +466,17 @@ theme_override_constants/separation = 8
 [node name="ReportHeaderRow" type="HBoxContainer" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox" unique_id=1815428746]
 layout_mode = 2
 
-[node name="ReportHeaderLabel" type="Label" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow" unique_id=226013091]
+[node name="ReportHeaderLabel" type="RichTextLabel" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow" unique_id=226013091]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.55, 0.3, 0.05, 1)
-theme_override_fonts/font = ExtResource("3_font_hitchcut")
-theme_override_font_sizes/font_size = 14
-text = "COMMUNICATION GROWTH REPORT"
+theme_override_colors/default_color = Color(0.55, 0.3, 0.05, 1)
+theme_override_fonts/normal_font = ExtResource("3_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[img=16x16]res://assets/ui/icons/icon_report.png[/img] COMMUNICATION GROWTH REPORT"
+fit_content = true
+autowrap_mode = 0
 
 [node name="MiniRefreshButton" type="Button" parent="PanelContainer/Margin/VBoxContainer/Body/RightSection/ReportPanel/Margin/VBox/ReportHeaderRow" unique_id=1956061480]
 visible = false

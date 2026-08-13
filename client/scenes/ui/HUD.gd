@@ -4,7 +4,7 @@ extends CanvasLayer
 @onready var player_id_label: Label = $PlayerInfoCard/MarginContainer/VBoxContainer/PlayerIdLabel
 @onready var level_label: Label = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/LevelLabel
 @onready var xp_bar: ProgressBar = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/XPProgressBar
-@onready var streak_label: Label = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/StreakLabel
+@onready var streak_label: Control = $PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer/StreakLabel
 @onready var id_card_button: TextureButton = $IdCardButton
 @onready var journal_button: TextureButton = $JournalButton
 @onready var objective_banner: PanelContainer = $ObjectiveBanner
@@ -90,7 +90,7 @@ func _update_hud() -> void:
 	player_id_label.text = "PLAYER: " + PlayerStore.player_id
 	level_label.text = "Lvl " + str(PlayerStore.level)
 	xp_bar.value = PlayerStore.xp_progress * 100.0
-	streak_label.text = "Streak: " + str(PlayerStore.daily_streak)
+	streak_label.text = "[img=16x16]res://assets/ui/icons/icon_fire.png[/img] Streak: " + str(PlayerStore.daily_streak)
 
 func _on_id_card_pressed() -> void:
 	if AudioManager:

@@ -52,16 +52,19 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_card_bg")
 [node name="ContentArea" type="Control" parent="OverlayRoot/CardPanel" unique_id=706676455]
 layout_mode = 2
 
-[node name="LocationLabel" type="Label" parent="OverlayRoot/CardPanel/ContentArea" unique_id=480246085]
+[node name="LocationLabel" type="RichTextLabel" parent="OverlayRoot/CardPanel/ContentArea" unique_id=480246085]
 layout_mode = 1
 offset_left = 72.0
 offset_top = 68.0
 offset_right = 350.0
 offset_bottom = 92.0
-theme_override_colors/font_color = Color(0.35, 0.28, 0.18, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 14
-text = "Location"
+theme_override_colors/default_color = Color(0.35, 0.28, 0.18, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[img=18x18]res://assets/ui/icons/icon_location.png[/img] Location"
+fit_content = true
+autowrap_mode = 0
 
 [node name="NpcLabel" type="Label" parent="OverlayRoot/CardPanel/ContentArea" unique_id=1723306013]
 layout_mode = 1

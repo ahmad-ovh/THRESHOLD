@@ -3,7 +3,7 @@ extends CanvasLayer
 
 signal acknowledged
 
-@onready var location_label: Label = $OverlayRoot/CardPanel/ContentArea/LocationLabel
+@onready var location_label: Control = $OverlayRoot/CardPanel/ContentArea/LocationLabel
 @onready var npc_label: Label = $OverlayRoot/CardPanel/ContentArea/NpcLabel
 @onready var relationship_label: Label = $OverlayRoot/CardPanel/ContentArea/RelationshipPill/RelationshipLabel
 @onready var situation_label: Label = $OverlayRoot/CardPanel/ContentArea/SituationLabel
@@ -59,7 +59,7 @@ func setup_and_show(data: Dictionary) -> void:
 	var focus = str(data.get("encounter_focus", ""))
 	var facts = data.get("known_facts", [])
 
-	location_label.text = location_name
+	location_label.text = "[img=18x18]res://assets/ui/icons/icon_location.png[/img] " + location_name
 	npc_label.text = npc_name + " (" + npc_role + ")"
 	relationship_label.text = "Status: " + (tier if tier != "" else "Stranger")
 	situation_label.text = situation

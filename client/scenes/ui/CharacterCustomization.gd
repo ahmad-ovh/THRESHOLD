@@ -63,10 +63,10 @@ const LIP_PALETTE: Array[Color] = [
 
 const GLASSES_ENABLED := false
 const CATEGORIES: Array[Dictionary] = [
-	{"name": "Skin Tone", "icon": "", "mode": "SKIN"},
-	{"name": "Hairstyle", "icon": "", "mode": "HAIR"},
-	{"name": "Eyes", "icon": "", "mode": "EYES"},
-	{"name": "Nose & Mouth", "icon": "", "mode": "NOSE_MOUTH"},
+	{"name": "Skin Tone", "icon": "res://assets/ui/icons/icon_skin.png", "mode": "SKIN"},
+	{"name": "Hairstyle", "icon": "res://assets/ui/icons/icon_hair.png", "mode": "HAIR"},
+	{"name": "Eyes", "icon": "res://assets/ui/icons/icon_eyes.png", "mode": "EYES"},
+	{"name": "Nose & Mouth", "icon": "res://assets/ui/icons/icon_nose.png", "mode": "NOSE_MOUTH"},
 ]
 
 @export var is_development_mode: bool = false
@@ -189,6 +189,14 @@ func _setup_category_tabs() -> void:
 		var btn = tab_buttons[i]
 		if not btn:
 			continue
+
+		if i < CATEGORIES.size():
+			var cat = CATEGORIES[i]
+			if cat.get("icon", "") != "":
+				var tex = load(cat["icon"]) as Texture2D
+				if tex:
+					btn.icon = tex
+					btn.expand_icon = true
 
 		btn.pivot_offset = btn.size / 2.0
 

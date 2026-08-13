@@ -411,33 +411,49 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="ClarityLabel" type="Label" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1977204048]
+[node name="ClarityLabel" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1977204048]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 13
-text = "Clarity: 50%"
+theme_override_colors/default_color = Color(0.3, 0.24, 0.16, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "[img=16x16]res://assets/ui/icons/icon_clarity.png[/img] Clarity: 50%"
+fit_content = true
+autowrap_mode = 0
 
-[node name="EmpathyLabel" type="Label" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1069466686]
+[node name="EmpathyLabel" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1069466686]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 13
-text = "Empathy: 50%"
+theme_override_colors/default_color = Color(0.3, 0.24, 0.16, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "[img=16x16]res://assets/ui/icons/icon_empathy.png[/img] Empathy: 50%"
+fit_content = true
+autowrap_mode = 0
 
-[node name="PolitenessLabel" type="Label" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1253872496]
+[node name="PolitenessLabel" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1253872496]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 13
-text = "Politeness: 50%"
+theme_override_colors/default_color = Color(0.3, 0.24, 0.16, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "[img=16x16]res://assets/ui/icons/icon_politeness.png[/img] Politeness: 50%"
+fit_content = true
+autowrap_mode = 0
 
-[node name="ExpressionLabel" type="Label" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1894530080]
+[node name="ExpressionLabel" type="RichTextLabel" parent="OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer" unique_id=1894530080]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.3, 0.24, 0.16, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 13
-text = "Expression: 50%"
+theme_override_colors/default_color = Color(0.3, 0.24, 0.16, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "[img=16x16]res://assets/ui/icons/icon_expression.png[/img] Expression: 50%"
+fit_content = true
+autowrap_mode = 0
 
 [node name="LeaveConfirmModal" type="Control" parent="OverlayRoot"]
 visible = false

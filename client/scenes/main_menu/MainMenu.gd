@@ -93,7 +93,7 @@ func _fetch_daily(p_id: String) -> void:
 
 	var txt = "[b]Featured NPC:[/b] " + npc + "\n"
 	txt += "[b]Focus Skills:[/b] " + focus + "\n"
-	txt += "[b]Daily Streak:[/b] " + str(streak) + " Days"
+	txt += "[img=20x20]res://assets/ui/icons/icon_fire.png[/img] [b]Daily Streak:[/b] " + str(streak) + " Days"
 	daily_details.text = txt
 
 func _set_buttons_disabled(disabled_state: bool) -> void:

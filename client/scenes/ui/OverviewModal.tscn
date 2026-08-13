@@ -113,12 +113,16 @@ theme_override_constants/margin_bottom = 0
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ContentArea/ObserverCard/Margin" unique_id=1093732552]
 layout_mode = 2
 
-[node name="HeaderLabel" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer" unique_id=836519110]
+[node name="HeaderLabel" type="RichTextLabel" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer" unique_id=836519110]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 0.3, 0.05, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 14
-text = "Observer Pattern Insight"
+theme_override_colors/default_color = Color(0.55, 0.3, 0.05, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[img=16x16]res://assets/ui/icons/icon_report.png[/img] Observer Pattern Insight"
+fit_content = true
+autowrap_mode = 0
 
 [node name="ObserverText" type="Label" parent="PanelContainer/ContentArea/ObserverCard/Margin/VBoxContainer" unique_id=1867544843]
 layout_mode = 2

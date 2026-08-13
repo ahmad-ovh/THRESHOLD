@@ -93,12 +93,16 @@ size_flags_vertical = 4
 theme_override_styles/background = SubResource("StyleBoxFlat_xp_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
 
-[node name="StreakLabel" type="Label" parent="PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1382415797]
+[node name="StreakLabel" type="RichTextLabel" parent="PlayerInfoCard/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1382415797]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.45, 0.08, 1)
-theme_override_fonts/font = ExtResource("2_font_hitchcut")
-theme_override_font_sizes/font_size = 14
-text = "Streak: 0"
+theme_override_colors/default_color = Color(0.9, 0.45, 0.08, 1)
+theme_override_fonts/normal_font = ExtResource("2_font_hitchcut")
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[img=16x16]res://assets/ui/icons/icon_fire.png[/img] Streak: 0"
+fit_content = true
+autowrap_mode = 0
 
 [node name="IdCardButton" type="TextureButton" parent="." unique_id=982192999]
 custom_minimum_size = Vector2(130, 90)

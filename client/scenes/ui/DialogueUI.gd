@@ -23,10 +23,10 @@ extends CanvasLayer
 @onready var overall_bar: ProgressBar = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/OverallProgressBar
 @onready var status_badge_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/StatusBadgeLabel
 
-@onready var clarity_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/ClarityLabel
-@onready var empathy_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/EmpathyLabel
-@onready var politeness_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/PolitenessLabel
-@onready var expression_label: Label = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/ExpressionLabel
+@onready var clarity_label: Control = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/ClarityLabel
+@onready var empathy_label: Control = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/EmpathyLabel
+@onready var politeness_label: Control = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/PolitenessLabel
+@onready var expression_label: Control = $OverlayRoot/FeedbackPanel/Margin/VBoxContainer/SubStatsContainer/ExpressionLabel
 
 signal message_submitted(text: String)
 signal conversation_end_confirmed
@@ -121,10 +121,10 @@ func _reset_encounter_metrics() -> void:
 	status_badge_label.text = "Status: Baseline"
 	status_badge_label.remove_theme_color_override("font_color")
 	
-	clarity_label.text = "Clarity: 50%"
-	empathy_label.text = "Empathy: 50%"
-	politeness_label.text = "Politeness: 50%"
-	expression_label.text = "Expression: 50%"
+	clarity_label.text = "[img=16x16]res://assets/ui/icons/icon_clarity.png[/img] Clarity: 50%"
+	empathy_label.text = "[img=16x16]res://assets/ui/icons/icon_empathy.png[/img] Empathy: 50%"
+	politeness_label.text = "[img=16x16]res://assets/ui/icons/icon_politeness.png[/img] Politeness: 50%"
+	expression_label.text = "[img=16x16]res://assets/ui/icons/icon_expression.png[/img] Expression: 50%"
 
 func set_spatial_targets(npc_node: Node3D, player_node: Node3D) -> void:
 	active_npc_node = npc_node
@@ -228,10 +228,10 @@ func _recalculate_cumulative_performance() -> void:
 	var tween = create_tween().set_parallel(true)
 	tween.tween_property(overall_bar, "value", overall, 0.4)
 	
-	clarity_label.text = "Clarity: %d%%" % int(avg_c)
-	empathy_label.text = "Empathy: %d%%" % int(avg_e)
-	politeness_label.text = "Politeness: %d%%" % int(avg_p)
-	expression_label.text = "Expression: %d%%" % int(avg_x)
+	clarity_label.text = "[img=16x16]res://assets/ui/icons/icon_clarity.png[/img] Clarity: %d%%" % int(avg_c)
+	empathy_label.text = "[img=16x16]res://assets/ui/icons/icon_empathy.png[/img] Empathy: %d%%" % int(avg_e)
+	politeness_label.text = "[img=16x16]res://assets/ui/icons/icon_politeness.png[/img] Politeness: %d%%" % int(avg_p)
+	expression_label.text = "[img=16x16]res://assets/ui/icons/icon_expression.png[/img] Expression: %d%%" % int(avg_x)
 	
 	if delta > 0.5:
 		delta_label.text = "+%d%% ↑" % int(delta)
